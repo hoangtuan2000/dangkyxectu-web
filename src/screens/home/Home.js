@@ -1,21 +1,27 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
+import {
+    Avatar,
+    Menu,
+    MenuItem,
+    Tooltip,
+    styled,
+    useTheme,
+    Box,
+    Drawer,
+    CssBaseline,
+    Toolbar,
+    List,
+    Typography,
+    Divider,
+    IconButton,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from "@mui/icons-material/Logout";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import LogoCTU from "../../assets/logoCTU.png";
@@ -69,49 +75,225 @@ const DrawerHeader = styled("div")(({ theme, bgColor }) => ({
     ...theme.mixins.toolbar,
     justifyContent: "space-between",
     backgroundColor: bgColor ? theme.palette.primary.main : "none",
+    [theme.breakpoints.up("xs")]: {
+        fontSize: "10px",
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: "12px",
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: "15px",
+    },
+}));
+
+const ListFeatures = styled(List)(({ theme }) => ({
+    [theme.breakpoints.up("xs")]: {
+        ".MuiSvgIcon-root": {
+            fontSize: "20px",
+        },
+        ".MuiTypography-root": {
+            fontSize: "13px",
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        ".MuiSvgIcon-root": {
+            fontSize: "22px",
+        },
+        ".MuiTypography-root": {
+            fontSize: "14px",
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        ".MuiSvgIcon-root": {
+            fontSize: "23px",
+        },
+        ".MuiTypography-root": {
+            fontSize: "15px",
+        },
+    },
+}));
+
+const Logo = styled("img")(({ theme }) => ({
+    width: "80px",
+    padding: "5px",
+    marginRight: "10px",
+    [theme.breakpoints.up("xs")]: { display: "none" },
+    [theme.breakpoints.up("sm")]: { display: "block" },
+    [theme.breakpoints.up("md")]: { display: "block" },
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+    fontWeight: "bold",
+    fontFamily: "serif",
+    [theme.breakpoints.up("xs")]: {
+        fontSize: "13px",
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: "23px",
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: "24px",
+    },
 }));
 
 export default function Home() {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+
+    // handle drawer open/close
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setDrawerOpen(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setDrawerOpen(false);
+    };
+
+    // handle open/close avatar account
+    const [anchorElAvatar, setAnchorElAvatar] = React.useState(null);
+    const openAccount = Boolean(anchorElAvatar);
+
+    const handleClick = (e) => {
+        setAnchorElAvatar(e.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorElAvatar(null);
     };
 
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
 
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={drawerOpen}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        sx={{ mr: 2, ...(open && { display: "none" }) }}
+                        sx={{ mr: 2, ...(drawerOpen && { display: "none" }) }}
                     >
                         <MenuIcon />
                     </IconButton>
                     {/* {!open && ( */}
-                    <img
-                        src={LogoCTU}
-                        style={{ width: "80px", padding: "5px", marginRight: "10px" }}
-                    />
+                    <Logo src={LogoCTU} />
                     {/* )} */}
-                    <Typography variant="h6" noWrap component="div">
+                    <Title variant="h6" noWrap component="div">
                         {Strings.App.TITLE}
-                    </Typography>
+                    </Title>
 
                     <Box sx={{ flexGrow: 1 }} />
-                    <Typography variant="h6" noWrap component="div">
-                        Account
-                    </Typography>
+
+                    <Box
+                        sx={{
+                            display: {
+                                xs: "none",
+                                sm: "block",
+                            },
+                            justifyContent: "center",
+                            alignContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Typography variant="p" noWrap component="div">
+                            Dương Hoàng Tuấn
+                        </Typography>
+                        <Typography
+                            variant="p"
+                            noWrap
+                            component="div"
+                            sx={{
+                                textAlign: "end",
+                            }}
+                        >
+                            B1809315
+                        </Typography>
+                    </Box>
+
+                    <Tooltip title="Tài Khoản">
+                        <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 1 }}
+                            // aria-controls={
+                            //     openAccount ? "account-menu" : undefined
+                            // }
+                            // aria-haspopup="true"
+                            // aria-expanded={openAccount ? "true" : undefined}
+                        >
+                            <Avatar
+                                alt="avatar"
+                                src="/static/images/avatar/1.jpg"
+                                sx={{
+                                    width: {
+                                        xs: 30,
+                                        sm: 40,
+                                        md: 50,
+                                    },
+                                    height: {
+                                        xs: 30,
+                                        sm: 40,
+                                        md: 50,
+                                    },
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        anchorEl={anchorElAvatar}
+                        open={openAccount}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                            elevation: 0,
+                            sx: {
+                                overflow: "visible",
+                                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                mt: 1.5,
+                                "& .MuiAvatar-root": {
+                                    width: 32,
+                                    height: 32,
+                                    ml: -0.5,
+                                    mr: 1,
+                                },
+                                "& .MuiList-root": {
+                                    padding: 0,
+                                },
+                                "& .MuiButtonBase-root": {
+                                    padding: "4px 8px",
+                                },
+                                "&:before": {
+                                    content: '""',
+                                    display: "block",
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 14,
+                                    width: 10,
+                                    height: 10,
+                                    bgcolor: "background.paper",
+                                    transform: "translateY(-50%) rotate(45deg)",
+                                    zIndex: 0,
+                                },
+                            },
+                        }}
+                        transformOrigin={{
+                            horizontal: "right",
+                            vertical: "top",
+                        }}
+                        anchorOrigin={{
+                            horizontal: "right",
+                            vertical: "bottom",
+                        }}
+                    >
+                        <MenuItem sx={{ fontSize: "12px" }}>
+                            <LogoutIcon
+                                sx={{ marginRight: "5px", fontSize: "16px" }}
+                            />
+                            Đăng Xuất
+                        </MenuItem>
+                    </Menu>
                 </Toolbar>
             </AppBar>
 
@@ -126,7 +308,7 @@ export default function Home() {
                 }}
                 variant="persistent"
                 anchor="left"
-                open={open}
+                open={drawerOpen}
             >
                 <DrawerHeader>
                     <h2>Quản Lý</h2>
@@ -139,7 +321,7 @@ export default function Home() {
                         /> */}
                 </DrawerHeader>
                 <Divider />
-                <List>
+                <ListFeatures>
                     {["Tất Cả Xe", "Xe Đã Đăng Ký"].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton>
@@ -154,7 +336,7 @@ export default function Home() {
                             </ListItemButton>
                         </ListItem>
                     ))}
-                </List>
+                </ListFeatures>
                 <Divider />
                 <List>
                     <ListItem key={"Dark mode"} disablePadding>
@@ -168,7 +350,7 @@ export default function Home() {
                 </List>
             </Drawer>
 
-            <Main open={open}>
+            <Main open={drawerOpen}>
                 <DrawerHeader />
                 <Typography paragraph>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
