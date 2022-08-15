@@ -18,15 +18,20 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    Switch,
 } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import LogoCTU from "../../assets/logoCTU.png";
 import Strings from "../../commons/Strings";
+import { useSelector, useDispatch } from "react-redux";
+import { changeDarkMode } from "../../redux/themeDarkModeSlice";
 
 const drawerWidth = 240;
 
@@ -140,6 +145,10 @@ const Title = styled(Typography)(({ theme }) => ({
 export default function MainLayout() {
     const theme = useTheme();
 
+    const dispath = useDispatch();
+
+    const themeDarkMode = useSelector((state) => state.themeDarkMode.darkMode);
+
     // handle drawer open/close
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -161,6 +170,11 @@ export default function MainLayout() {
 
     const handleClose = () => {
         setAnchorElAvatar(null);
+    };
+
+    // handle theme dark mode
+    const handleChangeThemeMode = () => {
+        dispath(changeDarkMode());
     };
 
     return (
@@ -327,7 +341,16 @@ export default function MainLayout() {
                 open={drawerOpen}
             >
                 <DrawerHeader>
-                    <h2>Quản Lý</h2>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            width: "100%",
+                            textAlign: "center",
+                        }}
+                    >
+                        Công Cụ Quản Lý
+                    </Typography>
                     <IconButton onClick={handleDrawerClose}>
                         <MenuIcon />
                     </IconButton>
@@ -356,11 +379,23 @@ export default function MainLayout() {
                 <Divider />
                 <List>
                     <ListItem key={"Dark mode"} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton
+                            onClick={() => {
+                                handleChangeThemeMode();
+                            }}
+                        >
                             <ListItemIcon>
-                                <InboxIcon />
+                                {themeDarkMode ? (
+                                    <Brightness4Icon />
+                                ) : (
+                                    <Brightness7Icon />
+                                )}
                             </ListItemIcon>
-                            <ListItemText primary={"Dark mode"} />
+                            <ListItemText
+                                primary={
+                                    themeDarkMode ? "Giao diện tối" : "Giao diện sáng"
+                                }
+                            />
                         </ListItemButton>
                     </ListItem>
                 </List>

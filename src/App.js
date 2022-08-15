@@ -5,11 +5,16 @@ import Home from "./screens/home/Home";
 import ProtectRoutesAdmin from "./components/protectRoutesAdmin/ProtectRoutesAdmin";
 import MainLayout from "./components/mainLayout/MainLayout";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { useSelector, useDispatch  } from "react-redux";
 
 function App() {
-    const darkMode = createTheme({
+    const themeDarkMode = useSelector(
+        (state) => state.themeDarkMode.darkMode
+    );
+
+    const themeMode = createTheme({
         palette: {
-            mode: "dark",
+            mode: themeDarkMode ? "dark" : "light",
         },
         breakpoints: {
             values: {
@@ -26,7 +31,7 @@ function App() {
     });
 
     return (
-        <ThemeProvider theme={darkMode}>
+        <ThemeProvider theme={themeMode}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login />} />
