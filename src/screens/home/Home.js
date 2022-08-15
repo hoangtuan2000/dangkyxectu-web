@@ -1,45 +1,128 @@
 import * as React from "react";
 import {
     Box,
+    Card,
+    CardActionArea,
+    CardContent,
+    CardMedia,
+    List,
+    ListItem,
+    ListItemText,
+    styled,
     Typography,
 } from "@mui/material";
+import NearMeIcon from "@mui/icons-material/NearMe";
 
+const data = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwhhFEsta01Sk0xhKOv41PbmJryOP_bPlSjg&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIqvVFqLp_TvYGGHcFleqT8ldUtKWdYx0hxQ&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwhhFEsta01Sk0xhKOv41PbmJryOP_bPlSjg&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIqvVFqLp_TvYGGHcFleqT8ldUtKWdYx0hxQ&usqp=CAU",
+];
+
+const CardContainer = styled(Card)(({ theme }) => ({
+    float: "left",
+    margin: "5px",
+    [theme.breakpoints.up("xs")]: {
+        maxWidth: 240,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        maxWidth: 250,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        maxWidth: 310,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        maxWidth: 365,
+        width: 365,
+    },
+    [theme.breakpoints.up("sm")]: {
+        maxWidth: 230,
+    },
+    [theme.breakpoints.up("md")]: {
+        maxWidth: 234,
+    },
+    [theme.breakpoints.up("lg")]: {
+        maxWidth: 267,
+    },
+    [theme.breakpoints.up("xl")]: {
+        maxWidth: 200,
+    },
+}));
 
 export default function Home() {
-
     return (
         <Box>
-            <Typography paragraph>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Rhoncus dolor purus non enim praesent elementum facilisis leo
-                vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-                hendrerit gravida rutrum quisque non tellus. Convallis convallis
-                tellus id interdum velit laoreet id donec ultrices. Odio morbi
-                quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                adipiscing bibendum est ultricies integer quis. Cursus euismod
-                quis viverra nibh cras. Metus vulputate eu scelerisque felis
-                imperdiet proin fermentum leo. Mauris commodo quis imperdiet
-                massa tincidunt. Cras tincidunt lobortis feugiat vivamus at
-                augue. At augue eget arcu dictum varius duis at consectetur
-                lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                sapien faucibus et molestie ac.
-            </Typography>
-            <Typography paragraph>
-                Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-                ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-                elementum integer enim neque volutpat ac tincidunt. Ornare
-                suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-                volutpat consequat mauris. Elementum eu facilisis sed odio
-                morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-                tincidunt ornare massa eget egestas purus viverra accumsan in.
-                In hendrerit gravida rutrum quisque non tellus orci ac.
-                Pellentesque nec nam aliquam sem et tortor. Habitant morbi
-                tristique senectus et. Adipiscing elit duis tristique
-                sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-                eleifend. Commodo viverra maecenas accumsan lacus vel facilisis.
-                Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-            </Typography>
+            {data.map((srcImage, index) => {
+                return (
+                    <CardContainer key={index}>
+                        <CardActionArea>
+                            <CardMedia
+                                component="img"
+                                height="200"
+                                alt="green iguana"
+                                src={srcImage}
+                            />
+                            <CardContent>
+                                <Typography
+                                    // gutterBottom
+                                    variant="h6"
+                                    component="div"
+                                >
+                                    Xe 46 chổ
+                                </Typography>
+                                <Typography variant="p" component="div">
+                                    Biển số: 65A-123456
+                                </Typography>
+                                <Typography variant="p" component="div">
+                                    Tình trạng: bình thường
+                                </Typography>
+                                <Typography variant="p" color="text.secondary">
+                                    Lịch trình:
+                                </Typography>
+                                <List
+                                    sx={{
+                                        width: "100%",
+                                        // maxWidth: 360,
+                                        bgcolor: "background.paper",
+                                        padding: "0px",
+                                    }}
+                                >
+                                    <ListItem
+                                        sx={{
+                                            padding: "0px",
+                                        }}
+                                    >
+                                        <NearMeIcon
+                                            fontSize="small"
+                                            sx={{ marginRight: "5px" }}
+                                        />
+                                        <ListItemText
+                                            primary="Đại Học Cần Thơ AAA SFD SDFD AA AA AA AA"
+                                            secondary="01/01/2022 - 03/01/2022"
+                                            primaryTypographyProps={{
+                                                fontSize: "13px",
+                                                fontWeight: "bold",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                            }}
+                                            secondaryTypographyProps={{
+                                                fontSize: "12px",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                            }}
+                                        />
+                                    </ListItem>
+                                </List>
+                            </CardContent>
+                        </CardActionArea>
+                    </CardContainer>
+                );
+            })}
         </Box>
     );
 }

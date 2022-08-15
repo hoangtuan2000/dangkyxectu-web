@@ -12,7 +12,7 @@ function ProtectRoutesAdmin() {
     if(1 == 1){
         return <Outlet /> 
     }else{
-        return <Navigate to='/' />
+        return <Navigate to='/login' />
     }
 }
 
