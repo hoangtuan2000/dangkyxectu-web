@@ -354,10 +354,6 @@ export default function MainLayout() {
                     <IconButton onClick={handleDrawerClose}>
                         <MenuIcon />
                     </IconButton>
-                    {/* <img
-                            src={LogoCTU}
-                            style={{ width: "50px", padding: "5px" }}
-                        /> */}
                 </DrawerHeader>
                 <Divider />
                 <ListFeatures>

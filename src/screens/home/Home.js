@@ -1,10 +1,16 @@
 import * as React from "react";
 import {
     Box,
+    Button,
     Card,
     CardActionArea,
     CardContent,
     CardMedia,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     List,
     ListItem,
     ListItemText,
@@ -53,11 +59,19 @@ const CardContainer = styled(Card)(({ theme }) => ({
 }));
 
 export default function Home() {
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     return (
         <Box>
             {data.map((srcImage, index) => {
                 return (
-                    <CardContainer key={index}>
+                    <CardContainer key={index} onClick={handleClickOpen()} data-aos="zoom-in">
                         <CardActionArea>
                             <CardMedia
                                 component="img"
@@ -123,6 +137,29 @@ export default function Home() {
                     </CardContainer>
                 );
             })}
+
+            <Dialog open={open} onClose={handleClose} scroll="body">
+                <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
+                <DialogContent>
+                    <DialogContentText
+                        id="scroll-dialog-description"
+                        tabIndex={-1}
+                    >
+                        {[...new Array(50)]
+                            .map(
+                                () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
+                            )
+                            .join("\n")}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Subscribe</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
