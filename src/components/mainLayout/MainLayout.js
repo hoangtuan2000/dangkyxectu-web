@@ -20,7 +20,7 @@ import {
     ListItemText,
     Switch,
 } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -361,20 +361,35 @@ export default function MainLayout() {
                 </DrawerHeader>
                 <Divider />
                 <ListFeatures>
-                    {["Tất Cả Xe", "Xe Đã Đăng Ký"].map((text, index) => (
-                        <ListItem key={text} disablePadding>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/"
+                        >
                             <ListItemButton>
                                 <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
+                                    <InboxIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
                                 </ListItemIcon>
-                                <ListItemText primary={text} />
+                                <ListItemText
+                                    primary={"sdfsdfdfsd"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
                             </ListItemButton>
-                        </ListItem>
-                    ))}
+                        </NavLink>
+                    </ListItem>
                 </ListFeatures>
                 <Divider />
                 <List>
@@ -393,7 +408,9 @@ export default function MainLayout() {
                             </ListItemIcon>
                             <ListItemText
                                 primary={
-                                    themeDarkMode ? "Giao diện tối" : "Giao diện sáng"
+                                    themeDarkMode
+                                        ? "Giao diện tối"
+                                        : "Giao diện sáng"
                                 }
                             />
                         </ListItemButton>
