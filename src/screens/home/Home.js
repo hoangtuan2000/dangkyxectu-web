@@ -1,25 +1,19 @@
 import * as React from "react";
 import {
     Box,
-    Button,
     Card,
     CardActionArea,
     CardContent,
     CardMedia,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
     List,
     ListItem,
     ListItemText,
     styled,
     Typography,
-    useTheme,
 } from "@mui/material";
 import NearMeIcon from "@mui/icons-material/NearMe";
+import DialogCarInfo from "../../components/dialogCarInfo/DialogCarInfo";
+import DialogCarRental from "../../components/dialogCarRental/DialogCarRental";
 
 const data = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
@@ -61,22 +55,33 @@ const CardContainer = styled(Card)(({ theme }) => ({
 }));
 
 export default function Home() {
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => () => {
-        setOpen(true);
+    const [openDialogCarInfo, setOpenDialogCarInfo] = React.useState(false);
+    const [openDialogCarRental, setOpenDialogCarRental] = React.useState(false);
+
+    const handleOpenDialogCarInfo = () => () => {
+        setOpenDialogCarInfo(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseDialogCarInfo = () => {
+        setOpenDialogCarInfo(false);
     };
+
+    const handleOpenDialogCarRental = () => () => {
+        setOpenDialogCarRental(true);
+        setOpenDialogCarInfo(false);
+    };
+
+    const handleCloseDialogCarRental = () => {
+        setOpenDialogCarRental(false);
+    };
+
     return (
         <Box>
             {data.map((srcImage, index) => {
                 return (
                     <CardContainer
                         key={index}
-                        onClick={handleClickOpen()}
+                        onClick={handleOpenDialogCarInfo()}
                         data-aos="zoom-in"
                     >
                         <CardActionArea>
@@ -145,86 +150,16 @@ export default function Home() {
                 );
             })}
 
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                scroll="body"
-                fullWidth={true}
-            >
-                <DialogTitle>Thông Tin Xe</DialogTitle>
-                <DialogContent>
-                    <Box>
-                        <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU"
-                            style={{
-                                float: "left",
-                                width: "200px",
-                                height: "200px",
-                                objectFit: "cover",
-                                borderRadius: "10px",
-                                marginRight: "10px",
-                            }}
-                        />
-                    </Box>
-                    <Box>
-                        <Typography variant="p" component="div">
-                            Xe 16 chỗ
-                        </Typography>
-                        <Typography variant="p" component="div">
-                            Biển số: 65A-12345
-                        </Typography>
-                        <Typography variant="p" component="div">
-                            Tình trạng: Hoạt Động
-                        </Typography>
-                        <Button variant="contained" size="small">
-                            Đăng Ký Lịch Trình
-                        </Button>
-                        <Typography variant="p" component="div">
-                            Lịch trình:
-                        </Typography>
-                        <List
-                            sx={{
-                                bgcolor: "background.paper",
-                                padding: "0px",
-                                float: "left",
-                                borderRadius: "10px",
-                            }}
-                        >
-                            <ListItem>
-                                <NearMeIcon
-                                    fontSize="small"
-                                    sx={{ marginRight: "5px" }}
-                                />
-                                <ListItemText
-                                    primary="Đại Học Cần Thơ AAA SFD SDFD AA AA AA AA"
-                                    secondary="01/01/2022 - 03/01/2022"
-                                    primaryTypographyProps={{
-                                        fontSize: "13px",
-                                        fontWeight: "bold",
-                                        whiteSpace: "nowrap",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                    }}
-                                    secondaryTypographyProps={{
-                                        fontSize: "12px",
-                                        whiteSpace: "nowrap",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                    }}
-                                />
-                            </ListItem>
-                        </List>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={handleClose}
-                        sx={{ color: theme.palette.error.light }}
-                    >
-                        Thoát
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <DialogCarInfo
+                open={openDialogCarInfo}
+                handleClose={handleCloseDialogCarInfo}
+                handleOpenDialogCarRental={handleOpenDialogCarRental}
+            />
+
+            <DialogCarRental
+                open={openDialogCarRental}
+                handleClose={handleCloseDialogCarRental}
+            />
         </Box>
     );
 }
