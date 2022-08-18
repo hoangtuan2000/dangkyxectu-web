@@ -13,6 +13,7 @@ import CarRentalManager from "./screens/carRentalManager/CarRentalManager";
 import { CarRental } from "@mui/icons-material";
 import CarManager from "./screens/carManager/CarManager";
 import DriverManagement from "./screens/driverManagement/DriverManagement";
+import Statistical from "./screens/statistical/Statistical";
 
 // init AOS library
 AOS.init({
@@ -62,6 +63,7 @@ function App() {
                                 <Route path="car-rental-manager" element={<CarRentalManager />} />
                                 <Route path="car-manager" element={<CarManager />} />
                                 <Route path="driver-management" element={<DriverManagement />} />
+                                <Route path="statistical" element={<Statistical />} />
                             </Route>
                         </Route>
                     </Route>

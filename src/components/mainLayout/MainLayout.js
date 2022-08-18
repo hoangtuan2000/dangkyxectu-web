@@ -38,6 +38,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
+import InsightsIcon from '@mui/icons-material/Insights';
 
 const drawerWidth = 240;
 
@@ -506,6 +507,35 @@ export default function MainLayout() {
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={"Quản Lý Tài Xế"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
+                            </ListItemButton>
+                        </NavLink>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/statistical"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InsightsIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={"Thống Kê"}
                                     sx={{ color: theme.palette.primary.light }}
                                 />
                             </ListItemButton>
