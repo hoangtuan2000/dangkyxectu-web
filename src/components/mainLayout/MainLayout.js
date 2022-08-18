@@ -32,6 +32,12 @@ import LogoCTU from "../../assets/logoCTU.png";
 import Strings from "../../commons/Strings";
 import { useSelector, useDispatch } from "react-redux";
 import { changeDarkMode } from "../../redux/themeDarkModeSlice";
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import FeedIcon from '@mui/icons-material/Feed';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
 
 const drawerWidth = 240;
 
@@ -373,14 +379,133 @@ export default function MainLayout() {
                         >
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <InboxIcon
+                                    <ListAltIcon
                                         sx={{
                                             color: theme.palette.primary.light,
                                         }}
                                     />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={"sdfsdfdfsd"}
+                                    primary={"Tất Cả Xe"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
+                            </ListItemButton>
+                        </NavLink>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/rented-car"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <FactCheckIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={"Xe Đã Đăng Ký"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
+                            </ListItemButton>
+                        </NavLink>
+                    </ListItem>
+                </ListFeatures>
+                <Divider />
+                <ListFeatures>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/car-rental-manager"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <FeedIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={"Quản Lý Đăng Ký"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
+                            </ListItemButton>
+                        </NavLink>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/car-manager"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <DirectionsCarIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={"Quản Lý Xe"}
+                                    sx={{ color: theme.palette.primary.light }}
+                                />
+                            </ListItemButton>
+                        </NavLink>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <NavLink
+                            style={({ isActive }) => {
+                                return {
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    textDecoration: "none",
+                                    backgroundColor: isActive
+                                        ? theme.palette.action.selected
+                                        : "",
+                                };
+                            }}
+                            to="/driver-management"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <PeopleAltIcon
+                                        sx={{
+                                            color: theme.palette.primary.light,
+                                        }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={"Quản Lý Tài Xế"}
                                     sx={{ color: theme.palette.primary.light }}
                                 />
                             </ListItemButton>
@@ -397,7 +522,7 @@ export default function MainLayout() {
                         >
                             <ListItemIcon>
                                 {themeDarkMode ? (
-                                    <Brightness4Icon />
+                                    <NightsStayIcon />
                                 ) : (
                                     <Brightness7Icon />
                                 )}

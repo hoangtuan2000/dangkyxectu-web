@@ -77,6 +77,9 @@ export default function Home() {
 
     return (
         <Box>
+            <Typography variant="h6" component="div">
+                Danh sách xe
+            </Typography>
             {data.map((srcImage, index) => {
                 return (
                     <CardContainer

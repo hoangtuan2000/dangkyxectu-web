@@ -8,6 +8,11 @@ import Login from "./screens/login/Login";
 import Home from "./screens/home/Home";
 import ProtectRoutesAdmin from "./components/protectRoutesAdmin/ProtectRoutesAdmin";
 import MainLayout from "./components/mainLayout/MainLayout";
+import RentedCar from "./screens/rentedCar/RentedCar";
+import CarRentalManager from "./screens/carRentalManager/CarRentalManager";
+import { CarRental } from "@mui/icons-material";
+import CarManager from "./screens/carManager/CarManager";
+import DriverManagement from "./screens/driverManagement/DriverManagement";
 
 // init AOS library
 AOS.init({
@@ -53,6 +58,10 @@ function App() {
                                 }
                             >
                                 <Route index element={<Home />} />
+                                <Route path="rented-car" element={<RentedCar />} />
+                                <Route path="car-rental-manager" element={<CarRentalManager />} />
+                                <Route path="car-manager" element={<CarManager />} />
+                                <Route path="driver-management" element={<DriverManagement />} />
                             </Route>
                         </Route>
                     </Route>

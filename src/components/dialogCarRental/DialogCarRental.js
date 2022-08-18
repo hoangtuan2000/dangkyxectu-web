@@ -58,6 +58,7 @@ export default function DialogCarRental({ open, handleClose }) {
                             ),
                         }}
                     />
+                    <TextField label="Lý Do" variant="outlined" size="small" fullWidth />
 
                     <Typography>Thuê Tài Xế Lái</Typography>
                     <RadioGroup defaultValue="Có" row>
