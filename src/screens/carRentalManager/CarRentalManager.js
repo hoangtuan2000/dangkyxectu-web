@@ -34,7 +34,7 @@ const CustomNoRowsOverlay = () => {
 const rowsTest = [
     {
         id: 1,
-        type: "46 chổ",
+        type: "46 Chỗ",
         fullName: "Dương Hoàng Tuấn - B1809315",
         code: "B1809315",
         department: "Công Nghệ Thông Tin & Truyền Thông",
@@ -47,7 +47,7 @@ const rowsTest = [
     },
     {
         id: 2,
-        type: "46 chổ",
+        type: "46 Chỗ",
         fullName: "Dương Hoàng Tuấn - B1809315",
         code: "B1809315",
         department: "Công Nghệ Thông Tin & Truyền Thông",
@@ -60,7 +60,7 @@ const rowsTest = [
     },
     {
         id: 3,
-        type: "46 chổ",
+        type: "46 Chỗ",
         fullName: "Dương Hoàng Tuấn - B1809315",
         code: "B1809315",
         department: "Công Nghệ Thông Tin & Truyền Thông",
@@ -73,7 +73,7 @@ const rowsTest = [
     },
     {
         id: 4,
-        type: "46 chổ",
+        type: "46 Chỗ",
         fullName: "Dương Hoàng Tuấn - B1809315",
         code: "B1809315",
         department: "Công Nghệ Thông Tin & Truyền Thông",
@@ -86,7 +86,7 @@ const rowsTest = [
     },
     {
         id: 5,
-        type: "46 chổ",
+        type: "46 Chỗ",
         fullName: "Dương Hoàng Tuấn - B1809315",
         code: "B1809315",
         department: "Công Nghệ Thông Tin & Truyền Thông",

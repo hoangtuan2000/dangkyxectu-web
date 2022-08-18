@@ -100,7 +100,7 @@ export default function Home() {
                                     variant="h6"
                                     component="div"
                                 >
-                                    Xe 46 chổ
+                                    Xe 46 Chỗ
                                 </Typography>
                                 <Typography variant="p" component="div">
                                     Biển số: 65A-123456

@@ -34,7 +34,7 @@ const rowsTest = [
         id: 1,
         imageCar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        type: "46 chổ",
+        type: "46 Chỗ",
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
@@ -46,7 +46,7 @@ const rowsTest = [
         id: 2,
         imageCar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        type: "46 chổ",
+        type: "46 Chỗ",
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
@@ -58,7 +58,7 @@ const rowsTest = [
         id: 3,
         imageCar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        type: "46 chổ",
+        type: "46 Chỗ",
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
@@ -70,7 +70,7 @@ const rowsTest = [
         id: 4,
         imageCar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        type: "46 chổ",
+        type: "46 Chỗ",
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
@@ -82,7 +82,7 @@ const rowsTest = [
         id: 5,
         imageCar:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        type: "46 chổ",
+        type: "46 Chỗ",
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
@@ -113,8 +113,8 @@ function RentedCar() {
         },
         {
             field: "imageCar",
-            headerName: "hình",
-            description: "hình",
+            headerName: "Ảnh",
+            description: "Ảnh",
             width: 100,
             sortable: false,
             renderCell: (params) => {
