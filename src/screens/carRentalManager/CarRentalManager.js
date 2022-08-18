@@ -34,10 +34,10 @@ const CustomNoRowsOverlay = () => {
 const rowsTest = [
     {
         id: 1,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        licensePlates: "65A - 123456",
+        fullName: "Dương Hoàng Tuấn - B1809315",
+        code: "B1809315",
+        department: "Công Nghệ Thông Tin & Truyền Thông",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
@@ -47,10 +47,10 @@ const rowsTest = [
     },
     {
         id: 2,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        licensePlates: "65A - 123456",
+        fullName: "Dương Hoàng Tuấn - B1809315",
+        code: "B1809315",
+        department: "Công Nghệ Thông Tin & Truyền Thông",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
@@ -60,10 +60,10 @@ const rowsTest = [
     },
     {
         id: 3,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        licensePlates: "65A - 123456",
+        fullName: "Dương Hoàng Tuấn - B1809315",
+        code: "B1809315",
+        department: "Công Nghệ Thông Tin & Truyền Thông",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
@@ -73,10 +73,10 @@ const rowsTest = [
     },
     {
         id: 4,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        licensePlates: "65A - 123456",
+        fullName: "Dương Hoàng Tuấn - B1809315",
+        code: "B1809315",
+        department: "Công Nghệ Thông Tin & Truyền Thông",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
@@ -86,10 +86,10 @@ const rowsTest = [
     },
     {
         id: 5,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        licensePlates: "65A - 123456",
+        fullName: "Dương Hoàng Tuấn - B1809315",
+        code: "B1809315",
+        department: "Công Nghệ Thông Tin & Truyền Thông",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
@@ -125,36 +125,54 @@ function CarRentalManager() {
             sortable: false,
         },
         {
-            field: "imageCar",
-            headerName: "hình",
-            description: "hình",
-            width: 100,
+            field: "fullName",
+            headerName: "Họ Tên - Mã Cán Bộ",
+            description: "Họ Tên - Mã Cán Bộ",
+            width: 180,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <img
-                        src={params.row.imageCar}
-                        alt={params.row.imageCar}
-                        style={{
-                            width: "80px",
-                            borderRadius: "10px",
-                        }}
-                    />
+                    <Tooltip title={params.row.fullName} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.fullName}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "department",
+            headerName: "Thuộc Khoa",
+            description: "Thuộc Khoa",
+            width: 180,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.department} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.department}
+                        </span>
+                    </Tooltip>
                 );
             },
         },
         {
             field: "type",
-            headerName: "Loại Xe",
-            description: "Loại Xe",
+            headerName: "Thuê Xe",
+            description: "Thuê Xe",
             width: 100,
-            sortable: false,
-        },
-        {
-            field: "licensePlates",
-            headerName: "biển số",
-            description: "biển số",
-            width: 120,
             sortable: false,
         },
         {
