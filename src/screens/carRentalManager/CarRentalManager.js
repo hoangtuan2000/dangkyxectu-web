@@ -1,4 +1,15 @@
-import { Box, Button, Pagination, Typography, useTheme } from "@mui/material";
+import {
+    Box,
+    Button,
+    IconButton,
+    Pagination,
+    Rating,
+    Tab,
+    Tabs,
+    Tooltip,
+    Typography,
+    useTheme,
+} from "@mui/material";
 import {
     DataGrid,
     gridPageCountSelector,
@@ -9,6 +20,8 @@ import {
     useGridSelector,
 } from "@mui/x-data-grid";
 import React from "react";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const CustomNoRowsOverlay = () => {
     return (
@@ -21,48 +34,68 @@ const CustomNoRowsOverlay = () => {
 const rowsTest = [
     {
         id: 1,
-        name: "hình",
+        imageCar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        description: "65A - 123456",
-        startTime: "29/06/2022 07:00",
-        endTime: "30/06/2022 06:59",
-        status: "Deleted",
+        licensePlates: "65A - 123456",
+        startLocation: "Khu II Đại Học Cần Thơ",
+        endLocation: "Khu Hòa An",
+        reason: "Dự hội thảo tại Trường ABC DEF",
+        startTime: "29/06/2022",
+        endTime: "30/06/2022",
+        status: "Hoàn Thành",
     },
     {
         id: 2,
-        name: "hình",
+        imageCar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        description: "65A - 123456",
-        startTime: "29/06/2022 07:00",
-        endTime: "30/06/2022 06:59",
-        status: "New",
+        licensePlates: "65A - 123456",
+        startLocation: "Khu II Đại Học Cần Thơ",
+        endLocation: "Khu Hòa An",
+        reason: "Dự hội thảo tại Trường ABC DEF",
+        startTime: "29/06/2022",
+        endTime: "30/06/2022",
+        status: "Thành Công",
     },
     {
         id: 3,
-        name: "hình",
+        imageCar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        description: "65A - 123456",
-        startTime: "29/06/2022 07:00",
-        endTime: "30/06/2022 06:59",
-        status: "Auditing",
+        licensePlates: "65A - 123456",
+        startLocation: "Khu II Đại Học Cần Thơ",
+        endLocation: "Khu Hòa An",
+        reason: "Dự hội thảo tại Trường ABC DEF",
+        startTime: "29/06/2022",
+        endTime: "30/06/2022",
+        status: "Chờ Xác Nhận",
     },
     {
         id: 4,
-        name: "hình",
+        imageCar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        description: "65A - 123456",
-        startTime: "29/06/2022 07:00",
-        endTime: "30/06/2022 06:59",
-        status: "Completed",
+        licensePlates: "65A - 123456",
+        startLocation: "Khu II Đại Học Cần Thơ",
+        endLocation: "Khu Hòa An",
+        reason: "Dự hội thảo tại Trường ABC DEF",
+        startTime: "29/06/2022",
+        endTime: "30/06/2022",
+        status: "Đã Hủy",
     },
     {
         id: 5,
-        name: "hình",
+        imageCar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 chổ",
-        description: "65A - 123456",
-        startTime: "29/06/2022 07:00",
-        endTime: "30/06/2022 06:59",
-        status: "Expired",
+        licensePlates: "65A - 123456",
+        startLocation: "Khu II Đại Học Cần Thơ",
+        endLocation: "Khu Hòa An",
+        reason: "Dự hội thảo tại Trường ABC DEF",
+        startTime: "29/06/2022",
+        endTime: "30/06/2022",
+        status: "Từ Chối",
     },
 ];
 
@@ -70,7 +103,19 @@ function CarRentalManager() {
     const theme = useTheme();
     // const [rows, setRows] = useState<GridRowsProp>([])
 
-    const status = ["Deleted", "New", "Auditing", "Completed", "Expired"];
+    const [value, setValue] = React.useState("Tất Cả");
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    const status = [
+        "Hoàn Thành",
+        "Thành Công",
+        "Chờ Xác Nhận",
+        "Đã Hủy",
+        "Từ Chối",
+    ];
     // const type = ["Daily audit", "Audited by 5s"]
     const columns = [
         {
@@ -80,77 +125,151 @@ function CarRentalManager() {
             sortable: false,
         },
         {
-            field: "name",
+            field: "imageCar",
             headerName: "hình",
             description: "hình",
             width: 100,
             sortable: false,
+            renderCell: (params) => {
+                return (
+                    <img
+                        src={params.row.imageCar}
+                        alt={params.row.imageCar}
+                        style={{
+                            width: "80px",
+                            borderRadius: "10px",
+                        }}
+                    />
+                );
+            },
         },
         {
             field: "type",
             headerName: "Loại Xe",
             description: "Loại Xe",
+            width: 100,
+            sortable: false,
+        },
+        {
+            field: "licensePlates",
+            headerName: "biển số",
+            description: "biển số",
             width: 120,
             sortable: false,
         },
         {
-            field: "description",
-            headerName: "biển số",
-            description: "biển số",
+            field: "startLocation",
+            headerName: "Vị trí Bắt Đầu",
+            description: "Vị trí Bắt Đầu",
             width: 180,
             sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.startLocation} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.startLocation}
+                        </span>
+                    </Tooltip>
+                );
+            },
         },
         {
-            field: "why",
-            headerName: "Lý do",
-            description: "Lý do",
+            field: "endLocation",
+            headerName: "Vị trí Kết Thúc",
+            description: "Vị trí Kết Thúc",
             width: 180,
             sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.endLocation} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.endLocation}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "reason",
+            headerName: "Lý Do",
+            description: "Lý Do",
+            width: 180,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.reason} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.reason}
+                        </span>
+                    </Tooltip>
+                );
+            },
         },
         {
             field: "startTime",
             headerName: "ngày đi",
             description: "ngày đi",
-            width: 165,
+            width: 110,
             sortable: false,
         },
         {
             field: "endTime",
             headerName: "ngày về",
             description: "ngày về",
-            width: 165,
+            width: 110,
             sortable: false,
         },
         {
             field: "status",
             headerName: "trạng thái",
             description: "trạng thái",
-            width: 165,
+            width: 120,
             sortable: false,
             renderCell: (params) => {
                 let bgColor = "white";
                 let textColor = "white";
                 switch (params.value) {
                     case status[0]:
-                        bgColor = "red";
+                        bgColor = "Blue";
                         break;
                     case status[1]:
-                        textColor = "black";
-                        break;
-                    case status[2]:
                         bgColor = "green";
                         break;
+                    case status[2]:
+                        bgColor = "pink";
+                        textColor = "black";
+                        break;
                     case status[3]:
-                        bgColor = "blue";
+                        bgColor = "gray";
                         break;
                     case status[4]:
-                        bgColor = "gray";
+                        bgColor = "red";
                         break;
                 }
                 return (
                     <>
                         <Box
                             style={{
+                                width: "90px",
+                                textAlign: "center",
                                 backgroundColor: bgColor,
                                 color: textColor,
                                 padding: "2px 6px",
@@ -169,18 +288,23 @@ function CarRentalManager() {
         },
         {
             field: "update",
-            headerName: "chi tiết",
-            description: "chi tiết",
-            width: 165,
+            headerName: "cập nhật",
+            description: "cập nhật",
+            width: 80,
             sortable: false,
             renderCell: (params) => {
-                return (
-                    <>
-                        <Button variant="contained" size="small">
-                            xem chi tiết
-                        </Button>
-                    </>
-                );
+                if (
+                    params.row.status == status[1] ||
+                    params.row.status == status[2]
+                ) {
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton color="primary">
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                }
             },
         },
     ];
@@ -223,15 +347,29 @@ function CarRentalManager() {
     return (
         <Box>
             <Typography variant="h6" component="div">
-                Danh sách yêu cầu đăng ký
+                Danh sách yêu cầu đăng ký xe
             </Typography>
+
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                sx={{ marginBottom: "10px" }}
+            >
+                <Tab value="Tất Cả" label="Tất Cả" wrapped />
+                <Tab value="Hoàn Thành" label="Hoàn Thành" />
+                <Tab value="Thành Công" label="Thành Công" />
+                <Tab value="Chờ Xác Nhận" label="Chờ Xác Nhận" />
+                <Tab value="Từ Chối" label="Từ Chối" />
+                <Tab value="Hủy" label="Hủy" />
+            </Tabs>
+
             <DataGrid
                 columns={columns}
                 rows={rowsTest}
                 autoHeight
                 disableColumnMenu
                 disableSelectionOnClick
-                pageSize={2}
+                pageSize={5}
                 // sx={{
                 //     ".MuiDataGrid-columnSeparator": {
                 //         display: "none"

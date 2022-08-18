@@ -153,7 +153,15 @@ function RentedCar() {
             renderCell: (params) => {
                 return (
                     <Tooltip title={params.row.startLocation} arrow>
-                        <span>{params.row.startLocation}</span>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.startLocation}
+                        </span>
                     </Tooltip>
                 );
             },
@@ -167,7 +175,15 @@ function RentedCar() {
             renderCell: (params) => {
                 return (
                     <Tooltip title={params.row.endLocation} arrow>
-                        <span>{params.row.endLocation}</span>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.endLocation}
+                        </span>
                     </Tooltip>
                 );
             },
