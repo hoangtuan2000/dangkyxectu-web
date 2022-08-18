@@ -20,6 +20,7 @@ import React from "react";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import CheckIcon from "@mui/icons-material/Check";
 
 const CustomNoRowsOverlay = () => {
     return (
@@ -40,6 +41,7 @@ const rowsTest = [
         endLocation: "Khu Hòa An",
         startTime: "29/06/2022",
         endTime: "30/06/2022",
+        SelfDriving: 0,
         status: "Hoàn Thành",
     },
     {
@@ -52,6 +54,7 @@ const rowsTest = [
         endLocation: "Khu Hòa An",
         startTime: "29/06/2022",
         endTime: "30/06/2022",
+        SelfDriving: 1,
         status: "Thành Công",
     },
     {
@@ -64,6 +67,7 @@ const rowsTest = [
         endLocation: "Khu Hòa An",
         startTime: "29/06/2022",
         endTime: "30/06/2022",
+        SelfDriving: 0,
         status: "Chờ Xác Nhận",
     },
     {
@@ -76,6 +80,7 @@ const rowsTest = [
         endLocation: "Khu Hòa An",
         startTime: "29/06/2022",
         endTime: "30/06/2022",
+        SelfDriving: 0,
         status: "Đã Hủy",
     },
     {
@@ -88,6 +93,7 @@ const rowsTest = [
         endLocation: "Khu Hòa An",
         startTime: "29/06/2022",
         endTime: "30/06/2022",
+        SelfDriving: 0,
         status: "Từ Chối",
     },
 ];
@@ -201,6 +207,20 @@ function RentedCar() {
             description: "ngày về",
             width: 110,
             sortable: false,
+        },
+        {
+            field: "SelfDriving",
+            headerName: "Tự Lái",
+            description: "Tự Lái",
+            width: 70,
+            sortable: false,
+            renderCell: (params) => {
+                if (params.row.SelfDriving == 1) {
+                    return <CheckIcon />;
+                } else {
+                    return false
+                }
+            },
         },
         {
             field: "status",
