@@ -20,6 +20,10 @@ const Strings = {
         FULL_NAME: "Họ Tên",
         DEPARTMENT: "Thuộc Khoa",
         REASON: "Lý Do",
+        BRAND: "Thương Hiệu",
+        NUMBER_OF_TRIPS: "Số Chuyến Đi",
+        NUMBER_OF_FAILURES: "Số Lần Hỏng Hóc",
+        LICENSE: "Giấy Phép",
     },
 
     Login: {
@@ -46,6 +50,10 @@ const Strings = {
 
     CarRentalManager: {
         CAR_RENTAL_LIST: "Danh Sách Yêu Cầu Đăng Ký Xe",
+    },
+
+    CarManager: {
+        ADD_CAR: "Thêm Xe",
     },
 };
 

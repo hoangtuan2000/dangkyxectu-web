@@ -23,14 +23,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-
-const CustomNoRowsOverlay = () => {
-    return (
-        <Box>
-            <p>Không có dữ liệu</p>
-        </Box>
-    );
-};
+import Strings from "../../constants/Strings";
+import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 
 const rowsTest = [
     {
@@ -117,8 +111,8 @@ function CarManager() {
         },
         {
             field: "imageCar",
-            headerName: "Ảnh",
-            description: "Ảnh",
+            headerName: Strings.Common.IMAGE,
+            description: Strings.Common.IMAGE,
             width: 100,
             sortable: false,
             renderCell: (params) => {
@@ -136,8 +130,8 @@ function CarManager() {
         },
         {
             field: "carBrand",
-            headerName: "Thương Hiệu",
-            description: "Thương Hiệu",
+            headerName: Strings.Common.BRAND,
+            description: Strings.Common.BRAND,
             width: 120,
             sortable: false,
             renderCell: (params) => {
@@ -158,36 +152,36 @@ function CarManager() {
         },
         {
             field: "type",
-            headerName: "Loại Xe",
-            description: "Loại Xe",
+            headerName: Strings.Common.CAR_TYPE,
+            description: Strings.Common.CAR_TYPE,
             width: 100,
             sortable: false,
         },
         {
             field: "licensePlates",
-            headerName: "biển số",
-            description: "biển số",
+            headerName: Strings.Common.LICENSE_PLATES,
+            description: Strings.Common.LICENSE_PLATES,
             width: 120,
             sortable: false,
         },
         {
             field: "numberOfTrips",
-            headerName: "Số Chuyến Đi",
-            description: "Số Chuyến Đi",
+            headerName: Strings.Common.NUMBER_OF_TRIPS,
+            description: Strings.Common.NUMBER_OF_TRIPS,
             width: 110,
             sortable: false,
         },
         {
             field: "numberOfFailures",
-            headerName: "Số Lần Hỏng Hóc",
-            description: "Số Lần Hỏng Hóc",
+            headerName: Strings.Common.NUMBER_OF_FAILURES,
+            description: Strings.Common.NUMBER_OF_FAILURES,
             width: 140,
             sortable: false,
         },
         {
             field: "status",
-            headerName: "trạng thái",
-            description: "trạng thái",
+            headerName: Strings.Common.STATUS,
+            description: Strings.Common.STATUS,
             width: 125,
             sortable: false,
             renderCell: (params) => {
@@ -229,8 +223,8 @@ function CarManager() {
         },
         {
             field: "license",
-            headerName: "Giấy Phép",
-            description: "Giấy Phép",
+            headerName: Strings.Common.LICENSE,
+            description: Strings.Common.LICENSE,
             width: 90,
             sortable: false,
             renderCell: (params) => {
@@ -266,8 +260,8 @@ function CarManager() {
         },
         {
             field: "update",
-            headerName: "cập nhật",
-            description: "cập nhật",
+            headerName: Strings.Common.UPDATE,
+            description: Strings.Common.UPDATE,
             width: 80,
             sortable: false,
             renderCell: (params) => {
@@ -284,41 +278,6 @@ function CarManager() {
         },
     ];
 
-    const CustomPagination = () => {
-        const apiRef = useGridApiContext();
-        const page = useGridSelector(apiRef, gridPageSelector);
-        const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-        const rowRangeVisible = useGridSelector(
-            apiRef,
-            gridPaginationRowRangeSelector
-        );
-        const totalRows = useGridSelector(apiRef, gridRowCountSelector);
-
-        return (
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ marginRight: "15px" }}>
-                    {rowRangeVisible &&
-                        `${rowRangeVisible?.firstRowIndex + 1} - ${
-                            rowRangeVisible?.lastRowIndex + 1
-                        } trên tổng ${totalRows} mẫu tin`}
-                </span>
-                <Pagination
-                    showFirstButton
-                    showLastButton
-                    color="primary"
-                    shape="rounded"
-                    // count={auditData?.totalPages}
-                    // page={auditData?.currentPage}
-                    count={pageCount}
-                    page={page + 1}
-                    onChange={(event, value) => {
-                        apiRef.current.setPage(value - 1);
-                    }}
-                />
-            </div>
-        );
-    };
-
     return (
         <Box>
             <Button
@@ -329,7 +288,7 @@ function CarManager() {
                 }}
                 startIcon={<DirectionsCarIcon />}
             >
-                Thêm Xe
+                {Strings.CarManager.ADD_CAR}
             </Button>
 
             <Tabs
@@ -343,33 +302,7 @@ function CarManager() {
                 <Tab value="Xe 32 Chỗ" label="Xe 32 Chỗ" />
             </Tabs>
 
-            <DataGrid
-                columns={columns}
-                rows={rowsTest}
-                autoHeight
-                disableColumnMenu
-                disableSelectionOnClick
-                pageSize={5}
-                // sx={{
-                //     ".MuiDataGrid-columnSeparator": {
-                //         display: "none"
-                //     },
-                //     ".MuiDataGrid-columnHeaderTitle": {
-                //         fontWeight: "bold",
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     ".MuiDataGrid-cell": {
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     "&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus, &.MuiDataGrid-root .MuiDataGrid-cell:focus": {
-                //         outline: "none",
-                //     },
-                // }}
-                components={{
-                    Pagination: CustomPagination,
-                    NoRowsOverlay: CustomNoRowsOverlay,
-                }}
-            />
+            <DataGridCustom columns={columns} rows={rowsTest} />
         </Box>
     );
 }
