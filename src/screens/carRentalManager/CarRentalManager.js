@@ -22,8 +22,8 @@ const rowsTest = [
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Hoàn Thành",
     },
     {
@@ -35,8 +35,8 @@ const rowsTest = [
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Thành Công",
     },
     {
@@ -48,8 +48,8 @@ const rowsTest = [
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Chờ Xác Nhận",
     },
     {
@@ -61,8 +61,8 @@ const rowsTest = [
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Đã Hủy",
     },
     {
@@ -74,8 +74,8 @@ const rowsTest = [
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
         reason: "Dự hội thảo tại Trường ABC DEF",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Từ Chối",
     },
 ];
@@ -107,8 +107,8 @@ function CarRentalManager() {
         },
         {
             field: "fullName",
-            headerName: "Họ Tên - Mã Cán Bộ",
-            description: "Họ Tên - Mã Cán Bộ",
+            headerName: Strings.Common.FULL_NAME,
+            description: Strings.Common.FULL_NAME,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -129,8 +129,8 @@ function CarRentalManager() {
         },
         {
             field: "department",
-            headerName: "Thuộc Khoa",
-            description: "Thuộc Khoa",
+            headerName: Strings.Common.DEPARTMENT,
+            description: Strings.Common.DEPARTMENT,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -151,15 +151,15 @@ function CarRentalManager() {
         },
         {
             field: "type",
-            headerName: "Thuê Xe",
-            description: "Thuê Xe",
+            headerName: Strings.Common.CAR_TYPE,
+            description: Strings.Common.CAR_TYPE,
             width: 100,
             sortable: false,
         },
         {
             field: "startLocation",
-            headerName: "Vị trí Bắt Đầu",
-            description: "Vị trí Bắt Đầu",
+            headerName: Strings.Common.START_LOCATION,
+            description: Strings.Common.START_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -180,8 +180,8 @@ function CarRentalManager() {
         },
         {
             field: "endLocation",
-            headerName: "Vị trí Kết Thúc",
-            description: "Vị trí Kết Thúc",
+            headerName: Strings.Common.END_LOCATION,
+            description: Strings.Common.END_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -202,8 +202,8 @@ function CarRentalManager() {
         },
         {
             field: "reason",
-            headerName: "Lý Do",
-            description: "Lý Do",
+            headerName: Strings.Common.REASON,
+            description: Strings.Common.REASON,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -223,23 +223,23 @@ function CarRentalManager() {
             },
         },
         {
-            field: "startTime",
-            headerName: "ngày đi",
-            description: "ngày đi",
+            field: "startDay",
+            headerName: Strings.Common.START_DAY,
+            description: Strings.Common.START_DAY,
             width: 110,
             sortable: false,
         },
         {
-            field: "endTime",
-            headerName: "ngày về",
-            description: "ngày về",
+            field: "endDay",
+            headerName: Strings.Common.END_DAY,
+            description: Strings.Common.END_DAY,
             width: 110,
             sortable: false,
         },
         {
             field: "status",
-            headerName: "trạng thái",
-            description: "trạng thái",
+            headerName: Strings.Common.STATUS,
+            description: Strings.Common.STATUS,
             width: 120,
             sortable: false,
             renderCell: (params) => {
@@ -287,8 +287,8 @@ function CarRentalManager() {
         },
         {
             field: "update",
-            headerName: "cập nhật",
-            description: "cập nhật",
+            headerName: Strings.Common.UPDATE,
+            description: Strings.Common.UPDATE,
             width: 80,
             sortable: false,
             renderCell: (params) => {

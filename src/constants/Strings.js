@@ -19,6 +19,7 @@ const Strings = {
         REVIEW: "Đánh Giá",
         FULL_NAME: "Họ Tên",
         DEPARTMENT: "Thuộc Khoa",
+        REASON: "Lý Do",
     },
 
     Login: {
