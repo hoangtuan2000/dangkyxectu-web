@@ -261,7 +261,7 @@ export default function MainLayout() {
                                     },
                                 }}
                             />
-                            {Strings.App.LOGOUT}
+                            {Strings.Common.LOGOUT}
                         </MenuItem>
                     </Menu>
                 </Toolbar>

@@ -27,12 +27,12 @@ const currentUserPersistConfig = {
 };
 
 const darkModePersistedReducer = persistReducer(
-    currentUserPersistConfig,
+    darkModePersistConfig,
     themeDarkModeReducer
 );
 
 const currentUserPersistedReducer = persistReducer(
-    darkModePersistConfig,
+    currentUserPersistConfig,
     currentUserReducer
 );
 

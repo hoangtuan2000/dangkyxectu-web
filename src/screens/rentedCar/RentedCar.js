@@ -1,34 +1,17 @@
 import {
     Box,
     IconButton,
-    Pagination,
     Rating,
     Tooltip,
     Typography,
     useTheme,
 } from "@mui/material";
-import {
-    DataGrid,
-    gridPageCountSelector,
-    gridPageSelector,
-    gridPaginationRowRangeSelector,
-    gridRowCountSelector,
-    useGridApiContext,
-    useGridSelector,
-} from "@mui/x-data-grid";
 import React from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import CheckIcon from "@mui/icons-material/Check";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const CustomNoRowsOverlay = () => {
-    return (
-        <Box>
-            <p>Không có dữ liệu</p>
-        </Box>
-    );
-};
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../constants/Strings";
 
 const rowsTest = [
     {
@@ -39,9 +22,8 @@ const rowsTest = [
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
-        SelfDriving: 0,
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Hoàn Thành",
     },
     {
@@ -52,9 +34,8 @@ const rowsTest = [
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
-        SelfDriving: 1,
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Thành Công",
     },
     {
@@ -65,9 +46,8 @@ const rowsTest = [
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
-        SelfDriving: 0,
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Chờ Xác Nhận",
     },
     {
@@ -78,9 +58,8 @@ const rowsTest = [
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
-        SelfDriving: 0,
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Đã Hủy",
     },
     {
@@ -91,9 +70,8 @@ const rowsTest = [
         licensePlates: "65A - 123456",
         startLocation: "Khu II Đại Học Cần Thơ",
         endLocation: "Khu Hòa An",
-        startTime: "29/06/2022",
-        endTime: "30/06/2022",
-        SelfDriving: 0,
+        startDay: "29/06/2022",
+        endDay: "30/06/2022",
         status: "Từ Chối",
     },
 ];
@@ -119,8 +97,8 @@ function RentedCar() {
         },
         {
             field: "imageCar",
-            headerName: "Ảnh",
-            description: "Ảnh",
+            headerName: Strings.RentedCar.IMAGE,
+            description: Strings.RentedCar.IMAGE,
             width: 100,
             sortable: false,
             renderCell: (params) => {
@@ -138,22 +116,22 @@ function RentedCar() {
         },
         {
             field: "type",
-            headerName: "Loại Xe",
-            description: "Loại Xe",
+            headerName: Strings.RentedCar.CAR_TYPE,
+            description: Strings.RentedCar.CAR_TYPE,
             width: 100,
             sortable: false,
         },
         {
             field: "licensePlates",
-            headerName: "biển số",
-            description: "biển số",
+            headerName: Strings.RentedCar.LICENSE_PLATES,
+            description: Strings.RentedCar.LICENSE_PLATES,
             width: 120,
             sortable: false,
         },
         {
             field: "startLocation",
-            headerName: "Vị trí Bắt Đầu",
-            description: "Vị trí Bắt Đầu",
+            headerName: Strings.RentedCar.START_LOCATION,
+            description: Strings.RentedCar.START_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -174,8 +152,8 @@ function RentedCar() {
         },
         {
             field: "endLocation",
-            headerName: "Vị trí Kết Thúc",
-            description: "Vị trí Kết Thúc",
+            headerName: Strings.RentedCar.END_LOCATION,
+            description: Strings.RentedCar.END_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -195,37 +173,23 @@ function RentedCar() {
             },
         },
         {
-            field: "startTime",
-            headerName: "ngày đi",
-            description: "ngày đi",
+            field: "startDay",
+            headerName: Strings.RentedCar.START_DAY,
+            description: Strings.RentedCar.START_DAY,
             width: 110,
             sortable: false,
         },
         {
-            field: "endTime",
-            headerName: "ngày về",
-            description: "ngày về",
+            field: "endDay",
+            headerName: Strings.RentedCar.END_DAY,
+            description: Strings.RentedCar.END_DAY,
             width: 110,
             sortable: false,
-        },
-        {
-            field: "SelfDriving",
-            headerName: "Tự Lái",
-            description: "Tự Lái",
-            width: 70,
-            sortable: false,
-            renderCell: (params) => {
-                if (params.row.SelfDriving == 1) {
-                    return <CheckIcon />;
-                } else {
-                    return false
-                }
-            },
         },
         {
             field: "status",
-            headerName: "trạng thái",
-            description: "trạng thái",
+            headerName: Strings.RentedCar.STATUS,
+            description: Strings.RentedCar.STATUS,
             width: 120,
             sortable: false,
             renderCell: (params) => {
@@ -273,8 +237,8 @@ function RentedCar() {
         },
         {
             field: "update",
-            headerName: "cập nhật",
-            description: "cập nhật",
+            headerName: Strings.RentedCar.UPDATE,
+            description: Strings.RentedCar.UPDATE,
             width: 80,
             sortable: false,
             renderCell: (params) => {
@@ -289,7 +253,7 @@ function RentedCar() {
                             </IconButton>
                         </Tooltip>
                     );
-                }else{
+                } else {
                     return (
                         <Tooltip title="Xem Chi Tiết" arrow>
                             <IconButton color="primary">
@@ -302,8 +266,8 @@ function RentedCar() {
         },
         {
             field: "cancel",
-            headerName: "Hủy",
-            description: "Hủy",
+            headerName: Strings.RentedCar.CANCEL,
+            description: Strings.RentedCar.CANCEL,
             width: 50,
             sortable: false,
             renderCell: (params) => {
@@ -323,8 +287,8 @@ function RentedCar() {
         },
         {
             field: "reviews",
-            headerName: "đánh giá",
-            description: "đánh giá",
+            headerName: Strings.RentedCar.REVIEW,
+            description: Strings.RentedCar.REVIEW,
             width: 165,
             sortable: false,
             renderCell: (params) => {
@@ -342,73 +306,13 @@ function RentedCar() {
         },
     ];
 
-    const CustomPagination = () => {
-        const apiRef = useGridApiContext();
-        const page = useGridSelector(apiRef, gridPageSelector);
-        const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-        const rowRangeVisible = useGridSelector(
-            apiRef,
-            gridPaginationRowRangeSelector
-        );
-        const totalRows = useGridSelector(apiRef, gridRowCountSelector);
-
-        return (
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ marginRight: "15px" }}>
-                    {rowRangeVisible &&
-                        `${rowRangeVisible?.firstRowIndex + 1} - ${
-                            rowRangeVisible?.lastRowIndex + 1
-                        } trên tổng ${totalRows} mẫu tin`}
-                </span>
-                <Pagination
-                    showFirstButton
-                    showLastButton
-                    color="primary"
-                    shape="rounded"
-                    // count={auditData?.totalPages}
-                    // page={auditData?.currentPage}
-                    count={pageCount}
-                    page={page + 1}
-                    onChange={(event, value) => {
-                        apiRef.current.setPage(value - 1);
-                    }}
-                />
-            </div>
-        );
-    };
-
     return (
         <Box>
             <Typography variant="h6" component="div">
-                Danh sách xe đã đăng ký
+                {Strings.RentedCar.RENTED_CAR_LIST}
             </Typography>
-            <DataGrid
-                columns={columns}
-                rows={rowsTest}
-                autoHeight
-                disableColumnMenu
-                disableSelectionOnClick
-                pageSize={5}
-                // sx={{
-                //     ".MuiDataGrid-columnSeparator": {
-                //         display: "none"
-                //     },
-                //     ".MuiDataGrid-columnHeaderTitle": {
-                //         fontWeight: "bold",
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     ".MuiDataGrid-cell": {
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     "&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus, &.MuiDataGrid-root .MuiDataGrid-cell:focus": {
-                //         outline: "none",
-                //     },
-                // }}
-                components={{
-                    Pagination: CustomPagination,
-                    NoRowsOverlay: CustomNoRowsOverlay,
-                }}
-            />
+
+            <DataGridCustom columns={columns} rows={rowsTest} />
         </Box>
     );
 }
