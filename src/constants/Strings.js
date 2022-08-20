@@ -6,6 +6,19 @@ const Strings = {
     Common: {
         LOGOUT: "Đăng Xuất",
         NO_DATA: "Không Có Dữ Liệu",
+        IMAGE: "Ảnh",
+        CAR_TYPE: "Loại Xe",
+        LICENSE_PLATES: "Biển Số",
+        START_LOCATION: "Vị Trí Bắt Đầu",
+        END_LOCATION: "Vị Trí Kết Thúc",
+        START_DAY: "Ngày Đi",
+        END_DAY: "Ngày Về",
+        STATUS: "Trạng Thái",
+        UPDATE: "Cập Nhật",
+        CANCEL: "Hủy",
+        REVIEW: "Đánh Giá",
+        FULL_NAME: "Họ Tên",
+        DEPARTMENT: "Thuộc Khoa",
     },
 
     Login: {
@@ -28,17 +41,10 @@ const Strings = {
 
     RentedCar: {
         RENTED_CAR_LIST: "Danh Sách Xe Đã Đăng Ký",
-        IMAGE: "Ảnh",
-        CAR_TYPE: "Loại Xe",
-        LICENSE_PLATES: "Biển Số",
-        START_LOCATION: "Vị Trí Bắt Đầu",
-        END_LOCATION: "Vị Trí Kết Thúc",
-        START_DAY: "Ngày Đi",
-        END_DAY: "Ngày Về",
-        STATUS: "Trạng Thái",
-        UPDATE: "Cập Nhật",
-        CANCEL: "Hủy",
-        REVIEW: "Đánh Giá",
+    },
+
+    CarRentalManager: {
+        CAR_RENTAL_LIST: "Danh Sách Yêu Cầu Đăng Ký Xe",
     },
 };
 

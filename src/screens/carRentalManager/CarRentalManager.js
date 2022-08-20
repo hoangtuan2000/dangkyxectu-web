@@ -1,35 +1,16 @@
 import {
     Box,
-    Button,
     IconButton,
-    Pagination,
-    Rating,
     Tab,
     Tabs,
     Tooltip,
     Typography,
     useTheme,
 } from "@mui/material";
-import {
-    DataGrid,
-    gridPageCountSelector,
-    gridPageSelector,
-    gridPaginationRowRangeSelector,
-    gridRowCountSelector,
-    useGridApiContext,
-    useGridSelector,
-} from "@mui/x-data-grid";
 import React from "react";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-
-const CustomNoRowsOverlay = () => {
-    return (
-        <Box>
-            <p>Không có dữ liệu</p>
-        </Box>
-    );
-};
+import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../constants/Strings";
 
 const rowsTest = [
     {
@@ -327,45 +308,10 @@ function CarRentalManager() {
         },
     ];
 
-    const CustomPagination = () => {
-        const apiRef = useGridApiContext();
-        const page = useGridSelector(apiRef, gridPageSelector);
-        const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-        const rowRangeVisible = useGridSelector(
-            apiRef,
-            gridPaginationRowRangeSelector
-        );
-        const totalRows = useGridSelector(apiRef, gridRowCountSelector);
-
-        return (
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ marginRight: "15px" }}>
-                    {rowRangeVisible &&
-                        `${rowRangeVisible?.firstRowIndex + 1} - ${
-                            rowRangeVisible?.lastRowIndex + 1
-                        } trên tổng ${totalRows} mẫu tin`}
-                </span>
-                <Pagination
-                    showFirstButton
-                    showLastButton
-                    color="primary"
-                    shape="rounded"
-                    // count={auditData?.totalPages}
-                    // page={auditData?.currentPage}
-                    count={pageCount}
-                    page={page + 1}
-                    onChange={(event, value) => {
-                        apiRef.current.setPage(value - 1);
-                    }}
-                />
-            </div>
-        );
-    };
-
     return (
         <Box>
             <Typography variant="h6" component="div">
-                Danh sách yêu cầu đăng ký xe
+                {Strings.CarRentalManager.CAR_RENTAL_LIST}
             </Typography>
 
             <Tabs
@@ -381,33 +327,7 @@ function CarRentalManager() {
                 <Tab value="Hủy" label="Hủy" />
             </Tabs>
 
-            <DataGrid
-                columns={columns}
-                rows={rowsTest}
-                autoHeight
-                disableColumnMenu
-                disableSelectionOnClick
-                pageSize={5}
-                // sx={{
-                //     ".MuiDataGrid-columnSeparator": {
-                //         display: "none"
-                //     },
-                //     ".MuiDataGrid-columnHeaderTitle": {
-                //         fontWeight: "bold",
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     ".MuiDataGrid-cell": {
-                //         fontSize: Constants.Styles.FONT_SIZE_SMALL
-                //     },
-                //     "&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus, &.MuiDataGrid-root .MuiDataGrid-cell:focus": {
-                //         outline: "none",
-                //     },
-                // }}
-                components={{
-                    Pagination: CustomPagination,
-                    NoRowsOverlay: CustomNoRowsOverlay,
-                }}
-            />
+            <DataGridCustom columns={columns} rows={rowsTest} />
         </Box>
     );
 }

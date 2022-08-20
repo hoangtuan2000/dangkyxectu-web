@@ -97,8 +97,8 @@ function RentedCar() {
         },
         {
             field: "imageCar",
-            headerName: Strings.RentedCar.IMAGE,
-            description: Strings.RentedCar.IMAGE,
+            headerName: Strings.Common.IMAGE,
+            description: Strings.Common.IMAGE,
             width: 100,
             sortable: false,
             renderCell: (params) => {
@@ -116,22 +116,22 @@ function RentedCar() {
         },
         {
             field: "type",
-            headerName: Strings.RentedCar.CAR_TYPE,
-            description: Strings.RentedCar.CAR_TYPE,
+            headerName: Strings.Common.CAR_TYPE,
+            description: Strings.Common.CAR_TYPE,
             width: 100,
             sortable: false,
         },
         {
             field: "licensePlates",
-            headerName: Strings.RentedCar.LICENSE_PLATES,
-            description: Strings.RentedCar.LICENSE_PLATES,
+            headerName: Strings.Common.LICENSE_PLATES,
+            description: Strings.Common.LICENSE_PLATES,
             width: 120,
             sortable: false,
         },
         {
             field: "startLocation",
-            headerName: Strings.RentedCar.START_LOCATION,
-            description: Strings.RentedCar.START_LOCATION,
+            headerName: Strings.Common.START_LOCATION,
+            description: Strings.Common.START_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -152,8 +152,8 @@ function RentedCar() {
         },
         {
             field: "endLocation",
-            headerName: Strings.RentedCar.END_LOCATION,
-            description: Strings.RentedCar.END_LOCATION,
+            headerName: Strings.Common.END_LOCATION,
+            description: Strings.Common.END_LOCATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
@@ -174,22 +174,22 @@ function RentedCar() {
         },
         {
             field: "startDay",
-            headerName: Strings.RentedCar.START_DAY,
-            description: Strings.RentedCar.START_DAY,
+            headerName: Strings.Common.START_DAY,
+            description: Strings.Common.START_DAY,
             width: 110,
             sortable: false,
         },
         {
             field: "endDay",
-            headerName: Strings.RentedCar.END_DAY,
-            description: Strings.RentedCar.END_DAY,
+            headerName: Strings.Common.END_DAY,
+            description: Strings.Common.END_DAY,
             width: 110,
             sortable: false,
         },
         {
             field: "status",
-            headerName: Strings.RentedCar.STATUS,
-            description: Strings.RentedCar.STATUS,
+            headerName: Strings.Common.STATUS,
+            description: Strings.Common.STATUS,
             width: 120,
             sortable: false,
             renderCell: (params) => {
@@ -237,8 +237,8 @@ function RentedCar() {
         },
         {
             field: "update",
-            headerName: Strings.RentedCar.UPDATE,
-            description: Strings.RentedCar.UPDATE,
+            headerName: Strings.Common.UPDATE,
+            description: Strings.Common.UPDATE,
             width: 80,
             sortable: false,
             renderCell: (params) => {
@@ -266,8 +266,8 @@ function RentedCar() {
         },
         {
             field: "cancel",
-            headerName: Strings.RentedCar.CANCEL,
-            description: Strings.RentedCar.CANCEL,
+            headerName: Strings.Common.CANCEL,
+            description: Strings.Common.CANCEL,
             width: 50,
             sortable: false,
             renderCell: (params) => {
@@ -287,8 +287,8 @@ function RentedCar() {
         },
         {
             field: "reviews",
-            headerName: Strings.RentedCar.REVIEW,
-            description: Strings.RentedCar.REVIEW,
+            headerName: Strings.Common.REVIEW,
+            description: Strings.Common.REVIEW,
             width: 165,
             sortable: false,
             renderCell: (params) => {
