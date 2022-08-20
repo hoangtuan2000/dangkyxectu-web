@@ -17,10 +17,10 @@ import {
     useGridSelector,
 } from "@mui/x-data-grid";
 import React from "react";
-import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CheckIcon from "@mui/icons-material/Check";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const CustomNoRowsOverlay = () => {
     return (
@@ -286,6 +286,14 @@ function RentedCar() {
                         <Tooltip title="Cập Nhật" arrow>
                             <IconButton color="primary">
                                 <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                }else{
+                    return (
+                        <Tooltip title="Xem Chi Tiết" arrow>
+                            <IconButton color="primary">
+                                <VisibilityIcon />
                             </IconButton>
                         </Tooltip>
                     );

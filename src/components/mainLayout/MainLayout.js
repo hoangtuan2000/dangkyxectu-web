@@ -4,7 +4,6 @@ import {
     Menu,
     MenuItem,
     Tooltip,
-    styled,
     useTheme,
     Box,
     Drawer,
@@ -18,136 +17,31 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Switch,
 } from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
-import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import LogoCTU from "../../assets/logoCTU.png";
 import Strings from "../../commons/Strings";
 import { useSelector, useDispatch } from "react-redux";
 import { changeDarkMode } from "../../redux/themeDarkModeSlice";
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import FeedIcon from '@mui/icons-material/Feed';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import NightsStayIcon from '@mui/icons-material/NightsStay';
-import InsightsIcon from '@mui/icons-material/Insights';
-
-const drawerWidth = 240;
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-    ({ theme, open }) => ({
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: `-${drawerWidth}px`,
-        ...(open && {
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: 0,
-        }),
-    })
-);
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-    transition: theme.transitions.create(["margin", "width"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        width: `calc(100% - ${drawerWidth}px)`,
-        height: "80px",
-        marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(["margin", "width"], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const DrawerHeader = styled("div")(({ theme, bgColor }) => ({
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    height: "80px",
-    paddingBottom: "0px",
-    ...theme.mixins.toolbar,
-    justifyContent: "space-between",
-    backgroundColor: bgColor ? theme.palette.primary.main : "none",
-    [theme.breakpoints.up("xs")]: {
-        fontSize: "10px",
-    },
-    [theme.breakpoints.up("sm")]: {
-        fontSize: "12px",
-    },
-    [theme.breakpoints.up("md")]: {
-        fontSize: "15px",
-    },
-}));
-
-const ListFeatures = styled(List)(({ theme }) => ({
-    [theme.breakpoints.up("xs")]: {
-        ".MuiSvgIcon-root": {
-            fontSize: "20px",
-        },
-        ".MuiTypography-root": {
-            fontSize: "13px",
-        },
-    },
-    [theme.breakpoints.up("sm")]: {
-        ".MuiSvgIcon-root": {
-            fontSize: "22px",
-        },
-        ".MuiTypography-root": {
-            fontSize: "14px",
-        },
-    },
-    [theme.breakpoints.up("md")]: {
-        ".MuiSvgIcon-root": {
-            fontSize: "23px",
-        },
-        ".MuiTypography-root": {
-            fontSize: "15px",
-        },
-    },
-}));
-
-const Logo = styled("img")(({ theme }) => ({
-    width: "80px",
-    padding: "5px",
-    marginRight: "10px",
-    [theme.breakpoints.up("xs")]: { display: "none" },
-    [theme.breakpoints.up("sm")]: { display: "block" },
-    [theme.breakpoints.up("md")]: { display: "block" },
-}));
-
-const Title = styled(Typography)(({ theme }) => ({
-    fontWeight: "bold",
-    fontFamily: "serif",
-    [theme.breakpoints.up("xs")]: {
-        fontSize: "13px",
-    },
-    [theme.breakpoints.up("sm")]: {
-        fontSize: "23px",
-    },
-    [theme.breakpoints.up("md")]: {
-        fontSize: "24px",
-    },
-}));
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import FeedIcon from "@mui/icons-material/Feed";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import InsightsIcon from "@mui/icons-material/Insights";
+import {
+    Main,
+    AppBar,
+    DrawerHeader,
+    ListFeatures,
+    Logo,
+    Title,
+    drawerWidth,
+} from "./MainLayoutCustomStyles";
 
 export default function MainLayout() {
     const theme = useTheme();
@@ -363,6 +257,7 @@ export default function MainLayout() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
+
                 <ListFeatures>
                     <ListItem disablePadding>
                         <NavLink
@@ -424,6 +319,7 @@ export default function MainLayout() {
                     </ListItem>
                 </ListFeatures>
                 <Divider />
+                
                 <ListFeatures>
                     <ListItem disablePadding>
                         <NavLink
