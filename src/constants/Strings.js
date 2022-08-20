@@ -1,6 +1,7 @@
 const Strings = {
     App: {
         TITLE: "Hệ Thống Đăng Ký Sử Dụng Xe",
+        LOGOUT: "Đăng Xuất",
     },
 
     Login: {
@@ -9,6 +10,11 @@ const Strings = {
         REMEMBER_ACCOUNT: "Ghi nhớ tôi",
         LOGIN: "Đăng Nhập",
     },
+
+    MainLayout: {
+        TEXT_HEADER: "Công Cụ Quản Lý",
+    },
+
 };
 
 export default Strings;

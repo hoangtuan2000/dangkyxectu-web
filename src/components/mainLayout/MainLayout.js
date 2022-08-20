@@ -17,13 +17,14 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    Button,
 } from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import LogoCTU from "../../assets/logoCTU.png";
-import Strings from "../../commons/Strings";
+import Strings from "../../constants/Strings";
 import { useSelector, useDispatch } from "react-redux";
 import { changeDarkMode } from "../../redux/themeDarkModeSlice";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -42,6 +43,48 @@ import {
     Title,
     drawerWidth,
 } from "./MainLayoutCustomStyles";
+import RoutesPath from "../../constants/RoutesPath";
+import { changeCurrentUser } from "../../redux/currentUserSlice";
+import Role from "../../constants/Role";
+
+const DataListItems = [
+    {
+        path: RoutesPath.HOME,
+        icon: <ListAltIcon />,
+        name: "Tất Cả Xe",
+        role: Role.ALL,
+    },
+    {
+        path: RoutesPath.RENDTED_CAR,
+        icon: <FactCheckIcon />,
+        name: "Xe Đã Đăng Ký",
+        role: Role.USER,
+    },
+    {
+        path: RoutesPath.CAR_RENTAL_MANAGER,
+        icon: <FeedIcon />,
+        name: "Quản Lý Đăng Ký",
+        role: Role.ADMIN,
+    },
+    {
+        path: RoutesPath.CAR_MANAGER,
+        icon: <DirectionsCarIcon />,
+        name: "Quản Lý Xe",
+        role: Role.ADMIN,
+    },
+    {
+        path: RoutesPath.DRIVER_MANAGEMENT,
+        icon: <PeopleAltIcon />,
+        name: "Quản Lý Tài Xế",
+        role: Role.ADMIN,
+    },
+    {
+        path: RoutesPath.STATISTICAL,
+        icon: <InsightsIcon />,
+        name: "Thống Kê",
+        role: Role.ADMIN,
+    },
+];
 
 export default function MainLayout() {
     const theme = useTheme();
@@ -49,6 +92,7 @@ export default function MainLayout() {
     const dispath = useDispatch();
 
     const themeDarkMode = useSelector((state) => state.themeDarkMode.darkMode);
+    const currentUser = useSelector((state) => state.currentUser.user);
 
     // handle drawer open/close
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -93,9 +137,9 @@ export default function MainLayout() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    {/* {!open && ( */}
+                    
                     <Logo src={LogoCTU} />
-                    {/* )} */}
+                    
                     <Title variant="h6" noWrap component="div">
                         {Strings.App.TITLE}
                     </Title>
@@ -133,11 +177,6 @@ export default function MainLayout() {
                             onClick={handleClick}
                             size="small"
                             sx={{ ml: 1 }}
-                            // aria-controls={
-                            //     openAccount ? "account-menu" : undefined
-                            // }
-                            // aria-haspopup="true"
-                            // aria-expanded={openAccount ? "true" : undefined}
                         >
                             <Avatar
                                 alt="avatar"
@@ -222,7 +261,7 @@ export default function MainLayout() {
                                     },
                                 }}
                             />
-                            Đăng Xuất
+                            {Strings.App.LOGOUT}
                         </MenuItem>
                     </Menu>
                 </Toolbar>
@@ -250,7 +289,7 @@ export default function MainLayout() {
                             textAlign: "center",
                         }}
                     >
-                        Công Cụ Quản Lý
+                        {Strings.MainLayout.TEXT_HEADER}
                     </Typography>
                     <IconButton onClick={handleDrawerClose}>
                         <MenuIcon />
@@ -259,186 +298,49 @@ export default function MainLayout() {
                 <Divider />
 
                 <ListFeatures>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <ListAltIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
+                    {DataListItems.map((item, index) => {
+                        if (item.role == currentUser.role || item.role == Role.ALL) {
+                            return (
+                                <ListItem disablePadding key={index}>
+                                    <NavLink
+                                        style={({ isActive }) => {
+                                            return {
+                                                width: "100%",
+                                                borderRadius: "5px",
+                                                textDecoration: "none",
+                                                backgroundColor: isActive
+                                                    ? theme.palette.action
+                                                          .selected
+                                                    : "",
+                                            };
                                         }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Tất Cả Xe"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/rented-car"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <FactCheckIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
-                                        }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Xe Đã Đăng Ký"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
+                                        to={item.path}
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon
+                                                sx={{
+                                                    color: theme.palette.primary
+                                                        .light,
+                                                }}
+                                            >
+                                                {item.icon}
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={item.name}
+                                                sx={{
+                                                    color: theme.palette.primary
+                                                        .light,
+                                                }}
+                                            />
+                                        </ListItemButton>
+                                    </NavLink>
+                                </ListItem>
+                            );
+                        }
+                    })}
                 </ListFeatures>
                 <Divider />
-                
-                <ListFeatures>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/car-rental-manager"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <FeedIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
-                                        }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Quản Lý Đăng Ký"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/car-manager"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <DirectionsCarIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
-                                        }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Quản Lý Xe"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/driver-management"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <PeopleAltIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
-                                        }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Quản Lý Tài Xế"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <NavLink
-                            style={({ isActive }) => {
-                                return {
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    textDecoration: "none",
-                                    backgroundColor: isActive
-                                        ? theme.palette.action.selected
-                                        : "",
-                                };
-                            }}
-                            to="/statistical"
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <InsightsIcon
-                                        sx={{
-                                            color: theme.palette.primary.light,
-                                        }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={"Thống Kê"}
-                                    sx={{ color: theme.palette.primary.light }}
-                                />
-                            </ListItemButton>
-                        </NavLink>
-                    </ListItem>
-                </ListFeatures>
-                <Divider />
+
                 <List>
                     <ListItem key={"Dark mode"} disablePadding>
                         <ListItemButton
