@@ -24,7 +24,7 @@ const Strings = {
         NUMBER_OF_TRIPS: "Số Chuyến Đi",
         NUMBER_OF_FAILURES: "Số Lần Hỏng Hóc",
         LICENSE: "Giấy Phép",
-        NUMBER_PHONE: "Số Điện Thoại"
+        NUMBER_PHONE: "Số Điện Thoại",
     },
 
     Login: {
@@ -59,7 +59,15 @@ const Strings = {
 
     DriverManagement: {
         ADD_DRIVER: "Thêm Tài Xế",
-        DRIVER_CODE: "Mã Tài Xế"
+        DRIVER_CODE: "Mã Tài Xế",
+    },
+
+    Statistical: {
+        TOTAL_CAR: "Tổng Số Xe",
+        TOTAL_DRIVER: "Tống Số Tài Xế",
+        TOTAL_TRIPS: "Tống Số Chuyến Đi",
+        FORM_IS_PENDING_CONFIRMATION: "Đơn Chờ Xác Nhận",
+        LICENSE_EXPIRES: "Giấy Phép Hết Hạn",
     },
 };
 

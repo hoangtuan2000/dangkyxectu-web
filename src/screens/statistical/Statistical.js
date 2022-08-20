@@ -16,6 +16,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import Strings from "../../constants/Strings";
 
 const data = [
     {
@@ -71,7 +72,6 @@ function Statistical() {
                     width: "280px",
                     height: "130px",
                     backgroundColor: theme.palette.action.selected,
-                    // boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                     boxShadow: `${theme.palette.text.disabled} 0px 5px 15px`,
                     borderRadius: "10px",
                     borderLeft: `5px solid ${theme.palette.error.main}`,
@@ -90,7 +90,8 @@ function Statistical() {
                         fontWeight: "bold",
                     }}
                 >
-                    <DirectionsCarIcon sx={{ marginRight: "5px" }} /> Tổng Số Xe
+                    <DirectionsCarIcon sx={{ marginRight: "5px" }} />
+                    {Strings.Statistical.TOTAL_CAR}
                 </Typography>
                 <Box sx={{ paddingLeft: "15px" }}>
                     <Typography variant="p" component="div">
@@ -128,7 +129,8 @@ function Statistical() {
                         fontWeight: "bold",
                     }}
                 >
-                    <PeopleAltIcon sx={{ marginRight: "5px" }} /> Tổng Số Tài Xế
+                    <PeopleAltIcon sx={{ marginRight: "5px" }} />
+                    {Strings.Statistical.TOTAL_DRIVER}
                 </Typography>
                 <Box sx={{ paddingLeft: "15px" }}>
                     <Typography variant="p" component="div">
@@ -166,8 +168,8 @@ function Statistical() {
                         fontWeight: "bold",
                     }}
                 >
-                    <AirportShuttleIcon sx={{ marginRight: "5px" }} /> Tổng Số
-                    Chuyến Đi
+                    <AirportShuttleIcon sx={{ marginRight: "5px" }} />
+                    {Strings.Statistical.TOTAL_TRIPS}
                 </Typography>
                 <Box
                     sx={{
@@ -206,8 +208,8 @@ function Statistical() {
                         fontWeight: "bold",
                     }}
                 >
-                    <LibraryBooksIcon sx={{ marginRight: "5px" }} /> Đơn Chờ Xác
-                    Nhận
+                    <LibraryBooksIcon sx={{ marginRight: "5px" }} />
+                    {Strings.Statistical.FORM_IS_PENDING_CONFIRMATION}
                 </Typography>
                 <Box
                     sx={{
@@ -246,8 +248,8 @@ function Statistical() {
                         fontWeight: "bold",
                     }}
                 >
-                    <LibraryBooksIcon sx={{ marginRight: "5px" }} /> Giấy Phép
-                    Hết Hạn
+                    <LibraryBooksIcon sx={{ marginRight: "5px" }} />
+                    {Strings.Statistical.LICENSE_EXPIRES}
                 </Typography>
                 <Box
                     sx={{
@@ -273,10 +275,7 @@ function Statistical() {
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name">
-                    <Label
-                        value="Pages of my website"
-                        position="insideTop"
-                    />
+                    <Label value="Pages of my website" position="insideTop" />
                 </XAxis>
                 <YAxis
                     label={{
