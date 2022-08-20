@@ -24,6 +24,7 @@ const Strings = {
         NUMBER_OF_TRIPS: "Số Chuyến Đi",
         NUMBER_OF_FAILURES: "Số Lần Hỏng Hóc",
         LICENSE: "Giấy Phép",
+        NUMBER_PHONE: "Số Điện Thoại"
     },
 
     Login: {
@@ -54,6 +55,11 @@ const Strings = {
 
     CarManager: {
         ADD_CAR: "Thêm Xe",
+    },
+
+    DriverManagement: {
+        ADD_DRIVER: "Thêm Tài Xế",
+        DRIVER_CODE: "Mã Tài Xế"
     },
 };
 
