@@ -21,7 +21,7 @@ import {
     FormCheckBox,
     ButtonLogin,
 } from "./LoginCustomStyles";
-import Strings from "../../commons/Strings";
+import Strings from "../../constants/Strings";
 import logoCTU from "../../assets/logoCTU.png";
 
 export default function Login() {
