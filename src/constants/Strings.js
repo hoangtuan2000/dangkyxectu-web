@@ -15,6 +15,12 @@ const Strings = {
         TEXT_HEADER: "Công Cụ Quản Lý",
     },
 
+    Home: {
+        CAR_LIST: "Danh Sách Xe",
+        LICENSE_PLATES: "Biển Số Xe: ",
+        VEHICLE_CONDITION: "Tình Trạng Xe: ",
+        SCHEDULE: "Lịch Trình: ",
+    },
 };
 
 export default Strings;

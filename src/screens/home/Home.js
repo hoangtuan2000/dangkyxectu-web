@@ -1,20 +1,20 @@
 import * as React from "react";
 import {
     Box,
-    Card,
     CardActionArea,
     CardContent,
     CardMedia,
     List,
     ListItem,
     ListItemText,
-    styled,
     Typography,
+    useTheme,
 } from "@mui/material";
 import { CardContainer } from "./HomeCustomStyles";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import DialogCarInfo from "../../components/dialogCarInfo/DialogCarInfo";
 import DialogCarRental from "../../components/dialogCarRental/DialogCarRental";
+import Strings from "../../constants/Strings";
 
 const data = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
@@ -26,6 +26,9 @@ const data = [
 ];
 
 export default function Home() {
+
+    const theme = useTheme()
+
     const [openDialogCarInfo, setOpenDialogCarInfo] = React.useState(false);
     const [openDialogCarRental, setOpenDialogCarRental] = React.useState(false);
 
@@ -49,7 +52,7 @@ export default function Home() {
     return (
         <Box>
             <Typography variant="h6" component="div">
-                Danh sách xe
+                {Strings.Home.CAR_LIST}
             </Typography>
             {data.map((srcImage, index) => {
                 return (
@@ -66,20 +69,17 @@ export default function Home() {
                                 src={srcImage}
                             />
                             <CardContent>
-                                <Typography
-                                    variant="h6"
-                                    component="div"
-                                >
+                                <Typography variant="h6" component="div">
                                     Xe 46 Chỗ
                                 </Typography>
                                 <Typography variant="p" component="div">
-                                    Biển số: 65A-123456
+                                    {Strings.Home.LICENSE_PLATES} 65A-123456
                                 </Typography>
                                 <Typography variant="p" component="div">
-                                    Tình trạng: bình thường
+                                    {Strings.Home.VEHICLE_CONDITION} bình thường
                                 </Typography>
                                 <Typography variant="p" color="text.secondary">
-                                    Lịch trình:
+                                    {Strings.Home.SCHEDULE}
                                 </Typography>
                                 <List
                                     sx={{
@@ -94,6 +94,7 @@ export default function Home() {
                                         }}
                                     >
                                         <NearMeIcon
+                                        color="primary"
                                             fontSize="small"
                                             sx={{ marginRight: "5px" }}
                                         />
@@ -106,6 +107,7 @@ export default function Home() {
                                                 whiteSpace: "nowrap",
                                                 overflow: "hidden",
                                                 textOverflow: "ellipsis",
+                                                color: theme.palette.primary.main
                                             }}
                                             secondaryTypographyProps={{
                                                 fontSize: "12px",
