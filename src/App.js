@@ -16,6 +16,7 @@ import Statistical from "./screens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
 import Role from "./constants/Role";
 import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
+import TripManager from "./screens/tripManager/TripManager";
 
 // init AOS library
 AOS.init({
@@ -77,6 +78,10 @@ function App() {
                                         <Route
                                             path={RoutesPath.CAR_MANAGER}
                                             element={<CarManager />}
+                                        />
+                                        <Route
+                                            path={RoutesPath.TRIP_MANAGER}
+                                            element={<TripManager />}
                                         />
                                         <Route
                                             path={RoutesPath.DRIVER_MANAGEMENT}

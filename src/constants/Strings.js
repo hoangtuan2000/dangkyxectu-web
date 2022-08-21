@@ -73,6 +73,10 @@ const Strings = {
     DriverTripManager: {
         TRIP_LIST: "Danh Sách Chuyến Đi",
     },
+
+    TripManager: {
+        TRIP_LIST: "Danh Sách Chuyến Đi",
+    },
 };
 
 export default Strings;
