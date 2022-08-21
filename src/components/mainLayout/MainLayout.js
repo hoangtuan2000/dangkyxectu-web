@@ -34,6 +34,8 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
+import CommuteIcon from "@mui/icons-material/Commute";
+
 import {
     Main,
     AppBar,
@@ -52,7 +54,7 @@ const DataListItems = [
         path: RoutesPath.HOME,
         icon: <ListAltIcon />,
         name: "Tất Cả Xe",
-        role: Role.ALL,
+        role: Role.ADMIN_USER,
     },
     {
         path: RoutesPath.RENDTED_CAR,
@@ -83,6 +85,12 @@ const DataListItems = [
         icon: <InsightsIcon />,
         name: "Thống Kê",
         role: Role.ADMIN,
+    },
+    {
+        path: RoutesPath.DRIVER_TRIP_MANAGER,
+        icon: <CommuteIcon />,
+        name: "Quản Lý Chuyến Đi",
+        role: Role.DRIVER,
     },
 ];
 
@@ -137,9 +145,9 @@ export default function MainLayout() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    
+
                     <Logo src={LogoCTU} />
-                    
+
                     <Title variant="h6" noWrap component="div">
                         {Strings.App.TITLE}
                     </Title>
@@ -299,7 +307,10 @@ export default function MainLayout() {
 
                 <ListFeatures>
                     {DataListItems.map((item, index) => {
-                        if (item.role == currentUser.role || item.role == Role.ALL) {
+                        if (
+                            item.role == currentUser.role ||
+                            (item.role == Role.ADMIN_USER && currentUser.role != Role.DRIVER)
+                        ) {
                             return (
                                 <ListItem disablePadding key={index}>
                                     <NavLink

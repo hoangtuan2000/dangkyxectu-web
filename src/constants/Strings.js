@@ -69,6 +69,10 @@ const Strings = {
         FORM_IS_PENDING_CONFIRMATION: "Đơn Chờ Xác Nhận",
         LICENSE_EXPIRES: "Giấy Phép Hết Hạn",
     },
+
+    DriverTripManager: {
+        TRIP_LIST: "Danh Sách Chuyến Đi",
+    },
 };
 
 export default Strings;

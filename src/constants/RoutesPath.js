@@ -6,6 +6,7 @@ const RoutesPath = {
     CAR_MANAGER: "car-manager",
     DRIVER_MANAGEMENT: "driver-management",
     STATISTICAL: "statistical",
+    DRIVER_TRIP_MANAGER: "driver-trip-manager",
 };
 
 export default RoutesPath;

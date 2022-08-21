@@ -15,6 +15,7 @@ import DriverManagement from "./screens/driverManagement/DriverManagement";
 import Statistical from "./screens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
 import Role from "./constants/Role";
+import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 
 // init AOS library
 AOS.init({
@@ -56,7 +57,10 @@ function App() {
                                 path={RoutesPath.HOME}
                                 element={<MainLayout />}
                             >
-                                <Route index element={<Home />} />
+                                {currentUser.role != Role.DRIVER && (
+                                    <Route index element={<Home />} />
+                                )}
+
                                 {currentUser.role == Role.USER && (
                                     <Route
                                         path={RoutesPath.RENDTED_CAR}
@@ -83,6 +87,13 @@ function App() {
                                             element={<Statistical />}
                                         />
                                     </>
+                                )}
+
+                                {currentUser.role == Role.DRIVER && (
+                                    <Route
+                                        path={RoutesPath.DRIVER_TRIP_MANAGER}
+                                        element={<DriverTripManager />}
+                                    />
                                 )}
                             </Route>
                         </Route>
