@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-    Box,
-    Checkbox,
-    Grid,
-    IconButton,
-    InputAdornment,
-} from "@mui/material";
+import { Box, Checkbox, Grid, IconButton, InputAdornment } from "@mui/material";
 import {
     AccountCircle,
     VisibilityOff,
@@ -22,17 +16,27 @@ import {
     ButtonLogin,
 } from "./LoginCustomStyles";
 import Strings from "../../constants/Strings";
+import Constants from "../../constants/Constants";
 import logoCTU from "../../assets/logoCTU.png";
+import { LoginService } from "../../services/LoginServices";
+import axios from "axios";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const handleSubmit = (event) => {
+    const [inputLogin, setInputLogin] = useState({
+        code: null,
+        password: null,
+    });
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+        const res = await LoginService(inputLogin)
+        console.log("res89", res);
+        if(res.status != Constants.ApiCode.SUCCESS){
+            console.log("lỗi liền2");
+        }else{
+            console.log("ok2");
+        }
     };
 
     return (
@@ -45,6 +49,12 @@ export default function Login() {
                     </Title>
                     <Box component="form" onSubmit={handleSubmit}>
                         <TextLogin
+                            onChange={(e) =>
+                                setInputLogin({
+                                    ...inputLogin,
+                                    code: e.target.value,
+                                })
+                            }
                             margin="normal"
                             fullWidth
                             label={Strings.Login.LOGIN_CODE}
@@ -60,6 +70,12 @@ export default function Login() {
                             }}
                         />
                         <TextLogin
+                            onChange={(e) =>
+                                setInputLogin({
+                                    ...inputLogin,
+                                    password: e.target.value,
+                                })
+                            }
                             margin="normal"
                             fullWidth
                             size="small"
