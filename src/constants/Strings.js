@@ -25,6 +25,8 @@ const Strings = {
         NUMBER_OF_FAILURES: "Số Lần Hỏng Hóc",
         LICENSE: "Giấy Phép",
         NUMBER_PHONE: "Số Điện Thoại",
+        AN_ERROR_OCCURRED: "Đã Xảy Ra Lỗi",
+        NO_SCHEDULE: "Không Có Lịch Trình",
     },
 
     Login: {
@@ -32,6 +34,8 @@ const Strings = {
         PASSWORD: "Mật Khẩu",
         REMEMBER_ACCOUNT: "Ghi nhớ tôi",
         LOGIN: "Đăng Nhập",
+        PLEASE_ENTER_PASSWORD: "Vui Lòng Nhập Mật Khẩu",
+        PLEASE_ENTER_CODE: "Vui Lòng Nhập Mã Số",
     },
 
     MainLayout: {
@@ -41,7 +45,7 @@ const Strings = {
     Home: {
         CAR_LIST: "Danh Sách Xe",
         LICENSE_PLATES: "Biển Số Xe: ",
-        VEHICLE_CONDITION: "Tình Trạng Xe: ",
+        VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
     },
 

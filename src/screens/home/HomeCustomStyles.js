@@ -6,6 +6,7 @@ import {
 const CardContainer = styled(Card)(({ theme }) => ({
     float: "left",
     margin: "5px",
+    height: 350,
     [theme.breakpoints.up("xs")]: {
         maxWidth: 240,
     },
@@ -16,7 +17,7 @@ const CardContainer = styled(Card)(({ theme }) => ({
         maxWidth: 310,
     },
     [theme.breakpoints.up("mobileL")]: {
-        maxWidth: 365,
+        // maxWidth: 365,
         width: 365,
     },
     [theme.breakpoints.up("sm")]: {

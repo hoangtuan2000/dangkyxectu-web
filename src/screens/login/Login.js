@@ -16,112 +16,207 @@ import {
     ButtonLogin,
 } from "./LoginCustomStyles";
 import Strings from "../../constants/Strings";
-import Constants from "../../constants/Constants";
 import logoCTU from "../../assets/logoCTU.png";
 import { LoginService } from "../../services/LoginServices";
-import axios from "axios";
+import ModalError from "../../components/modalError/ModalError";
+import Constants from "../../constants/Constants";
+import helper from "../../common/helper";
+import BackDrop from "../../components/backDrop/BackDrop";
+import { useNavigate } from "react-router-dom";
+import RoutesPath from "../../constants/RoutesPath";
+import { useDispatch } from "react-redux";
+import {
+    changeAccessTokenUser,
+    changeCodeUser,
+    changeFullNameUser,
+    changeRoleUser,
+    changeTokenUser,
+} from "../../redux/currentUserSlice";
 
 export default function Login() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [showPassword, setShowPassword] = useState(false);
+    const [backDrop, setBackDrop] = useState(false);
     const [inputLogin, setInputLogin] = useState({
         code: null,
         password: null,
+        helperCode: null,
+        helperPassword: null,
     });
+
+    const [modalError, setModalError] = useState({
+        open: false,
+        title: null,
+        content: null,
+    });
+
+    const handleChangeCode = (e) => {
+        setInputLogin({
+            ...inputLogin,
+            code: e.target.value,
+            helperCode: null,
+        });
+    };
+
+    const handleChangePassword = (e) => {
+        setInputLogin({
+            ...inputLogin,
+            password: e.target.value,
+            helperPassword: null,
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const res = await LoginService(inputLogin)
-        console.log("res89", res);
-        if(res.status != Constants.ApiCode.SUCCESS){
-            console.log("lỗi liền2");
-        }else{
-            console.log("ok2");
+        if (
+            helper.isNullOrEmpty(inputLogin.code) ||
+            helper.isNullOrEmpty(inputLogin.password)
+        ) {
+            // code login null or empty => set error help text
+            helper.isNullOrEmpty(inputLogin.code) &&
+                setInputLogin({
+                    ...inputLogin,
+                    helperCode: Strings.Login.PLEASE_ENTER_CODE,
+                });
+            // password login null or empty => set error help text
+            helper.isNullOrEmpty(inputLogin.password) &&
+                setInputLogin({
+                    ...inputLogin,
+                    helperPassword: Strings.Login.PLEASE_ENTER_PASSWORD,
+                });
+        } else {
+            await setBackDrop(true);
+            const res = await LoginService.Login(inputLogin);
+            // axios success
+            if (res.data) {
+                // login success
+                if (res.data.status == Constants.ApiCode.OK) {
+                    await dispatch(changeTokenUser(res.data.data.token));
+                    await dispatch(
+                        changeAccessTokenUser(res.data.data.access_token)
+                    );
+                    await dispatch(changeFullNameUser(res.data.data.fullName));
+                    await dispatch(changeCodeUser(res.data.data.code));
+                    await dispatch(changeRoleUser(res.data.data.role));
+                    navigate(RoutesPath.HOME);
+                } else {
+                    setModalError({
+                        ...modalError,
+                        open: true,
+                        title: res.data.message,
+                    });
+                }
+            }
+            // axios fail
+            else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                    content: res.name,
+                });
+            }
+            await setBackDrop(false);
         }
     };
 
     return (
-        <GridContainer container p={2}>
-            <Grid item xs={12} sm={8} md={5}>
-                <BoxLogin>
-                    <Logo src={logoCTU} alt="Logo CTU" />
-                    <Title component="h1" variant="h5">
-                        {Strings.App.TITLE}
-                    </Title>
-                    <Box component="form" onSubmit={handleSubmit}>
-                        <TextLogin
-                            onChange={(e) =>
-                                setInputLogin({
-                                    ...inputLogin,
-                                    code: e.target.value,
-                                })
-                            }
-                            margin="normal"
-                            fullWidth
-                            label={Strings.Login.LOGIN_CODE}
-                            placeholder={Strings.Login.LOGIN_CODE}
-                            autoFocus
-                            size="small"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <AccountCircle />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        <TextLogin
-                            onChange={(e) =>
-                                setInputLogin({
-                                    ...inputLogin,
-                                    password: e.target.value,
-                                })
-                            }
-                            margin="normal"
-                            fullWidth
-                            size="small"
-                            label={Strings.Login.PASSWORD}
-                            placeholder={Strings.Login.PASSWORD}
-                            type={showPassword ? "text" : "password"}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Key />
-                                    </InputAdornment>
-                                ),
-                                endAdornment: (
-                                    <InputAdornment position="start">
-                                        <IconButton
-                                            onClick={(e) =>
-                                                setShowPassword(!showPassword)
-                                            }
-                                        >
-                                            {showPassword ? (
-                                                <VisibilityOff />
-                                            ) : (
-                                                <Visibility />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        <FormCheckBox
-                            control={
-                                <Checkbox value="remember" color="primary" />
-                            }
-                            label={Strings.Login.REMEMBER_ACCOUNT}
-                        />
-                        <ButtonLogin
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            {Strings.Login.LOGIN}
-                        </ButtonLogin>
-                    </Box>
-                </BoxLogin>
-            </Grid>
-        </GridContainer>
+        <>
+            <GridContainer container p={2}>
+                <Grid item xs={12} sm={8} md={5}>
+                    <BoxLogin>
+                        <Logo src={logoCTU} alt="Logo CTU" />
+                        <Title component="h1" variant="h5">
+                            {Strings.App.TITLE}
+                        </Title>
+                        <Box component="form" onSubmit={handleSubmit}>
+                            <TextLogin
+                                onChange={(e) => handleChangeCode(e)}
+                                error={inputLogin.helperCode && true}
+                                helperText={inputLogin.helperCode}
+                                margin="normal"
+                                fullWidth
+                                label={Strings.Login.LOGIN_CODE}
+                                placeholder={Strings.Login.LOGIN_CODE}
+                                autoFocus
+                                size="small"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AccountCircle />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TextLogin
+                                onChange={(e) => handleChangePassword(e)}
+                                error={inputLogin.helperPassword && true}
+                                helperText={inputLogin.helperPassword}
+                                margin="normal"
+                                fullWidth
+                                size="small"
+                                label={Strings.Login.PASSWORD}
+                                placeholder={Strings.Login.PASSWORD}
+                                type={showPassword ? "text" : "password"}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Key />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="start">
+                                            <IconButton
+                                                onClick={(e) =>
+                                                    setShowPassword(
+                                                        !showPassword
+                                                    )
+                                                }
+                                            >
+                                                {showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <FormCheckBox
+                                control={
+                                    <Checkbox
+                                        value="remember"
+                                        color="primary"
+                                    />
+                                }
+                                label={Strings.Login.REMEMBER_ACCOUNT}
+                            />
+                            <ButtonLogin
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                {Strings.Login.LOGIN}
+                            </ButtonLogin>
+                        </Box>
+                    </BoxLogin>
+                </Grid>
+            </GridContainer>
+
+            <ModalError
+                open={modalError.open}
+                handleClose={() =>
+                    setModalError({ ...modalError, open: false })
+                }
+                content={modalError.content}
+                title={modalError.title}
+            />
+
+            <BackDrop open={backDrop} />
+        </>
     );
 }

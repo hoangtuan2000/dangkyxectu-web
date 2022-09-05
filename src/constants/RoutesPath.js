@@ -1,6 +1,7 @@
 const RoutesPath = {
-    LOGIN: "/login",
-    HOME: "/",
+    INDEX: "/",
+    LOGIN: "/",
+    HOME: "home",
     RENDTED_CAR: "rented-car",
     CAR_RENTAL_MANAGER: "car-rental-manager",
     CAR_MANAGER: "car-manager",

@@ -1,5 +1,5 @@
 const Role = {
-    ALL: "all",
+    // ALL: "all",
     ADMIN: "admin",
     USER: "user",
     DRIVER: "driver",

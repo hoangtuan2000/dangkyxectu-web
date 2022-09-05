@@ -2,8 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: {
-        name: "abc",
-        role: "admin"
+        fullName: null,
+        code: null,
+        role: null,
+        token: null,
+        accessToken: null,
     },
 };
 
@@ -11,16 +14,40 @@ export const currentUserSlice = createSlice({
     name: "currentUserSlice",
     initialState,
     reducers: {
-        changeCurrentUser: (state, action) => {
+        changeRoleUser: (state, action) => {
             state.user = {
                 ...state.user,
                 role: action.payload
+            };
+        },
+        changeFullNameUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                fullName: action.payload
+            };
+        },
+        changeCodeUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                code: action.payload
+            };
+        },
+        changeTokenUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                token: action.payload
+            };
+        },
+        changeAccessTokenUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                accessToken: action.payload
             };
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { changeCurrentUser } = currentUserSlice.actions;
+export const { changeRoleUser, changeFullNameUser, changeCodeUser, changeTokenUser, changeAccessTokenUser } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

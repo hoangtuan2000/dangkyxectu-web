@@ -17,6 +17,7 @@ import RoutesPath from "./constants/RoutesPath";
 import Role from "./constants/Role";
 import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
+import NoPage from "./screens/noPage/NoPage";
 
 // init AOS library
 AOS.init({
@@ -52,14 +53,17 @@ function App() {
                 <Routes>
                     <Route path={RoutesPath.LOGIN} element={<Login />} />
 
-                    <Route path={RoutesPath.HOME}>
+                    <Route path={RoutesPath.INDEX}>
                         <Route element={<ProtectRoutesAdmin />}>
                             <Route
-                                path={RoutesPath.HOME}
+                                path={RoutesPath.INDEX}
                                 element={<MainLayout />}
                             >
                                 {currentUser.role != Role.DRIVER && (
-                                    <Route index element={<Home />} />
+                                    <Route
+                                        path={RoutesPath.HOME}
+                                        element={<Home />}
+                                    />
                                 )}
 
                                 {currentUser.role == Role.USER && (
@@ -96,11 +100,12 @@ function App() {
 
                                 {currentUser.role == Role.DRIVER && (
                                     <Route
-                                        path={RoutesPath.DRIVER_TRIP_MANAGER}
+                                        path={RoutesPath.HOME}
                                         element={<DriverTripManager />}
                                     />
                                 )}
                             </Route>
+                            <Route path="*" element={<NoPage />} />
                         </Route>
                     </Route>
                 </Routes>

@@ -93,7 +93,7 @@ const DataListItems = [
         role: Role.ADMIN,
     },
     {
-        path: RoutesPath.DRIVER_TRIP_MANAGER,
+        path: RoutesPath.HOME,
         icon: <CommuteIcon />,
         name: "Quản Lý Chuyến Đi",
         role: Role.DRIVER,
