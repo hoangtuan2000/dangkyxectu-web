@@ -45,8 +45,11 @@ const Strings = {
     Home: {
         CAR_LIST: "Danh Sách Xe",
         LICENSE_PLATES: "Biển Số Xe: ",
+        CAR_COLOR: "Màu Xe: ",
+        CAR_BRAND: "Thương Hiệu: ",
         VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
+        CAR_INFO: "Thông Tin Xe",
     },
 
     RentedCar: {
