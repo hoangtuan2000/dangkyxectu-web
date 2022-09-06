@@ -32,7 +32,7 @@ export default function Home() {
     });
 
     const [openDialogCarInfo, setOpenDialogCarInfo] = useState(false);
-    const [openDialogCarRental, setOpenDialogCarRental] = useState(false);
+    // const [openDialogCarRental, setOpenDialogCarRental] = useState(false);
 
     const [carScheduleList, setCarScheduleList] = useState([]);
     const [car, setCar] = useState([]);
@@ -54,14 +54,14 @@ export default function Home() {
         setOpenDialogCarInfo(false);
     };
 
-    const handleOpenDialogCarRental = () => {
-        setOpenDialogCarRental(true);
-        setOpenDialogCarInfo(false);
-    };
+    // const handleOpenDialogCarRental = () => {
+    //     setOpenDialogCarRental(true);
+    //     setOpenDialogCarInfo(false);
+    // };
 
-    const handleCloseDialogCarRental = () => {
-        setOpenDialogCarRental(false);
-    };
+    // const handleCloseDialogCarRental = () => {
+    //     setOpenDialogCarRental(false);
+    // };
 
     const getCarScheduleList = async (idCar) => {
         const res = await HomeService.getCarScheduleList({ idCar: idCar });
@@ -249,7 +249,7 @@ export default function Home() {
         setBackDrop(true);
         getCarTypeList();
         getCarBrandList();
-        getCarColorList()
+        getCarColorList();
         getCarStatusList();
         getCarList();
         setBackDrop(false);
@@ -307,22 +307,35 @@ export default function Home() {
                                     </Typography>
                                     <Typography variant="p" component="div">
                                         {Strings.Home.VEHICLE_CONDITION}{" "}
-                                        <span
-                                            style={{
-                                                color:
-                                                    status[0] &&
-                                                    status[0].idCarStatus == 2
-                                                        ? theme.palette.error
-                                                              .main
-                                                        : status[0]
-                                                              .idCarStatus == 3
-                                                        ? theme.palette.warning
-                                                              .main
-                                                        : null,
-                                            }}
-                                        >
-                                            {status[0].name}
-                                        </span>
+                                        {status &&
+                                        status[0].idCarStatus == 2 ? (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.error
+                                                        .main,
+                                                }}
+                                            >
+                                                {status[0].name}
+                                            </span>
+                                        ) : status[0].idCarStatus == 3 ? (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.warning
+                                                        .main,
+                                                }}
+                                            >
+                                                {status[0].name}
+                                            </span>
+                                        ) : (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.success
+                                                        .main,
+                                                }}
+                                            >
+                                                {status[0].name}
+                                            </span>
+                                        )}
                                     </Typography>
                                     <Typography
                                         variant="p"
@@ -424,7 +437,7 @@ export default function Home() {
             <DialogCarInfo
                 open={openDialogCarInfo}
                 handleClose={handleCloseDialogCarInfo}
-                handleOpenDialogCarRental={handleOpenDialogCarRental}
+                // handleOpenDialogCarRental={handleOpenDialogCarRental}
                 carData={car}
                 carTypeData={carTypeList}
                 carColorData={carColorList}
@@ -433,10 +446,10 @@ export default function Home() {
                 carScheduleList={carScheduleList}
             />
 
-            <DialogCarRental
+            {/* <DialogCarRental
                 open={openDialogCarRental}
                 handleClose={handleCloseDialogCarRental}
-            />
+            /> */}
 
             <ModalError
                 open={modalError.open}

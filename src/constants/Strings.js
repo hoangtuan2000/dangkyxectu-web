@@ -50,6 +50,7 @@ const Strings = {
         VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
         CAR_INFO: "Thông Tin Xe",
+        CAR_REGISTRATRION_INFOMATION: "Thông Tin Đăng Ký Xe",
     },
 
     RentedCar: {

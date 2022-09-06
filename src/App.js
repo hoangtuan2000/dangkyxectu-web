@@ -18,6 +18,7 @@ import Role from "./constants/Role";
 import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
+import RentalCar from "./screens/rentalCar/RentalCar";
 
 // init AOS library
 AOS.init({
@@ -60,10 +61,17 @@ function App() {
                                 element={<MainLayout />}
                             >
                                 {currentUser.role != Role.DRIVER && (
-                                    <Route
-                                        path={RoutesPath.HOME}
-                                        element={<Home />}
-                                    />
+                                    <>
+                                        <Route
+                                            path={RoutesPath.HOME}
+                                            element={<Home />}
+                                        />
+                                            <Route
+                                                path={RoutesPath.RENTAL_CAR}
+                                                element={<RentalCar />}
+                                            />
+                                        {/* </Route> */}
+                                    </>
                                 )}
 
                                 {currentUser.role == Role.USER && (

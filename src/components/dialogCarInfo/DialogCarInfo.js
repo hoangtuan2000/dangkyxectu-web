@@ -24,11 +24,13 @@ import {
     Title,
 } from "./DialogCarInfoCustomStyles";
 import CreateIcon from "@mui/icons-material/Create";
+import { useNavigate } from "react-router-dom";
+import RoutesPath from "../../constants/RoutesPath";
 
 export default function DialogCarInfo({
     open,
     handleClose,
-    handleOpenDialogCarRental,
+    // handleOpenDialogCarRental,
     carData,
     carTypeData,
     carStatusData,
@@ -37,6 +39,7 @@ export default function DialogCarInfo({
     carScheduleList,
 }) {
     const theme = useTheme();
+    let navigate = useNavigate();
 
     const type =
         carTypeData &&
@@ -122,7 +125,7 @@ export default function DialogCarInfo({
                             <ButtonStyled
                                 variant="contained"
                                 size="small"
-                                onClick={handleOpenDialogCarRental}
+                                onClick={() => navigate(RoutesPath.RENTAL_CAR, {idCar: 3})}
                             >
                                 <CreateIcon
                                     fontSize="small"
