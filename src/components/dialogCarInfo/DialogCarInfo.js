@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import * as React from "react";
 import {
     Box,
     Button,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -14,62 +13,13 @@ import {
     useTheme,
 } from "@mui/material";
 import NearMeIcon from "@mui/icons-material/NearMe";
-import Strings from "../../constants/Strings";
-import {
-    ButtonStyled,
-    CarTypeTitle,
-    Img,
-    ListContainer,
-    TextContent,
-    Title,
-} from "./DialogCarInfoCustomStyles";
-import CreateIcon from "@mui/icons-material/Create";
 
 export default function DialogCarInfo({
     open,
     handleClose,
     handleOpenDialogCarRental,
-    carData,
-    carTypeData,
-    carStatusData,
-    carColorData,
-    carBrandData,
-    carScheduleList,
 }) {
     const theme = useTheme();
-
-    const type =
-        carTypeData &&
-        carData[0] &&
-        carTypeData.filter((item) => {
-            if (item.idCarType == carData[0].idCarType) {
-                return item;
-            }
-        });
-    const status =
-        carStatusData &&
-        carData[0] &&
-        carStatusData.filter((item) => {
-            if (item.idCarStatus == carData[0].idCarStatus) {
-                return item;
-            }
-        });
-    const color =
-        carColorData &&
-        carData[0] &&
-        carColorData.filter((item) => {
-            if (item.idCarColor == carData[0].idCarColor) {
-                return item;
-            }
-        });
-    const brand =
-        carBrandData &&
-        carData[0] &&
-        carBrandData.filter((item) => {
-            if (item.idCarBrand == carData[0].idCarBrand) {
-                return item;
-            }
-        });
 
     return (
         <Dialog
@@ -78,141 +28,74 @@ export default function DialogCarInfo({
             scroll="body"
             fullWidth={true}
         >
-            <Title>{Strings.Home.CAR_INFO}</Title>
+            <DialogTitle>Thông Tin Xe</DialogTitle>
             <DialogContent>
-                {carData[0] ? (
-                    <Box>
-                        <Box sx={{ float: "left" }}>
-                            <Img src={carData[0].image} />
-                        </Box>
-                        <Box sx={{ float: "left" }}>
-                            <CarTypeTitle variant="p" component="div">
-                                {type &&
-                                    `${type[0].name} ${type[0].seatNumber} Chổ`}
-                            </CarTypeTitle>
-                            <TextContent variant="p" component="div">
-                                {Strings.Home.LICENSE_PLATES}{" "}
-                                {carData[0].licensePlates}
-                            </TextContent>
-                            <TextContent variant="p" component="div">
-                                {Strings.Home.VEHICLE_CONDITION}{" "}
-                                <span
-                                    style={{
-                                        fontWeight: "bold",
-                                        color:
-                                            status[0] &&
-                                            status[0].idCarStatus == 2
-                                                ? theme.palette.error.main
-                                                : status[0].idCarStatus == 3
-                                                ? theme.palette.warning.main
-                                                : theme.palette.success.main,
-                                    }}
-                                >
-                                    {status && status[0].name}
-                                </span>
-                            </TextContent>
-                            <TextContent variant="p" component="div">
-                                {Strings.Home.CAR_COLOR}{" "}
-                                {color && color[0].name}
-                            </TextContent>
-                            <TextContent variant="p" component="div">
-                                {Strings.Home.CAR_BRAND}{" "}
-                                {brand && brand[0].name}
-                            </TextContent>
-                            <ButtonStyled
-                                variant="contained"
-                                size="small"
-                                onClick={handleOpenDialogCarRental}
-                            >
-                                <CreateIcon
-                                    fontSize="small"
-                                    sx={{ marginRight: "5px" }}
-                                />
-                                Đăng Ký Lịch Trình
-                            </ButtonStyled>
-                        </Box>
-                        <Box sx={{ clear: "both" }}></Box>
-                        <Box>
-                            <TextContent variant="p" component="div">
-                                Lịch trình:
-                            </TextContent>
-                            {carScheduleList.length > 0 ? (
-                                <ListContainer>
-                                    {carScheduleList.map((val) => {
-                                        const startDay =
-                                            val.startDay &&
-                                            new Date(
-                                                val.startDay * 1000
-                                            ).toLocaleDateString("en-GB");
-                                        const endDay =
-                                            val.endDay &&
-                                            new Date(
-                                                val.endDay * 1000
-                                            ).toLocaleDateString("en-GB");
-                                        return (
-                                            <ListItem
-                                                key={val.idSchedule}
-                                                sx={{
-                                                    padding: 0,
-                                                    paddingLeft: 1,
-                                                }}
-                                            >
-                                                <NearMeIcon
-                                                    color="primary"
-                                                    fontSize="small"
-                                                    sx={{ marginRight: "5px" }}
-                                                />
-                                                <ListItemText
-                                                    primary={val.reason}
-                                                    secondary={`${startDay} - ${endDay}`}
-                                                    primaryTypographyProps={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "bold",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        color: theme.palette
-                                                            .primary.main,
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        fontSize: "12px",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        );
-                                    })}
-                                </ListContainer>
-                            ) : (
-                                <TextContent
-                                    variant="p"
-                                    component="div"
-                                    sx={{
-                                        color: theme.palette.success.main,
-                                        fontWeight: "bold",
-                                        marginLeft: 2,
-                                    }}
-                                >
-                                    {Strings.Common.NO_SCHEDULE}
-                                </TextContent>
-                            )}
-                        </Box>
-                    </Box>
-                ) : (
-                    <Box
+                <Box>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU"
+                        style={{
+                            float: "left",
+                            width: "200px",
+                            height: "200px",
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            marginRight: "10px",
+                        }}
+                    />
+                </Box>
+                <Box>
+                    <Typography variant="p" component="div">
+                        Xe 16 chỗ
+                    </Typography>
+                    <Typography variant="p" component="div">
+                        Biển số: 65A-12345
+                    </Typography>
+                    <Typography variant="p" component="div">
+                        Tình trạng: Hoạt Động
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={handleOpenDialogCarRental()}
+                    >
+                        Đăng Ký Lịch Trình
+                    </Button>
+                    <Typography variant="p" component="div">
+                        Lịch trình:
+                    </Typography>
+                    <List
                         sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            bgcolor: "background.paper",
+                            padding: "0px",
+                            float: "left",
+                            borderRadius: "10px",
                         }}
                     >
-                        <CircularProgress />
-                    </Box>
-                )}
+                        <ListItem>
+                            <NearMeIcon
+                                fontSize="small"
+                                sx={{ marginRight: "5px" }}
+                            />
+                            <ListItemText
+                                primary="Đại Học Cần Thơ AAA SFD SDFD AA AA AA AA"
+                                secondary="01/01/2022 - 03/01/2022"
+                                primaryTypographyProps={{
+                                    fontSize: "13px",
+                                    fontWeight: "bold",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                }}
+                                secondaryTypographyProps={{
+                                    fontSize: "12px",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                }}
+                            />
+                        </ListItem>
+                    </List>
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Button
