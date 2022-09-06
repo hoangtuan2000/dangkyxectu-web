@@ -18,6 +18,8 @@ const Constants = {
         },
         Home: {
             GET_CAR_LIST: "/getCarList",
+            GET_CAR: "/getCar",
+            GET_SCHEDULE_LIST: "/getScheduleList",
         },
     },
 };

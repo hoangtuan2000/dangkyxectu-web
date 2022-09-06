@@ -2,9 +2,9 @@ import axiosInstance from "../common/axiosConfig";
 import Constants from "../constants/Constants";
 
 const HomeService = {
-    getCarList: async (data) => {
+    getCarScheduleList: async (data) => {
         return await axiosInstance
-            .post(Constants.ApiPath.Home.GET_CAR_LIST, data)
+            .post(Constants.ApiPath.Home.GET_SCHEDULE_LIST, data)
             .then((res) => {
                 return res;
             })
@@ -13,9 +13,20 @@ const HomeService = {
             });
     },
 
-    getCommon: async (data) => {
+    getCar: async (data) => {
         return await axiosInstance
-            .post(Constants.ApiPath.Common.GET_COMMON, data)
+            .post(Constants.ApiPath.Home.GET_CAR, data)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
+    
+    getCarList: async () => {
+        return await axiosInstance
+            .post(Constants.ApiPath.Home.GET_CAR_LIST)
             .then((res) => {
                 return res;
             })

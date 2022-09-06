@@ -19,15 +19,7 @@ import { HomeService } from "../../services/HomeServices";
 import Constants from "../../constants/Constants";
 import ModalError from "../../components/modalError/ModalError";
 import BackDrop from "../../components/backDrop/BackDrop";
-
-// const data = [
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwhhFEsta01Sk0xhKOv41PbmJryOP_bPlSjg&usqp=CAU",
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIqvVFqLp_TvYGGHcFleqT8ldUtKWdYx0hxQ&usqp=CAU",
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwhhFEsta01Sk0xhKOv41PbmJryOP_bPlSjg&usqp=CAU",
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIqvVFqLp_TvYGGHcFleqT8ldUtKWdYx0hxQ&usqp=CAU",
-// ];
+import { GlobalService } from "../../services/GlobalServices";
 
 export default function Home() {
     const theme = useTheme();
@@ -42,19 +34,27 @@ export default function Home() {
     const [openDialogCarInfo, setOpenDialogCarInfo] = useState(false);
     const [openDialogCarRental, setOpenDialogCarRental] = useState(false);
 
+    const [carScheduleList, setCarScheduleList] = useState([]);
+    const [car, setCar] = useState([]);
     const [carList, setCarList] = useState([]);
     const [carTypeList, setCarTypeList] = useState([]);
     const [carStatusList, setCarStatusList] = useState([]);
+    const [carColorList, setCarColorList] = useState([]);
+    const [carBrandList, setCarBrandList] = useState([]);
 
-    const handleOpenDialogCarInfo = () => () => {
-        setOpenDialogCarInfo(true);
+    const handleOpenDialogCarInfo = async (idCar) => {
+        await setBackDrop(true);
+        await getCar(idCar);
+        await getCarScheduleList(idCar);
+        await setOpenDialogCarInfo(true);
+        await setBackDrop(false);
     };
 
     const handleCloseDialogCarInfo = () => {
         setOpenDialogCarInfo(false);
     };
 
-    const handleOpenDialogCarRental = () => () => {
+    const handleOpenDialogCarRental = () => {
         setOpenDialogCarRental(true);
         setOpenDialogCarInfo(false);
     };
@@ -63,8 +63,60 @@ export default function Home() {
         setOpenDialogCarRental(false);
     };
 
+    const getCarScheduleList = async (idCar) => {
+        const res = await HomeService.getCarScheduleList({ idCar: idCar });
+        // axios success
+        if (res.data) {
+            // login success
+            if (res.data.status == Constants.ApiCode.OK) {
+                setCarScheduleList(res.data.data);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
+
+    const getCar = async (idCar) => {
+        const res = await HomeService.getCar({ idCar: idCar });
+        // axios success
+        if (res.data) {
+            // login success
+            if (res.data.status == Constants.ApiCode.OK) {
+                setCar(res.data.data);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
+
     const getCarList = async () => {
-        const res = await HomeService.getCarList({ common: "car" });
+        const res = await HomeService.getCarList();
         // axios success
         if (res.data) {
             // login success
@@ -90,7 +142,7 @@ export default function Home() {
     };
 
     const getCarTypeList = async () => {
-        const res = await HomeService.getCommon({ common: "car_type" });
+        const res = await GlobalService.getCommon({ common: "car_type" });
         // axios success
         if (res.data) {
             // login success
@@ -116,7 +168,7 @@ export default function Home() {
     };
 
     const getCarStatusList = async () => {
-        const res = await HomeService.getCommon({ common: "car_status" });
+        const res = await GlobalService.getCommon({ common: "car_status" });
         // axios success
         if (res.data) {
             // login success
@@ -141,11 +193,65 @@ export default function Home() {
         }
     };
 
+    const getCarColorList = async () => {
+        const res = await GlobalService.getCommon({ common: "car_color" });
+        // axios success
+        if (res.data) {
+            // login success
+            if (res.data.status == Constants.ApiCode.OK) {
+                setCarColorList(res.data.data);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
+
+    const getCarBrandList = async () => {
+        const res = await GlobalService.getCommon({ common: "car_brand" });
+        // axios success
+        if (res.data) {
+            // login success
+            if (res.data.status == Constants.ApiCode.OK) {
+                setCarBrandList(res.data.data);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
+
     useEffect(() => {
         setBackDrop(true);
-        getCarList();
         getCarTypeList();
+        getCarBrandList();
+        getCarColorList()
         getCarStatusList();
+        getCarList();
         setBackDrop(false);
     }, []);
 
@@ -177,7 +283,7 @@ export default function Home() {
                     return (
                         <CardContainer
                             key={val.idCar}
-                            onClick={handleOpenDialogCarInfo()}
+                            onClick={() => handleOpenDialogCarInfo(val.idCar)}
                             data-aos="zoom-in"
                         >
                             <CardActionArea>
@@ -189,9 +295,10 @@ export default function Home() {
                                 />
                                 <CardContent>
                                     <Typography variant="h6" component="div">
-                                        {type[0].name +
-                                            " " +
-                                            type[0].seatNumber}{" "}
+                                        {type[0] &&
+                                            type[0].name +
+                                                " " +
+                                                type[0].seatNumber}{" "}
                                         Chỗ
                                     </Typography>
                                     <Typography variant="p" component="div">
@@ -203,6 +310,7 @@ export default function Home() {
                                         <span
                                             style={{
                                                 color:
+                                                    status[0] &&
                                                     status[0].idCarStatus == 2
                                                         ? theme.palette.error
                                                               .main
@@ -239,7 +347,9 @@ export default function Home() {
                                                 <NearMeIcon
                                                     color="primary"
                                                     fontSize="small"
-                                                    sx={{ marginRight: "5px" }}
+                                                    sx={{
+                                                        marginRight: "5px",
+                                                    }}
                                                 />
                                                 <ListItemText
                                                     primary={val.reason}
@@ -292,8 +402,8 @@ export default function Home() {
                     sx={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: 'center',
-                        height: '50vh'
+                        justifyContent: "center",
+                        height: "50vh",
                     }}
                 >
                     <Typography
@@ -315,6 +425,12 @@ export default function Home() {
                 open={openDialogCarInfo}
                 handleClose={handleCloseDialogCarInfo}
                 handleOpenDialogCarRental={handleOpenDialogCarRental}
+                carData={car}
+                carTypeData={carTypeList}
+                carColorData={carColorList}
+                carBrandData={carBrandList}
+                carStatusData={carStatusList}
+                carScheduleList={carScheduleList}
             />
 
             <DialogCarRental
