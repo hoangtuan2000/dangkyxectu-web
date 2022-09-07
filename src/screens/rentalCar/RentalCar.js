@@ -9,7 +9,7 @@ import {
     useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import BackDrop from "../../components/backDrop/BackDrop";
 import ModalError from "../../components/modalError/ModalError";
@@ -32,6 +32,10 @@ import {
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ModalShowAddress from "../../components/modalShowAddress/ModalShowAddress";
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import vi from "date-fns/locale/vi";
+registerLocale("vi", vi);
 
 function RentalCar() {
     const theme = useTheme();
@@ -195,6 +199,26 @@ function RentalCar() {
         setBackDrop(false);
     }, []);
 
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
+
+    const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+        <ButtonStyled
+            onClick={onClick}
+            ref={ref}
+            variant="outlined"
+            endIcon={
+                <CalendarMonthIcon
+                    sx={{
+                        color: theme.palette.primary.main,
+                    }}
+                />
+            }
+        >
+            {value ? value : Strings.RentalCar.CHOOSE_TIME}
+        </ButtonStyled>
+    ));
+
     return (
         <Box>
             <Typography variant="h6" component="div">
@@ -328,18 +352,19 @@ function RentalCar() {
 
                 <BoxRightContent>
                     <Box>
-                        <ButtonStyled
-                            variant="outlined"
-                            endIcon={
-                                <CalendarMonthIcon
-                                    sx={{
-                                        color: theme.palette.primary.main,
-                                    }}
-                                />
-                            }
-                        >
-                            -- Chọn Thời Gian --
-                        </ButtonStyled>
+                        <div style={{ float: "left" }}>
+                            <DatePicker
+                                locale="vi"
+                                selectsRange={true}
+                                startDate={startDate}
+                                endDate={endDate}
+                                onChange={(update) => {
+                                    setDateRange(update);
+                                }}
+                                withPortal
+                                customInput={<ExampleCustomInput />}
+                            />
+                        </div>
                         <TextInput
                             label={Strings.RentalCar.CAR_RENTAL_REASON}
                             variant="outlined"

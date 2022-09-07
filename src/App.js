@@ -1,4 +1,6 @@
 import "aos/dist/aos.css";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AOS from "aos";
 import { createTheme, ThemeProvider } from "@mui/material";

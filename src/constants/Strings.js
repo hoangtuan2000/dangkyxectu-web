@@ -95,7 +95,8 @@ const Strings = {
         END_LOCATION: "-- Địa Điểm Kết Thúc --",
         ENTER_START_LOCATION: "-- Nhập Địa Điểm Xuất Phát --",
         ENTER_END_LOCATION: "-- Nhập Địa Điểm Kết Thúc --",
-        CAR_RENTAL_REASON: "-- Lý Do Đăng Ký Xe --"
+        CAR_RENTAL_REASON: "-- Lý Do Đăng Ký Xe --",
+        CHOOSE_TIME: "-- Chọn Thời Gian --",
     },
 
     DialogShowAddress: {
