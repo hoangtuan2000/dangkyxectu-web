@@ -21,6 +21,9 @@ const Constants = {
             GET_CAR: "/getCar",
             GET_SCHEDULE_LIST: "/getScheduleList",
         },
+        RentalCar: {
+            GET_CAR: "/getCar",
+        },
     },
 };
 

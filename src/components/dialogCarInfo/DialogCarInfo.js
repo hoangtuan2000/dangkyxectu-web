@@ -24,7 +24,7 @@ import {
     Title,
 } from "./DialogCarInfoCustomStyles";
 import CreateIcon from "@mui/icons-material/Create";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
 
 export default function DialogCarInfo({
@@ -43,6 +43,7 @@ export default function DialogCarInfo({
 
     const type =
         carTypeData &&
+        carData &&
         carData[0] &&
         carTypeData.filter((item) => {
             if (item.idCarType == carData[0].idCarType) {
@@ -51,6 +52,7 @@ export default function DialogCarInfo({
         });
     const status =
         carStatusData &&
+        carData &&
         carData[0] &&
         carStatusData.filter((item) => {
             if (item.idCarStatus == carData[0].idCarStatus) {
@@ -59,6 +61,7 @@ export default function DialogCarInfo({
         });
     const color =
         carColorData &&
+        carData &&
         carData[0] &&
         carColorData.filter((item) => {
             if (item.idCarColor == carData[0].idCarColor) {
@@ -67,6 +70,7 @@ export default function DialogCarInfo({
         });
     const brand =
         carBrandData &&
+        carData &&
         carData[0] &&
         carBrandData.filter((item) => {
             if (item.idCarBrand == carData[0].idCarBrand) {
@@ -83,7 +87,7 @@ export default function DialogCarInfo({
         >
             <Title>{Strings.Home.CAR_INFO}</Title>
             <DialogContent>
-                {carData[0] ? (
+                {carData && carData[0] ? (
                     <Box>
                         <Box sx={{ float: "left" }}>
                             <Img src={carData[0].image} />
@@ -125,7 +129,12 @@ export default function DialogCarInfo({
                             <ButtonStyled
                                 variant="contained"
                                 size="small"
-                                onClick={() => navigate(RoutesPath.RENTAL_CAR, {idCar: 3})}
+                                onClick={() =>
+                                    navigate(
+                                        RoutesPath.RENTAL_CAR +
+                                            `/${carData[0].idCar}`
+                                    )
+                                }
                             >
                                 <CreateIcon
                                     fontSize="small"

@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themeDarkModeReducer from "./themeDarkModeSlice";
 import currentUserReducer from "./currentUserSlice";
+import globalReduxReducer from "./globalReduxSlice";
 
 import {
     persistReducer,
@@ -40,6 +41,7 @@ export const store = configureStore({
     reducer: {
         themeDarkMode: darkModePersistedReducer,
         currentUser: currentUserPersistedReducer,
+        globalRedux: globalReduxReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -66,11 +66,13 @@ function App() {
                                             path={RoutesPath.HOME}
                                             element={<Home />}
                                         />
-                                            <Route
-                                                path={RoutesPath.RENTAL_CAR}
-                                                element={<RentalCar />}
-                                            />
-                                        {/* </Route> */}
+                                        <Route
+                                            path={
+                                                RoutesPath.RENTAL_CAR +
+                                                "/:idCar"
+                                            }
+                                            element={<RentalCar />}
+                                        />
                                     </>
                                 )}
 

@@ -27,6 +27,9 @@ const Strings = {
         NUMBER_PHONE: "Số Điện Thoại",
         AN_ERROR_OCCURRED: "Đã Xảy Ra Lỗi",
         NO_SCHEDULE: "Không Có Lịch Trình",
+        CHOOSE_WARD: "-- Chọn xã phường --",
+        CHOOSE_DISTRICT: "-- Chọn quận huyện --",
+        CHOOSE_PROVINCE: "-- Chọn tỉnh thành phố --",
     },
 
     Login: {
@@ -50,7 +53,6 @@ const Strings = {
         VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
         CAR_INFO: "Thông Tin Xe",
-        CAR_REGISTRATRION_INFOMATION: "Thông Tin Đăng Ký Xe",
     },
 
     RentedCar: {
@@ -84,6 +86,20 @@ const Strings = {
 
     TripManager: {
         TRIP_LIST: "Danh Sách Chuyến Đi",
+    },
+
+    RentalCar: {
+        RENTAL_CAR: "Đăng Ký Xe",
+        CAR_REGISTRATRION_INFOMATION: "Thông Tin Đăng Ký Xe",
+        START_LOCATION: "-- Địa Điểm Xuất Phát --",
+        END_LOCATION: "-- Địa Điểm Kết Thúc --",
+        ENTER_START_LOCATION: "-- Nhập Địa Điểm Xuất Phát --",
+        ENTER_END_LOCATION: "-- Nhập Địa Điểm Kết Thúc --",
+        CAR_RENTAL_REASON: "-- Lý Do Đăng Ký Xe --"
+    },
+
+    DialogShowAddress: {
+        TITLE: "Chọn Địa Chỉ",
     },
 };
 

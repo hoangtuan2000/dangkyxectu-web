@@ -48,6 +48,7 @@ import {
 import RoutesPath from "../../constants/RoutesPath";
 import { changeCurrentUser } from "../../redux/currentUserSlice";
 import Role from "../../constants/Role";
+import { changeOpenDrawer } from "../../redux/globalReduxSlice";
 
 const DataListItems = [
     {
@@ -107,15 +108,22 @@ export default function MainLayout() {
 
     const themeDarkMode = useSelector((state) => state.themeDarkMode.darkMode);
     const currentUser = useSelector((state) => state.currentUser.user);
+    const openDrawerRedux = useSelector(
+        (state) => state.globalRedux.openDrawer
+    );
 
     // handle drawer open/close
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = React.useState(
+        openDrawerRedux ? openDrawerRedux : false
+    );
 
     const handleDrawerOpen = () => {
+        dispath(changeOpenDrawer(true));
         setDrawerOpen(true);
     };
 
     const handleDrawerClose = () => {
+        dispath(changeOpenDrawer(false));
         setDrawerOpen(false);
     };
 
@@ -315,7 +323,8 @@ export default function MainLayout() {
                     {DataListItems.map((item, index) => {
                         if (
                             item.role == currentUser.role ||
-                            (item.role == Role.ADMIN_USER && currentUser.role != Role.DRIVER)
+                            (item.role == Role.ADMIN_USER &&
+                                currentUser.role != Role.DRIVER)
                         ) {
                             return (
                                 <ListItem disablePadding key={index}>

@@ -262,24 +262,28 @@ export default function Home() {
             </Typography>
             {carList.length > 0 ? (
                 carList.map((val) => {
-                    const type = carTypeList.filter((item) => {
-                        if (item.idCarType == val.idCarType) {
-                            return item;
-                        }
-                    });
-                    const status = carStatusList.filter((item) => {
-                        if (item.idCarStatus == val.idCarStatus) {
-                            return item;
-                        }
-                    });
+                    const type = carTypeList
+                        ? carTypeList.filter((item) => {
+                              if (item.idCarType == val.idCarType) {
+                                  return item;
+                              }
+                          })
+                        : [];
+                    const status = carStatusList
+                        ? carStatusList.filter((item) => {
+                              if (item.idCarStatus == val.idCarStatus) {
+                                  return item;
+                              }
+                          })
+                        : [];
                     const startDay =
-                        val.startDay &&
+                        val.startDay ?
                         new Date(val.startDay * 1000).toLocaleDateString(
                             "en-GB"
-                        );
+                        ) : undefined
                     const endDay =
-                        val.endDay &&
-                        new Date(val.endDay * 1000).toLocaleDateString("en-GB");
+                        val.endDay ?
+                        new Date(val.endDay * 1000).toLocaleDateString("en-GB") : undefined
                     return (
                         <CardContainer
                             key={val.idCar}
@@ -295,7 +299,7 @@ export default function Home() {
                                 />
                                 <CardContent>
                                     <Typography variant="h6" component="div">
-                                        {type[0] &&
+                                        {type.length > 0 &&
                                             type[0].name +
                                                 " " +
                                                 type[0].seatNumber}{" "}
@@ -307,35 +311,36 @@ export default function Home() {
                                     </Typography>
                                     <Typography variant="p" component="div">
                                         {Strings.Home.VEHICLE_CONDITION}{" "}
-                                        {status &&
-                                        status[0].idCarStatus == 2 ? (
-                                            <span
-                                                style={{
-                                                    color: theme.palette.error
-                                                        .main,
-                                                }}
-                                            >
-                                                {status[0].name}
-                                            </span>
-                                        ) : status[0].idCarStatus == 3 ? (
-                                            <span
-                                                style={{
-                                                    color: theme.palette.warning
-                                                        .main,
-                                                }}
-                                            >
-                                                {status[0].name}
-                                            </span>
-                                        ) : (
-                                            <span
-                                                style={{
-                                                    color: theme.palette.success
-                                                        .main,
-                                                }}
-                                            >
-                                                {status[0].name}
-                                            </span>
-                                        )}
+                                        {status.length > 0 ? (
+                                            status[0].idCarStatus == 2 ? (
+                                                <span
+                                                    style={{
+                                                        color: theme.palette
+                                                            .error.main,
+                                                    }}
+                                                >
+                                                    {status[0].name}
+                                                </span>
+                                            ) : status[0].idCarStatus == 3 ? (
+                                                <span
+                                                    style={{
+                                                        color: theme.palette
+                                                            .warning.main,
+                                                    }}
+                                                >
+                                                    {status[0].name}
+                                                </span>
+                                            ) : (
+                                                <span
+                                                    style={{
+                                                        color: theme.palette
+                                                            .success.main,
+                                                    }}
+                                                >
+                                                    {status[0].name}
+                                                </span>
+                                            )
+                                        ) : undefined}
                                     </Typography>
                                     <Typography
                                         variant="p"

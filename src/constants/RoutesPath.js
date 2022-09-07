@@ -2,7 +2,7 @@ const RoutesPath = {
     INDEX: "/",
     LOGIN: "/",
     HOME: "home",
-    RENTAL_CAR: "rental-car",
+    RENTAL_CAR: "/home/rental-car",
     RENDTED_CAR: "rented-car",
     CAR_RENTAL_MANAGER: "car-rental-manager",
     CAR_MANAGER: "car-manager",
