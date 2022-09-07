@@ -34,6 +34,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ModalShowAddress from "../../components/modalShowAddress/ModalShowAddress";
 import DatePicker from "react-datepicker";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
+import { addDays, subDays } from "date-fns";
 import vi from "date-fns/locale/vi";
 registerLocale("vi", vi);
 
@@ -199,8 +200,14 @@ function RentalCar() {
         setBackDrop(false);
     }, []);
 
-    const [dateRange, setDateRange] = useState([null, null]);
-    const [startDate, endDate] = dateRange;
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const onChange = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+        console.log("dates", dates);
+    };
 
     const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
         <ButtonStyled
@@ -355,14 +362,20 @@ function RentalCar() {
                         <div style={{ float: "left" }}>
                             <DatePicker
                                 locale="vi"
+                                dateFormat="dd/MM/yyyy"
                                 selectsRange={true}
                                 startDate={startDate}
                                 endDate={endDate}
-                                onChange={(update) => {
-                                    setDateRange(update);
-                                }}
                                 withPortal
                                 customInput={<ExampleCustomInput />}
+                                selected={startDate}
+                                onChange={onChange}
+                                excludeDates={[
+                                    // new Date(),
+                                    new Date("09/09/2022"),
+                                ]}
+                                selectsDisabledDaysInRange
+                                minDate={new Date()}
                             />
                         </div>
                         <TextInput
