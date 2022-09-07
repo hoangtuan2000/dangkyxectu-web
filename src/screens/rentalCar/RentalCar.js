@@ -21,7 +21,8 @@ import {
     BoxContainerContent,
     BoxLeftContent,
     BoxRightContent,
-    ButtonInput,
+    // ButtonInput,
+    ButtonStyled,
     CarTypeTitle,
     Img,
     TextContent,
@@ -51,6 +52,8 @@ function RentalCar() {
     const [carStatusList, setCarStatusList] = useState([]);
     const [carColorList, setCarColorList] = useState([]);
     const [carBrandList, setCarBrandList] = useState([]);
+
+    const [input, setInput] = useState(undefined);
 
     const getCar = async (idCar) => {
         const res = await RentalCarService.getCar({ idCar: idCar });
@@ -325,78 +328,55 @@ function RentalCar() {
 
                 <BoxRightContent>
                     <Box>
-                        <ButtonInput>
-                            <TextInput
-                                disabled
-                                label="-- Chọn Thời Gian --"
-                                // value="sdfsdf"
-                                variant="outlined"
-                                size="small"
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="start">
-                                            <CalendarMonthIcon
-                                                sx={{
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                            />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                sx={{ margin: 0 }}
-                            />
-                        </ButtonInput>
+                        <ButtonStyled
+                            variant="outlined"
+                            endIcon={
+                                <CalendarMonthIcon
+                                    sx={{
+                                        color: theme.palette.primary.main,
+                                    }}
+                                />
+                            }
+                        >
+                            -- Chọn Thời Gian --
+                        </ButtonStyled>
                         <TextInput
                             label={Strings.RentalCar.CAR_RENTAL_REASON}
                             variant="outlined"
                             size="small"
                         />
                     </Box>
+
+                    <Box sx={{ clear: "both" }}></Box>
+
                     <Box>
-                        <ButtonInput onClick={() => setModalShowAdderss(true)}>
-                            <TextInput
-                                disabled
-                                label={Strings.RentalCar.START_LOCATION}
-                                variant="outlined"
-                                size="small"
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="start">
-                                            <LocationOnIcon
-                                                sx={{
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                            />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                sx={{ margin: 0 }}
-                            />
-                        </ButtonInput>
-                        <ButtonInput>
-                            <TextInput
-                                disabled
-                                label={Strings.RentalCar.END_LOCATION}
-                                variant="outlined"
-                                size="small"
-                                // sx={{ width: "100% !important" }}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="start">
-                                            <LocationOnIcon
-                                                sx={{
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                            />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                sx={{ margin: 0 }}
-                            />
-                        </ButtonInput>
+                        <ButtonStyled
+                            onClick={() => setModalShowAdderss(true)}
+                            variant="outlined"
+                            endIcon={
+                                <LocationOnIcon
+                                    sx={{
+                                        color: theme.palette.primary.main,
+                                    }}
+                                />
+                            }
+                        >
+                            {Strings.RentalCar.START_LOCATION}
+                        </ButtonStyled>
+
+                        <ButtonStyled
+                            onClick={() => setModalShowAdderss(true)}
+                            variant="outlined"
+                            endIcon={
+                                <LocationOnIcon
+                                    sx={{
+                                        color: theme.palette.primary.main,
+                                    }}
+                                />
+                            }
+                        >
+                            {Strings.RentalCar.END_LOCATION}
+                        </ButtonStyled>
                     </Box>
                 </BoxRightContent>
             </BoxContainerContent>

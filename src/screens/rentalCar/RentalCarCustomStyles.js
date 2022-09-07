@@ -279,93 +279,132 @@ const TextInput = styled(TextField)(({ theme }) => ({
     },
 }));
 
-const ButtonInput = styled(Button)(({ theme }) => ({
-    padding: 0,
+// const ButtonInput = styled(Button)(({ theme }) => ({
+//     padding: 0,
+//     margin: 10,
+//     textTransform: "capitalize",
+//     [theme.breakpoints.up("mobileS")]: {
+//         width: 230,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 10,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 10,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 16,
+//         },
+//     },
+//     [theme.breakpoints.up("mobileM")]: {
+//         width: 280,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 18,
+//         },
+//     },
+//     [theme.breakpoints.up("mobileL")]: {
+//         width: 290,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 20,
+//         },
+//     },
+//     [theme.breakpoints.up("sm")]: {
+//         width: 400,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 11,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 22,
+//         },
+//     },
+//     [theme.breakpoints.up("md")]: {
+//         width: 420,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 12,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 12,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 24,
+//         },
+//     },
+//     [theme.breakpoints.up("lg")]: {
+//         width: 390,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 13,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 13,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 20,
+//         },
+//     },
+//     [theme.breakpoints.up("xl")]: {
+//         width: 420,
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
+//             fontSize: 13,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
+//             fontSize: 13,
+//         },
+//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
+//             fontSize: 20,
+//         },
+//     },
+// }));
+
+const ButtonStyled = styled(Button)(({ theme }) => ({
+    float: 'left',
+    display: 'flex',
+    justifyContent: 'space-between',
     margin: 10,
     textTransform: "capitalize",
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.action.active,
+    fontWeight: "unset",
     [theme.breakpoints.up("mobileS")]: {
         width: 230,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 10,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 10,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 16,
-        },
+        fontSize: 12,
     },
     [theme.breakpoints.up("mobileM")]: {
         width: 280,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 18,
-        },
+        fontSize: 12,
     },
     [theme.breakpoints.up("mobileL")]: {
         width: 290,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 20,
-        },
+        fontSize: 12,
     },
     [theme.breakpoints.up("sm")]: {
         width: 400,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 11,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 22,
-        },
+        fontSize: 13,
     },
     [theme.breakpoints.up("md")]: {
         width: 420,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 12,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 12,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 24,
-        },
+        fontSize: 13,
     },
     [theme.breakpoints.up("lg")]: {
         width: 390,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 13,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 20,
-        },
+        fontSize: 13,
     },
     [theme.breakpoints.up("xl")]: {
         width: 420,
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-            fontSize: 13,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-            fontSize: 20,
-        },
+        fontSize: 13,
     },
 }));
 
@@ -378,5 +417,6 @@ export {
     BoxLeftContent,
     BoxRightContent,
     BoxContainerContent,
-    ButtonInput,
+    // ButtonInput,
+    ButtonStyled,
 };
