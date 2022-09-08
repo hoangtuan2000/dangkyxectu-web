@@ -66,6 +66,8 @@ function RentalCar() {
     const [carColorList, setCarColorList] = useState([]);
     const [carBrandList, setCarBrandList] = useState([]);
 
+    const [selectedStartAddress, setSelectedStartAddress] = useState();
+
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const onChange = (dates) => {
@@ -490,6 +492,7 @@ function RentalCar() {
                 handleClose={() => setModalShowStartAdderss(false)}
                 labelInput={Strings.RentalCar.ENTER_START_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_START_LOCATION}
+                onConfirm={(e) => console.log("onConfirm", e)}
             />
 
             <ModalShowAddress

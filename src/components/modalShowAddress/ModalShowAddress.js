@@ -1,10 +1,6 @@
 import {
     Autocomplete,
     Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
     InputAdornment,
     Modal,
     TextField,
@@ -23,12 +19,14 @@ import { GlobalService } from "../../services/GlobalServices";
 import ModalError from "../modalError/ModalError";
 import Constants from "../../constants/Constants";
 import { useEffect, useState } from "react";
+import helper from "../../common/helper";
 
 export default function ModalShowAddress({
     open,
     handleClose,
     labelInput,
     titleModal,
+    onConfirm = () => {},
 }) {
     const theme = useTheme();
 
@@ -42,11 +40,18 @@ export default function ModalShowAddress({
     const [districtList, setDistrictList] = useState([]);
     const [wardList, setWardList] = useState([]);
 
-    // const [showProvince, setShowProvince] = useState();
+    const [errorChooseAddress, setErrorChooseAddress] = useState({
+        addressEmpty: false,
+        provinceEmpty: false,
+        districtEmpty: false,
+        wardEmpty: false,
+    });
+
     const [showDistrict, setShowDistrict] = useState([]);
     const [showWard, setShowWard] = useState([]);
 
     const [selectedAddress, setSelectedAddress] = useState({
+        address: null,
         province: null,
         district: null,
         ward: null,
@@ -182,6 +187,43 @@ export default function ModalShowAddress({
         });
     };
 
+    const handleValidateAddress = () => {
+        setErrorChooseAddress({
+            addressEmpty: helper.isNullOrEmpty(selectedAddress.address)
+                ? true
+                : false,
+            provinceEmpty: helper.isNullOrEmpty(selectedAddress.province)
+                ? true
+                : false,
+            districtEmpty: helper.isNullOrEmpty(selectedAddress.district)
+                ? true
+                : false,
+            wardEmpty: helper.isNullOrEmpty(selectedAddress.ward)
+                ? true
+                : false,
+        });
+    };
+
+    const handleConfirm = () => {
+        if (
+            helper.isNullOrEmpty(selectedAddress.address) ||
+            helper.isNullOrEmpty(selectedAddress.province) ||
+            helper.isNullOrEmpty(selectedAddress.district) ||
+            helper.isNullOrEmpty(selectedAddress.ward)
+        ) {
+            handleValidateAddress();
+        } else {
+            setErrorChooseAddress({
+                addressEmpty: false,
+                provinceEmpty: false,
+                districtEmpty: false,
+                wardEmpty: false,
+            });
+            onConfirm(selectedAddress);
+            handleClose();
+        }
+    };
+
     useEffect(() => {
         getProvinceList();
         getDistrictList();
@@ -223,6 +265,14 @@ export default function ModalShowAddress({
                             </InputAdornment>
                         ),
                     }}
+                    onChange={(e) => {
+                        setSelectedAddress({
+                            ...selectedAddress,
+                            address: e.target.value,
+                        });
+                    }}
+                    value={selectedAddress.address || ""}
+                    error={errorChooseAddress.addressEmpty}
                 />
 
                 <Autocomplete
@@ -235,6 +285,7 @@ export default function ModalShowAddress({
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            error={errorChooseAddress.provinceEmpty}
                             label={Strings.Common.CHOOSE_PROVINCE}
                         />
                     )}
@@ -258,6 +309,7 @@ export default function ModalShowAddress({
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            error={errorChooseAddress.districtEmpty}
                             label={Strings.Common.CHOOSE_DISTRICT}
                         />
                     )}
@@ -281,6 +333,7 @@ export default function ModalShowAddress({
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            error={errorChooseAddress.wardEmpty}
                             label={Strings.Common.CHOOSE_WARD}
                         />
                     )}
@@ -316,11 +369,12 @@ export default function ModalShowAddress({
                         endIcon={<CheckCircleIcon />}
                         color="primary"
                         sx={{ marginRight: 1 }}
-                        onClick={handleClose}
+                        onClick={handleConfirm}
                     >
                         {Strings.Common.CONFIRM}
                     </ButtonFeatures>
                 </Box>
+
                 <ModalError
                     open={modalError.open}
                     handleClose={() =>
