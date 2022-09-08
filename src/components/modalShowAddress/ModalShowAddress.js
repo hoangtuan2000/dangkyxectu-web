@@ -27,6 +27,10 @@ export default function ModalShowAddress({
     labelInput,
     titleModal,
     onConfirm = () => {},
+    defaultAddress,
+    defaultProvince,
+    defaultDistrict,
+    defaultWard,
 }) {
     const theme = useTheme();
 
@@ -51,10 +55,10 @@ export default function ModalShowAddress({
     const [showWard, setShowWard] = useState([]);
 
     const [selectedAddress, setSelectedAddress] = useState({
-        address: null,
-        province: null,
-        district: null,
-        ward: null,
+        address: defaultAddress ? defaultAddress : null,
+        province: defaultProvince ? defaultProvince : null,
+        district: defaultDistrict ? defaultDistrict : null,
+        ward: defaultWard ? defaultWard : null,
     });
 
     const getProvinceList = async () => {
@@ -228,6 +232,10 @@ export default function ModalShowAddress({
         getProvinceList();
         getDistrictList();
         getWardList();
+
+        if(defaultAddress && defaultProvince && defaultDistrict && defaultWard){
+            handleConfirm()
+        }
     }, []);
 
     return (
@@ -328,7 +336,7 @@ export default function ModalShowAddress({
                     sx={{ marginBottom: 1 }}
                     noOptionsText={Strings.Common.NO_DATA}
                     disabled={showWard.length > 0 ? false : true}
-                    options={showDistrict}
+                    options={showWard}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                         <TextField

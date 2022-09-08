@@ -5,6 +5,7 @@ import {
     IconButton,
     InputAdornment,
     TextField,
+    Tooltip,
     Typography,
     useTheme,
 } from "@mui/material";
@@ -66,34 +67,23 @@ function RentalCar() {
     const [carColorList, setCarColorList] = useState([]);
     const [carBrandList, setCarBrandList] = useState([]);
 
-    const [selectedStartAddress, setSelectedStartAddress] = useState();
+    const [showStartAddress, setShowStartAddress] = useState();
+    const [showEndAddress, setShowEndAddress] = useState();
+    const [selectedDates, setSelectedDates] = useState({
+        startDate: null,
+        endDate: null,
+    });
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const onChange = (dates) => {
-        const [start, end] = dates;
-        setStartDate(start);
-        setEndDate(end);
-        console.log("dates", dates);
-    };
-
-    const ButtonDate = forwardRef(({ value, onClick }, ref) => (
-        <ButtonStyled
-            onClick={onClick}
-            ref={ref}
-            variant="outlined"
-            endIcon={
-                <CalendarMonthIcon
-                    sx={{
-                        color: theme.palette.primary.main,
-                    }}
-                />
-            }
-            sx={{ color: value && theme.palette.text.primary }}
-        >
-            {value ? value : Strings.RentalCar.CHOOSE_TIME}
-        </ButtonStyled>
-    ));
+    const [dataSendApi, setDataSendApi] = useState({
+        startDate: null,
+        endDate: null,
+        startLocation: null,
+        endLocation: null,
+        reason: null,
+        note: null,
+        idWardStartLocation: null,
+        idWardEndLocation: null,
+    });
 
     const getCar = async (idCar) => {
         const res = await RentalCarService.getCar({ idCar: idCar });
@@ -225,6 +215,75 @@ function RentalCar() {
         }
     };
 
+    const handleChangeDate = (dates) => {
+        const [start, end] = dates;
+        setSelectedDates({
+            startDate: start,
+            endDate: end,
+        });
+        setDataSendApi({
+            ...dataSendApi,
+            startDate: Math.floor(new Date(start).getTime() / 1000),
+            endDate: Math.floor(new Date(end).getTime() / 1000),
+        });
+    };
+
+    const handleShowStartAddress = (e) => {
+        const address = `${e.address} - ${e.ward.name} - ${e.district.name} - ${e.province.name}`;
+        setShowStartAddress(address);
+        setDataSendApi({
+            ...dataSendApi,
+            startLocation: e.address,
+            idWardStartLocation: e.ward.idWard,
+        });
+    };
+
+    const handleShowEndAddress = (e) => {
+        const address = `${e.address} - ${e.ward.name} - ${e.district.name} - ${e.province.name}`;
+        setShowEndAddress(address);
+        setDataSendApi({
+            ...dataSendApi,
+            endLocation: e.address,
+            idWardEndLocation: e.ward.idWard,
+        });
+    };
+
+    const handleChangeReason = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            reason: e.target.value
+        });
+    }
+
+    const handleChangeNote = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            note: e.target.value
+        });
+    }
+
+    const ButtonDate = forwardRef(({ value, onClick }, ref) => {
+        return (
+            <Tooltip title={value ? value : Strings.RentalCar.CHOOSE_TIME}>
+                <ButtonStyled
+                    onClick={onClick}
+                    ref={ref}
+                    variant="outlined"
+                    endIcon={
+                        <CalendarMonthIcon
+                            sx={{
+                                color: theme.palette.primary.main,
+                            }}
+                        />
+                    }
+                    sx={{ color: value && theme.palette.text.primary }}
+                >
+                    {value ? value : Strings.RentalCar.CHOOSE_TIME}
+                </ButtonStyled>
+            </Tooltip>
+        );
+    });
+
     useEffect(() => {
         setBackDrop(true);
         getCarTypeList();
@@ -233,7 +292,7 @@ function RentalCar() {
         getCarBrandList();
         getCar(idCar);
         setBackDrop(false);
-    }, []);    
+    }, []);
 
     return (
         <Box>
@@ -374,18 +433,18 @@ function RentalCar() {
                             </TitleInput>
                             <DatePicker
                                 locale="vi"
-                                dateFormat="dd/MM/yyyy"
+                                dateFormat={Constants.Styled.DATE_FORMAT}
                                 selectsRange={true}
-                                startDate={startDate}
-                                endDate={endDate}
+                                startDate={selectedDates.startDate}
+                                endDate={selectedDates.endDate}
                                 withPortal
                                 customInput={<ButtonDate />}
-                                selected={startDate}
-                                onChange={onChange}
-                                excludeDates={[
-                                    // new Date(),
-                                    new Date("09/09/2022"),
-                                ]}
+                                selected={selectedDates.startDate}
+                                onChange={handleChangeDate}
+                                // excludeDates={[
+                                //     // new Date(),
+                                //     new Date("09/09/2022"),
+                                // ]}
                                 selectsDisabledDaysInRange
                                 minDate={new Date()}
                             />
@@ -401,6 +460,8 @@ function RentalCar() {
                                 }
                                 variant="outlined"
                                 size="small"
+                                value={dataSendApi.reason || ""}
+                                onChange={(e) => handleChangeReason(e)}
                             />
                         </div>
                     </Box>
@@ -423,7 +484,30 @@ function RentalCar() {
                                     />
                                 }
                             >
-                                {Strings.RentalCar.ENTER_START_LOCATION}
+                                <Tooltip
+                                    title={
+                                        showStartAddress
+                                            ? showStartAddress
+                                            : Strings.RentalCar
+                                                  .ENTER_START_LOCATION
+                                    }
+                                >
+                                    <Box
+                                        sx={{
+                                            whiteSpace: "nowrap",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            color:
+                                                showStartAddress &&
+                                                theme.palette.text.primary,
+                                        }}
+                                    >
+                                        {showStartAddress
+                                            ? showStartAddress
+                                            : Strings.RentalCar
+                                                  .ENTER_START_LOCATION}
+                                    </Box>
+                                </Tooltip>
                             </ButtonStyled>
                         </div>
 
@@ -442,7 +526,30 @@ function RentalCar() {
                                     />
                                 }
                             >
-                                {Strings.RentalCar.ENTER_END_LOCATION}
+                                <Tooltip
+                                    title={
+                                        showEndAddress
+                                            ? showEndAddress
+                                            : Strings.RentalCar
+                                                  .ENTER_END_LOCATION
+                                    }
+                                >
+                                    <Box
+                                        sx={{
+                                            whiteSpace: "nowrap",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            color:
+                                                showEndAddress &&
+                                                theme.palette.text.primary,
+                                        }}
+                                    >
+                                        {showEndAddress
+                                            ? showEndAddress
+                                            : Strings.RentalCar
+                                                  .ENTER_END_LOCATION}
+                                    </Box>
+                                </Tooltip>
                             </ButtonStyled>
                         </div>
                     </Box>
@@ -456,6 +563,8 @@ function RentalCar() {
                                 placeholder={Strings.RentalCar.ENTER_NOTE}
                                 variant="outlined"
                                 size="small"
+                                value={dataSendApi.note || ""}
+                                onChange={(e) => handleChangeNote(e)}
                             />
                         </div>
                     </Box>
@@ -479,6 +588,7 @@ function RentalCar() {
                                 size="small"
                                 variant="contained"
                                 endIcon={<SendIcon />}
+                                onClick={() => console.log(dataSendApi)}
                             >
                                 {Strings.RentalCar.REGISTRATION_CONFIRMATION}
                             </ButtonFeatures>
@@ -492,7 +602,25 @@ function RentalCar() {
                 handleClose={() => setModalShowStartAdderss(false)}
                 labelInput={Strings.RentalCar.ENTER_START_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_START_LOCATION}
-                onConfirm={(e) => console.log("onConfirm", e)}
+                onConfirm={(e) => handleShowStartAddress(e)}
+                defaultAddress={"Khu II Đại Học Cần Thơ"}
+                defaultProvince={{
+                    idProvince: "92",
+                    name: "Thành phố Cần Thơ",
+                    type: "Thành phố Trung ương",
+                }}
+                defaultDistrict={{
+                    idDistrict: "916",
+                    idProvince: "92",
+                    name: "Quận Ninh Kiều",
+                    type: "Quận",
+                }}
+                defaultWard={{
+                    idDistrict: "916",
+                    idWard: "31149",
+                    name: "Phường An Khánh",
+                    type: "Phường",
+                }}
             />
 
             <ModalShowAddress
@@ -500,6 +628,7 @@ function RentalCar() {
                 handleClose={() => setModalShowEndAdderss(false)}
                 labelInput={Strings.RentalCar.ENTER_END_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_END_LOCATION}
+                onConfirm={(e) => handleShowEndAddress(e)}
             />
 
             <ModalError

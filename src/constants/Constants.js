@@ -25,6 +25,10 @@ const Constants = {
             GET_CAR: "/getCar",
         },
     },
+
+    Styled: {
+        DATE_FORMAT: "dd/MM/yyyy",
+    },
 };
 
 export default Constants;

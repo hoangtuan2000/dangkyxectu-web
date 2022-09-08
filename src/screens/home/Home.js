@@ -276,14 +276,14 @@ export default function Home() {
                               }
                           })
                         : [];
-                    const startDay =
-                        val.startDay ?
-                        new Date(val.startDay * 1000).toLocaleDateString(
+                    const startDate =
+                        val.startDate ?
+                        new Date(val.startDate * 1000).toLocaleDateString(
                             "en-GB"
                         ) : undefined
-                    const endDay =
-                        val.endDay ?
-                        new Date(val.endDay * 1000).toLocaleDateString("en-GB") : undefined
+                    const endDate =
+                        val.endDate ?
+                        new Date(val.endDate * 1000).toLocaleDateString("en-GB") : undefined
                     return (
                         <CardContainer
                             key={val.idCar}
@@ -371,7 +371,7 @@ export default function Home() {
                                                 />
                                                 <ListItemText
                                                     primary={val.reason}
-                                                    secondary={`${startDay} - ${endDay}`}
+                                                    secondary={`${startDate} - ${endDate}`}
                                                     primaryTypographyProps={{
                                                         fontSize: "13px",
                                                         fontWeight: "bold",

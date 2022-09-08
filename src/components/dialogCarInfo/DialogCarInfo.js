@@ -151,15 +151,15 @@ export default function DialogCarInfo({
                             {carScheduleList.length > 0 ? (
                                 <ListContainer>
                                     {carScheduleList.map((val) => {
-                                        const startDay =
-                                            val.startDay &&
+                                        const startDate =
+                                            val.startDate &&
                                             new Date(
-                                                val.startDay * 1000
+                                                val.startDate * 1000
                                             ).toLocaleDateString("en-GB");
-                                        const endDay =
-                                            val.endDay &&
+                                        const endDate =
+                                            val.endDate &&
                                             new Date(
-                                                val.endDay * 1000
+                                                val.endDate * 1000
                                             ).toLocaleDateString("en-GB");
                                         return (
                                             <ListItem
@@ -176,7 +176,7 @@ export default function DialogCarInfo({
                                                 />
                                                 <ListItemText
                                                     primary={val.reason}
-                                                    secondary={`${startDay} - ${endDay}`}
+                                                    secondary={`${startDate} - ${endDate}`}
                                                     primaryTypographyProps={{
                                                         fontSize: "13px",
                                                         fontWeight: "bold",
