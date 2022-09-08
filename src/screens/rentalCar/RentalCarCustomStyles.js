@@ -279,104 +279,14 @@ const TextInput = styled(TextField)(({ theme }) => ({
     },
 }));
 
-// const ButtonInput = styled(Button)(({ theme }) => ({
-//     padding: 0,
-//     margin: 10,
-//     textTransform: "capitalize",
-//     [theme.breakpoints.up("mobileS")]: {
-//         width: 230,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 10,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 10,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 16,
-//         },
-//     },
-//     [theme.breakpoints.up("mobileM")]: {
-//         width: 280,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 18,
-//         },
-//     },
-//     [theme.breakpoints.up("mobileL")]: {
-//         width: 290,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 20,
-//         },
-//     },
-//     [theme.breakpoints.up("sm")]: {
-//         width: 400,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 11,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 22,
-//         },
-//     },
-//     [theme.breakpoints.up("md")]: {
-//         width: 420,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 12,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 12,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 24,
-//         },
-//     },
-//     [theme.breakpoints.up("lg")]: {
-//         width: 390,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 13,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 13,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 20,
-//         },
-//     },
-//     [theme.breakpoints.up("xl")]: {
-//         width: 420,
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiInputBase-input": {
-//             fontSize: 13,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiFormLabel-root": {
-//             fontSize: 13,
-//         },
-//         "&.MuiButtonBase-root .MuiFormControl-root .MuiSvgIcon-root": {
-//             fontSize: 20,
-//         },
-//     },
-// }));
-
 const ButtonStyled = styled(Button)(({ theme }) => ({
-    float: 'left',
-    display: 'flex',
-    justifyContent: 'space-between',
+    // float: "left",
+    display: "flex",
+    justifyContent: "space-between",
     margin: 10,
     textTransform: "capitalize",
-    color: theme.palette.text.primary,
-    borderColor: theme.palette.action.active,
+    color: theme.palette.text.disabled,
+    borderColor: theme.palette.action.disabled,
     fontWeight: "unset",
     [theme.breakpoints.up("mobileS")]: {
         width: 230,
@@ -408,6 +318,64 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     },
 }));
 
+const TitleInput = styled(Typography)(({ theme }) => ({
+    // fontWeight: "bold",
+    fontStyle: "italic",
+    padding: 0,
+    marginLeft: 10,
+    [theme.breakpoints.up("xs")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("xl")]: {
+        fontSize: 13,
+    },
+}));
+
+const ButtonFeatures = styled(Button)(({ theme }) => ({
+    [theme.breakpoints.up("xs")]: {
+        fontSize: 9,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 9,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("xl")]: {
+        fontSize: 13,
+    },
+}));
+
 export {
     Title,
     Img,
@@ -417,6 +385,7 @@ export {
     BoxLeftContent,
     BoxRightContent,
     BoxContainerContent,
-    // ButtonInput,
+    TitleInput,
     ButtonStyled,
+    ButtonFeatures
 };

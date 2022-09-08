@@ -30,6 +30,7 @@ const Strings = {
         CHOOSE_WARD: "-- Chọn xã phường --",
         CHOOSE_DISTRICT: "-- Chọn quận huyện --",
         CHOOSE_PROVINCE: "-- Chọn tỉnh thành phố --",
+        NOTE: "Ghi Chú",
     },
 
     Login: {
@@ -91,12 +92,19 @@ const Strings = {
     RentalCar: {
         RENTAL_CAR: "Đăng Ký Xe",
         CAR_REGISTRATRION_INFOMATION: "Thông Tin Đăng Ký Xe",
-        START_LOCATION: "-- Địa Điểm Xuất Phát --",
-        END_LOCATION: "-- Địa Điểm Kết Thúc --",
+        ENTER_START_LOCATION: "-- Địa Điểm Xuất Phát --",
+        ENTER_END_LOCATION: "-- Địa Điểm Kết Thúc --",
         ENTER_START_LOCATION: "-- Nhập Địa Điểm Xuất Phát --",
         ENTER_END_LOCATION: "-- Nhập Địa Điểm Kết Thúc --",
-        CAR_RENTAL_REASON: "-- Lý Do Đăng Ký Xe --",
+        ENTER_CAR_RENTAL_REASON: "-- Mục Đích Sử Dụng Xe --",
         CHOOSE_TIME: "-- Chọn Thời Gian --",
+        ENTER_NOTE: "-- Ghi Chú --",
+        START_END_DAY: "Ngày Đi - Ngày Về: ",
+        CAR_RENTAL_REASON: "Mục Đích Sử Dụng Xe: ",
+        START_LOCATION: "Địa Điểm Xuất Phát: ",
+        END_LOCATION: "Địa Điểm Kết Thúc: ",
+        NOTE: "Ghi Chú: ",
+        REGISTRATION_CONFIRMATION: "Xác Nhận Đăng Ký",
     },
 
     DialogShowAddress: {

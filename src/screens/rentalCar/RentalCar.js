@@ -10,17 +10,19 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { forwardRef, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import BackDrop from "../../components/backDrop/BackDrop";
 import ModalError from "../../components/modalError/ModalError";
 import Constants from "../../constants/Constants";
 import Strings from "../../constants/Strings";
+import RoutesPath from '../../constants/RoutesPath'
 import { GlobalService } from "../../services/GlobalServices";
 import { RentalCarService } from "../../services/RentalCarServices";
 import {
     BoxContainerContent,
     BoxLeftContent,
     BoxRightContent,
+    ButtonFeatures,
     // ButtonInput,
     ButtonStyled,
     CarTypeTitle,
@@ -28,7 +30,11 @@ import {
     TextContent,
     TextInput,
     Title,
+    TitleInput,
 } from "./RentalCarCustomStyles";
+import SendIcon from "@mui/icons-material/Send";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CreateIcon from "@mui/icons-material/Create";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ModalShowAddress from "../../components/modalShowAddress/ModalShowAddress";
@@ -41,8 +47,9 @@ registerLocale("vi", vi);
 function RentalCar() {
     const theme = useTheme();
 
+    const navigate = useNavigate()
+
     const { idCar } = useParams();
-    // let { type, status, color, brand } = [];
 
     const [modalShowAdderss, setModalShowAdderss] = useState(false);
     const [backDrop, setBackDrop] = useState(false);
@@ -209,7 +216,7 @@ function RentalCar() {
         console.log("dates", dates);
     };
 
-    const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    const ButtonDate = forwardRef(({ value, onClick }, ref) => (
         <ButtonStyled
             onClick={onClick}
             ref={ref}
@@ -221,6 +228,7 @@ function RentalCar() {
                     }}
                 />
             }
+            sx={{ color: value && theme.palette.text.primary }}
         >
             {value ? value : Strings.RentalCar.CHOOSE_TIME}
         </ButtonStyled>
@@ -360,6 +368,9 @@ function RentalCar() {
                 <BoxRightContent>
                     <Box>
                         <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.START_END_DAY}
+                            </TitleInput>
                             <DatePicker
                                 locale="vi"
                                 dateFormat="dd/MM/yyyy"
@@ -367,7 +378,7 @@ function RentalCar() {
                                 startDate={startDate}
                                 endDate={endDate}
                                 withPortal
-                                customInput={<ExampleCustomInput />}
+                                customInput={<ButtonDate />}
                                 selected={startDate}
                                 onChange={onChange}
                                 excludeDates={[
@@ -378,43 +389,97 @@ function RentalCar() {
                                 minDate={new Date()}
                             />
                         </div>
-                        <TextInput
-                            label={Strings.RentalCar.CAR_RENTAL_REASON}
-                            variant="outlined"
-                            size="small"
-                        />
+
+                        <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.CAR_RENTAL_REASON}
+                            </TitleInput>
+                            <TextInput
+                                placeholder={
+                                    Strings.RentalCar.ENTER_CAR_RENTAL_REASON
+                                }
+                                variant="outlined"
+                                size="small"
+                            />
+                        </div>
                     </Box>
 
                     <Box sx={{ clear: "both" }}></Box>
 
                     <Box>
-                        <ButtonStyled
-                            onClick={() => setModalShowAdderss(true)}
-                            variant="outlined"
-                            endIcon={
-                                <LocationOnIcon
-                                    sx={{
-                                        color: theme.palette.primary.main,
-                                    }}
-                                />
-                            }
-                        >
-                            {Strings.RentalCar.START_LOCATION}
-                        </ButtonStyled>
+                        <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.START_LOCATION}
+                            </TitleInput>
+                            <ButtonStyled
+                                onClick={() => setModalShowAdderss(true)}
+                                variant="outlined"
+                                endIcon={
+                                    <LocationOnIcon
+                                        sx={{
+                                            color: theme.palette.primary.main,
+                                        }}
+                                    />
+                                }
+                            >
+                                {Strings.RentalCar.ENTER_START_LOCATION}
+                            </ButtonStyled>
+                        </div>
 
-                        <ButtonStyled
-                            onClick={() => setModalShowAdderss(true)}
-                            variant="outlined"
-                            endIcon={
-                                <LocationOnIcon
-                                    sx={{
-                                        color: theme.palette.primary.main,
-                                    }}
-                                />
-                            }
-                        >
-                            {Strings.RentalCar.END_LOCATION}
-                        </ButtonStyled>
+                        <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.END_LOCATION}
+                            </TitleInput>
+                            <ButtonStyled
+                                onClick={() => setModalShowAdderss(true)}
+                                variant="outlined"
+                                endIcon={
+                                    <LocationOnIcon
+                                        sx={{
+                                            color: theme.palette.primary.main,
+                                        }}
+                                    />
+                                }
+                            >
+                                {Strings.RentalCar.ENTER_END_LOCATION}
+                            </ButtonStyled>
+                        </div>
+                    </Box>
+
+                    <Box>
+                        <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.NOTE}
+                            </TitleInput>
+                            <TextInput
+                                placeholder={Strings.RentalCar.ENTER_NOTE}
+                                variant="outlined"
+                                size="small"
+                            />
+                        </div>
+                    </Box>
+
+                    <Box sx={{ clear: "both" }}></Box>
+                    <Box>
+                        <Box sx={{ marginLeft: 2}}>
+                            <ButtonFeatures
+                                size="small"
+                                variant="contained"
+                                endIcon={<CancelIcon />}
+                                color="error"
+                                sx={{ marginRight: 1 }}
+                                onClick={() => {navigate("/" + RoutesPath.HOME)}}
+                            >
+                                {Strings.Common.CANCEL}
+                            </ButtonFeatures>
+                            <ButtonFeatures
+                                size="small"
+                                variant="contained"
+                                endIcon={<SendIcon />}
+                            >
+                                {Strings.RentalCar.REGISTRATION_CONFIRMATION}
+                            </ButtonFeatures>
+                        </Box>
                     </Box>
                 </BoxRightContent>
             </BoxContainerContent>
