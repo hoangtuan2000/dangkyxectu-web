@@ -66,4 +66,32 @@ const Title = styled(Typography)(({ theme }) => ({
     },
 }));
 
-export {Title, ModalContainer };
+const ButtonFeatures = styled(Button)(({ theme }) => ({
+    
+    [theme.breakpoints.up("xs")]: {
+        fontSize: 9,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 9,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("xl")]: {
+        fontSize: 13,
+    },
+}));
+
+export {Title, ModalContainer, ButtonFeatures };

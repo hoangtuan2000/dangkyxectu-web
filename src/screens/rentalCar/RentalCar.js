@@ -15,7 +15,7 @@ import BackDrop from "../../components/backDrop/BackDrop";
 import ModalError from "../../components/modalError/ModalError";
 import Constants from "../../constants/Constants";
 import Strings from "../../constants/Strings";
-import RoutesPath from '../../constants/RoutesPath'
+import RoutesPath from "../../constants/RoutesPath";
 import { GlobalService } from "../../services/GlobalServices";
 import { RentalCarService } from "../../services/RentalCarServices";
 import {
@@ -47,11 +47,12 @@ registerLocale("vi", vi);
 function RentalCar() {
     const theme = useTheme();
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const { idCar } = useParams();
 
-    const [modalShowAdderss, setModalShowAdderss] = useState(false);
+    const [modalShowStartAdderss, setModalShowStartAdderss] = useState(false);
+    const [modalShowEndAdderss, setModalShowEndAdderss] = useState(false);
     const [backDrop, setBackDrop] = useState(false);
     const [modalError, setModalError] = useState({
         open: false,
@@ -65,7 +66,32 @@ function RentalCar() {
     const [carColorList, setCarColorList] = useState([]);
     const [carBrandList, setCarBrandList] = useState([]);
 
-    const [input, setInput] = useState(undefined);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const onChange = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+        console.log("dates", dates);
+    };
+
+    const ButtonDate = forwardRef(({ value, onClick }, ref) => (
+        <ButtonStyled
+            onClick={onClick}
+            ref={ref}
+            variant="outlined"
+            endIcon={
+                <CalendarMonthIcon
+                    sx={{
+                        color: theme.palette.primary.main,
+                    }}
+                />
+            }
+            sx={{ color: value && theme.palette.text.primary }}
+        >
+            {value ? value : Strings.RentalCar.CHOOSE_TIME}
+        </ButtonStyled>
+    ));
 
     const getCar = async (idCar) => {
         const res = await RentalCarService.getCar({ idCar: idCar });
@@ -205,34 +231,7 @@ function RentalCar() {
         getCarBrandList();
         getCar(idCar);
         setBackDrop(false);
-    }, []);
-
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const onChange = (dates) => {
-        const [start, end] = dates;
-        setStartDate(start);
-        setEndDate(end);
-        console.log("dates", dates);
-    };
-
-    const ButtonDate = forwardRef(({ value, onClick }, ref) => (
-        <ButtonStyled
-            onClick={onClick}
-            ref={ref}
-            variant="outlined"
-            endIcon={
-                <CalendarMonthIcon
-                    sx={{
-                        color: theme.palette.primary.main,
-                    }}
-                />
-            }
-            sx={{ color: value && theme.palette.text.primary }}
-        >
-            {value ? value : Strings.RentalCar.CHOOSE_TIME}
-        </ButtonStyled>
-    ));
+    }, []);    
 
     return (
         <Box>
@@ -412,7 +411,7 @@ function RentalCar() {
                                 {Strings.RentalCar.START_LOCATION}
                             </TitleInput>
                             <ButtonStyled
-                                onClick={() => setModalShowAdderss(true)}
+                                onClick={() => setModalShowStartAdderss(true)}
                                 variant="outlined"
                                 endIcon={
                                     <LocationOnIcon
@@ -431,7 +430,7 @@ function RentalCar() {
                                 {Strings.RentalCar.END_LOCATION}
                             </TitleInput>
                             <ButtonStyled
-                                onClick={() => setModalShowAdderss(true)}
+                                onClick={() => setModalShowEndAdderss(true)}
                                 variant="outlined"
                                 endIcon={
                                     <LocationOnIcon
@@ -461,14 +460,16 @@ function RentalCar() {
 
                     <Box sx={{ clear: "both" }}></Box>
                     <Box>
-                        <Box sx={{ marginLeft: 2}}>
+                        <Box sx={{ marginLeft: 2 }}>
                             <ButtonFeatures
                                 size="small"
                                 variant="contained"
                                 endIcon={<CancelIcon />}
                                 color="error"
                                 sx={{ marginRight: 1 }}
-                                onClick={() => {navigate("/" + RoutesPath.HOME)}}
+                                onClick={() => {
+                                    navigate("/" + RoutesPath.HOME);
+                                }}
                             >
                                 {Strings.Common.CANCEL}
                             </ButtonFeatures>
@@ -485,9 +486,17 @@ function RentalCar() {
             </BoxContainerContent>
 
             <ModalShowAddress
-                open={modalShowAdderss}
-                handleClose={() => setModalShowAdderss(false)}
+                open={modalShowStartAdderss}
+                handleClose={() => setModalShowStartAdderss(false)}
                 labelInput={Strings.RentalCar.ENTER_START_LOCATION}
+                titleModal={Strings.ModalShowAddress.TITLE_START_LOCATION}
+            />
+
+            <ModalShowAddress
+                open={modalShowEndAdderss}
+                handleClose={() => setModalShowEndAdderss(false)}
+                labelInput={Strings.RentalCar.ENTER_END_LOCATION}
+                titleModal={Strings.ModalShowAddress.TITLE_END_LOCATION}
             />
 
             <ModalError

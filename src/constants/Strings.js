@@ -16,6 +16,7 @@ const Strings = {
         STATUS: "Trạng Thái",
         UPDATE: "Cập Nhật",
         CANCEL: "Hủy",
+        CONFIRM: "Xác Nhận",
         REVIEW: "Đánh Giá",
         FULL_NAME: "Họ Tên",
         DEPARTMENT: "Thuộc Khoa",
@@ -107,8 +108,9 @@ const Strings = {
         REGISTRATION_CONFIRMATION: "Xác Nhận Đăng Ký",
     },
 
-    DialogShowAddress: {
-        TITLE: "Chọn Địa Chỉ",
+    ModalShowAddress: {
+        TITLE_START_LOCATION: "Chọn Địa Chỉ Xuất Phát",
+        TITLE_END_LOCATION: "Chọn Địa Chỉ Kết Thúc",
     },
 };
 
