@@ -75,6 +75,7 @@ function RentalCar() {
     });
 
     const [dataSendApi, setDataSendApi] = useState({
+        idCar: idCar,
         startDate: null,
         endDate: null,
         startLocation: null,
