@@ -1,19 +1,14 @@
-import { Navigate, Outlet } from 'react-router-dom';
-// import {useSelector} from 'react-redux'
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ProtectRoutesAdmin() {
-    // const userLoginAdmin = useSelector((state) => state.userLoginAdmin.infoUserAdmin)
-    // if(Object.entries(userLoginAdmin).length !== 0){
-    //     return <Outlet /> 
-    // }else{
-    //     return <Navigate to='/' />
-    // }
+    const currentUser = useSelector((state) => state.currentUser.user);
 
-    if(1 == 1){
-        return <Outlet /> 
-    }else{
-        return <Navigate to='/login' />
+    if (currentUser.token && currentUser.accessToken) {
+        return <Outlet />;
+    } else {
+        return <Navigate to="/" />;
     }
 }
 
-export default ProtectRoutesAdmin
+export default ProtectRoutesAdmin;

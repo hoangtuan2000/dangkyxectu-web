@@ -4,6 +4,7 @@ const Strings = {
     },
 
     Common: {
+        ERROR: "Có Lỗi Xảy Ra",
         LOGOUT: "Đăng Xuất",
         NO_DATA: "Không Có Dữ Liệu",
         IMAGE: "Ảnh",

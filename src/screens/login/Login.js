@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Box, Checkbox, Grid, IconButton, InputAdornment } from "@mui/material";
+import {
+    Box,
+    Checkbox,
+    Grid,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 import {
     AccountCircle,
     VisibilityOff,
@@ -14,6 +20,7 @@ import {
     TextLogin,
     FormCheckBox,
     ButtonLogin,
+    AlertError,
 } from "./LoginCustomStyles";
 import Strings from "../../constants/Strings";
 import logoCTU from "../../assets/logoCTU.png";
@@ -24,18 +31,19 @@ import helper from "../../common/helper";
 import BackDrop from "../../components/backDrop/BackDrop";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
-    changeAccessTokenUser,
-    changeCodeUser,
-    changeFullNameUser,
-    changeRoleUser,
-    changeTokenUser,
+    changeUser,
 } from "../../redux/currentUserSlice";
+import { changeErrorAuthencationToken } from "../../redux/globalReduxSlice";
 
 export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const errorAuthencationToken = useSelector(
+        (state) => state.globalRedux.errorAuthencationToken
+    );
 
     const [showPassword, setShowPassword] = useState(false);
     const [backDrop, setBackDrop] = useState(false);
@@ -68,7 +76,7 @@ export default function Login() {
         });
     };
 
-    const handleSubmit = async (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
         if (
             helper.isNullOrEmpty(inputLogin.code) ||
@@ -93,13 +101,16 @@ export default function Login() {
             if (res.data) {
                 // login success
                 if (res.data.status == Constants.ApiCode.OK) {
-                    await dispatch(changeTokenUser(res.data.data.token));
                     await dispatch(
-                        changeAccessTokenUser(res.data.data.access_token)
+                        changeUser({
+                            fullName: res.data.data.fullName,
+                            code: res.data.data.code,
+                            role: res.data.data.role,
+                            token: res.data.data.token,
+                            accessToken: res.data.data.access_token,
+                        })
                     );
-                    await dispatch(changeFullNameUser(res.data.data.fullName));
-                    await dispatch(changeCodeUser(res.data.data.code));
-                    await dispatch(changeRoleUser(res.data.data.role));
+                    await dispatch(changeErrorAuthencationToken(null));
                     navigate(RoutesPath.HOME);
                 } else {
                     setModalError({
@@ -131,7 +142,14 @@ export default function Login() {
                         <Title component="h1" variant="h5">
                             {Strings.App.TITLE}
                         </Title>
-                        <Box component="form" onSubmit={handleSubmit}>
+                        {errorAuthencationToken && (
+                            <AlertError severity="error">
+                                {errorAuthencationToken &&
+                                    errorAuthencationToken}
+                            </AlertError>
+                        )}
+
+                        <Box component="form" onSubmit={handleLogin}>
                             <TextLogin
                                 onChange={(e) => handleChangeCode(e)}
                                 error={inputLogin.helperCode && true}

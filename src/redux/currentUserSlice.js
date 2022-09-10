@@ -17,37 +17,60 @@ export const currentUserSlice = createSlice({
         changeRoleUser: (state, action) => {
             state.user = {
                 ...state.user,
-                role: action.payload
+                role: action.payload,
             };
         },
         changeFullNameUser: (state, action) => {
             state.user = {
                 ...state.user,
-                fullName: action.payload
+                fullName: action.payload,
             };
         },
         changeCodeUser: (state, action) => {
             state.user = {
                 ...state.user,
-                code: action.payload
+                code: action.payload,
             };
         },
         changeTokenUser: (state, action) => {
             state.user = {
                 ...state.user,
-                token: action.payload
+                token: action.payload,
             };
         },
         changeAccessTokenUser: (state, action) => {
             state.user = {
                 ...state.user,
-                accessToken: action.payload
+                accessToken: action.payload,
+            };
+        },
+        changeUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                ...action.payload
+            };
+        },
+        deleteCurrentUser: (state, action) => {
+            state.user = {
+                fullName: null,
+                code: null,
+                role: null,
+                token: null,
+                accessToken: null,
             };
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { changeRoleUser, changeFullNameUser, changeCodeUser, changeTokenUser, changeAccessTokenUser } = currentUserSlice.actions;
+export const {
+    changeRoleUser,
+    changeFullNameUser,
+    changeCodeUser,
+    deleteCurrentUser,
+    changeTokenUser,
+    changeAccessTokenUser,
+    changeUser
+} = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

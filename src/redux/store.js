@@ -27,6 +27,12 @@ const currentUserPersistConfig = {
     storage,
 };
 
+const globalReduxPersistConfig = {
+    key: "globalRedux",
+    version: 1,
+    storage,
+};
+
 const darkModePersistedReducer = persistReducer(
     darkModePersistConfig,
     themeDarkModeReducer
@@ -37,11 +43,16 @@ const currentUserPersistedReducer = persistReducer(
     currentUserReducer
 );
 
+const globalReduxPersistedReducer = persistReducer(
+    globalReduxPersistConfig,
+    globalReduxReducer
+);
+
 export const store = configureStore({
     reducer: {
         themeDarkMode: darkModePersistedReducer,
         currentUser: currentUserPersistedReducer,
-        globalRedux: globalReduxReducer,
+        globalRedux: globalReduxPersistedReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

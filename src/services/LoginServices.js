@@ -1,9 +1,9 @@
-import axiosInstance from "../common/axiosConfig";
+import { axiosInstanceNotAuth } from "../common/axiosConfig";
 import Constants from "../constants/Constants";
 
 const LoginService = {
     Login: async (data) => {
-        return await axiosInstance
+        return await axiosInstanceNotAuth
             .post(Constants.ApiPath.Login.LOGIN, data)
             .then((res) => {
                 return res;

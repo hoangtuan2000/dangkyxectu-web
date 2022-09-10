@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box,
     Button,
     FormControlLabel,
@@ -15,6 +16,7 @@ const GridContainer = styled(Grid)(({ theme }) => ({
     height: "100vh",
     [theme.breakpoints.up("sm")]: {
         backgroundColor: "rgb(211 234 255)",
+        overflow: "auto",
     },
 }));
 
@@ -52,6 +54,26 @@ const Title = styled(Typography)(({ theme }) => ({
     },
     [theme.breakpoints.up("md")]: {
         fontSize: "24px",
+    },
+}));
+
+const AlertError = styled(Alert)(({ theme }) => ({
+    width: "95%",
+    borderRadius: 15,
+    padding: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    display: "flex",
+    alignItems: "center",
+    color: theme.palette.error.main,
+    [theme.breakpoints.up("xs")]: {
+        fontSize: "11px",
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: "12px",
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: "14px",
     },
 }));
 
@@ -140,4 +162,5 @@ export {
     TextLogin,
     FormCheckBox,
     ButtonLogin,
+    AlertError,
 };
