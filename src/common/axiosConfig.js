@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 import { store } from "../redux/store";
 import { deleteCurrentUser } from "../redux/currentUserSlice";
 import Constants from "../constants/Constants";
@@ -65,8 +66,17 @@ const Authentication = async () => {
 
 axiosInstance.interceptors.request.use(
     async function (config) {
-        const resultAuthentication = await Authentication();
-        return resultAuthentication ? config : false;
+        const token = store.getState().currentUser.user.token;
+        let decoded = jwt_decode(token);
+        // If the token expires, then send
+        if (new Date() >= new Date(decoded.exp * 1000)) {
+            const resultAuthentication = await Authentication();
+            return resultAuthentication ? config : false;
+        }
+        // token has not expired
+        else {
+            return config;
+        }
     },
     function (error) {
         return Promise.reject(error);
