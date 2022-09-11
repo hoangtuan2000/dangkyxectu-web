@@ -1,11 +1,5 @@
-import { useState } from "react";
-import {
-    Box,
-    Checkbox,
-    Grid,
-    IconButton,
-    InputAdornment,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Checkbox, Grid, IconButton, InputAdornment } from "@mui/material";
 import {
     AccountCircle,
     VisibilityOff,
@@ -32,14 +26,14 @@ import BackDrop from "../../components/backDrop/BackDrop";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    changeUser,
-} from "../../redux/currentUserSlice";
+import { changeUser } from "../../redux/currentUserSlice";
 import { changeErrorAuthencationToken } from "../../redux/globalReduxSlice";
 
 export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const currentUser = useSelector((state) => state.currentUser.user);
 
     const errorAuthencationToken = useSelector(
         (state) => state.globalRedux.errorAuthencationToken
@@ -132,6 +126,13 @@ export default function Login() {
             await setBackDrop(false);
         }
     };
+
+    useEffect(() => {
+        // If you just opened the app and the token has not expired, go to the home page
+        if (currentUser.token && currentUser.accessToken) {
+            navigate(RoutesPath.HOME);
+        }
+    }, []);
 
     return (
         <>

@@ -55,7 +55,6 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path={RoutesPath.LOGIN} element={<Login />} />
-
                     <Route path={RoutesPath.INDEX}>
                         <Route element={<ProtectRoutesAdmin />}>
                             <Route
