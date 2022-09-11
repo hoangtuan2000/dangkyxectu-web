@@ -26,7 +26,7 @@ const BoxLogin = styled(Box)(({ theme }) => ({
     alignItems: "center",
     [theme.breakpoints.up("sm")]: {
         backgroundColor: "white",
-        padding: theme.spacing(4),
+        padding: theme.spacing(1),
         paddingLeft: theme.spacing(5),
         paddingRight: theme.spacing(5),
         WebkitBoxShadow:
@@ -38,7 +38,7 @@ const BoxLogin = styled(Box)(({ theme }) => ({
 }));
 
 const Logo = styled("img")({
-    width: "40%",
+    width: "30%",
     marginBottom: 15,
 });
 

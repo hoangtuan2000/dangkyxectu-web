@@ -387,5 +387,5 @@ export {
     BoxContainerContent,
     TitleInput,
     ButtonStyled,
-    ButtonFeatures
+    ButtonFeatures,
 };

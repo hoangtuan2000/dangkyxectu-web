@@ -173,11 +173,15 @@ export default function Home() {
         }
     };
 
+    const run = async () => {
+        await setBackDrop(true);
+        await getCommon();
+        await getCarList();
+        await setBackDrop(false);
+    };
+
     useEffect(() => {
-        setBackDrop(true);
-        getCommon();
-        getCarList();
-        setBackDrop(false);
+        run();
     }, []);
 
     return (

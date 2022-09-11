@@ -61,62 +61,14 @@ export default function ModalShowAddress({
         ward: defaultWard ? defaultWard : null,
     });
 
-    const getProvinceList = async () => {
-        const res = await GlobalService.getCommon({ common: "province" });
+    const getCommon = async () => {
+        const res = await GlobalService.getCommon({ group: "ward, district, province" });
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setProvinceList(res.data.data);
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
-            });
-        }
-    };
-
-    const getDistrictList = async () => {
-        const res = await GlobalService.getCommon({ common: "district" });
-        // axios success
-        if (res.data) {
-            if (res.data.status == Constants.ApiCode.OK) {
-                setDistrictList(res.data.data);
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
-            });
-        }
-    };
-
-    const getWardList = async () => {
-        const res = await GlobalService.getCommon({ common: "ward" });
-        // axios success
-        if (res.data) {
-            if (res.data.status == Constants.ApiCode.OK) {
-                setWardList(res.data.data);
+                setWardList(res.data.data.ward);
+                setDistrictList(res.data.data.district);
+                setProvinceList(res.data.data.province);
             } else {
                 setModalError({
                     ...modalError,
@@ -229,9 +181,7 @@ export default function ModalShowAddress({
     };
 
     useEffect(() => {
-        getProvinceList();
-        getDistrictList();
-        getWardList();
+        getCommon()
 
         if(defaultAddress && defaultProvince && defaultDistrict && defaultWard){
             handleConfirm()

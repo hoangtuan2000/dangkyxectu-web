@@ -43,7 +43,29 @@ import DatePicker from "react-datepicker";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import { addDays, subDays } from "date-fns";
 import vi from "date-fns/locale/vi";
+import helper from "../../common/helper";
 registerLocale("vi", vi);
+
+const defaultStartAddress = {
+    address: "Khu II Đại Học Cần Thơ",
+    province: {
+        idProvince: "92",
+        name: "Thành phố Cần Thơ",
+        type: "Thành phố Trung ương",
+    },
+    district: {
+        idDistrict: "916",
+        idProvince: "92",
+        name: "Quận Ninh Kiều",
+        type: "Quận",
+    },
+    ward: {
+        idDistrict: "916",
+        idWard: "31149",
+        name: "Phường An Khánh",
+        type: "Phường",
+    },
+};
 
 function RentalCar() {
     const theme = useTheme();
@@ -74,16 +96,60 @@ function RentalCar() {
         endDate: null,
     });
 
+    const [errorData, setErrorData] = useState({
+        errorIdCar: false,
+        errorStartDate: false,
+        errorEndDate: false,
+        errorStartLocation: false,
+        errorEndLocation: false,
+        errorReason: false,
+        errorNote: false,
+        errorIdWardStartLocation: false,
+        errorIdWardEndLocation: false,
+    });
+
     const [dataSendApi, setDataSendApi] = useState({
         idCar: idCar,
         startDate: null,
         endDate: null,
-        startLocation: null,
+        startLocation: defaultStartAddress.address,
         endLocation: null,
         reason: null,
         note: null,
-        idWardStartLocation: null,
+        idWardStartLocation: defaultStartAddress.ward.idWard,
         idWardEndLocation: null,
+    });
+
+    const ButtonDate = forwardRef(({ value, onClick }, ref) => {
+        return (
+            <Tooltip title={value ? value : Strings.RentalCar.CHOOSE_TIME}>
+                <ButtonStyled
+                    onClick={onClick}
+                    ref={ref}
+                    variant="outlined"
+                    endIcon={
+                        <CalendarMonthIcon
+                            sx={{
+                                color: theme.palette.primary.main,
+                            }}
+                        />
+                    }
+                    sx={{
+                        color: value
+                            ? theme.palette.text.primary
+                            : (errorData.errorStartDate ||
+                                  errorData.errorEndDate) &&
+                              theme.palette.error.light,
+                        borderColor:
+                            (errorData.errorStartDate ||
+                                errorData.errorEndDate) &&
+                            theme.palette.error.dark,
+                    }}
+                >
+                    {value ? value : Strings.RentalCar.CHOOSE_TIME}
+                </ButtonStyled>
+            </Tooltip>
+        );
     });
 
     const getCar = async (idCar) => {
@@ -179,44 +245,114 @@ function RentalCar() {
     const handleChangeReason = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            reason: e.target.value
+            reason: e.target.value,
         });
-    }
+    };
 
     const handleChangeNote = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            note: e.target.value
+            note: e.target.value,
         });
-    }
+    };
 
-    const ButtonDate = forwardRef(({ value, onClick }, ref) => {
-        return (
-            <Tooltip title={value ? value : Strings.RentalCar.CHOOSE_TIME}>
-                <ButtonStyled
-                    onClick={onClick}
-                    ref={ref}
-                    variant="outlined"
-                    endIcon={
-                        <CalendarMonthIcon
-                            sx={{
-                                color: theme.palette.primary.main,
-                            }}
-                        />
-                    }
-                    sx={{ color: value && theme.palette.text.primary }}
-                >
-                    {value ? value : Strings.RentalCar.CHOOSE_TIME}
-                </ButtonStyled>
-            </Tooltip>
-        );
-    });
+    const handleCheckNullData = () => {
+        if (
+            helper.isNullOrEmpty(dataSendApi.idCar) ||
+            helper.isNullOrEmpty(dataSendApi.startDate) ||
+            helper.isNullOrEmpty(dataSendApi.endDate) ||
+            helper.isNullOrEmpty(dataSendApi.startLocation) ||
+            helper.isNullOrEmpty(dataSendApi.endLocation) ||
+            helper.isNullOrEmpty(dataSendApi.idWardStartLocation) ||
+            helper.isNullOrEmpty(dataSendApi.idWardEndLocation) ||
+            helper.isNullOrEmpty(dataSendApi.reason)
+        ) {
+            setErrorData({
+                ...errorData,
+                errorIdCar: helper.isNullOrEmpty(dataSendApi.idCar) && true,
+                errorStartDate:
+                    helper.isNullOrEmpty(dataSendApi.startDate) && true,
+                errorEndDate: helper.isNullOrEmpty(dataSendApi.endDate) && true,
+                errorStartLocation:
+                    helper.isNullOrEmpty(dataSendApi.startLocation) && true,
+                errorEndLocation:
+                    helper.isNullOrEmpty(dataSendApi.endLocation) && true,
+                errorReason: helper.isNullOrEmpty(dataSendApi.reason) && true,
+                errorIdWardStartLocation:
+                    helper.isNullOrEmpty(dataSendApi.idWardStartLocation) &&
+                    true,
+                errorIdWardEndLocation:
+                    helper.isNullOrEmpty(dataSendApi.idWardEndLocation) && true,
+            });
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    const handleResetErrorData = () => {
+        setErrorData({
+            errorIdCar: false,
+            errorStartDate: false,
+            errorEndDate: false,
+            errorStartLocation: false,
+            errorEndLocation: false,
+            errorReason: false,
+            errorNote: false,
+            errorIdWardStartLocation: false,
+            errorIdWardEndLocation: false,
+        });
+    };
+
+    const handleCheckLengthData = () => {
+        const len = 250;
+        if (
+            !helper.checkStringLength(dataSendApi.startLocation, len) ||
+            !helper.checkStringLength(dataSendApi.endLocation, len) ||
+            !helper.checkStringLength(dataSendApi.reason, len) ||
+            (dataSendApi.note &&
+                !helper.checkStringLength(dataSendApi.note, len))
+        ) {
+            setErrorData({
+                ...errorData,
+                errorStartLocation:
+                    !helper.checkStringLength(dataSendApi.startLocation, len) &&
+                    true,
+                errorEndLocation:
+                    !helper.checkStringLength(dataSendApi.endLocation, len) &&
+                    true,
+                errorReason:
+                    !helper.checkStringLength(dataSendApi.reason, len) && true,
+                errorNote:
+                    dataSendApi.note &&
+                    !helper.checkStringLength(dataSendApi.note, len) &&
+                    true,
+            });
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    const handleSubmit = async () => {
+        const checkNull = await handleCheckNullData();
+        if (checkNull) {
+            const checkLength = await handleCheckLengthData();
+            if (checkLength) {
+                handleResetErrorData();
+            }
+        }
+    };
+
+    const run = async () => {
+        await setBackDrop(true);
+        await getCommon();
+        await getCar(idCar);
+        await setBackDrop(false);
+    };
 
     useEffect(() => {
-        setBackDrop(true);
-        getCommon()
-        getCar(idCar);
-        setBackDrop(false);
+        run();
     }, []);
 
     return (
@@ -378,6 +514,19 @@ function RentalCar() {
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
                                 {Strings.RentalCar.CAR_RENTAL_REASON}
+                                <span
+                                    style={{
+                                        display: errorData.errorReason
+                                            ? "contents"
+                                            : "none",
+                                        color: theme.palette.error.main,
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        marginLeft: 10,
+                                    }}
+                                >
+                                    ( 1 - 250 Ký Tự )
+                                </span>
                             </TitleInput>
                             <TextInput
                                 placeholder={
@@ -387,6 +536,15 @@ function RentalCar() {
                                 size="small"
                                 value={dataSendApi.reason || ""}
                                 onChange={(e) => handleChangeReason(e)}
+                                error={errorData.errorReason ? true : false}
+                                inputProps={{
+                                    style: {
+                                        color:
+                                            errorData.errorReason &&
+                                            !dataSendApi.reason &&
+                                            theme.palette.error.main,
+                                    },
+                                }}
                             />
                         </div>
                     </Box>
@@ -397,6 +555,19 @@ function RentalCar() {
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
                                 {Strings.RentalCar.START_LOCATION}
+                                <span
+                                    style={{
+                                        display: errorData.errorStartLocation
+                                            ? "contents"
+                                            : "none",
+                                        color: theme.palette.error.main,
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        marginLeft: 10,
+                                    }}
+                                >
+                                    ( 1 - 250 Ký Tự )
+                                </span>
                             </TitleInput>
                             <ButtonStyled
                                 onClick={() => setModalShowStartAdderss(true)}
@@ -408,6 +579,16 @@ function RentalCar() {
                                         }}
                                     />
                                 }
+                                sx={{
+                                    color:
+                                        (errorData.errorStartLocation ||
+                                            errorData.idWardStartLocation) &&
+                                        theme.palette.error.light,
+                                    borderColor:
+                                        (errorData.errorStartLocation ||
+                                            errorData.idWardStartLocation) &&
+                                        theme.palette.error.dark,
+                                }}
                             >
                                 <Tooltip
                                     title={
@@ -439,6 +620,19 @@ function RentalCar() {
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
                                 {Strings.RentalCar.END_LOCATION}
+                                <span
+                                    style={{
+                                        display: errorData.errorEndLocation
+                                            ? "contents"
+                                            : "none",
+                                        color: theme.palette.error.main,
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        marginLeft: 10,
+                                    }}
+                                >
+                                    ( 1 - 250 Ký Tự )
+                                </span>
                             </TitleInput>
                             <ButtonStyled
                                 onClick={() => setModalShowEndAdderss(true)}
@@ -450,6 +644,16 @@ function RentalCar() {
                                         }}
                                     />
                                 }
+                                sx={{
+                                    color:
+                                        (errorData.errorEndLocation ||
+                                            errorData.idWardEndLocation) &&
+                                        theme.palette.error.light,
+                                    borderColor:
+                                        (errorData.errorEndLocation ||
+                                            errorData.idWardEndLocation) &&
+                                        theme.palette.error.dark,
+                                }}
                             >
                                 <Tooltip
                                     title={
@@ -483,6 +687,19 @@ function RentalCar() {
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
                                 {Strings.RentalCar.NOTE}
+                                <span
+                                    style={{
+                                        display: errorData.errorNote
+                                            ? "contents"
+                                            : "none",
+                                        color: theme.palette.error.main,
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        marginLeft: 10,
+                                    }}
+                                >
+                                    ( 1 - 250 Ký Tự )
+                                </span>
                             </TitleInput>
                             <TextInput
                                 placeholder={Strings.RentalCar.ENTER_NOTE}
@@ -513,7 +730,7 @@ function RentalCar() {
                                 size="small"
                                 variant="contained"
                                 endIcon={<SendIcon />}
-                                onClick={() => console.log(dataSendApi)}
+                                onClick={handleSubmit}
                             >
                                 {Strings.RentalCar.REGISTRATION_CONFIRMATION}
                             </ButtonFeatures>
@@ -528,24 +745,10 @@ function RentalCar() {
                 labelInput={Strings.RentalCar.ENTER_START_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_START_LOCATION}
                 onConfirm={(e) => handleShowStartAddress(e)}
-                defaultAddress={"Khu II Đại Học Cần Thơ"}
-                defaultProvince={{
-                    idProvince: "92",
-                    name: "Thành phố Cần Thơ",
-                    type: "Thành phố Trung ương",
-                }}
-                defaultDistrict={{
-                    idDistrict: "916",
-                    idProvince: "92",
-                    name: "Quận Ninh Kiều",
-                    type: "Quận",
-                }}
-                defaultWard={{
-                    idDistrict: "916",
-                    idWard: "31149",
-                    name: "Phường An Khánh",
-                    type: "Phường",
-                }}
+                defaultAddress={defaultStartAddress.address}
+                defaultProvince={defaultStartAddress.province}
+                defaultDistrict={defaultStartAddress.district}
+                defaultWard={defaultStartAddress.ward}
             />
 
             <ModalShowAddress
