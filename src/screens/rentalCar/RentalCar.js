@@ -112,91 +112,18 @@ function RentalCar() {
         }
     };
 
-    const getCarTypeList = async () => {
-        const res = await GlobalService.getCommon({ common: "car_type" });
+    const getCommon = async () => {
+        const res = await GlobalService.getCommon({
+            group: "car_type, car_status, car_color, car_brand",
+        });
         // axios success
         if (res.data) {
             // login success
             if (res.data.status == Constants.ApiCode.OK) {
-                setCarTypeList(res.data.data);
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
-            });
-        }
-    };
-
-    const getCarStatusList = async () => {
-        const res = await GlobalService.getCommon({ common: "car_status" });
-        // axios success
-        if (res.data) {
-            // login success
-            if (res.data.status == Constants.ApiCode.OK) {
-                setCarStatusList(res.data.data);
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
-            });
-        }
-    };
-
-    const getCarColorList = async () => {
-        const res = await GlobalService.getCommon({ common: "car_color" });
-        // axios success
-        if (res.data) {
-            // login success
-            if (res.data.status == Constants.ApiCode.OK) {
-                setCarColorList(res.data.data);
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
-            });
-        }
-    };
-
-    const getCarBrandList = async () => {
-        const res = await GlobalService.getCommon({ common: "car_brand" });
-        // axios success
-        if (res.data) {
-            // login success
-            if (res.data.status == Constants.ApiCode.OK) {
-                setCarBrandList(res.data.data);
+                setCarTypeList(res.data.data.car_type);
+                setCarStatusList(res.data.data.car_status);
+                setCarColorList(res.data.data.car_color);
+                setCarBrandList(res.data.data.car_brand);
             } else {
                 setModalError({
                     ...modalError,
@@ -287,10 +214,7 @@ function RentalCar() {
 
     useEffect(() => {
         setBackDrop(true);
-        getCarTypeList();
-        getCarStatusList();
-        getCarColorList();
-        getCarBrandList();
+        getCommon()
         getCar(idCar);
         setBackDrop(false);
     }, []);
