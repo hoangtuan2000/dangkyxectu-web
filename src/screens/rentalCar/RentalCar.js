@@ -1,17 +1,7 @@
-import { AccountCircle } from "@mui/icons-material";
-import {
-    Button,
-    Grid,
-    IconButton,
-    InputAdornment,
-    TextField,
-    Tooltip,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Tooltip, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { forwardRef, useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import BackDrop from "../../components/backDrop/BackDrop";
 import ModalError from "../../components/modalError/ModalError";
 import Constants from "../../constants/Constants";
@@ -24,7 +14,6 @@ import {
     BoxLeftContent,
     BoxRightContent,
     ButtonFeatures,
-    // ButtonInput,
     ButtonStyled,
     CarTypeTitle,
     Img,
@@ -35,15 +24,14 @@ import {
 } from "./RentalCarCustomStyles";
 import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
-import CreateIcon from "@mui/icons-material/Create";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ModalShowAddress from "../../components/modalShowAddress/ModalShowAddress";
-import DatePicker from "react-datepicker";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-import { addDays, subDays } from "date-fns";
-import vi from "date-fns/locale/vi";
 import helper from "../../common/helper";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import vi from "date-fns/locale/vi";
+import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
 registerLocale("vi", vi);
 
 const defaultStartAddress = {
@@ -74,9 +62,12 @@ function RentalCar() {
 
     const { idCar } = useParams();
 
+    const ModalShowEndAddressRef = useRef(); // use call reset address function
+
     const [modalShowStartAdderss, setModalShowStartAdderss] = useState(false);
     const [modalShowEndAdderss, setModalShowEndAdderss] = useState(false);
     const [backDrop, setBackDrop] = useState(false);
+    const [modalSuccess, setModalSuccess] = useState(false);
     const [modalError, setModalError] = useState({
         open: false,
         title: null,
@@ -217,8 +208,8 @@ function RentalCar() {
         });
         setDataSendApi({
             ...dataSendApi,
-            startDate: Math.floor(new Date(start).getTime() / 1000),
-            endDate: Math.floor(new Date(end).getTime() / 1000),
+            startDate: Math.floor(new Date(start).getTime()),
+            endDate: Math.floor(new Date(end).getTime()),
         });
     };
 
@@ -292,6 +283,7 @@ function RentalCar() {
 
     const handleResetErrorData = () => {
         setErrorData({
+            ...errorData,
             errorIdCar: false,
             errorStartDate: false,
             errorEndDate: false,
@@ -307,22 +299,29 @@ function RentalCar() {
     const handleCheckLengthData = () => {
         const len = 250;
         if (
-            !helper.checkStringLength(dataSendApi.startLocation, len) ||
-            !helper.checkStringLength(dataSendApi.endLocation, len) ||
-            !helper.checkStringLength(dataSendApi.reason, len) ||
+            (dataSendApi.startLocation &&
+                !helper.checkStringLength(dataSendApi.startLocation, len)) ||
+            (dataSendApi.endLocation &&
+                !helper.checkStringLength(dataSendApi.endLocation, len)) ||
+            (dataSendApi.reason &&
+                !helper.checkStringLength(dataSendApi.reason, len)) ||
             (dataSendApi.note &&
                 !helper.checkStringLength(dataSendApi.note, len))
         ) {
             setErrorData({
                 ...errorData,
                 errorStartLocation:
+                    dataSendApi.startLocation &&
                     !helper.checkStringLength(dataSendApi.startLocation, len) &&
                     true,
                 errorEndLocation:
+                    dataSendApi.endLocation &&
                     !helper.checkStringLength(dataSendApi.endLocation, len) &&
                     true,
                 errorReason:
-                    !helper.checkStringLength(dataSendApi.reason, len) && true,
+                    dataSendApi.reason &&
+                    !helper.checkStringLength(dataSendApi.reason, len) &&
+                    true,
                 errorNote:
                     dataSendApi.note &&
                     !helper.checkStringLength(dataSendApi.note, len) &&
@@ -334,12 +333,59 @@ function RentalCar() {
         }
     };
 
+    const handleResetInput = () => {
+        handleResetErrorData();
+        setShowEndAddress();
+        setSelectedDates({
+            startDate: null,
+            endDate: null,
+        });
+        setDataSendApi({
+            idCar: idCar,
+            startDate: null,
+            endDate: null,
+            startLocation: defaultStartAddress.address,
+            endLocation: null,
+            reason: null,
+            note: null,
+            idWardStartLocation: defaultStartAddress.ward.idWard,
+            idWardEndLocation: null,
+        });
+    };
+
     const handleSubmit = async () => {
         const checkNull = await handleCheckNullData();
         if (checkNull) {
             const checkLength = await handleCheckLengthData();
             if (checkLength) {
-                handleResetErrorData();
+                await setBackDrop(true);
+                const res = await RentalCarService.createSchedule(dataSendApi);
+                // axios success
+                if (res.data) {
+                    if (res.data.status == Constants.ApiCode.OK) {
+                        handleResetInput();
+                        //call function of child component: modalShowEndAdderss 
+                        //=> reset value in modal choosse end address
+                        ModalShowEndAddressRef.current.handleResetAddress();
+                        setModalSuccess(true);
+                    } else {
+                        setModalError({
+                            ...modalError,
+                            open: true,
+                            title: res.data.message,
+                        });
+                    }
+                }
+                // axios fail
+                else {
+                    setModalError({
+                        ...modalError,
+                        open: true,
+                        title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                        content: res.name,
+                    });
+                }
+                await setBackDrop(false);
             }
         }
     };
@@ -757,6 +803,7 @@ function RentalCar() {
                 labelInput={Strings.RentalCar.ENTER_END_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_END_LOCATION}
                 onConfirm={(e) => handleShowEndAddress(e)}
+                ref={ModalShowEndAddressRef}
             />
 
             <ModalError
@@ -766,6 +813,11 @@ function RentalCar() {
                 }
                 content={modalError.content}
                 title={modalError.title}
+            />
+
+            <ModalSuccess
+                open={modalSuccess}
+                handleClose={() => setModalSuccess(false)}
             />
             <BackDrop open={backDrop} />
         </Box>

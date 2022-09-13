@@ -1,12 +1,12 @@
 import { Backdrop, Fade, Modal } from "@mui/material";
+import Strings from "../../constants/Strings";
 import {
     BoxContainer,
-    Content,
-    ErrorOutlineIconCustom,
+    CheckCircleIconCustom,
     Title,
-} from "./ModalErrorCustomStyles";
+} from "./ModalSuccessCustomStyles";
 
-function ModalError({ open, handleClose, title, content }) {
+function ModalSuccess({ open, handleClose }) {
     return (
         <Modal
             open={open && open}
@@ -20,16 +20,13 @@ function ModalError({ open, handleClose, title, content }) {
             <Fade in={open}>
                 <BoxContainer>
                     <Title variant="p" component="p">
-                        {title && title}
+                        {Strings.Common.SUCCESS}
                     </Title>
-                    <Content variant="p" component="p">
-                        {content && content}
-                    </Content>
-                    <ErrorOutlineIconCustom />
+                    <CheckCircleIconCustom />
                 </BoxContainer>
             </Fade>
         </Modal>
     );
 }
 
-export default ModalError;
+export default ModalSuccess;

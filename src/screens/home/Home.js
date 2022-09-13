@@ -13,14 +13,12 @@ import {
 import { CardContainer } from "./HomeCustomStyles";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import DialogCarInfo from "../../components/dialogCarInfo/DialogCarInfo";
-import DialogCarRental from "../../components/dialogCarRental/DialogCarRental";
 import Strings from "../../constants/Strings";
 import { HomeService } from "../../services/HomeServices";
 import Constants from "../../constants/Constants";
 import ModalError from "../../components/modalError/ModalError";
 import BackDrop from "../../components/backDrop/BackDrop";
 import { GlobalService } from "../../services/GlobalServices";
-import axios from "axios";
 
 export default function Home() {
     const theme = useTheme();
@@ -33,7 +31,6 @@ export default function Home() {
     });
 
     const [openDialogCarInfo, setOpenDialogCarInfo] = useState(false);
-    // const [openDialogCarRental, setOpenDialogCarRental] = useState(false);
 
     const [carScheduleList, setCarScheduleList] = useState([]);
     const [car, setCar] = useState([]);
@@ -55,20 +52,10 @@ export default function Home() {
         setOpenDialogCarInfo(false);
     };
 
-    // const handleOpenDialogCarRental = () => {
-    //     setOpenDialogCarRental(true);
-    //     setOpenDialogCarInfo(false);
-    // };
-
-    // const handleCloseDialogCarRental = () => {
-    //     setOpenDialogCarRental(false);
-    // };
-
     const getCarScheduleList = async (idCar) => {
         const res = await HomeService.getCarScheduleList({ idCar: idCar });
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 setCarScheduleList(res.data.data);
             } else {
@@ -94,7 +81,6 @@ export default function Home() {
         const res = await HomeService.getCar({ idCar: idCar });
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 setCar(res.data.data);
             } else {
@@ -120,7 +106,6 @@ export default function Home() {
         const res = await HomeService.getCarList();
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 setCarList(res.data.data);
             } else {
@@ -148,7 +133,6 @@ export default function Home() {
         });
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 setCarTypeList(res.data.data.car_type);
                 setCarStatusList(res.data.data.car_status);
@@ -358,12 +342,6 @@ export default function Home() {
                     <Typography
                         variant="h6"
                         component="div"
-                        // sx={{
-                        //     marginLeft: 1,
-                        //     marginTop: 1,
-                        //     color: theme.palette.success.main,
-                        //     fontWeight: "bold",
-                        // }}
                     >
                         {Strings.Common.NO_DATA}
                     </Typography>
@@ -373,7 +351,6 @@ export default function Home() {
             <DialogCarInfo
                 open={openDialogCarInfo}
                 handleClose={handleCloseDialogCarInfo}
-                // handleOpenDialogCarRental={handleOpenDialogCarRental}
                 carData={car}
                 carTypeData={carTypeList}
                 carColorData={carColorList}
@@ -381,11 +358,6 @@ export default function Home() {
                 carStatusData={carStatusList}
                 carScheduleList={carScheduleList}
             />
-
-            {/* <DialogCarRental
-                open={openDialogCarRental}
-                handleClose={handleCloseDialogCarRental}
-            /> */}
 
             <ModalError
                 open={modalError.open}

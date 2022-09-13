@@ -33,6 +33,7 @@ const Strings = {
         CHOOSE_DISTRICT: "-- Chọn quận huyện --",
         CHOOSE_PROVINCE: "-- Chọn tỉnh thành phố --",
         NOTE: "Ghi Chú",
+        SUCCESS: "Thành Công",
     },
 
     Login: {
