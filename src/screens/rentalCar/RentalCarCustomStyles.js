@@ -193,6 +193,9 @@ const TextContent = styled(Typography)(({ theme }) => ({
 
 const TextInput = styled(TextField)(({ theme }) => ({
     margin: 10,
+    ".MuiInputBase-root": {
+        paddingRight: 5,
+    },
     [theme.breakpoints.up("mobileS")]: {
         width: 230,
         ".MuiInputBase-input": {
@@ -202,7 +205,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
             fontSize: 12,
         },
         ".MuiSvgIcon-root": {
-            fontSize: 18,
+            fontSize: 20,
         },
     },
     [theme.breakpoints.up("mobileM")]: {
@@ -214,7 +217,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
             fontSize: 12,
         },
         ".MuiSvgIcon-root": {
-            fontSize: 18,
+            fontSize: 20,
         },
     },
     [theme.breakpoints.up("mobileL")]: {
@@ -226,7 +229,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
             fontSize: 12,
         },
         ".MuiSvgIcon-root": {
-            fontSize: 18,
+            fontSize: 20,
         },
     },
     [theme.breakpoints.up("sm")]: {
@@ -262,7 +265,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
             fontSize: 13,
         },
         ".MuiSvgIcon-root": {
-            fontSize: 22,
+            fontSize: 20,
         },
     },
     [theme.breakpoints.up("xl")]: {
@@ -274,7 +277,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
             fontSize: 13,
         },
         ".MuiSvgIcon-root": {
-            fontSize: 22,
+            fontSize: 20,
         },
     },
 }));
@@ -372,6 +375,45 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
         fontSize: 13,
     },
     [theme.breakpoints.up("xl")]: {
+        fontSize: 13,
+    },
+}));
+
+const Icon = styled(Button)(({ theme }) => ({
+    // float: "left",
+    display: "flex",
+    justifyContent: "space-between",
+    margin: 10,
+    textTransform: "capitalize",
+    color: theme.palette.text.disabled,
+    borderColor: theme.palette.action.disabled,
+    fontWeight: "unset",
+    [theme.breakpoints.up("mobileS")]: {
+        width: 230,
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 280,
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 290,
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 400,
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 420,
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 390,
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 420,
         fontSize: 13,
     },
 }));

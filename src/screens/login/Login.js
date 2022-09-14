@@ -99,6 +99,7 @@ export default function Login() {
                         changeUser({
                             fullName: res.data.data.fullName,
                             code: res.data.data.code,
+                            phone: res.data.data.phone,
                             role: res.data.data.role,
                             token: res.data.data.token,
                             accessToken: res.data.data.access_token,

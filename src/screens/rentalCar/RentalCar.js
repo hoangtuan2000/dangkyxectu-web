@@ -1,4 +1,4 @@
-import { Tooltip, Typography, useTheme } from "@mui/material";
+import { InputAdornment, Tooltip, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,6 +22,9 @@ import {
     Title,
     TitleInput,
 } from "./RentalCarCustomStyles";
+import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import CreateIcon from "@mui/icons-material/Create";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -32,6 +35,7 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
+import { useSelector } from "react-redux";
 registerLocale("vi", vi);
 
 const defaultStartAddress = {
@@ -57,12 +61,11 @@ const defaultStartAddress = {
 
 function RentalCar() {
     const theme = useTheme();
+    const ModalShowEndAddressRef = useRef(); // use call reset address function
 
     const navigate = useNavigate();
-
+    const currentUser = useSelector((state) => state.currentUser.user);
     const { idCar } = useParams();
-
-    const ModalShowEndAddressRef = useRef(); // use call reset address function
 
     const [modalShowStartAdderss, setModalShowStartAdderss] = useState(false);
     const [modalShowEndAdderss, setModalShowEndAdderss] = useState(false);
@@ -95,6 +98,7 @@ function RentalCar() {
         errorEndLocation: false,
         errorReason: false,
         errorNote: false,
+        errorPhone: false,
         errorIdWardStartLocation: false,
         errorIdWardEndLocation: false,
     });
@@ -107,6 +111,7 @@ function RentalCar() {
         endLocation: null,
         reason: null,
         note: null,
+        phone: currentUser.phone || null,
         idWardStartLocation: defaultStartAddress.ward.idWard,
         idWardEndLocation: null,
     });
@@ -240,6 +245,24 @@ function RentalCar() {
         });
     };
 
+    const handleChangePhone = (e) => {
+        if (helper.isValidPhoneNumber(e.target.value)) {
+            setDataSendApi({
+                ...dataSendApi,
+                phone: e.target.value,
+            });
+        } else {
+            setDataSendApi({
+                ...dataSendApi,
+                phone: e.target.value,
+            });
+            setErrorData({
+                ...errorData,
+                errorPhone: true,
+            });
+        }
+    };
+
     const handleChangeNote = (e) => {
         setDataSendApi({
             ...dataSendApi,
@@ -256,7 +279,8 @@ function RentalCar() {
             helper.isNullOrEmpty(dataSendApi.endLocation) ||
             helper.isNullOrEmpty(dataSendApi.idWardStartLocation) ||
             helper.isNullOrEmpty(dataSendApi.idWardEndLocation) ||
-            helper.isNullOrEmpty(dataSendApi.reason)
+            helper.isNullOrEmpty(dataSendApi.reason) ||
+            helper.isNullOrEmpty(dataSendApi.phone)
         ) {
             setErrorData({
                 ...errorData,
@@ -274,6 +298,7 @@ function RentalCar() {
                     true,
                 errorIdWardEndLocation:
                     helper.isNullOrEmpty(dataSendApi.idWardEndLocation) && true,
+                errorPhone: helper.isNullOrEmpty(dataSendApi.phone) && true,
             });
             return false;
         } else {
@@ -291,6 +316,7 @@ function RentalCar() {
             errorEndLocation: false,
             errorReason: false,
             errorNote: false,
+            errorPhone: false,
             errorIdWardStartLocation: false,
             errorIdWardEndLocation: false,
         });
@@ -300,31 +326,34 @@ function RentalCar() {
         const len = 250;
         if (
             (dataSendApi.startLocation &&
-                !helper.checkStringLength(dataSendApi.startLocation, len)) ||
+                !helper.isValidStringLength(dataSendApi.startLocation, len)) ||
             (dataSendApi.endLocation &&
-                !helper.checkStringLength(dataSendApi.endLocation, len)) ||
+                !helper.isValidStringLength(dataSendApi.endLocation, len)) ||
             (dataSendApi.reason &&
-                !helper.checkStringLength(dataSendApi.reason, len)) ||
+                !helper.isValidStringLength(dataSendApi.reason, len)) ||
             (dataSendApi.note &&
-                !helper.checkStringLength(dataSendApi.note, len))
+                !helper.isValidStringLength(dataSendApi.note, len))
         ) {
             setErrorData({
                 ...errorData,
                 errorStartLocation:
                     dataSendApi.startLocation &&
-                    !helper.checkStringLength(dataSendApi.startLocation, len) &&
+                    !helper.isValidStringLength(
+                        dataSendApi.startLocation,
+                        len
+                    ) &&
                     true,
                 errorEndLocation:
                     dataSendApi.endLocation &&
-                    !helper.checkStringLength(dataSendApi.endLocation, len) &&
+                    !helper.isValidStringLength(dataSendApi.endLocation, len) &&
                     true,
                 errorReason:
                     dataSendApi.reason &&
-                    !helper.checkStringLength(dataSendApi.reason, len) &&
+                    !helper.isValidStringLength(dataSendApi.reason, len) &&
                     true,
                 errorNote:
                     dataSendApi.note &&
-                    !helper.checkStringLength(dataSendApi.note, len) &&
+                    !helper.isValidStringLength(dataSendApi.note, len) &&
                     true,
             });
             return false;
@@ -348,6 +377,7 @@ function RentalCar() {
             endLocation: null,
             reason: null,
             note: null,
+            phone: currentUser.phone || null,
             idWardStartLocation: defaultStartAddress.ward.idWard,
             idWardEndLocation: null,
         });
@@ -364,7 +394,7 @@ function RentalCar() {
                 if (res.data) {
                     if (res.data.status == Constants.ApiCode.OK) {
                         handleResetInput();
-                        //call function of child component: modalShowEndAdderss 
+                        //call function of child component: modalShowEndAdderss
                         //=> reset value in modal choosse end address
                         ModalShowEndAddressRef.current.handleResetAddress();
                         setModalSuccess(true);
@@ -591,6 +621,18 @@ function RentalCar() {
                                             theme.palette.error.main,
                                     },
                                 }}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="start">
+                                            <AssignmentIcon
+                                                sx={{
+                                                    color: theme.palette.primary
+                                                        .main,
+                                                }}
+                                            />
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                         </div>
                     </Box>
@@ -753,6 +795,58 @@ function RentalCar() {
                                 size="small"
                                 value={dataSendApi.note || ""}
                                 onChange={(e) => handleChangeNote(e)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="start">
+                                            <CreateIcon
+                                                sx={{
+                                                    color: theme.palette.primary
+                                                        .main,
+                                                }}
+                                            />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ float: "left" }}>
+                            <TitleInput variant="p" component="div">
+                                {Strings.RentalCar.PHONE_NUMBER}
+                                <span
+                                    style={{
+                                        display: errorData.errorPhone
+                                            ? "contents"
+                                            : "none",
+                                        color: theme.palette.error.main,
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        marginLeft: 10,
+                                    }}
+                                >
+                                    ({Strings.RentalCar.INVALID_PHONE_NUMBER} )
+                                </span>
+                            </TitleInput>
+                            <TextInput
+                                placeholder={
+                                    Strings.RentalCar.ENTER_PHONE_NUMBER
+                                }
+                                variant="outlined"
+                                size="small"
+                                value={dataSendApi.phone || ""}
+                                onChange={(e) => handleChangePhone(e)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="start">
+                                            <PhoneEnabledIcon
+                                                sx={{
+                                                    color: theme.palette.primary
+                                                        .main,
+                                                }}
+                                            />
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                         </div>
                     </Box>

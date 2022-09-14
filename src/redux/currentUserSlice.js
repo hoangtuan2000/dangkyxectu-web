@@ -4,6 +4,7 @@ const initialState = {
     user: {
         fullName: null,
         code: null,
+        phone: null,
         role: null,
         token: null,
         accessToken: null,
@@ -30,6 +31,12 @@ export const currentUserSlice = createSlice({
             state.user = {
                 ...state.user,
                 code: action.payload,
+            };
+        },
+        changePhoneUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                phone: action.payload,
             };
         },
         changeTokenUser: (state, action) => {
@@ -67,6 +74,7 @@ export const {
     changeRoleUser,
     changeFullNameUser,
     changeCodeUser,
+    changePhoneUser,
     deleteCurrentUser,
     changeTokenUser,
     changeAccessTokenUser,
