@@ -77,6 +77,7 @@ function RentalCar() {
         content: null,
     });
 
+    const [disableDateSchedule, setDisableDateSchedule] = useState([]);
     const [car, setCar] = useState([]);
     const [carTypeList, setCarTypeList] = useState([]);
     const [carStatusList, setCarStatusList] = useState([]);
@@ -147,6 +148,61 @@ function RentalCar() {
             </Tooltip>
         );
     });
+
+    const getScheduledDateForCar = async (idCar) => {
+        const res = await RentalCarService.getScheduledDateForCar({
+            idCar: idCar,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                let result = res.data.data;
+                if (result.length > 0) {
+                    // handle put the dates already in the schedule into the array useState DisableDateSchedule
+                    let dateRange = [];
+                    for (let i = 0; i < result.length; i++) {
+                        let startDate = new Date(result[i].startDate * 1000);
+                        let endDate = new Date(result[i].endDate * 1000);
+                        if (
+                            new Date(startDate.toDateString()) >=
+                                new Date(new Date().toDateString()) ||
+                            new Date(endDate.toDateString()) >=
+                                new Date(new Date().toDateString())
+                        ) {
+                            for (
+                                let dateTemp = new Date(
+                                    startDate.toDateString()
+                                );
+                                dateTemp <= new Date(endDate.toDateString());
+
+                            ) {
+                                dateRange.push(new Date(dateTemp.toDateString()));
+                                dateTemp = new Date(
+                                    dateTemp.setDate(dateTemp.getDate() + 1)
+                                );
+                            }
+                        }
+                    }
+                    setDisableDateSchedule([...dateRange]);
+                }
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
 
     const getCar = async (idCar) => {
         const res = await RentalCarService.getCar({ idCar: idCar });
@@ -424,6 +480,7 @@ function RentalCar() {
         await setBackDrop(true);
         await getCommon();
         await getCar(idCar);
+        await getScheduledDateForCar(idCar);
         await setBackDrop(false);
     };
 
@@ -578,10 +635,7 @@ function RentalCar() {
                                 customInput={<ButtonDate />}
                                 selected={selectedDates.startDate}
                                 onChange={handleChangeDate}
-                                // excludeDates={[
-                                //     // new Date(),
-                                //     new Date("09/09/2022"),
-                                // ]}
+                                excludeDates={[...disableDateSchedule]}
                                 selectsDisabledDaysInRange
                                 minDate={new Date()}
                             />

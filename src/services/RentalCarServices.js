@@ -13,6 +13,16 @@ const RentalCarService = {
                 return err;
             });
     },
+    getScheduledDateForCar: async (data) => {
+        return await axiosInstance
+            .post(Constants.ApiPath.RentalCar.GET_SCHEDULE_DATE_FOR_CAR, data)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
     createSchedule: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
