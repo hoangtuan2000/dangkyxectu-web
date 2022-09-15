@@ -280,7 +280,7 @@ function RentalCar() {
             helper.isNullOrEmpty(dataSendApi.idWardStartLocation) ||
             helper.isNullOrEmpty(dataSendApi.idWardEndLocation) ||
             helper.isNullOrEmpty(dataSendApi.reason) ||
-            helper.isNullOrEmpty(dataSendApi.phone)
+            !helper.isValidPhoneNumber(dataSendApi.phone)
         ) {
             setErrorData({
                 ...errorData,
@@ -298,7 +298,7 @@ function RentalCar() {
                     true,
                 errorIdWardEndLocation:
                     helper.isNullOrEmpty(dataSendApi.idWardEndLocation) && true,
-                errorPhone: helper.isNullOrEmpty(dataSendApi.phone) && true,
+                errorPhone: !helper.isNullOrEmpty(dataSendApi.phone) && true,
             });
             return false;
         } else {
@@ -824,7 +824,7 @@ function RentalCar() {
                                         marginLeft: 10,
                                     }}
                                 >
-                                    ({Strings.RentalCar.INVALID_PHONE_NUMBER} )
+                                    ( {Strings.RentalCar.INVALID_PHONE_NUMBER} )
                                 </span>
                             </TitleInput>
                             <TextInput

@@ -108,7 +108,7 @@ const Strings = {
         START_LOCATION: "Địa Điểm Xuất Phát: ",
         END_LOCATION: "Địa Điểm Kết Thúc: ",
         NOTE: "Ghi Chú: ",
-        PHONE_NUMBER: "Số Điện Thoại:",
+        PHONE_NUMBER: "Số Điện Thoại: ",
         INVALID_PHONE_NUMBER: 'Số Điện Thoại Không Hợp Lệ',
         REGISTRATION_CONFIRMATION: "Xác Nhận Đăng Ký",
     },
