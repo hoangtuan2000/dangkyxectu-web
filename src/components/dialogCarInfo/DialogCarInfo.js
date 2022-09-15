@@ -26,6 +26,7 @@ import {
 import CreateIcon from "@mui/icons-material/Create";
 import { Link, useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
+import helper from "../../common/helper";
 
 export default function DialogCarInfo({
     open,
@@ -153,14 +154,14 @@ export default function DialogCarInfo({
                                     {carScheduleList.map((val) => {
                                         const startDate =
                                             val.startDate &&
-                                            new Date(
-                                                val.startDate * 1000
-                                            ).toLocaleDateString("en-GB");
+                                            helper.formatDateStringFromTimeStamp(
+                                                val.startDate
+                                            );
                                         const endDate =
                                             val.endDate &&
-                                            new Date(
-                                                val.endDate * 1000
-                                            ).toLocaleDateString("en-GB");
+                                            helper.formatDateStringFromTimeStamp(
+                                                val.endDate
+                                            );
                                         return (
                                             <ListItem
                                                 key={val.idSchedule}

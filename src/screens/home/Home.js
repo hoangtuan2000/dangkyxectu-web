@@ -19,6 +19,7 @@ import Constants from "../../constants/Constants";
 import ModalError from "../../components/modalError/ModalError";
 import BackDrop from "../../components/backDrop/BackDrop";
 import { GlobalService } from "../../services/GlobalServices";
+import helper from "../../common/helper";
 
 export default function Home() {
     const theme = useTheme();
@@ -190,14 +191,10 @@ export default function Home() {
                           })
                         : [];
                     const startDate = val.startDate
-                        ? new Date(val.startDate * 1000).toLocaleDateString(
-                              "en-GB"
-                          )
+                        ? helper.formatDateStringFromTimeStamp(val.startDate)
                         : undefined;
                     const endDate = val.endDate
-                        ? new Date(val.endDate * 1000).toLocaleDateString(
-                              "en-GB"
-                          )
+                        ? helper.formatDateStringFromTimeStamp(val.endDate)
                         : undefined;
                     return (
                         <CardContainer

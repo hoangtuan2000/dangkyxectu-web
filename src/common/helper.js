@@ -20,6 +20,11 @@ const helper = {
         const regExp = new RegExp(/^([0]{1})([1-9]{1})([0-9]{8})$/)
         return regExp.test(phoneNumber)
     },
+
+    formatDateStringFromTimeStamp: (timeStamp) => {
+        timeStamp = parseInt(timeStamp)
+        return new Date(timeStamp * 1000).toLocaleDateString("en-GB")
+    }
 };
 
 export default helper;

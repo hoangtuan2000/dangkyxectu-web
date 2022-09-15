@@ -15,6 +15,7 @@ const Strings = {
         DESTINATION: "Điểm Đến",
         START_DAY: "Ngày Đi",
         END_DAY: "Ngày Về",
+        TIME: "Thời Gian",
         STATUS: "Trạng Thái",
         UPDATE: "Cập Nhật",
         CANCEL: "Hủy",

@@ -17,21 +17,32 @@ const Constants = {
         Login: {
             LOGIN: "/login",
         },
-        Home: {
-            GET_CAR_LIST: "/getCarList",
-            GET_CAR: "/getCar",
-            GET_SCHEDULE_LIST: "/getScheduleList",
-        },
         RentalCar: {
             GET_CAR: "/getCar",
             GET_SCHEDULE_DATE_FOR_CAR: "/getScheduledDateForCar",
             CREATE_SCHEDULE: "/createSchedule",
         },
+        Home: {
+            GET_CAR_LIST: "/getCarList",
+            GET_CAR: "/getCar",
+            GET_SCHEDULE_LIST: "/getScheduleList",
+        },
+        RentedCar: {
+            GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList'
+        }
     },
 
     Styled: {
         DATE_FORMAT: "dd/MM/yyyy",
     },
+
+    scheduleStatus: {
+        PENDING: "Chờ Duyệt",
+        APPROVED: "Đã Duyệt",
+        COMPLETE: "Hoàn Thành",
+        CANCELLED: "Đã Hủy",
+        REFUSE: "Từ Chối",
+    }
 };
 
 export default Constants;
