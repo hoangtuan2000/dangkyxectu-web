@@ -20,7 +20,7 @@ const rowsTest = [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 Chỗ",
         licensePlates: "65A - 123456",
-        startLocation: "Khu II Đại Học Cần Thơ",
+        reason: "Đi Tham Quan",
         endLocation: "Khu Hòa An",
         startDay: "29/06/2022",
         endDay: "30/06/2022",
@@ -32,7 +32,7 @@ const rowsTest = [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 Chỗ",
         licensePlates: "65A - 123456",
-        startLocation: "Khu II Đại Học Cần Thơ",
+        reason: "Đi Tham Quan",
         endLocation: "Khu Hòa An",
         startDay: "29/06/2022",
         endDay: "30/06/2022",
@@ -44,7 +44,7 @@ const rowsTest = [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 Chỗ",
         licensePlates: "65A - 123456",
-        startLocation: "Khu II Đại Học Cần Thơ",
+        reason: "Đi Tham Quan",
         endLocation: "Khu Hòa An",
         startDay: "29/06/2022",
         endDay: "30/06/2022",
@@ -56,7 +56,7 @@ const rowsTest = [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 Chỗ",
         licensePlates: "65A - 123456",
-        startLocation: "Khu II Đại Học Cần Thơ",
+        reason: "Đi Tham Quan",
         endLocation: "Khu Hòa An",
         startDay: "29/06/2022",
         endDay: "30/06/2022",
@@ -68,7 +68,7 @@ const rowsTest = [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
         type: "46 Chỗ",
         licensePlates: "65A - 123456",
-        startLocation: "Khu II Đại Học Cần Thơ",
+        reason: "Đi Tham Quan",
         endLocation: "Khu Hòa An",
         startDay: "29/06/2022",
         endDay: "30/06/2022",
@@ -129,14 +129,14 @@ function RentedCar() {
             sortable: false,
         },
         {
-            field: "startLocation",
-            headerName: Strings.Common.START_LOCATION,
-            description: Strings.Common.START_LOCATION,
+            field: "reason",
+            headerName: Strings.Common.REASON,
+            description: Strings.Common.REASON,
             width: 180,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.startLocation} arrow>
+                    <Tooltip title={params.row.reason} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -144,7 +144,7 @@ function RentedCar() {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.startLocation}
+                            {params.row.reason}
                         </span>
                     </Tooltip>
                 );
@@ -152,8 +152,8 @@ function RentedCar() {
         },
         {
             field: "endLocation",
-            headerName: Strings.Common.END_LOCATION,
-            description: Strings.Common.END_LOCATION,
+            headerName: Strings.Common.DESTINATION,
+            description: Strings.Common.DESTINATION,
             width: 180,
             sortable: false,
             renderCell: (params) => {
