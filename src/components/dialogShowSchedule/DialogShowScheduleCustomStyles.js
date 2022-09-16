@@ -1,37 +1,75 @@
 import {
     Box,
     Button,
-    DialogTitle,
-    List,
+    Dialog,
     styled,
     TextField,
     Typography,
 } from "@mui/material";
 
-const ModalContainer = styled(Box)(({ theme }) => ({
-    [theme.breakpoints.up("xs")]: {
-        width: 315,
-    },
+const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("mobileS")]: {
-        width: 315,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "310px !important", 
+                margin: 0,
+            },
+        },
     },
     [theme.breakpoints.up("mobileM")]: {
-        width: 368,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "368px !important",
+                margin: 0, 
+            },
+        },
     },
     [theme.breakpoints.up("mobileL")]: {
-        width: 410,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "410px !important",
+                margin: 0, 
+            },
+        },
     },
     [theme.breakpoints.up("sm")]: {
-        width: 600,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "600px !important",
+                margin: 0, 
+            },
+        },
     },
     [theme.breakpoints.up("md")]: {
-        width: 700,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "700px !important",
+                margin: 0, 
+            },
+        },
     },
     [theme.breakpoints.up("lg")]: {
-        width: 800,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "800px !important",
+                margin: 0, 
+            },
+        },
     },
     [theme.breakpoints.up("xl")]: {
-        width: 900,
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "900px !important",
+                margin: 0, 
+            },
+        },
     },
 }));
 
@@ -330,7 +368,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
 
 export {
     Title,
-    ModalContainer,
+    DialogContainer,
     ButtonFeatures,
     BoxLeft,
     Img,

@@ -1,40 +1,40 @@
 import {
-    Autocomplete,
     Box,
+    Dialog,
+    DialogActions,
+    DialogContent,
     InputAdornment,
     List,
     ListItem,
     ListItemText,
-    Modal,
     Rating,
-    TextField,
     Tooltip,
     useTheme,
 } from "@mui/material";
-import Strings from "../../constants/Strings";
+import React from "react";
 import {
     BoxLeft,
     BoxRight,
     ButtonFeatures,
     CarTypeTitle,
+    DialogContainer,
     Img,
-    ModalContainer,
     TextContent,
     TextInput,
     Title,
-} from "./ModalShowScheduleCustomStyles";
-import CommentIcon from '@mui/icons-material/Comment';
+} from "./DialogShowScheduleCustomStyles";
+import CreateIcon from "@mui/icons-material/Create";
+import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import CommentIcon from "@mui/icons-material/Comment";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { GlobalService } from "../../services/GlobalServices";
+import Strings from "../../constants/Strings";
+import { useState } from "react";
 import ModalError from "../modalError/ModalError";
-import Constants from "../../constants/Constants";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import helper from "../../common/helper";
 
-const ModalShowSchedule = ({ open, handleClose }) => {
+function DialogShowSchedule({ open, handleClose }) {
     const theme = useTheme();
 
     const [modalError, setModalError] = useState({
@@ -44,20 +44,13 @@ const ModalShowSchedule = ({ open, handleClose }) => {
     });
 
     return (
-        <Modal open={open} onClose={handleClose}>
-            <ModalContainer
-                sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    bgcolor: "background.paper",
-                    borderRadius: 5,
-                    boxShadow: 24,
-                    p: 3,
-                    paddingTop: 2,
-                }}
-            >
+        <DialogContainer
+            open={open}
+            onClose={handleClose}
+            scroll="body"
+            fullWidth={true}
+        >
+            <DialogContent>
                 <Title>{Strings.ModalShowSchedule.TITLE} (Số: 1355654)</Title>
 
                 <Box>
@@ -70,28 +63,14 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                         </CarTypeTitle>
                         <TextContent variant="p" component="div">
                             {Strings.RentedCar.LICENSE_PLATES}
-                            <Tooltip
-                                title={
-                                    "a"
-                                }
-                                arrow
-                            >
-                                <span>
-                                    a
-                                </span>
+                            <Tooltip title={"a"} arrow>
+                                <span>a</span>
                             </Tooltip>
                         </TextContent>
                         <TextContent variant="p" component="div">
                             {Strings.RentedCar.CAR_BRAND}
-                            <Tooltip
-                                title={
-                                    "a"
-                                }
-                                arrow
-                            >
-                                <span>
-                                    a
-                                </span>
+                            <Tooltip title={"a"} arrow>
+                                <span>a</span>
                             </Tooltip>
                         </TextContent>
                         <TextContent variant="p" component="div">
@@ -124,15 +103,8 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                         </TextContent>
                         <TextContent variant="p" component="div">
                             {Strings.RentedCar.TIME}
-                            <Tooltip
-                                title={
-                                    "a"
-                                }
-                                arrow
-                            >
-                                <span>
-                                    a
-                                </span>
+                            <Tooltip title={"a"} arrow>
+                                <span>a</span>
                             </Tooltip>
                         </TextContent>
                         <TextContent variant="p" component="div">
@@ -168,7 +140,28 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                                     <InputAdornment position="start">
                                         <CommentIcon
                                             sx={{
-                                                color: theme.palette.text.primary,
+                                                color: theme.palette.text
+                                                    .secondary,
+                                            }}
+                                        />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <TextInput
+                            placeholder={Strings.RentedCar.PHONE}
+                            label={Strings.RentedCar.PHONE}
+                            variant="outlined"
+                            size="small"
+                            // value={dataSendApi.phone || ""}
+                            // onChange={(e) => handleChangePhone(e)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <PhoneEnabledIcon
+                                            sx={{
+                                                color: theme.palette.text
+                                                    .secondary,
                                             }}
                                         />
                                     </InputAdornment>
@@ -189,6 +182,38 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                                 padding: "0px",
                             }}
                         >
+                            <ListItem
+                                sx={{
+                                    padding: "0px",
+                                }}
+                            >
+                                <CreateIcon
+                                    color="primary"
+                                    fontSize="small"
+                                    sx={{
+                                        marginRight: "5px",
+                                    }}
+                                />
+                                <ListItemText
+                                    primary={"Mục Đích Sử Dụng Xe: "}
+                                    secondary={"Đi Tham Quan"}
+                                    primaryTypographyProps={{
+                                        fontSize: "13px",
+                                        fontWeight: "bold",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        color: theme.palette.primary.main,
+                                    }}
+                                    secondaryTypographyProps={{
+                                        fontSize: "12px",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                    }}
+                                />
+                            </ListItem>
+
                             <ListItem
                                 sx={{
                                     padding: "0px",
@@ -255,7 +280,9 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                         </List>
                     </Box>
                 </Box>
+            </DialogContent>
 
+            <DialogActions>               
                 <Box
                     sx={{
                         display: "flex",
@@ -293,9 +320,9 @@ const ModalShowSchedule = ({ open, handleClose }) => {
                     content={modalError.content}
                     title={modalError.title}
                 />
-            </ModalContainer>
-        </Modal>
+            </DialogActions>
+        </DialogContainer>
     );
-};
+}
 
-export default ModalShowSchedule;
+export default DialogShowSchedule;

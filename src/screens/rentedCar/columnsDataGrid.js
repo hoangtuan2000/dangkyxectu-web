@@ -248,21 +248,46 @@ const col = (handleOpenModalShowSchedule) => {
             },
         },
         {
-            field: "reviews",
+            field: "review",
             headerName: Strings.Common.REVIEW,
             description: Strings.Common.REVIEW,
-            width: 165,
+            width: 120,
+            sortable: false,
+            renderCell: (params) => {
+                if(params.value){
+                    return (
+                        params.row.status == Constants.ScheduleStatus.COMPLETE && (
+                            <Rating
+                                name="read-only"
+                                defaultValue={params.row.review}
+                                precision={0.1}
+                                readOnly
+                                size="small"
+                            />
+                        )
+                    );
+                }
+            },
+        },
+        {
+            field: "scheduleCode",
+            headerName: Strings.Common.SCHEDULE_CODE,
+            description: Strings.Common.SCHEDULE_CODE,
+            width: 120,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    params.row.status == Constants.ScheduleStatus.COMPLETE && (
-                        <Rating
-                            name="read-only"
-                            value={2}
-                            readOnly
-                            size="small"
-                        />
-                    )
+                    <Tooltip title={params.row.scheduleCode} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.scheduleCode}
+                        </span>
+                    </Tooltip>
                 );
             },
         },

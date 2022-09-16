@@ -9,6 +9,7 @@ const Strings = {
         NO_DATA: "Không Có Dữ Liệu",
         IMAGE: "Ảnh",
         CAR_TYPE: "Loại Xe",
+        SCHEDULE_CODE: 'Mã Lịch Trình',
         LICENSE_PLATES: "Biển Số",
         START_LOCATION: "Vị Trí Bắt Đầu",
         END_LOCATION: "Vị Trí Kết Thúc",
@@ -72,6 +73,7 @@ const Strings = {
         TIME: "Thời Gian: ",
         REVIEW: "Đánh Giá: ",
         COMMENT: "Bình Luận",
+        PHONE: 'Số Điện Thoại'
     },
 
     CarRentalManager: {

@@ -10,7 +10,7 @@ import Constants from "../../constants/Constants";
 import { useState, useEffect } from "react";
 import helper from "../../common/helper";
 import col from "./columnsDataGrid";
-import ModalShowSchedule from "../../components/modalShowSchedule/ModalShowSchedule";
+import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 
 function RentedCar() {
     const [backDrop, setBackDrop] = useState(false);
@@ -66,6 +66,8 @@ function RentedCar() {
                             destination: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
                             dateRange: `${startDate} - ${endDate}`,
                             status: item.scheduleStatus,
+                            review: item.starNumber,
+                            scheduleCode: item.idSchedule
                         };
                     })
                 );
@@ -128,7 +130,7 @@ function RentedCar() {
                 }}
             />
 
-            <ModalShowSchedule
+            <DialogShowSchedule
                 open={modalShowSchedule}
                 handleClose={() => setModalShowSchedule(false)}
             />
