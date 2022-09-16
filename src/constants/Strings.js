@@ -63,6 +63,15 @@ const Strings = {
 
     RentedCar: {
         RENTED_CAR_LIST: "Danh Sách Xe Đã Đăng Ký",
+        CAR_LIST: "Danh Sách Xe",
+        LICENSE_PLATES: "Biển Số Xe: ",
+        CAR_BRAND: "Thương Hiệu: ",
+        SCHEDULE: "Lịch Trình: ",
+        USER_INFO: "Thông Tin Người Đăng Ký: ",
+        DRIVER_INFO: "Thông Tin Tài Xế: ",
+        TIME: "Thời Gian: ",
+        REVIEW: "Đánh Giá: ",
+        COMMENT: "Bình Luận",
     },
 
     CarRentalManager: {
@@ -113,11 +122,21 @@ const Strings = {
         PHONE_NUMBER: "Số Điện Thoại: ",
         INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
         REGISTRATION_CONFIRMATION: "Xác Nhận Đăng Ký",
+        CAR_LIST: "Danh Sách Xe",
+        LICENSE_PLATES: "Biển Số Xe: ",
+        CAR_COLOR: "Màu Xe: ",
+        CAR_BRAND: "Thương Hiệu: ",
+        VEHICLE_CONDITION: "Tình Trạng: ",
+        SCHEDULE: "Lịch Trình: ",
     },
 
     ModalShowAddress: {
         TITLE_START_LOCATION: "Chọn Địa Chỉ Xuất Phát",
         TITLE_END_LOCATION: "Chọn Địa Chỉ Kết Thúc",
+    },
+
+    ModalShowSchedule: {
+        TITLE: "Cập Nhật Lịch Trình",
     },
 };
 

@@ -25,15 +25,6 @@ const ModalShowAddress = forwardRef(
     (
         props,
         ref
-        // open,
-        // handleClose,
-        // labelInput,
-        // titleModal,
-        // onConfirm = () => {},
-        // defaultAddress,
-        // defaultProvince,
-        // defaultDistrict,
-        // defaultWard
     ) => {
         const theme = useTheme();
 

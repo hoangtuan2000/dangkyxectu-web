@@ -572,14 +572,14 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.Home.LICENSE_PLATES}{" "}
+                                            {Strings.RentalCar.LICENSE_PLATES}{" "}
                                             {val.licensePlates}
                                         </TextContent>
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.Home.VEHICLE_CONDITION}{" "}
+                                            {Strings.RentalCar.VEHICLE_CONDITION}{" "}
                                             <span
                                                 style={{
                                                     fontWeight: "bold",
@@ -605,14 +605,14 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.Home.CAR_COLOR}{" "}
+                                            {Strings.RentalCar.CAR_COLOR}{" "}
                                             {color && color[0].name}
                                         </TextContent>
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.Home.CAR_BRAND}{" "}
+                                            {Strings.RentalCar.CAR_BRAND}{" "}
                                             {brand && brand[0].name}
                                         </TextContent>
                                     </Box>

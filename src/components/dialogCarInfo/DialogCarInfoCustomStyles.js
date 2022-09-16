@@ -43,29 +43,26 @@ const Title = styled(DialogTitle)(({ theme }) => ({
     justifyContent: "center",
     fontWeight: "bold",
     color: theme.palette.primary.main,
-    [theme.breakpoints.up("xs")]: {
-        fontSize: 17,
-    },
     [theme.breakpoints.up("mobileS")]: {
-        fontSize: 17,
+        fontSize: 15,
     },
     [theme.breakpoints.up("mobileM")]: {
-        fontSize: 18,
+        fontSize: 15,
     },
     [theme.breakpoints.up("mobileL")]: {
-        fontSize: 18,
+        fontSize: 16,
     },
     [theme.breakpoints.up("sm")]: {
-        fontSize: 22,
+        fontSize: 18,
     },
     [theme.breakpoints.up("md")]: {
-        fontSize: 22,
+        fontSize: 20,
     },
     [theme.breakpoints.up("lg")]: {
-        fontSize: 22,
+        fontSize: 20,
     },
     [theme.breakpoints.up("xl")]: {
-        fontSize: 22,
+        fontSize: 20,
     },
 }));
 
