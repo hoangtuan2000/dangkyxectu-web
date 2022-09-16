@@ -162,7 +162,9 @@ export default function Home() {
         await setBackDrop(true);
         await getCommon();
         await getCarList();
-        await setBackDrop(false);
+        await setTimeout(() => {
+            setBackDrop(false)
+        }, 1000)
     };
 
     useEffect(() => {

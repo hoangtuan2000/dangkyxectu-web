@@ -36,13 +36,18 @@ const Constants = {
         DATE_FORMAT: "dd/MM/yyyy",
     },
 
-    scheduleStatus: {
+    ScheduleStatus: {
         PENDING: "Chờ Duyệt",
         APPROVED: "Đã Duyệt",
         COMPLETE: "Hoàn Thành",
         CANCELLED: "Đã Hủy",
         REFUSE: "Từ Chối",
-    }
+    },
+
+    Common: {
+        PAGE: 1,
+        LIMIT_ENTRY: 10,
+    },
 };
 
 export default Constants;

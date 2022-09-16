@@ -481,7 +481,9 @@ function RentalCar() {
         await getCommon();
         await getCar(idCar);
         await getScheduledDateForCar(idCar);
-        await setBackDrop(false);
+        await setTimeout(() => {
+            setBackDrop(false)
+        }, 1000)
     };
 
     useEffect(() => {
