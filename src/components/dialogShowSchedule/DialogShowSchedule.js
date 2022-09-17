@@ -86,8 +86,8 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
             setModalError({
                 ...modalError,
                 open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
+                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                content: res.name || null,
             });
         }
     };
@@ -118,9 +118,27 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
     };
 
     const handleSubmit = async () => {
-        const res = await DialogShowScheduleService.createOrUpdateReview({
-            ...dataSendApi,
-        });
+        let res = {};
+        if (
+            schedule.length > 0 &&
+            schedule[0].scheduleStatus == Constants.ScheduleStatus.COMPLETE
+        ) {
+            res = await DialogShowScheduleService.createOrUpdateReview({
+                idReview: dataSendApi.idReview,
+                idSchedule: dataSendApi.idSchedule,
+                comment: dataSendApi.comment,
+                starNumber: dataSendApi.starNumber,
+            });
+        } else if (
+            schedule.length > 0 &&
+            schedule[0].scheduleStatus == Constants.ScheduleStatus.APPROVED
+        ) {
+            res = await DialogShowScheduleService.updateScheduleApproved({
+                idSchedule: dataSendApi.idSchedule,
+                phoneUser: dataSendApi.phoneUser,
+            });
+        }
+
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -138,8 +156,8 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
             setModalError({
                 ...modalError,
                 open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
+                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                content: res.name || null,
             });
         }
     };

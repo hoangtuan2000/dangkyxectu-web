@@ -36,6 +36,23 @@ const DialogShowScheduleService = {
                 return err;
             });
     },
+
+    updateScheduleApproved: async (data) => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.DialogShowSchedule.UPDATE_SCHEDULE_APPROVED, data, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { DialogShowScheduleService };

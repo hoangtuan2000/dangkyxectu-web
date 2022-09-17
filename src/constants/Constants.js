@@ -33,6 +33,7 @@ const Constants = {
         DialogShowSchedule: {
             GET_SCHEDULE: '/getSchedule',
             CREATE_OR_UPDATE_REVIEW: '/createOrUpdateReview',
+            UPDATE_SCHEDULE_APPROVED: '/updateScheduleApproved',
         },
     },
 

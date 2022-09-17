@@ -88,8 +88,8 @@ function RentedCar() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
-                content: res.name,
+                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                content: res.name || null,
             });
         }
     };
