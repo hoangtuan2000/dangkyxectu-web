@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
-const col = (handleModalShowSchedule) => {
+const col = (handleModalShowSchedule, handleCancelSchedule) => {
     let columns = [];
     return (columns = [
         {
@@ -217,7 +217,7 @@ const col = (handleModalShowSchedule) => {
                             <IconButton
                                 color="primary"
                                 onClick={() => {
-                                    handleModalShowSchedule(params.row.update);
+                                    handleModalShowSchedule(params.row.scheduleCode);
                                 }}
                             >
                                 <ModeEditIcon />
@@ -230,7 +230,7 @@ const col = (handleModalShowSchedule) => {
                             <IconButton
                                 color="primary"
                                 onClick={() => {
-                                    handleModalShowSchedule(params.row.update);
+                                    handleModalShowSchedule(params.row.scheduleCode);
                                 }}
                             >
                                 <VisibilityIcon />
@@ -253,7 +253,12 @@ const col = (handleModalShowSchedule) => {
                 ) {
                     return (
                         <Tooltip title="Hủy Đăng Ký Xe" arrow>
-                            <IconButton color="error">
+                            <IconButton
+                                color="error"
+                                onClick={() => {
+                                    handleCancelSchedule(params.row.scheduleCode);
+                                }}
+                            >
                                 <DeleteForeverIcon />
                             </IconButton>
                         </Tooltip>

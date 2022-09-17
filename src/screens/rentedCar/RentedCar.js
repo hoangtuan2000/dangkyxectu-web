@@ -21,7 +21,7 @@ function RentedCar() {
         content: null,
     });
 
-    const [modalShowSchedule, setModalShowSchedule] = useState({
+    const [dialogShowSchedule, setDialogShowSchedule] = useState({
         open: false,
         idSchedule: null,
     });
@@ -71,7 +71,6 @@ function RentedCar() {
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
-                            update: item.idSchedule,
                         };
                     })
                 );
@@ -88,7 +87,10 @@ function RentedCar() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -102,6 +104,44 @@ function RentedCar() {
     const handleChangeRowsPerPage = (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
         getUserRegisteredScheduleList(Constants.Common.PAGE, e);
+    };
+
+    const handleOpenDialogSchedule = (e) => {
+        setDialogShowSchedule({
+            open: true,
+            idSchedule: e,
+        });
+    };
+
+    const handleCancelSchedule = async (e) => {
+        const res = await RentedCarService.cancelSchedule({
+            idSchedule: e
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                getUserRegisteredScheduleList()
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
     };
 
     const run = async () => {
@@ -123,12 +163,14 @@ function RentedCar() {
             </Typography>
 
             <DataGridCustom
-                columns={col((e) => {
-                    setModalShowSchedule({
-                        open: true,
-                        idSchedule: e
-                    });
-                })}
+                columns={col(
+                    (e) => {
+                        handleOpenDialogSchedule(e);
+                    },
+                    (e) => {
+                        handleCancelSchedule(e);
+                    }
+                )}
                 rows={scheduleList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -140,9 +182,14 @@ function RentedCar() {
             />
 
             <DialogShowSchedule
-                open={modalShowSchedule.open}
-                handleClose={() => setModalShowSchedule({...modalShowSchedule, open: false})}
-                idSchedule={modalShowSchedule.idSchedule}
+                open={dialogShowSchedule.open}
+                handleClose={() =>
+                    setDialogShowSchedule({
+                        ...dialogShowSchedule,
+                        open: false,
+                    })
+                }
+                idSchedule={dialogShowSchedule.idSchedule}
             />
 
             <ModalError

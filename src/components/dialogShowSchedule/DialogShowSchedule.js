@@ -86,7 +86,10 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -156,7 +159,10 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -226,11 +232,19 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                     <TextContent variant="p" component="div">
                                         {Strings.RentedCar.SUBSCRIBERS}
                                         <Tooltip
-                                            title={`${item.fullNameUser} (SĐT: ${item.phoneUser})`}
+                                            title={
+                                                item.fullNameUser &&
+                                                item.phoneUser
+                                                    ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
+                                                    : Strings.Common.UPDATING
+                                            }
                                             arrow
                                         >
                                             <span>
-                                                {`${item.fullNameUser} (SĐT: ${item.phoneUser})`}
+                                                {item.fullNameUser &&
+                                                item.phoneUser
+                                                    ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
+                                                    : Strings.Common.UPDATING}
                                             </span>
                                         </Tooltip>
                                     </TextContent>
@@ -238,11 +252,19 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                     <TextContent variant="p" component="div">
                                         {Strings.RentedCar.DRIVER}
                                         <Tooltip
-                                            title={`${item.fullNameDriver} (SĐT: ${item.phoneDriver})`}
+                                            title={
+                                                item.fullNameDriver &&
+                                                item.phoneDriver
+                                                    ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
+                                                    : Strings.Common.UPDATING
+                                            }
                                             arrow
                                         >
                                             <span>
-                                                {`${item.fullNameDriver} (SĐT: ${item.phoneDriver})`}
+                                                {item.fullNameDriver &&
+                                                item.phoneDriver
+                                                    ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
+                                                    : Strings.Common.UPDATING}
                                             </span>
                                         </Tooltip>
                                     </TextContent>

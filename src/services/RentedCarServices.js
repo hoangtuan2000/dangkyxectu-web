@@ -19,6 +19,22 @@ const RentedCarService = {
                 return err;
             });
     },
+    cancelSchedule: async (data) => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.RentedCar.CANCEL_SCHEDULE, data, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { RentedCarService };

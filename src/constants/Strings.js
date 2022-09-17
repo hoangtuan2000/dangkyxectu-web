@@ -9,7 +9,7 @@ const Strings = {
         NO_DATA: "Không Có Dữ Liệu",
         IMAGE: "Ảnh",
         CAR_TYPE: "Loại Xe",
-        SCHEDULE_CODE: 'Mã Lịch Trình',
+        SCHEDULE_CODE: "Mã Lịch Trình",
         LICENSE_PLATES: "Biển Số",
         START_LOCATION: "Vị Trí Bắt Đầu",
         END_LOCATION: "Vị Trí Kết Thúc",
@@ -38,6 +38,7 @@ const Strings = {
         NOTE: "Ghi Chú",
         SUCCESS: "Thành Công",
         INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
+        UPDATING: "Đang Cập Nhật",
     },
 
     Login: {
@@ -74,7 +75,7 @@ const Strings = {
         TIME: "Thời Gian: ",
         REVIEW: "Đánh Giá: ",
         COMMENT: "Bình Luận",
-        PHONE: 'Số Điện Thoại'
+        PHONE: "Số Điện Thoại",
     },
 
     CarRentalManager: {

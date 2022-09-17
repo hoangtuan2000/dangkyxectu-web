@@ -28,7 +28,8 @@ const Constants = {
             GET_SCHEDULE_LIST: "/getScheduleList",
         },
         RentedCar: {
-            GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList'
+            GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList',
+            CANCEL_SCHEDULE: '/cancelSchedule',
         },
         DialogShowSchedule: {
             GET_SCHEDULE: '/getSchedule',
