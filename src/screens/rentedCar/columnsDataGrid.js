@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
-const col = (handleModalShowSchedule, handleCancelSchedule) => {
+const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedulePending) => {
     let columns = [];
     return (columns = [
         {
@@ -204,7 +204,11 @@ const col = (handleModalShowSchedule, handleCancelSchedule) => {
                 if (params.row.status == Constants.ScheduleStatus.PENDING) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
-                            <IconButton color="primary">
+                            <IconButton color="primary"
+                            onClick={() => {
+                                handleUpdateSchedulePending(params.row.scheduleCode);
+                            }}
+                            >
                                 <ModeEditIcon />
                             </IconButton>
                         </Tooltip>

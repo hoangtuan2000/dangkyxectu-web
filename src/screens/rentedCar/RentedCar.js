@@ -11,8 +11,13 @@ import { useState, useEffect } from "react";
 import helper from "../../common/helper";
 import col from "./columnsDataGrid";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
+import { useNavigate } from "react-router-dom";
+import RoutesPath from "../../constants/RoutesPath";
 
 function RentedCar() {
+
+    const navigate = useNavigate()
+
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
     const [modalError, setModalError] = useState({
@@ -113,15 +118,23 @@ function RentedCar() {
         });
     };
 
+    const handleUpdateSchedulePending = (e) => {
+        navigate(RoutesPath.UPDATE_SCHEDULE_PENDING +"/"+ e)
+    };
+
     const handleCancelSchedule = async (e) => {
         const res = await RentedCarService.cancelSchedule({
-            idSchedule: e
+            idSchedule: e,
         });
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setModalSuccess(true);
-                getUserRegisteredScheduleList()
+                await setBackDrop(true);
+                await getUserRegisteredScheduleList();
+                await setTimeout(() => {
+                    setBackDrop(false);
+                }, 1000);
             } else {
                 setModalError({
                     ...modalError,
@@ -169,6 +182,9 @@ function RentedCar() {
                     },
                     (e) => {
                         handleCancelSchedule(e);
+                    },
+                    (e) => {
+                        handleUpdateSchedulePending(e);
                     }
                 )}
                 rows={scheduleList}

@@ -21,6 +21,7 @@ import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
+import UpdateSchedulePending from "./screens/updateSchedulePending/UpdateSchedulePending"
 
 // init AOS library
 AOS.init({
@@ -78,10 +79,19 @@ function App() {
                                 )}
 
                                 {currentUser.role == Role.USER && (
-                                    <Route
-                                        path={RoutesPath.RENDTED_CAR}
-                                        element={<RentedCar />}
-                                    />
+                                    <>
+                                        <Route
+                                            path={RoutesPath.RENDTED_CAR}
+                                            element={<RentedCar />}
+                                        />
+                                        <Route
+                                            path={
+                                                RoutesPath.UPDATE_SCHEDULE_PENDING +
+                                                "/:idSchedule"
+                                            }
+                                            element={<UpdateSchedulePending />}
+                                        />
+                                    </>
                                 )}
 
                                 {currentUser.role == Role.ADMIN && (
