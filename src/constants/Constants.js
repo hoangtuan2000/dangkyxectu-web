@@ -25,6 +25,7 @@ const Constants = {
         UpdateSchedulePending: {
             GET_SCHEDULE_DATE_FOR_CAR: "/getScheduledDateForCar",
             GET_SCHEDULE: '/getSchedule',
+            UPDATE_SCHEDULE_PENDING: '/updateSchedulePending',
         },
         Home: {
             GET_CAR_LIST: "/getCarList",

@@ -135,7 +135,6 @@ function RentalCar() {
     });
 
     const [errorData, setErrorData] = useState({
-        // errorIdCar: false,
         errorStartDate: false,
         errorEndDate: false,
         errorStartLocation: false,
@@ -148,7 +147,7 @@ function RentalCar() {
     });
 
     const [dataSendApi, setDataSendApi] = useState({
-        // idCar: idCar,
+        idSchedule: idSchedule,
         startDate: null,
         endDate: null,
         startLocation: null,
@@ -199,6 +198,7 @@ function RentalCar() {
     const getScheduledDateForCar = async (idCar) => {
         const res = await UpdateSchedulePendingService.getScheduledDateForCar({
             idCar: idCar,
+            notSchedule: idSchedule
         });
         // axios success
         if (res.data) {
@@ -314,6 +314,7 @@ function RentalCar() {
                     endDate: new Date(result[0].endDate * 1000),
                 });
                 setDataSendApi({
+                    ...dataSendApi,
                     startDate: result[0].startDate * 1000,
                     endDate: result[0].endDate * 1000,
                     startLocation: result[0].startLocation,
@@ -547,7 +548,7 @@ function RentalCar() {
             const checkLength = await handleCheckLengthData();
             if (checkLength) {
                 await setBackDrop(true);
-                const res = await RentalCarService.createSchedule(dataSendApi);
+                const res = await UpdateSchedulePendingService.updateSchedulePending(dataSendApi);
                 // axios success
                 if (res.data) {
                     if (res.data.status == Constants.ApiCode.OK) {
