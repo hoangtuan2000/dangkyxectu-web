@@ -880,7 +880,7 @@ function RentalCar() {
                                         marginLeft: 10,
                                     }}
                                 >
-                                    ( {Strings.RentalCar.INVALID_PHONE_NUMBER} )
+                                    ( {Strings.Common.INVALID_PHONE_NUMBER} )
                                 </span>
                             </TitleInput>
                             <TextInput

@@ -49,6 +49,13 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
     });
 
     const [schedule, setSchedule] = useState([]);
+    const [dataSendApi, setDataSendApi] = useState({
+        idReview: null,
+        idSchedule: null,
+        comment: null,
+        starNumber: null,
+        phoneUser: null,
+    });
 
     const getSchedule = async () => {
         const res = await DialogShowScheduleService.getSchedule({
@@ -58,6 +65,66 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setSchedule(res.data.data);
+                setDataSendApi({
+                    ...dataSendApi,
+                    idReview: res.data.data[0].idReview,
+                    idSchedule: res.data.data[0].idSchedule,
+                    comment: res.data.data[0].comment,
+                    starNumber: res.data.data[0].starNumber,
+                    phoneUser: res.data.data[0].phoneUser,
+                });
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`,
+                content: res.name,
+            });
+        }
+    };
+
+    const handleChangeRating = (val) => {
+        if (helper.isValidStarNumber(val)) {
+            setDataSendApi({
+                ...dataSendApi,
+                starNumber: val,
+            });
+        }
+    };
+
+    const handleChangeComment = (e) => {
+        if (helper.isValidStringLength(e.target.value, 500)) {
+            setDataSendApi({
+                ...dataSendApi,
+                comment: e.target.value,
+            });
+        }
+    };
+
+    const handleChangePhone = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            phoneUser: e.target.value,
+        });
+    };
+
+    const handleSubmit = async () => {
+        const res = await DialogShowScheduleService.createOrUpdateReview({
+            ...dataSendApi,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
             } else {
                 setModalError({
                     ...modalError,
@@ -189,13 +256,13 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                                 >
                                                     {Strings.RentedCar.REVIEW}
                                                     <Rating
-                                                        value={item.starNumber}
+                                                        value={
+                                                            dataSendApi.starNumber
+                                                        }
                                                         precision={0.5}
                                                         size="small"
                                                         onChange={(e, val) => {
-                                                            console.log("e", e);
-                                                            console.log(
-                                                                "val",
+                                                            handleChangeRating(
                                                                 val
                                                             );
                                                         }}
@@ -214,8 +281,12 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                                 size="small"
                                                 multiline
                                                 rows={2}
-                                                value={item.comment || ""}
-                                                // onChange={(e) => handleChangePhone(e)}
+                                                value={
+                                                    dataSendApi.comment || ""
+                                                }
+                                                onChange={(e) =>
+                                                    handleChangeComment(e)
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <InputAdornment position="start">
@@ -244,10 +315,24 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                                     label={
                                                         Strings.RentedCar.PHONE
                                                     }
+                                                    error={
+                                                        !helper.isValidPhoneNumber(
+                                                            dataSendApi.phoneUser
+                                                        )
+                                                    }
+                                                    helperText={
+                                                        Strings.Common
+                                                            .INVALID_PHONE_NUMBER
+                                                    }
                                                     variant="outlined"
                                                     size="small"
-                                                    value={item.phoneUser || ""}
-                                                    // onChange={(e) => handleChangePhone(e)}
+                                                    value={
+                                                        dataSendApi.phoneUser ||
+                                                        ""
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleChangePhone(e)
+                                                    }
                                                     InputProps={{
                                                         endAdornment: (
                                                             <InputAdornment position="start">
@@ -406,13 +491,22 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                     >
                         {Strings.Common.CANCEL}
                     </ButtonFeatures>
+
                     <ButtonFeatures
                         size="small"
                         variant="contained"
                         endIcon={<CheckCircleIcon />}
                         color="primary"
                         sx={{ marginRight: 1 }}
-                        // onClick={handleConfirm}
+                        onClick={handleSubmit}
+                        disabled={
+                            schedule.length > 0 &&
+                            (dataSendApi.starNumber != schedule[0].starNumber ||
+                                dataSendApi.comment != schedule[0].comment ||
+                                dataSendApi.phoneUser != schedule[0].phoneUser)
+                                ? false
+                                : true
+                        }
                     >
                         {Strings.Common.UPDATE}
                     </ButtonFeatures>

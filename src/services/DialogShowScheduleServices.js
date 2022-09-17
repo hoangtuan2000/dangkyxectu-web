@@ -19,6 +19,23 @@ const DialogShowScheduleService = {
                 return err;
             });
     },
+
+    createOrUpdateReview: async (data) => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.DialogShowSchedule.CREATE_OR_UPDATE_REVIEW, data, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { DialogShowScheduleService };

@@ -31,7 +31,8 @@ const Constants = {
             GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList'
         },
         DialogShowSchedule: {
-            GET_SCHEDULE: '/getSchedule'
+            GET_SCHEDULE: '/getSchedule',
+            CREATE_OR_UPDATE_REVIEW: '/createOrUpdateReview',
         },
     },
 

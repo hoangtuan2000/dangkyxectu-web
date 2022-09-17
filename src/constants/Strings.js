@@ -37,6 +37,7 @@ const Strings = {
         CHOOSE_PROVINCE: "-- Chọn tỉnh thành phố --",
         NOTE: "Ghi Chú",
         SUCCESS: "Thành Công",
+        INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
     },
 
     Login: {
@@ -122,7 +123,6 @@ const Strings = {
         END_LOCATION: "Địa Điểm Kết Thúc: ",
         NOTE: "Ghi Chú: ",
         PHONE_NUMBER: "Số Điện Thoại: ",
-        INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
         REGISTRATION_CONFIRMATION: "Xác Nhận Đăng Ký",
         CAR_LIST: "Danh Sách Xe",
         LICENSE_PLATES: "Biển Số Xe: ",
