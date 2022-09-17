@@ -78,24 +78,46 @@ function RentalCar() {
         content: null,
     });
 
-    const [defaultStartAddress, setDefaultStartAddress] = useState({
-        address: "",
-        province: {
-            idProvince: "",
-            name: "",
-            type: "",
+    const [defaultAddress, setDefaultAddress] = useState({
+        startAddress: {
+            address: "",
+            province: {
+                idProvince: "",
+                name: "",
+                type: "",
+            },
+            district: {
+                idDistrict: "",
+                idProvince: "",
+                name: "",
+                type: "",
+            },
+            ward: {
+                idDistrict: "",
+                idWard: "",
+                name: "",
+                type: "",
+            },
         },
-        district: {
-            idDistrict: "",
-            idProvince: "",
-            name: "",
-            type: "",
-        },
-        ward: {
-            idDistrict: "",
-            idWard: "",
-            name: "",
-            type: "",
+        endAddress: {
+            address: "",
+            province: {
+                idProvince: "",
+                name: "",
+                type: "",
+            },
+            district: {
+                idDistrict: "",
+                idProvince: "",
+                name: "",
+                type: "",
+            },
+            ward: {
+                idDistrict: "",
+                idWard: "",
+                name: "",
+                type: "",
+            },
         },
     });
     const [disableDateSchedule, setDisableDateSchedule] = useState([]);
@@ -129,18 +151,22 @@ function RentalCar() {
         // idCar: idCar,
         startDate: null,
         endDate: null,
-        startLocation: defaultStartAddress.address,
+        startLocation: null,
         endLocation: null,
         reason: null,
         note: null,
-        phone: currentUser.phone || null,
-        idWardStartLocation: defaultStartAddress.ward.idWard,
+        phoneUser: null,
+        idWardStartLocation: null,
         idWardEndLocation: null,
     });
 
     const ButtonDate = forwardRef(({ value, onClick }, ref) => {
         return (
-            <Tooltip title={value ? value : Strings.RentalCar.CHOOSE_TIME}>
+            <Tooltip
+                title={
+                    value ? value : Strings.UpdateSchedulePending.CHOOSE_TIME
+                }
+            >
                 <ButtonStyled
                     onClick={onClick}
                     ref={ref}
@@ -164,7 +190,7 @@ function RentalCar() {
                             theme.palette.error.dark,
                     }}
                 >
-                    {value ? value : Strings.RentalCar.CHOOSE_TIME}
+                    {value ? value : Strings.UpdateSchedulePending.CHOOSE_TIME}
                 </ButtonStyled>
             </Tooltip>
         );
@@ -241,25 +267,62 @@ function RentalCar() {
                 let result = res.data.data;
                 setSchedule(result);
                 getScheduledDateForCar(result[0].idCar);
-                setDefaultStartAddress({
-                    address: result[0].startLocation,
-                    province: {
-                        idProvince: result[0].idProvinceStart,
-                        name: result[0].provinceStart,
-                        type: result[0].provinceTypeStart,
+                setDefaultAddress({
+                    startAddress: {
+                        address: result[0].startLocation,
+                        province: {
+                            idProvince: result[0].idProvinceStart,
+                            name: result[0].provinceStart,
+                            type: result[0].provinceTypeStart,
+                        },
+                        district: {
+                            idDistrict: result[0].idDistrictStart,
+                            idProvince: result[0].idProvinceDistrictStart,
+                            name: result[0].districtStart,
+                            type: result[0].districtTypeStart,
+                        },
+                        ward: {
+                            idDistrict: result[0].idDistrictWardStart,
+                            idWard: result[0].idWardStart,
+                            name: result[0].wardStart,
+                            type: result[0].wardTypeStart,
+                        },
                     },
-                    district: {
-                        idDistrict: result[0].idDistrictStart,
-                        idProvince: result[0].idProvinceDistrictStart,
-                        name: result[0].districtStart,
-                        type: result[0].districtTypeStart,
+                    endAddress: {
+                        address: result[0].endLocation,
+                        province: {
+                            idProvince: result[0].idProvinceEnd,
+                            name: result[0].provinceEnd,
+                            type: result[0].provinceTypeEnd,
+                        },
+                        district: {
+                            idDistrict: result[0].idDistrictEnd,
+                            idProvince: result[0].idProvinceDistrictEnd,
+                            name: result[0].districtEnd,
+                            type: result[0].districtTypeEnd,
+                        },
+                        ward: {
+                            idDistrict: result[0].idDistrictWardEnd,
+                            idWard: result[0].idWardEnd,
+                            name: result[0].wardEnd,
+                            type: result[0].wardTypeEnd,
+                        },
                     },
-                    ward: {
-                        idDistrict: result[0].idDistrictWardStart,
-                        idWard: result[0].idWardStart,
-                        name: result[0].wardStart,
-                        type: result[0].wardTypeStart,
-                    },
+                });
+                setSelectedDates({
+                    startDate: new Date(result[0].startDate * 1000),
+                    endDate: new Date(result[0].endDate * 1000),
+                });
+                setDataSendApi({
+                    startDate: result[0].startDate * 1000,
+                    endDate: result[0].endDate * 1000,
+                    startLocation: result[0].startLocation,
+                    endLocation: result[0].endLocation,
+                    reason: result[0].reason,
+                    note: result[0].note,
+                    phoneUser: result[0].phoneUser,
+                    idWardStartLocation: result[0].idWardStart,
+                    idWardEndLocation: result[0].idWardEnd,
                 });
             } else {
                 setModalError({
@@ -361,12 +424,16 @@ function RentalCar() {
         if (helper.isValidPhoneNumber(e.target.value)) {
             setDataSendApi({
                 ...dataSendApi,
-                phone: e.target.value,
+                phoneUser: e.target.value,
+            });
+            setErrorData({
+                ...errorData,
+                errorPhone: false,
             });
         } else {
             setDataSendApi({
                 ...dataSendApi,
-                phone: e.target.value,
+                phoneUser: e.target.value,
             });
             setErrorData({
                 ...errorData,
@@ -392,7 +459,7 @@ function RentalCar() {
             helper.isNullOrEmpty(dataSendApi.idWardStartLocation) ||
             helper.isNullOrEmpty(dataSendApi.idWardEndLocation) ||
             helper.isNullOrEmpty(dataSendApi.reason) ||
-            !helper.isValidPhoneNumber(dataSendApi.phone)
+            !helper.isValidPhoneNumber(dataSendApi.phoneUser)
         ) {
             setErrorData({
                 ...errorData,
@@ -410,7 +477,7 @@ function RentalCar() {
                     true,
                 errorIdWardEndLocation:
                     helper.isNullOrEmpty(dataSendApi.idWardEndLocation) && true,
-                errorPhone: !helper.isNullOrEmpty(dataSendApi.phone) && true,
+                errorPhone: !helper.isNullOrEmpty(dataSendApi.phoneUser) && true,
             });
             return false;
         } else {
@@ -474,27 +541,6 @@ function RentalCar() {
         }
     };
 
-    const handleResetInput = () => {
-        handleResetErrorData();
-        setShowEndAddress();
-        setSelectedDates({
-            startDate: null,
-            endDate: null,
-        });
-        setDataSendApi({
-            // idCar: idCar,
-            startDate: null,
-            endDate: null,
-            startLocation: defaultStartAddress.address,
-            endLocation: null,
-            reason: null,
-            note: null,
-            phone: currentUser.phone || null,
-            idWardStartLocation: defaultStartAddress.ward.idWard,
-            idWardEndLocation: null,
-        });
-    };
-
     const handleSubmit = async () => {
         const checkNull = await handleCheckNullData();
         if (checkNull) {
@@ -505,11 +551,11 @@ function RentalCar() {
                 // axios success
                 if (res.data) {
                     if (res.data.status == Constants.ApiCode.OK) {
-                        handleResetInput();
                         //call function of child component: modalShowEndAdderss
                         //=> reset value in modal choosse end address
                         ModalShowEndAddressRef.current.handleResetAddress();
                         setModalSuccess(true);
+                        handleResetErrorData()
                     } else {
                         setModalError({
                             ...modalError,
@@ -551,17 +597,20 @@ function RentalCar() {
     return (
         <Box>
             <Typography variant="h6" component="div">
-                {Strings.RentalCar.RENTAL_CAR}
+                {Strings.UpdateSchedulePending.UPDATE_SCHEDULE}
             </Typography>
 
             <BoxContainerContent>
                 <Title variant="h6" component="div">
-                    {Strings.RentalCar.CAR_REGISTRATRION_INFOMATION}
+                    {Strings.UpdateSchedulePending.UPDATE_SCHEDULE}
+                    {" ( Số: " +
+                        (schedule.length > 0 && schedule[0].idSchedule) +
+                        " )"}
                 </Title>
 
                 <BoxLeftContent>
-                    {/* {car.length > 0 &&
-                        car.map((val) => {
+                    {schedule.length > 0 &&
+                        schedule.map((val) => {
                             const type =
                                 carTypeList.length > 0
                                     ? carTypeList.filter((item) => {
@@ -605,8 +654,6 @@ function RentalCar() {
                                 <Box key={val.idCar}>
                                     <Box
                                         sx={{
-                                            // textAlign: "start",
-                                            // marginLeft: 2,
                                             float: "left",
                                         }}
                                     >
@@ -614,8 +661,6 @@ function RentalCar() {
                                     </Box>
                                     <Box
                                         sx={{
-                                            // textAlign: "start",
-                                            // marginLeft: 2,
                                             float: "left",
                                         }}
                                     >
@@ -630,14 +675,20 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.RentalCar.LICENSE_PLATES}{" "}
+                                            {
+                                                Strings.UpdateSchedulePending
+                                                    .LICENSE_PLATES
+                                            }{" "}
                                             {val.licensePlates}
                                         </TextContent>
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.RentalCar.VEHICLE_CONDITION}{" "}
+                                            {
+                                                Strings.UpdateSchedulePending
+                                                    .VEHICLE_CONDITION
+                                            }{" "}
                                             <span
                                                 style={{
                                                     fontWeight: "bold",
@@ -663,27 +714,33 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.RentalCar.CAR_COLOR}{" "}
+                                            {
+                                                Strings.UpdateSchedulePending
+                                                    .CAR_COLOR
+                                            }{" "}
                                             {color && color[0].name}
                                         </TextContent>
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.RentalCar.CAR_BRAND}{" "}
+                                            {
+                                                Strings.UpdateSchedulePending
+                                                    .CAR_BRAND
+                                            }{" "}
                                             {brand && brand[0].name}
                                         </TextContent>
                                     </Box>
                                 </Box>
                             );
-                        })} */}
+                        })}
                 </BoxLeftContent>
 
                 <BoxRightContent>
                     <Box>
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.START_END_DAY}
+                                {Strings.UpdateSchedulePending.START_END_DAY}
                             </TitleInput>
                             <DatePicker
                                 locale="vi"
@@ -703,7 +760,10 @@ function RentalCar() {
 
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.CAR_RENTAL_REASON}
+                                {
+                                    Strings.UpdateSchedulePending
+                                        .CAR_RENTAL_REASON
+                                }
                                 <span
                                     style={{
                                         display: errorData.errorReason
@@ -720,7 +780,8 @@ function RentalCar() {
                             </TitleInput>
                             <TextInput
                                 placeholder={
-                                    Strings.RentalCar.ENTER_CAR_RENTAL_REASON
+                                    Strings.UpdateSchedulePending
+                                        .ENTER_CAR_RENTAL_REASON
                                 }
                                 variant="outlined"
                                 size="small"
@@ -756,7 +817,7 @@ function RentalCar() {
                     <Box>
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.START_LOCATION}
+                                {Strings.UpdateSchedulePending.START_LOCATION}
                                 <span
                                     style={{
                                         display: errorData.errorStartLocation
@@ -796,7 +857,7 @@ function RentalCar() {
                                     title={
                                         showStartAddress
                                             ? showStartAddress
-                                            : Strings.RentalCar
+                                            : Strings.UpdateSchedulePending
                                                   .ENTER_START_LOCATION
                                     }
                                 >
@@ -812,7 +873,7 @@ function RentalCar() {
                                     >
                                         {showStartAddress
                                             ? showStartAddress
-                                            : Strings.RentalCar
+                                            : Strings.UpdateSchedulePending
                                                   .ENTER_START_LOCATION}
                                     </Box>
                                 </Tooltip>
@@ -821,7 +882,7 @@ function RentalCar() {
 
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.END_LOCATION}
+                                {Strings.UpdateSchedulePending.END_LOCATION}
                                 <span
                                     style={{
                                         display: errorData.errorEndLocation
@@ -861,7 +922,7 @@ function RentalCar() {
                                     title={
                                         showEndAddress
                                             ? showEndAddress
-                                            : Strings.RentalCar
+                                            : Strings.UpdateSchedulePending
                                                   .ENTER_END_LOCATION
                                     }
                                 >
@@ -877,7 +938,7 @@ function RentalCar() {
                                     >
                                         {showEndAddress
                                             ? showEndAddress
-                                            : Strings.RentalCar
+                                            : Strings.UpdateSchedulePending
                                                   .ENTER_END_LOCATION}
                                     </Box>
                                 </Tooltip>
@@ -888,7 +949,7 @@ function RentalCar() {
                     <Box>
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.NOTE}
+                                {Strings.UpdateSchedulePending.NOTE}
                                 <span
                                     style={{
                                         display: errorData.errorNote
@@ -904,7 +965,9 @@ function RentalCar() {
                                 </span>
                             </TitleInput>
                             <TextInput
-                                placeholder={Strings.RentalCar.ENTER_NOTE}
+                                placeholder={
+                                    Strings.UpdateSchedulePending.ENTER_NOTE
+                                }
                                 variant="outlined"
                                 size="small"
                                 value={dataSendApi.note || ""}
@@ -926,7 +989,7 @@ function RentalCar() {
 
                         <div style={{ float: "left" }}>
                             <TitleInput variant="p" component="div">
-                                {Strings.RentalCar.PHONE_NUMBER}
+                                {Strings.UpdateSchedulePending.PHONE_NUMBER}
                                 <span
                                     style={{
                                         display: errorData.errorPhone
@@ -943,11 +1006,12 @@ function RentalCar() {
                             </TitleInput>
                             <TextInput
                                 placeholder={
-                                    Strings.RentalCar.ENTER_PHONE_NUMBER
+                                    Strings.UpdateSchedulePending
+                                        .ENTER_PHONE_NUMBER
                                 }
                                 variant="outlined"
                                 size="small"
-                                value={dataSendApi.phone || ""}
+                                value={dataSendApi.phoneUser || ""}
                                 onChange={(e) => handleChangePhone(e)}
                                 InputProps={{
                                     endAdornment: (
@@ -986,7 +1050,9 @@ function RentalCar() {
                                 endIcon={<SendIcon />}
                                 onClick={handleSubmit}
                             >
-                                {Strings.RentalCar.REGISTRATION_CONFIRMATION}
+                                {
+                                    Strings.Common.UPDATE
+                                }
                             </ButtonFeatures>
                         </Box>
                     </Box>
@@ -996,22 +1062,26 @@ function RentalCar() {
             <ModalShowAddress
                 open={modalShowStartAdderss}
                 handleClose={() => setModalShowStartAdderss(false)}
-                labelInput={Strings.RentalCar.ENTER_START_LOCATION}
+                labelInput={Strings.UpdateSchedulePending.ENTER_START_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_START_LOCATION}
                 onConfirm={(e) => handleShowStartAddress(e)}
-                defaultAddress={defaultStartAddress.address}
-                defaultProvince={defaultStartAddress.province}
-                defaultDistrict={defaultStartAddress.district}
-                defaultWard={defaultStartAddress.ward}
+                defaultAddress={defaultAddress.startAddress.address}
+                defaultProvince={defaultAddress.startAddress.province}
+                defaultDistrict={defaultAddress.startAddress.district}
+                defaultWard={defaultAddress.startAddress.ward}
             />
 
             <ModalShowAddress
                 open={modalShowEndAdderss}
                 handleClose={() => setModalShowEndAdderss(false)}
-                labelInput={Strings.RentalCar.ENTER_END_LOCATION}
+                labelInput={Strings.UpdateSchedulePending.ENTER_END_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_END_LOCATION}
                 onConfirm={(e) => handleShowEndAddress(e)}
                 ref={ModalShowEndAddressRef}
+                defaultAddress={defaultAddress.endAddress.address}
+                defaultProvince={defaultAddress.endAddress.province}
+                defaultDistrict={defaultAddress.endAddress.district}
+                defaultWard={defaultAddress.endAddress.ward}
             />
 
             <ModalError

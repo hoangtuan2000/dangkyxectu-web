@@ -307,6 +307,10 @@ function RentalCar() {
                 ...dataSendApi,
                 phone: e.target.value,
             });
+            setErrorData({
+                ...errorData,
+                errorPhone: false,
+            });
         } else {
             setDataSendApi({
                 ...dataSendApi,
