@@ -29,7 +29,10 @@ const Constants = {
         },
         RentedCar: {
             GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList'
-        }
+        },
+        DialogShowSchedule: {
+            GET_SCHEDULE: '/getSchedule'
+        },
     },
 
     Styled: {

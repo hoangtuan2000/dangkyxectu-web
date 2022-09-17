@@ -21,7 +21,10 @@ function RentedCar() {
         content: null,
     });
 
-    const [modalShowSchedule, setModalShowSchedule] = useState(false);
+    const [modalShowSchedule, setModalShowSchedule] = useState({
+        open: false,
+        idSchedule: null,
+    });
     const [scheduleList, setScheduleList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -67,7 +70,8 @@ function RentedCar() {
                             dateRange: `${startDate} - ${endDate}`,
                             status: item.scheduleStatus,
                             review: item.starNumber,
-                            scheduleCode: item.idSchedule
+                            scheduleCode: item.idSchedule,
+                            update: item.idSchedule,
                         };
                     })
                 );
@@ -119,7 +123,12 @@ function RentedCar() {
             </Typography>
 
             <DataGridCustom
-                columns={col(() => setModalShowSchedule(true))}
+                columns={col((e) => {
+                    setModalShowSchedule({
+                        open: true,
+                        idSchedule: e
+                    });
+                })}
                 rows={scheduleList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -131,8 +140,9 @@ function RentedCar() {
             />
 
             <DialogShowSchedule
-                open={modalShowSchedule}
-                handleClose={() => setModalShowSchedule(false)}
+                open={modalShowSchedule.open}
+                handleClose={() => setModalShowSchedule({...modalShowSchedule, open: false})}
+                idSchedule={modalShowSchedule.idSchedule}
             />
 
             <ModalError

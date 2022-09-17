@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
-const col = (handleOpenModalShowSchedule) => {
+const col = (handleModalShowSchedule) => {
     let columns = [];
     return (columns = [
         {
@@ -201,13 +201,25 @@ const col = (handleOpenModalShowSchedule) => {
             width: 85,
             sortable: false,
             renderCell: (params) => {
-                if (
-                    params.row.status == Constants.ScheduleStatus.PENDING ||
+                if (params.row.status == Constants.ScheduleStatus.PENDING) {
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton color="primary">
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                } else if (
                     params.row.status == Constants.ScheduleStatus.APPROVED
                 ) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
-                            <IconButton color="primary">
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    handleModalShowSchedule(params.row.update);
+                                }}
+                            >
                                 <ModeEditIcon />
                             </IconButton>
                         </Tooltip>
@@ -217,7 +229,9 @@ const col = (handleOpenModalShowSchedule) => {
                         <Tooltip title="Xem Chi Tiết" arrow>
                             <IconButton
                                 color="primary"
-                                onClick={() => handleOpenModalShowSchedule()}
+                                onClick={() => {
+                                    handleModalShowSchedule(params.row.update);
+                                }}
                             >
                                 <VisibilityIcon />
                             </IconButton>
@@ -254,9 +268,10 @@ const col = (handleOpenModalShowSchedule) => {
             width: 120,
             sortable: false,
             renderCell: (params) => {
-                if(params.value){
+                if (params.value) {
                     return (
-                        params.row.status == Constants.ScheduleStatus.COMPLETE && (
+                        params.row.status ==
+                            Constants.ScheduleStatus.COMPLETE && (
                             <Rating
                                 name="read-only"
                                 defaultValue={params.row.review}
