@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
     Avatar,
     Menu,
@@ -46,9 +46,13 @@ import {
     drawerWidth,
 } from "./MainLayoutCustomStyles";
 import RoutesPath from "../../constants/RoutesPath";
-import { changeCurrentUser } from "../../redux/currentUserSlice";
+import {
+    changeCurrentUser,
+    deleteCurrentUser,
+} from "../../redux/currentUserSlice";
 import Role from "../../constants/Role";
 import { changeOpenDrawer } from "../../redux/globalReduxSlice";
+import BackDrop from "../backDrop/BackDrop";
 
 const DataListItems = [
     {
@@ -105,15 +109,16 @@ export default function MainLayout() {
     const theme = useTheme();
 
     const dispath = useDispatch();
-
     const themeDarkMode = useSelector((state) => state.themeDarkMode.darkMode);
     const currentUser = useSelector((state) => state.currentUser.user);
     const openDrawerRedux = useSelector(
         (state) => state.globalRedux.openDrawer
     );
 
+    const [backDrop, setBackDrop] = useState(false);
+
     // handle drawer open/close
-    const [drawerOpen, setDrawerOpen] = React.useState(
+    const [drawerOpen, setDrawerOpen] = useState(
         openDrawerRedux ? openDrawerRedux : false
     );
 
@@ -128,7 +133,7 @@ export default function MainLayout() {
     };
 
     // handle open/close avatar account
-    const [anchorElAvatar, setAnchorElAvatar] = React.useState(null);
+    const [anchorElAvatar, setAnchorElAvatar] = useState(null);
     const openAccount = Boolean(anchorElAvatar);
 
     const handleClick = (e) => {
@@ -142,6 +147,14 @@ export default function MainLayout() {
     // handle theme dark mode
     const handleChangeThemeMode = () => {
         dispath(changeDarkMode());
+    };
+
+    const handleLogout = async () => {
+        await setBackDrop(true);
+        await setTimeout(() => {
+            dispath(deleteCurrentUser());
+            setBackDrop(false);
+        }, 700);
     };
 
     return (
@@ -180,7 +193,7 @@ export default function MainLayout() {
                         }}
                     >
                         <Typography variant="p" noWrap component="div">
-                            Dương Hoàng Tuấn
+                            {currentUser.fullName}
                         </Typography>
                         <Typography
                             variant="p"
@@ -190,7 +203,7 @@ export default function MainLayout() {
                                 textAlign: "end",
                             }}
                         >
-                            B1809315
+                            {currentUser.code}
                         </Typography>
                     </Box>
 
@@ -272,6 +285,7 @@ export default function MainLayout() {
                                     md: "16px",
                                 },
                             }}
+                            onClick={handleLogout}
                         >
                             <LogoutIcon
                                 sx={{
@@ -397,6 +411,8 @@ export default function MainLayout() {
                 <DrawerHeader />
                 <Outlet />
             </Main>
+
+            <BackDrop open={backDrop} />
         </Box>
     );
 }
