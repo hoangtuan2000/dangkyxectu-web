@@ -16,12 +16,12 @@ import CarManager from "./screens/carManager/CarManager";
 import DriverManagement from "./screens/driverManagement/DriverManagement";
 import Statistical from "./screens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
-import Role from "./constants/Role";
 import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
 import UpdateSchedulePending from "./screens/updateSchedulePending/UpdateSchedulePending"
+import Constants from "./constants/Constants";
 
 // init AOS library
 AOS.init({
@@ -62,7 +62,7 @@ function App() {
                                 path={RoutesPath.INDEX}
                                 element={<MainLayout />}
                             >
-                                {currentUser.role != Role.DRIVER && (
+                                {currentUser.role != Constants.Role.DRIVER && (
                                     <>
                                         <Route
                                             path={RoutesPath.HOME}
@@ -78,7 +78,7 @@ function App() {
                                     </>
                                 )}
 
-                                {currentUser.role == Role.USER && (
+                                {currentUser.role == Constants.Role.USER && (
                                     <>
                                         <Route
                                             path={RoutesPath.RENDTED_CAR}
@@ -94,7 +94,7 @@ function App() {
                                     </>
                                 )}
 
-                                {currentUser.role == Role.ADMIN && (
+                                {currentUser.role == Constants.Role.ADMIN && (
                                     <>
                                         <Route
                                             path={RoutesPath.CAR_RENTAL_MANAGER}
@@ -119,7 +119,7 @@ function App() {
                                     </>
                                 )}
 
-                                {currentUser.role == Role.DRIVER && (
+                                {currentUser.role == Constants.Role.DRIVER && (
                                     <Route
                                         path={RoutesPath.HOME}
                                         element={<DriverTripManager />}

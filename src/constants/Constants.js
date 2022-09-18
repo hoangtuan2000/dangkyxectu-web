@@ -62,6 +62,14 @@ const Constants = {
         PAGE: 1,
         LIMIT_ENTRY: 10,
     },
+
+    Role: {
+        // ALL: "all",
+        ADMIN: "admin",
+        USER: "user",
+        DRIVER: "driver",
+        ADMIN_USER: "admin user"
+    }
 };
 
 export default Constants;

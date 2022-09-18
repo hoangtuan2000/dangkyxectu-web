@@ -40,6 +40,9 @@ const Strings = {
         INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
         UPDATING: "Đang Cập Nhật",
         DETAIL: "Chi Tiết",
+        EXIT: "Thoát",
+        UPDATE_SCHEDULE: "Cập Nhật Lịch Trình",
+        INFO_SCHEDULE: "Thông Tin Lịch Trình",
     },
 
     Login: {
@@ -160,10 +163,6 @@ const Strings = {
     ModalShowAddress: {
         TITLE_START_LOCATION: "Chọn Địa Chỉ Xuất Phát",
         TITLE_END_LOCATION: "Chọn Địa Chỉ Kết Thúc",
-    },
-
-    ModalShowSchedule: {
-        TITLE: "Cập Nhật Lịch Trình",
     },
 };
 

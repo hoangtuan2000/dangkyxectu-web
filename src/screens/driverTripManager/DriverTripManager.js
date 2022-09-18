@@ -1,11 +1,5 @@
-import {useState, useEffect} from "react";
-import {
-    Box,
-    Tab,
-    Tabs,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../constants/Strings";
 import col from "./columnsDriverTripManagerDataGrid";
@@ -17,6 +11,7 @@ import helper from "../../common/helper";
 import Constants from "../../constants/Constants";
 import { RentedCarService } from "../../services/RentedCarServices";
 import { DriverTripManagerService } from "../../services/DriverTripManagerServices";
+import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 
 function DriverTripManager() {
     const theme = useTheme();
@@ -29,6 +24,10 @@ function DriverTripManager() {
         content: null,
     });
 
+    const [dialogShowSchedule, setDialogShowSchedule] = useState({
+        open: false,
+        idSchedule: null,
+    });
     const [scheduleList, setScheduleList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -105,6 +104,13 @@ function DriverTripManager() {
         }
     };
 
+    const handleOpenDialogSchedule = (e) => {
+        setDialogShowSchedule({
+            open: true,
+            idSchedule: e,
+        });
+    };
+
     const handleChangePage = (e) => {
         setDataInfo({ ...dataInfo, page: e });
         getDriverScheduleList(e);
@@ -144,7 +150,9 @@ function DriverTripManager() {
             </Tabs>
 
             <DataGridCustom
-                columns={col()}
+                columns={col((e) => {
+                    handleOpenDialogSchedule(e);
+                })}
                 rows={scheduleList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -153,6 +161,18 @@ function DriverTripManager() {
                 onChangeRowsPerPage={(e) => {
                     handleChangeRowsPerPage(e);
                 }}
+            />
+
+            <DialogShowSchedule
+                open={dialogShowSchedule.open}
+                handleClose={() =>
+                    setDialogShowSchedule({
+                        ...dialogShowSchedule,
+                        open: false,
+                    })
+                }
+                idSchedule={dialogShowSchedule.idSchedule}
+                titleDialog={Strings.Common.INFO_SCHEDULE}
             />
 
             <ModalError

@@ -207,6 +207,7 @@ function RentedCar() {
                     })
                 }
                 idSchedule={dialogShowSchedule.idSchedule}
+                titleDialog={Strings.Common.UPDATE_SCHEDULE}
             />
 
             <ModalError

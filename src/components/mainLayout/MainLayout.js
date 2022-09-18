@@ -50,58 +50,59 @@ import {
     changeCurrentUser,
     deleteCurrentUser,
 } from "../../redux/currentUserSlice";
-import Role from "../../constants/Role";
+
 import { changeOpenDrawer } from "../../redux/globalReduxSlice";
 import BackDrop from "../backDrop/BackDrop";
+import Constants from "../../constants/Constants";
 
 const DataListItems = [
     {
         path: RoutesPath.HOME,
         icon: <ListAltIcon />,
         name: "Tất Cả Xe",
-        role: Role.ADMIN_USER,
+        role: Constants.Role.ADMIN_USER,
     },
     {
         path: RoutesPath.RENDTED_CAR,
         icon: <FactCheckIcon />,
         name: "Xe Đã Đăng Ký",
-        role: Role.USER,
+        role: Constants.Role.USER,
     },
     {
         path: RoutesPath.CAR_RENTAL_MANAGER,
         icon: <FeedIcon />,
         name: "Quản Lý Đăng Ký",
-        role: Role.ADMIN,
+        role: Constants.Role.ADMIN,
     },
     {
         path: RoutesPath.CAR_MANAGER,
         icon: <DirectionsCarIcon />,
         name: "Quản Lý Xe",
-        role: Role.ADMIN,
+        role: Constants.Role.ADMIN,
     },
     {
         path: RoutesPath.TRIP_MANAGER,
         icon: <CommuteIcon />,
         name: "Quản Lý Chuyến Đi",
-        role: Role.ADMIN,
+        role: Constants.Role.ADMIN,
     },
     {
         path: RoutesPath.DRIVER_MANAGEMENT,
         icon: <PeopleAltIcon />,
         name: "Quản Lý Tài Xế",
-        role: Role.ADMIN,
+        role: Constants.Role.ADMIN,
     },
     {
         path: RoutesPath.STATISTICAL,
         icon: <InsightsIcon />,
         name: "Thống Kê",
-        role: Role.ADMIN,
+        role: Constants.Role.ADMIN,
     },
     {
         path: RoutesPath.HOME,
         icon: <CommuteIcon />,
         name: "Quản Lý Chuyến Đi",
-        role: Role.DRIVER,
+        role: Constants.Role.DRIVER,
     },
 ];
 
@@ -347,8 +348,8 @@ export default function MainLayout() {
                     {DataListItems.map((item, index) => {
                         if (
                             item.role == currentUser.role ||
-                            (item.role == Role.ADMIN_USER &&
-                                currentUser.role != Role.DRIVER)
+                            (item.role == Constants.Role.ADMIN_USER &&
+                                currentUser.role != Constants.Role.DRIVER)
                         ) {
                             return (
                                 <ListItem disablePadding key={index}>

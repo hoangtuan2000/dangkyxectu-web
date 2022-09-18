@@ -36,9 +36,12 @@ import BackDrop from "../backDrop/BackDrop";
 import Constants from "../../constants/Constants";
 import { DialogShowScheduleService } from "../../services/DialogShowScheduleServices";
 import helper from "../../common/helper";
+import { useSelector } from "react-redux";
 
-function DialogShowSchedule({ open, handleClose, idSchedule }) {
+function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
     const theme = useTheme();
+
+    const currentUser = useSelector((state) => state.currentUser.user);
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -187,196 +190,192 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
             scroll="body"
             fullWidth={true}
         >
-            <DialogContent>
-                {schedule.map((item) => {
-                    const startDate = helper.formatDateStringFromTimeStamp(
-                        item.startDate
-                    );
-                    const endDate = helper.formatDateStringFromTimeStamp(
-                        item.endDate
-                    );
-                    return (
-                        <Box key={item.idSchedule}>
-                            <Title>
-                                {Strings.ModalShowSchedule.TITLE} (Số:{" "}
-                                {item.idSchedule})
-                            </Title>
-
+            {schedule.map((item) => {
+                const startDate = helper.formatDateStringFromTimeStamp(
+                    item.startDate
+                );
+                const endDate = helper.formatDateStringFromTimeStamp(
+                    item.endDate
+                );
+                return (
+                    <Box key={item.idSchedule}>
+                        <DialogContent>
                             <Box>
-                                <BoxLeft>
-                                    <Img src={item.image} />
-                                </BoxLeft>
+                                <Title>
+                                    {titleDialog} (Số:{" "}
+                                    {item.idSchedule})
+                                </Title>
 
-                                <BoxRight>
-                                    <CarTypeTitle variant="p" component="div">
-                                        {`${item.carType} ${item.seatNumber} Chổ`}
-                                    </CarTypeTitle>
+                                <Box>
+                                    <BoxLeft>
+                                        <Img src={item.image} />
+                                    </BoxLeft>
 
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.LICENSE_PLATES}
-                                        <Tooltip
-                                            title={item.licensePlates}
-                                            arrow
+                                    <BoxRight>
+                                        <CarTypeTitle
+                                            variant="p"
+                                            component="div"
                                         >
-                                            <span>{item.licensePlates}</span>
-                                        </Tooltip>
-                                    </TextContent>
+                                            {`${item.carType} ${item.seatNumber} Chổ`}
+                                        </CarTypeTitle>
 
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.CAR_BRAND}
-                                        <Tooltip title={item.carBrand} arrow>
-                                            <span>{item.carBrand}</span>
-                                        </Tooltip>
-                                    </TextContent>
-
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.SUBSCRIBERS}
-                                        <Tooltip
-                                            title={
-                                                item.fullNameUser &&
-                                                item.phoneUser
-                                                    ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
-                                                    : Strings.Common.UPDATING
-                                            }
-                                            arrow
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
                                         >
-                                            <span>
-                                                {item.fullNameUser &&
-                                                item.phoneUser
-                                                    ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
-                                                    : Strings.Common.UPDATING}
-                                            </span>
-                                        </Tooltip>
-                                    </TextContent>
-
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.DRIVER}
-                                        <Tooltip
-                                            title={
-                                                item.fullNameDriver &&
-                                                item.phoneDriver
-                                                    ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
-                                                    : Strings.Common.UPDATING
-                                            }
-                                            arrow
-                                        >
-                                            <span>
-                                                {item.fullNameDriver &&
-                                                item.phoneDriver
-                                                    ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
-                                                    : Strings.Common.UPDATING}
-                                            </span>
-                                        </Tooltip>
-                                    </TextContent>
-
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.TIME}
-                                        <Tooltip
-                                            title={`${startDate} - ${endDate}`}
-                                            arrow
-                                        >
-                                            <span
-                                                style={{ fontWeight: "bold" }}
-                                            >{`${startDate} - ${endDate}`}</span>
-                                        </Tooltip>
-                                    </TextContent>
-
-                                    {item.scheduleStatus ==
-                                    Constants.ScheduleStatus.COMPLETE ? (
-                                        <Box>
-                                            <TextContent
-                                                variant="p"
-                                                component="div"
+                                            {Strings.RentedCar.LICENSE_PLATES}
+                                            <Tooltip
+                                                title={item.licensePlates}
+                                                arrow
                                             >
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                    }}
-                                                >
-                                                    {Strings.RentedCar.REVIEW}
-                                                    <Rating
-                                                        value={
-                                                            dataSendApi.starNumber
-                                                        }
-                                                        precision={0.5}
-                                                        size="small"
-                                                        onChange={(e, val) => {
-                                                            handleChangeRating(
-                                                                val
-                                                            );
-                                                        }}
-                                                    />
-                                                </Box>
-                                            </TextContent>
+                                                <span>
+                                                    {item.licensePlates}
+                                                </span>
+                                            </Tooltip>
+                                        </TextContent>
 
-                                            <TextInput
-                                                placeholder={
-                                                    Strings.RentedCar.COMMENT
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.CAR_BRAND}
+                                            <Tooltip
+                                                title={item.carBrand}
+                                                arrow
+                                            >
+                                                <span>{item.carBrand}</span>
+                                            </Tooltip>
+                                        </TextContent>
+
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.SUBSCRIBERS}
+                                            <Tooltip
+                                                title={
+                                                    item.fullNameUser &&
+                                                    item.phoneUser
+                                                        ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
+                                                        : Strings.Common
+                                                              .UPDATING
                                                 }
-                                                label={
-                                                    Strings.RentedCar.COMMENT
+                                                arrow
+                                            >
+                                                <span>
+                                                    {item.fullNameUser &&
+                                                    item.phoneUser
+                                                        ? `${item.fullNameUser} (SĐT: ${item.phoneUser})`
+                                                        : Strings.Common
+                                                              .UPDATING}
+                                                </span>
+                                            </Tooltip>
+                                        </TextContent>
+
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.DRIVER}
+                                            <Tooltip
+                                                title={
+                                                    item.fullNameDriver &&
+                                                    item.phoneDriver
+                                                        ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
+                                                        : Strings.Common
+                                                              .UPDATING
                                                 }
-                                                variant="outlined"
-                                                size="small"
-                                                multiline
-                                                rows={2}
-                                                value={
-                                                    dataSendApi.comment || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleChangeComment(e)
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <CommentIcon
-                                                                sx={{
-                                                                    color: theme
-                                                                        .palette
-                                                                        .text
-                                                                        .secondary,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </Box>
-                                    ) : (
-                                        item.scheduleStatus ==
-                                            Constants.ScheduleStatus
-                                                .APPROVED && (
+                                                arrow
+                                            >
+                                                <span>
+                                                    {item.fullNameDriver &&
+                                                    item.phoneDriver
+                                                        ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
+                                                        : Strings.Common
+                                                              .UPDATING}
+                                                </span>
+                                            </Tooltip>
+                                        </TextContent>
+
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.TIME}
+                                            <Tooltip
+                                                title={`${startDate} - ${endDate}`}
+                                                arrow
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >{`${startDate} - ${endDate}`}</span>
+                                            </Tooltip>
+                                        </TextContent>
+
+                                        {item.scheduleStatus ==
+                                            Constants.ScheduleStatus.COMPLETE &&
+                                        currentUser.role ==
+                                            Constants.Role.USER ? (
                                             <Box>
+                                                <TextContent
+                                                    variant="p"
+                                                    component="div"
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            alignItems:
+                                                                "center",
+                                                        }}
+                                                    >
+                                                        {
+                                                            Strings.RentedCar
+                                                                .REVIEW
+                                                        }
+                                                        <Rating
+                                                            value={
+                                                                dataSendApi.starNumber
+                                                            }
+                                                            precision={0.5}
+                                                            size="small"
+                                                            onChange={(
+                                                                e,
+                                                                val
+                                                            ) => {
+                                                                handleChangeRating(
+                                                                    val
+                                                                );
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                </TextContent>
+
                                                 <TextInput
                                                     placeholder={
-                                                        Strings.RentedCar.PHONE
+                                                        Strings.RentedCar
+                                                            .COMMENT
                                                     }
                                                     label={
-                                                        Strings.RentedCar.PHONE
-                                                    }
-                                                    error={
-                                                        !helper.isValidPhoneNumber(
-                                                            dataSendApi.phoneUser
-                                                        )
-                                                    }
-                                                    helperText={
-                                                        Strings.Common
-                                                            .INVALID_PHONE_NUMBER
+                                                        Strings.RentedCar
+                                                            .COMMENT
                                                     }
                                                     variant="outlined"
                                                     size="small"
+                                                    multiline
+                                                    rows={2}
                                                     value={
-                                                        dataSendApi.phoneUser ||
+                                                        dataSendApi.comment ||
                                                         ""
                                                     }
                                                     onChange={(e) =>
-                                                        handleChangePhone(e)
+                                                        handleChangeComment(e)
                                                     }
                                                     InputProps={{
                                                         endAdornment: (
                                                             <InputAdornment position="start">
-                                                                <PhoneEnabledIcon
+                                                                <CommentIcon
                                                                     sx={{
                                                                         color: theme
                                                                             .palette
@@ -389,169 +388,245 @@ function DialogShowSchedule({ open, handleClose, idSchedule }) {
                                                     }}
                                                 />
                                             </Box>
-                                        )
-                                    )}
-                                </BoxRight>
+                                        ) : (
+                                            item.scheduleStatus ==
+                                                Constants.ScheduleStatus
+                                                    .APPROVED &&
+                                            currentUser.role ==
+                                                Constants.Role.USER && (
+                                                <Box>
+                                                    <TextInput
+                                                        placeholder={
+                                                            Strings.RentedCar
+                                                                .PHONE
+                                                        }
+                                                        label={
+                                                            Strings.RentedCar
+                                                                .PHONE
+                                                        }
+                                                        error={
+                                                            !helper.isValidPhoneNumber(
+                                                                dataSendApi.phoneUser
+                                                            )
+                                                        }
+                                                        helperText={
+                                                            Strings.Common
+                                                                .INVALID_PHONE_NUMBER
+                                                        }
+                                                        variant="outlined"
+                                                        size="small"
+                                                        value={
+                                                            dataSendApi.phoneUser ||
+                                                            ""
+                                                        }
+                                                        onChange={(e) =>
+                                                            handleChangePhone(e)
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <PhoneEnabledIcon
+                                                                        sx={{
+                                                                            color: theme
+                                                                                .palette
+                                                                                .text
+                                                                                .secondary,
+                                                                        }}
+                                                                    />
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Box>
+                                            )
+                                        )}
+                                    </BoxRight>
 
-                                <Box sx={{ clear: "both" }}></Box>
-                                <Box>
-                                    <TextContent variant="p" component="div">
-                                        {Strings.RentedCar.SCHEDULE}
-                                    </TextContent>
-                                    <List
-                                        sx={{
-                                            width: "100%",
-                                            bgcolor: "background.paper",
-                                            padding: "0px",
-                                        }}
-                                    >
-                                        <ListItem
+                                    <Box sx={{ clear: "both" }}></Box>
+                                    <Box>
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.SCHEDULE}
+                                        </TextContent>
+                                        <List
                                             sx={{
+                                                width: "100%",
+                                                bgcolor: "background.paper",
                                                 padding: "0px",
                                             }}
                                         >
-                                            <CreateIcon
-                                                color="primary"
-                                                fontSize="small"
+                                            <ListItem
                                                 sx={{
-                                                    marginRight: "5px",
+                                                    padding: "0px",
                                                 }}
-                                            />
-                                            <ListItemText
-                                                primary={
-                                                    "Mục Đích Sử Dụng Xe: "
-                                                }
-                                                secondary={item.reason}
-                                                primaryTypographyProps={{
-                                                    fontSize: "13px",
-                                                    fontWeight: "bold",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                                secondaryTypographyProps={{
-                                                    fontSize: "12px",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                }}
-                                            />
-                                        </ListItem>
+                                            >
+                                                <CreateIcon
+                                                    color="primary"
+                                                    fontSize="small"
+                                                    sx={{
+                                                        marginRight: "5px",
+                                                    }}
+                                                />
+                                                <ListItemText
+                                                    primary={
+                                                        "Mục Đích Sử Dụng Xe: "
+                                                    }
+                                                    secondary={item.reason}
+                                                    primaryTypographyProps={{
+                                                        fontSize: "13px",
+                                                        fontWeight: "bold",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                        color: theme.palette
+                                                            .primary.main,
+                                                    }}
+                                                    secondaryTypographyProps={{
+                                                        fontSize: "12px",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                    }}
+                                                />
+                                            </ListItem>
 
-                                        <ListItem
-                                            sx={{
-                                                padding: "0px",
-                                            }}
-                                        >
-                                            <NearMeIcon
-                                                color="primary"
-                                                fontSize="small"
+                                            <ListItem
                                                 sx={{
-                                                    marginRight: "5px",
+                                                    padding: "0px",
                                                 }}
-                                            />
-                                            <ListItemText
-                                                primary={"Điểm xuất phát:"}
-                                                secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
-                                                primaryTypographyProps={{
-                                                    fontSize: "13px",
-                                                    fontWeight: "bold",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                                secondaryTypographyProps={{
-                                                    fontSize: "12px",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                }}
-                                            />
-                                        </ListItem>
+                                            >
+                                                <NearMeIcon
+                                                    color="primary"
+                                                    fontSize="small"
+                                                    sx={{
+                                                        marginRight: "5px",
+                                                    }}
+                                                />
+                                                <ListItemText
+                                                    primary={"Điểm xuất phát:"}
+                                                    secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
+                                                    primaryTypographyProps={{
+                                                        fontSize: "13px",
+                                                        fontWeight: "bold",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                        color: theme.palette
+                                                            .primary.main,
+                                                    }}
+                                                    secondaryTypographyProps={{
+                                                        fontSize: "12px",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                    }}
+                                                />
+                                            </ListItem>
 
-                                        <ListItem
-                                            sx={{
-                                                padding: "0px",
-                                            }}
-                                        >
-                                            <LocationOnIcon
-                                                color="primary"
-                                                fontSize="small"
+                                            <ListItem
                                                 sx={{
-                                                    marginRight: "5px",
+                                                    padding: "0px",
                                                 }}
-                                            />
-                                            <ListItemText
-                                                primary={"Điểm kết thúc:"}
-                                                secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
-                                                primaryTypographyProps={{
-                                                    fontSize: "13px",
-                                                    fontWeight: "bold",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    color: theme.palette.primary
-                                                        .main,
-                                                }}
-                                                secondaryTypographyProps={{
-                                                    fontSize: "12px",
-                                                    whiteSpace: "nowrap",
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                }}
-                                            />
-                                        </ListItem>
-                                    </List>
+                                            >
+                                                <LocationOnIcon
+                                                    color="primary"
+                                                    fontSize="small"
+                                                    sx={{
+                                                        marginRight: "5px",
+                                                    }}
+                                                />
+                                                <ListItemText
+                                                    primary={"Điểm kết thúc:"}
+                                                    secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
+                                                    primaryTypographyProps={{
+                                                        fontSize: "13px",
+                                                        fontWeight: "bold",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                        color: theme.palette
+                                                            .primary.main,
+                                                    }}
+                                                    secondaryTypographyProps={{
+                                                        fontSize: "12px",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow:
+                                                            "ellipsis",
+                                                    }}
+                                                />
+                                            </ListItem>
+                                        </List>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    );
-                })}
-            </DialogContent>
+                        </DialogContent>
 
-            <DialogActions>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: 4,
-                    }}
-                >
-                    <ButtonFeatures
-                        size="small"
-                        variant="contained"
-                        endIcon={<CancelIcon />}
-                        color="error"
-                        sx={{ marginRight: 1 }}
-                        onClick={handleClose}
-                    >
-                        {Strings.Common.CANCEL}
-                    </ButtonFeatures>
+                        <DialogActions>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                    marginTop: 4,
+                                }}
+                            >
+                                <ButtonFeatures
+                                    size="small"
+                                    variant="contained"
+                                    endIcon={<CancelIcon />}
+                                    color="error"
+                                    sx={{ marginRight: 1 }}
+                                    onClick={handleClose}
+                                >
+                                    {currentUser.role == Constants.Role.USER &&
+                                    (item.scheduleStatus ==
+                                        Constants.ScheduleStatus.APPROVED ||
+                                        item.scheduleStatus ==
+                                            Constants.ScheduleStatus.COMPLETE)
+                                        ? Strings.Common.CANCEL
+                                        : Strings.Common.EXIT}
+                                </ButtonFeatures>
 
-                    <ButtonFeatures
-                        size="small"
-                        variant="contained"
-                        endIcon={<CheckCircleIcon />}
-                        color="primary"
-                        sx={{ marginRight: 1 }}
-                        onClick={handleSubmit}
-                        disabled={
-                            schedule.length > 0 &&
-                            (dataSendApi.starNumber != schedule[0].starNumber ||
-                                dataSendApi.comment != schedule[0].comment ||
-                                dataSendApi.phoneUser != schedule[0].phoneUser)
-                                ? false
-                                : true
-                        }
-                    >
-                        {Strings.Common.UPDATE}
-                    </ButtonFeatures>
-                </Box>
-            </DialogActions>
+                                {currentUser.role == Constants.Role.USER &&
+                                    (item.scheduleStatus ==
+                                        Constants.ScheduleStatus.APPROVED ||
+                                        item.scheduleStatus ==
+                                            Constants.ScheduleStatus
+                                                .COMPLETE) && (
+                                        <ButtonFeatures
+                                            size="small"
+                                            variant="contained"
+                                            endIcon={<CheckCircleIcon />}
+                                            color="primary"
+                                            sx={{ marginRight: 1 }}
+                                            onClick={handleSubmit}
+                                            disabled={
+                                                schedule.length > 0 &&
+                                                (dataSendApi.starNumber !=
+                                                    schedule[0].starNumber ||
+                                                    dataSendApi.comment !=
+                                                        schedule[0].comment ||
+                                                    dataSendApi.phoneUser !=
+                                                        schedule[0].phoneUser)
+                                                    ? false
+                                                    : true
+                                            }
+                                        >
+                                            {Strings.Common.UPDATE}
+                                        </ButtonFeatures>
+                                    )}
+                            </Box>
+                        </DialogActions>
+                    </Box>
+                );
+            })}
 
             <ModalError
                 open={modalError.open}
