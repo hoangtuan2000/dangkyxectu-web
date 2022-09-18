@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
-import { Box, Tab, Tabs, Typography, useTheme } from "@mui/material";
+import {
+    Badge,
+    Box,
+    Fab,
+    Tab,
+    Tabs,
+    Tooltip,
+    Typography,
+    useTheme,
+} from "@mui/material";
 import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../constants/Strings";
 import col from "./columnsDriverTripManagerDataGrid";
 import { useNavigate } from "react-router-dom";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ModalError from "../../components/modalError/ModalError";
 import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../components/backDrop/BackDrop";
@@ -12,6 +22,7 @@ import Constants from "../../constants/Constants";
 import { RentedCarService } from "../../services/RentedCarServices";
 import { DriverTripManagerService } from "../../services/DriverTripManagerServices";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
+import { FabStyle } from "./DriverTripManagerCustomStyles";
 
 function DriverTripManager() {
     const theme = useTheme();
@@ -139,7 +150,18 @@ function DriverTripManager() {
                 {Strings.DriverTripManager.TRIP_LIST}
             </Typography>
 
-            <Tabs
+            <Tooltip title={Strings.Common.FILTER}>
+                <FabStyle
+                    color="primary"
+                    size="small"
+                >
+                    <Badge badgeContent={4} color="error">
+                        <FilterAltIcon />
+                    </Badge>
+                </FabStyle>
+            </Tooltip>
+
+            {/* <Tabs
                 value={value}
                 onChange={handleChange}
                 sx={{ marginBottom: "10px" }}
@@ -147,7 +169,7 @@ function DriverTripManager() {
                 <Tab value="Tất Cả" label="Tất Cả" />
                 <Tab value="Chuyến Đi Ngày Mai" label="Chuyến Đi Ngày Mai" />
                 <Tab value="Hoàn Thành" label="Hoàn Thành" />
-            </Tabs>
+            </Tabs> */}
 
             <DataGridCustom
                 columns={col((e) => {

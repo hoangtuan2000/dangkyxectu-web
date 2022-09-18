@@ -401,16 +401,16 @@ export default function MainLayout() {
                         >
                             <ListItemIcon>
                                 {themeDarkMode ? (
-                                    <NightsStayIcon />
-                                ) : (
                                     <Brightness7Icon />
+                                ) : (
+                                    <NightsStayIcon />
                                 )}
                             </ListItemIcon>
                             <ListItemText
                                 primary={
                                     themeDarkMode
-                                        ? "Giao diện tối"
-                                        : "Giao diện sáng"
+                                        ? "Giao diện sáng"
+                                        : "Giao diện tối"
                                 }
                             />
                         </ListItemButton>

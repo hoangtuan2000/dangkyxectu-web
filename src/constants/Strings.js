@@ -43,6 +43,7 @@ const Strings = {
         EXIT: "Thoát",
         UPDATE_SCHEDULE: "Cập Nhật Lịch Trình",
         INFO_SCHEDULE: "Thông Tin Lịch Trình",
+        FILTER: "Bộ Lọc",
     },
 
     Login: {
