@@ -6,7 +6,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
-const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedulePending) => {
+const col = (
+    handleModalShowSchedule,
+    handleCancelSchedule,
+    handleUpdateSchedulePending
+) => {
     let columns = [];
     return (columns = [
         {
@@ -80,14 +84,14 @@ const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedule
             },
         },
         {
-            field: "reason",
-            headerName: Strings.Common.REASON,
-            description: Strings.Common.REASON,
+            field: "startLocation",
+            headerName: Strings.Common.START_LOCATION,
+            description: Strings.Common.START_LOCATION,
             width: 190,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.reason} arrow>
+                    <Tooltip title={params.row.startLocation} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -95,21 +99,21 @@ const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedule
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.reason}
+                            {params.row.startLocation}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
-            field: "destination",
-            headerName: Strings.Common.DESTINATION,
-            description: Strings.Common.DESTINATION,
+            field: "endLocation",
+            headerName: Strings.Common.END_LOCATION,
+            description: Strings.Common.END_LOCATION,
             width: 190,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.destination} arrow>
+                    <Tooltip title={params.row.endLocation} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -117,7 +121,7 @@ const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedule
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.destination}
+                            {params.row.endLocation}
                         </span>
                     </Tooltip>
                 );
@@ -195,102 +199,26 @@ const col = (handleModalShowSchedule, handleCancelSchedule, handleUpdateSchedule
             },
         },
         {
-            field: "update",
-            headerName: Strings.Common.UPDATE,
-            description: Strings.Common.UPDATE,
+            field: "detail",
+            headerName: Strings.Common.DETAIL,
+            description: Strings.Common.DETAIL,
             width: 85,
             sortable: false,
             renderCell: (params) => {
-                if (params.row.status == Constants.ScheduleStatus.PENDING) {
-                    return (
-                        <Tooltip title="Cập Nhật" arrow>
-                            <IconButton color="primary"
+                return (
+                    <Tooltip title="Xem Chi Tiết" arrow>
+                        <IconButton
+                            color="primary"
                             onClick={() => {
-                                handleUpdateSchedulePending(params.row.scheduleCode);
+                                handleModalShowSchedule(
+                                    params.row.scheduleCode
+                                );
                             }}
-                            >
-                                <ModeEditIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                } else if (
-                    params.row.status == Constants.ScheduleStatus.APPROVED
-                ) {
-                    return (
-                        <Tooltip title="Cập Nhật" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    handleModalShowSchedule(params.row.scheduleCode);
-                                }}
-                            >
-                                <ModeEditIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                } else {
-                    return (
-                        <Tooltip title="Xem Chi Tiết" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    handleModalShowSchedule(params.row.scheduleCode);
-                                }}
-                            >
-                                <VisibilityIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                }
-            },
-        },
-        {
-            field: "cancel",
-            headerName: Strings.Common.CANCEL,
-            description: Strings.Common.CANCEL,
-            width: 60,
-            sortable: false,
-            renderCell: (params) => {
-                if (
-                    params.row.status == Constants.ScheduleStatus.PENDING ||
-                    params.row.status == Constants.ScheduleStatus.APPROVED
-                ) {
-                    return (
-                        <Tooltip title="Hủy Đăng Ký Xe" arrow>
-                            <IconButton
-                                color="error"
-                                onClick={() => {
-                                    handleCancelSchedule(params.row.scheduleCode);
-                                }}
-                            >
-                                <DeleteForeverIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                }
-            },
-        },
-        {
-            field: "review",
-            headerName: Strings.Common.REVIEW,
-            description: Strings.Common.REVIEW,
-            width: 120,
-            sortable: false,
-            renderCell: (params) => {
-                if (params.value) {
-                    return (
-                        params.row.status ==
-                            Constants.ScheduleStatus.COMPLETE && (
-                            <Rating
-                                name="read-only"
-                                defaultValue={params.row.review}
-                                precision={0.1}
-                                readOnly
-                                size="small"
-                            />
-                        )
-                    );
-                }
+                        >
+                            <VisibilityIcon />
+                        </IconButton>
+                    </Tooltip>
+                );
             },
         },
         {

@@ -9,7 +9,7 @@ import BackDrop from "../../components/backDrop/BackDrop";
 import Constants from "../../constants/Constants";
 import { useState, useEffect } from "react";
 import helper from "../../common/helper";
-import col from "./columnsDataGrid";
+import col from "./columnsRentedCarDataGrid";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
@@ -76,6 +76,7 @@ function RentedCar() {
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
+                            cancel: item.startDate //check startdate > current date => cancel schedule
                         };
                     })
                 );

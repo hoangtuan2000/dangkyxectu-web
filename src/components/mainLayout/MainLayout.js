@@ -19,7 +19,7 @@ import {
     ListItemText,
     Button,
 } from "@mui/material";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
@@ -108,6 +108,8 @@ const DataListItems = [
 export default function MainLayout() {
     const theme = useTheme();
 
+    const navigate = useNavigate();
+
     const dispath = useDispatch();
     const themeDarkMode = useSelector((state) => state.themeDarkMode.darkMode);
     const currentUser = useSelector((state) => state.currentUser.user);
@@ -173,9 +175,17 @@ export default function MainLayout() {
                         <MenuIcon />
                     </IconButton>
 
-                    <Logo src={LogoCTU} />
+                    <Logo
+                        src={LogoCTU}
+                        onClick={() => navigate(RoutesPath.HOME)}
+                    />
 
-                    <Title variant="h6" noWrap component="div">
+                    <Title
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        onClick={() => navigate(RoutesPath.HOME)}
+                    >
                         {Strings.App.TITLE}
                     </Title>
 

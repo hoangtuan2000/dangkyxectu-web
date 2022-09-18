@@ -39,27 +39,6 @@ import { useSelector } from "react-redux";
 import { UpdateSchedulePendingService } from "../../services/UpdateSchedulePendingServices";
 registerLocale("vi", vi);
 
-// let defaultStartAddress = {
-//     address: "Khu II Đại Học Cần Thơ",
-//     province: {
-//         idProvince: "92",
-//         name: "Thành phố Cần Thơ",
-//         type: "Thành phố Trung ương",
-//     },
-//     district: {
-//         idDistrict: "916",
-//         idProvince: "92",
-//         name: "Quận Ninh Kiều",
-//         type: "Quận",
-//     },
-//     ward: {
-//         idDistrict: "916",
-//         idWard: "31149",
-//         name: "Phường An Khánh",
-//         type: "Phường",
-//     },
-// };
-
 function RentalCar() {
     const theme = useTheme();
     const ModalShowEndAddressRef = useRef(); // use call reset address function

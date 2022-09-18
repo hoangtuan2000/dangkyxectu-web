@@ -39,6 +39,7 @@ const Strings = {
         SUCCESS: "Thành Công",
         INVALID_PHONE_NUMBER: "Số Điện Thoại Không Hợp Lệ",
         UPDATING: "Đang Cập Nhật",
+        DETAIL: "Chi Tiết",
     },
 
     Login: {

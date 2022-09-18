@@ -45,7 +45,8 @@ function DataGridCustom({
             apiRef,
             gridPaginationRowRangeSelector
         );
-        const totalPage = Math.round(totalRows / pageSize) || 1;
+
+        const totalPage = Math.ceil(totalRows / pageSize) || 1;
 
         return (
             <div style={{ display: "flex", alignItems: "center" }}>
