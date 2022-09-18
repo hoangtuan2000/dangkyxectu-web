@@ -7,9 +7,7 @@ import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
 const col = (
-    handleModalShowSchedule,
-    handleCancelSchedule,
-    handleUpdateSchedulePending
+    handleModalShowSchedule
 ) => {
     let columns = [];
     return (columns = [

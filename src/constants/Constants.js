@@ -36,6 +36,9 @@ const Constants = {
             GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList',
             CANCEL_SCHEDULE: '/cancelSchedule',
         },
+        DriverTripManager: {
+            GET_DRIVER_SCHEDULE_LIST: '/getDriverScheduleList',
+        },
         DialogShowSchedule: {
             GET_SCHEDULE: '/getSchedule',
             CREATE_OR_UPDATE_REVIEW: '/createOrUpdateReview',

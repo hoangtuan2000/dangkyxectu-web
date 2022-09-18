@@ -32,16 +32,24 @@ const BoxContainer = styled(Box)(({ theme }) => ({
         width: 315,
     },
     [theme.breakpoints.up("sm")]: {
-        width: 250,
+        maxWidth: 308,
+        width:  'fit-content',
+        padding: 10
     },
     [theme.breakpoints.up("md")]: {
-        width: 280,
+        maxWidth: 328,
+        width:  'fit-content',
+        padding: 10
     },
     [theme.breakpoints.up("lg")]: {
-        width: 300,
+        maxWidth: 360,
+        width:  'fit-content',
+        padding: 10
     },
     [theme.breakpoints.up("xl")]: {
-        width: 300,
+        maxWidth: 400,
+        width:  'fit-content',
+        padding: 10
     },
 }));
 
