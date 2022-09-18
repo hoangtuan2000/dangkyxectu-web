@@ -148,6 +148,7 @@ function RentalCar() {
 
     const [dataSendApi, setDataSendApi] = useState({
         idSchedule: idSchedule,
+        idCar: null,
         startDate: null,
         endDate: null,
         startLocation: null,
@@ -315,6 +316,7 @@ function RentalCar() {
                 });
                 setDataSendApi({
                     ...dataSendApi,
+                    idCar: result[0].idCar,
                     startDate: result[0].startDate * 1000,
                     endDate: result[0].endDate * 1000,
                     startLocation: result[0].startLocation,
