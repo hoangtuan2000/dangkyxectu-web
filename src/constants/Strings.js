@@ -44,6 +44,8 @@ const Strings = {
         UPDATE_SCHEDULE: "Cập Nhật Lịch Trình",
         INFO_SCHEDULE: "Thông Tin Lịch Trình",
         FILTER: "Bộ Lọc",
+        SEARCH: "Tìm Kiếm",
+        REFRESH: "Làm Mới",
     },
 
     Login: {
@@ -164,6 +166,13 @@ const Strings = {
     ModalShowAddress: {
         TITLE_START_LOCATION: "Chọn Địa Chỉ Xuất Phát",
         TITLE_END_LOCATION: "Chọn Địa Chỉ Kết Thúc",
+        TITLE_LOCATION: "Chọn Địa Chỉ",
+    },
+    DialogDriverFilter: {
+        CHOOSE_TIME: "-- Chọn Thời Gian --",
+        ENTER_LOCATION: "-- Địa Điểm --",
+        STATUS: "Trạng Thái:",
+        CAR_TYPE: "Loại Xe:",
     },
 };
 

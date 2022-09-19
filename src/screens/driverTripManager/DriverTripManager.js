@@ -12,17 +12,16 @@ import {
 import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../constants/Strings";
 import col from "./columnsDriverTripManagerDataGrid";
-import { useNavigate } from "react-router-dom";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ModalError from "../../components/modalError/ModalError";
 import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../components/backDrop/BackDrop";
 import helper from "../../common/helper";
 import Constants from "../../constants/Constants";
-import { RentedCarService } from "../../services/RentedCarServices";
 import { DriverTripManagerService } from "../../services/DriverTripManagerServices";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 import { FabStyle } from "./DriverTripManagerCustomStyles";
+import DialogDriverFilter from "../../components/dialogDriverFilter/DialogDriverFilter";
 
 function DriverTripManager() {
     const theme = useTheme();
@@ -39,18 +38,13 @@ function DriverTripManager() {
         open: false,
         idSchedule: null,
     });
+    const [dialogDriverFilter, setDialogDriverFilter] = useState(false);
     const [scheduleList, setScheduleList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
         pageSize: Constants.Common.LIMIT_ENTRY,
         totalRows: 0,
     });
-
-    const [value, setValue] = useState("Tất Cả");
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     const getDriverScheduleList = async (
         page = dataInfo.page,
@@ -154,22 +148,13 @@ function DriverTripManager() {
                 <FabStyle
                     color="primary"
                     size="small"
+                    onClick={() => setDialogDriverFilter(true)}
                 >
                     <Badge badgeContent={4} color="error">
                         <FilterAltIcon />
                     </Badge>
                 </FabStyle>
             </Tooltip>
-
-            {/* <Tabs
-                value={value}
-                onChange={handleChange}
-                sx={{ marginBottom: "10px" }}
-            >
-                <Tab value="Tất Cả" label="Tất Cả" />
-                <Tab value="Chuyến Đi Ngày Mai" label="Chuyến Đi Ngày Mai" />
-                <Tab value="Hoàn Thành" label="Hoàn Thành" />
-            </Tabs> */}
 
             <DataGridCustom
                 columns={col((e) => {
@@ -183,6 +168,11 @@ function DriverTripManager() {
                 onChangeRowsPerPage={(e) => {
                     handleChangeRowsPerPage(e);
                 }}
+            />
+
+            <DialogDriverFilter
+                open={dialogDriverFilter}
+                handleClose={() => setDialogDriverFilter(false)}
             />
 
             <DialogShowSchedule

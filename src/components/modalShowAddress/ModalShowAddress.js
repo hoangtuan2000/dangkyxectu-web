@@ -34,6 +34,7 @@ const ModalShowAddress = forwardRef((props, ref) => {
         defaultProvince,
         defaultDistrict,
         defaultWard,
+        notValidateAddress, // used to filter the address => schedule filter button => no need to filter the address
     } = props;
 
     const [modalError, setModalError] = useState({
@@ -57,7 +58,7 @@ const ModalShowAddress = forwardRef((props, ref) => {
     const [showWard, setShowWard] = useState([]);
 
     const [selectedAddress, setSelectedAddress] = useState({
-        address: defaultAddress ? defaultAddress : null,
+        address: defaultAddress ? defaultAddress : notValidateAddress ? '' : null,
         province: defaultProvince ? defaultProvince : null,
         district: defaultDistrict ? defaultDistrict : null,
         ward: defaultWard ? defaultWard : null,
@@ -152,9 +153,11 @@ const ModalShowAddress = forwardRef((props, ref) => {
 
     const handleValidateAddress = () => {
         setErrorChooseAddress({
-            addressEmpty: helper.isNullOrEmpty(selectedAddress.address)
-                ? true
-                : false,
+            addressEmpty:
+                !notValidateAddress &&
+                helper.isNullOrEmpty(selectedAddress.address)
+                    ? true
+                    : false,
             provinceEmpty: helper.isNullOrEmpty(selectedAddress.province)
                 ? true
                 : false,
@@ -169,7 +172,7 @@ const ModalShowAddress = forwardRef((props, ref) => {
 
     const handleConfirm = (address, province, district, ward) => {
         if (
-            helper.isNullOrEmpty(address) ||
+            (!notValidateAddress && helper.isNullOrEmpty(address)) ||
             helper.isNullOrEmpty(province) ||
             helper.isNullOrEmpty(district) ||
             helper.isNullOrEmpty(ward)
@@ -230,7 +233,7 @@ const ModalShowAddress = forwardRef((props, ref) => {
             setShowWard([]);
             setSelectedAddress({
                 ...selectedAddress,
-                address: defaultAddress ? defaultAddress : null,
+                address: defaultAddress ? defaultAddress : notValidateAddress ? '' : null,
                 province: defaultProvince ? defaultProvince : null,
                 district: defaultDistrict ? defaultDistrict : null,
                 ward: defaultWard ? defaultWard : null,
