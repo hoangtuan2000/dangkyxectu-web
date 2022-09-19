@@ -48,7 +48,7 @@ import ModalShowAddress from "../modalShowAddress/ModalShowAddress";
 import { GlobalService } from "../../services/GlobalServices";
 registerLocale("vi", vi);
 
-function DialogDriverFilter({ open, handleClose }) {
+function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
     const theme = useTheme();
 
     const ModalShowEndAddressRef = useRef(); // use call reset address function
@@ -76,8 +76,8 @@ function DialogDriverFilter({ open, handleClose }) {
     const [dataSendApi, setDataSendApi] = useState({
         status: [],
         carType: [],
-        startLocation: null,
-        idWardStartLocation: null,
+        address: null,
+        idWard: null,
         startDate: null,
         endDate: null,
     });
@@ -185,8 +185,8 @@ function DialogDriverFilter({ open, handleClose }) {
         setShowAddress(address);
         setDataSendApi({
             ...dataSendApi,
-            startLocation: e.address,
-            idWardStartLocation: e.ward.idWard,
+            address: e.address,
+            idWard: e.ward.idWard,
         });
     };
 
@@ -205,6 +205,14 @@ function DialogDriverFilter({ open, handleClose }) {
     };
 
     const handleRefreshFilter = () => {
+        onSubmit({
+            status: [],
+            carType: [],
+            address: null,
+            idWard: null,
+            startDate: null,
+            endDate: null,
+        });
         setSelectedDates({
             startDate: null,
             endDate: null,
@@ -213,8 +221,8 @@ function DialogDriverFilter({ open, handleClose }) {
         setDataSendApi({
             status: [],
             carType: [],
-            startLocation: null,
-            idWardStartLocation: null,
+            address: null,
+            idWard: null,
             startDate: null,
             endDate: null,
         });
@@ -393,7 +401,7 @@ function DialogDriverFilter({ open, handleClose }) {
                         endIcon={<CheckCircleIcon />}
                         color="primary"
                         sx={{ marginRight: 1 }}
-                        // onClick={handleSubmit}
+                        onClick={() => onSubmit(dataSendApi)}
                     >
                         {Strings.Common.SEARCH}
                     </ButtonFeatures>

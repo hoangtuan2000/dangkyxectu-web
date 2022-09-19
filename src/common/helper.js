@@ -35,6 +35,10 @@ const helper = {
             ? parseFloat(value).toFixed(1)
             : null;
     },
+
+    isArray: (value) => {
+        return Array.isArray(value);
+    },
 };
 
 export default helper;

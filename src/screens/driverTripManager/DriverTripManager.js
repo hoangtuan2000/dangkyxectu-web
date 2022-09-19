@@ -45,14 +45,30 @@ function DriverTripManager() {
         pageSize: Constants.Common.LIMIT_ENTRY,
         totalRows: 0,
     });
+    const [totalDataFilter, setTotalDataFilter] = useState(null);
 
     const getDriverScheduleList = async (
         page = dataInfo.page,
-        pageSize = dataInfo.pageSize
+        pageSize = dataInfo.pageSize,
+        status,
+        carType,
+        address,
+        idWard,
+        startDate,
+        endDate
     ) => {
-        const res = await DriverTripManagerService.getDriverScheduleList({
+        const data = {
             page: page,
             limitEntry: pageSize,
+            status,
+            carType,
+            address,
+            idWard,
+            startDate,
+            endDate,
+        };
+        const res = await DriverTripManagerService.getDriverScheduleList({
+            ...data,
         });
         // axios success
         if (res.data) {
@@ -126,6 +142,40 @@ function DriverTripManager() {
         getDriverScheduleList(Constants.Common.PAGE, e);
     };
 
+    const handleFilter = (e) => {
+        let status = [];
+        let carType = [];
+        if (helper.isArray(e.status) && e.status.length > 0) {
+            status = e.status.map((item) => {
+                return item.idScheduleStatus;
+            });
+        }
+        if (helper.isArray(e.carType) && e.carType.length > 0) {
+            carType = e.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+
+        //reset page and pageSize => call getDriverScheduleList function
+        getDriverScheduleList(
+            Constants.Common.PAGE,
+            Constants.Common.LIMIT_ENTRY,
+            status,
+            carType,
+            e.address,
+            e.idWard,
+            e.startDate,
+            e.endDate
+        );
+
+        // show total data to filter in UI => button filter
+        let total = status.length + carType.length;
+        if(e.address) total += 1
+        if(e.idWard) total += 1
+        if(e.startDate && e.endDate) total += 1
+        setTotalDataFilter(total > 0 ? total : null);
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverScheduleList();
@@ -150,7 +200,7 @@ function DriverTripManager() {
                     size="small"
                     onClick={() => setDialogDriverFilter(true)}
                 >
-                    <Badge badgeContent={4} color="error">
+                    <Badge badgeContent={totalDataFilter} color="error">
                         <FilterAltIcon />
                     </Badge>
                 </FabStyle>
@@ -173,6 +223,7 @@ function DriverTripManager() {
             <DialogDriverFilter
                 open={dialogDriverFilter}
                 handleClose={() => setDialogDriverFilter(false)}
+                onSubmit={(e) => handleFilter(e)}
             />
 
             <DialogShowSchedule
