@@ -85,7 +85,8 @@ const col = (
             field: "startLocation",
             headerName: Strings.Common.START_LOCATION,
             description: Strings.Common.START_LOCATION,
-            width: 190,
+            flex: 1,
+            minWidth: 190,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -107,7 +108,8 @@ const col = (
             field: "endLocation",
             headerName: Strings.Common.END_LOCATION,
             description: Strings.Common.END_LOCATION,
-            width: 190,
+            flex: 1,
+            minWidth: 190,
             sortable: false,
             renderCell: (params) => {
                 return (

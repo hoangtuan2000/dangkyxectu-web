@@ -46,12 +46,24 @@ function DriverTripManager() {
         totalRows: 0,
     });
     const [totalDataFilter, setTotalDataFilter] = useState(null);
+    const [dataFilter, setDataFilter] = useState({
+        status: [],
+        carType: [],
+        scheduleCode: null,
+        address: null,
+        ward: null,
+        district: null,
+        province: null,
+        startDate: null,
+        endDate: null,
+    });
 
     const getDriverScheduleList = async (
         page = dataInfo.page,
         pageSize = dataInfo.pageSize,
         status,
         carType,
+        scheduleCode,
         address,
         idWard,
         startDate,
@@ -62,6 +74,7 @@ function DriverTripManager() {
             limitEntry: pageSize,
             status,
             carType,
+            scheduleCode,
             address,
             idWard,
             startDate,
@@ -162,17 +175,31 @@ function DriverTripManager() {
             Constants.Common.LIMIT_ENTRY,
             status,
             carType,
+            e.scheduleCode,
             e.address,
-            e.idWard,
+            e.ward && e.ward.idWard,
             e.startDate,
             e.endDate
         );
 
+        setDataFilter({
+            status: [e.status],
+            carType: [e.carType],
+            scheduleCode: e.scheduleCode,
+            address: e.address,
+            ward: e.ward,
+            district: e.district,
+            province: e.province,
+            startDate: e.startDate,
+            endDate: e.endDate,
+        });
+
         // show total data to filter in UI => button filter
         let total = status.length + carType.length;
-        if(e.address) total += 1
-        if(e.idWard) total += 1
-        if(e.startDate && e.endDate) total += 1
+        if (e.scheduleCode) total += 1;
+        if (e.address) total += 1;
+        if (e.ward) total += 1;
+        if (e.startDate && e.endDate) total += 1;
         setTotalDataFilter(total > 0 ? total : null);
     };
 
@@ -224,6 +251,15 @@ function DriverTripManager() {
                 open={dialogDriverFilter}
                 handleClose={() => setDialogDriverFilter(false)}
                 onSubmit={(e) => handleFilter(e)}
+                defaultStatus={dataFilter.status}
+                defaultCarType={dataFilter.carType}
+                defaultScheduleCode={dataFilter.scheduleCode}
+                defaultAddress={dataFilter.address}
+                defaultWard={dataFilter.ward}
+                defaultDistrict={dataFilter.district}
+                defaultProvince={dataFilter.province}
+                defaultStartDate={dataFilter.startDate}
+                defaultEndDate={dataFilter.endDate}
             />
 
             <DialogShowSchedule

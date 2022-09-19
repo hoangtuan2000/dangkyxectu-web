@@ -6,6 +6,7 @@ import {
     DialogActions,
     DialogContent,
     FormControlLabel,
+    InputAdornment,
     TextField,
     Tooltip,
     useTheme,
@@ -17,6 +18,7 @@ import {
     ButtonStyled,
     DialogContainer,
     FormGroupStyle,
+    TextInput,
     TextStyle,
     Title,
 } from "./DialogDriverFilterCustomStyles";
@@ -48,7 +50,21 @@ import ModalShowAddress from "../modalShowAddress/ModalShowAddress";
 import { GlobalService } from "../../services/GlobalServices";
 registerLocale("vi", vi);
 
-function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
+function DialogDriverFilter({
+    open,
+    handleClose,
+    onSubmit = () => {},
+    handleRefreshDataFilter,
+    defaultStatus,
+    defaultCarType,
+    defaultScheduleCode,
+    defaultAddress,
+    defaultWard,
+    defaultDistrict,
+    defaultProvince,
+    defaultStartDate,
+    defaultEndDate,
+}) {
     const theme = useTheme();
 
     const ModalShowEndAddressRef = useRef(); // use call reset address function
@@ -74,10 +90,13 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
 
     const [showAddress, setShowAddress] = useState();
     const [dataSendApi, setDataSendApi] = useState({
-        status: [],
+        status: defaultStatus ? [...defaultStatus] : [],
         carType: [],
+        scheduleCode: null,
         address: null,
-        idWard: null,
+        ward: null,
+        district: null,
+        province: null,
         startDate: null,
         endDate: null,
     });
@@ -180,13 +199,22 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
         });
     };
 
-    const handleShowStartAddress = (e) => {
+    const handleChangeScheduleCode = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            scheduleCode: e.target.value ? e.target.value : null,
+        });
+    };
+
+    const handleShowAddress = (e) => {
         const address = `${e.address} - ${e.ward.name} - ${e.district.name} - ${e.province.name}`;
         setShowAddress(address);
         setDataSendApi({
             ...dataSendApi,
             address: e.address,
-            idWard: e.ward.idWard,
+            ward: e.ward,
+            district: e.district,
+            province: e.province,
         });
     };
 
@@ -208,8 +236,11 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
         onSubmit({
             status: [],
             carType: [],
+            scheduleCode: null,
             address: null,
-            idWard: null,
+            ward: null,
+            district: null,
+            province: null,
             startDate: null,
             endDate: null,
         });
@@ -218,14 +249,18 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
             endDate: null,
         });
         setShowAddress();
-        setDataSendApi({
-            status: [],
-            carType: [],
-            address: null,
-            idWard: null,
-            startDate: null,
-            endDate: null,
-        });
+        // setDataSendApi({
+        //     status: [],
+        //     carType: [],
+        //     scheduleCode: null,
+        //     address: null,
+        //     ward: null,
+        //     district: null,
+        //     province: null,
+        //     startDate: null,
+        //     endDate: null,
+        // });
+        handleRefreshDataFilter();
         //call function of child component: modalShowEndAdderss
         //=> reset value in modal choosse end address
         ModalShowEndAddressRef.current.handleResetAddress();
@@ -252,6 +287,32 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
         >
             <DialogContent>
                 <Title>{Strings.DialogDriverFilter.TITLE}</Title>
+                <BoxContent>
+                    <TextStyle>
+                        {Strings.DialogDriverFilter.SCHEDULE_CODE}
+                    </TextStyle>
+                    <TextInput
+                        placeholder={
+                            Strings.DialogDriverFilter.ENTER_SCHEDULE_CODE
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={dataSendApi.scheduleCode || ""}
+                        onChange={(e) => handleChangeScheduleCode(e)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="start">
+                                    <AssignmentIcon
+                                        sx={{
+                                            color: theme.palette.primary.main,
+                                        }}
+                                    />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </BoxContent>
+
                 <BoxContent>
                     <TextStyle>{Strings.DialogDriverFilter.STATUS}</TextStyle>
                     <AutocompleteStyle
@@ -313,7 +374,7 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
                 </BoxContent>
 
                 <BoxContent>
-                    <TextStyle>Thời Gian: </TextStyle>
+                    <TextStyle>{Strings.DialogDriverFilter.TIME} </TextStyle>
                     <DatePicker
                         locale="vi"
                         dateFormat={Constants.Styled.DATE_FORMAT}
@@ -328,7 +389,7 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
                 </BoxContent>
 
                 <BoxContent>
-                    <TextStyle>Địa Chỉ: </TextStyle>
+                    <TextStyle>{Strings.DialogDriverFilter.ADDRESS} </TextStyle>
                     <ButtonStyled
                         onClick={() => setModalShowStartAdderss(true)}
                         variant="outlined"
@@ -413,7 +474,7 @@ function DialogDriverFilter({ open, handleClose, onSubmit = () => {} }) {
                 handleClose={() => setModalShowStartAdderss(false)}
                 labelInput={Strings.DialogDriverFilter.ENTER_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_LOCATION}
-                onConfirm={(e) => handleShowStartAddress(e)}
+                onConfirm={(e) => handleShowAddress(e)}
                 ref={ModalShowEndAddressRef}
                 // defaultAddress={defaultStartAddress.address}
                 // defaultProvince={defaultStartAddress.province}

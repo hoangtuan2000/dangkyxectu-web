@@ -159,7 +159,8 @@ const BoxContent = styled(Box)(({ theme }) => ({
 }));
 
 const TextStyle = styled(Typography)(({ theme }) => ({
-    width: 75,
+    width: 90,
+    textAlign: 'right',
     [theme.breakpoints.up("mobileS")]: {
         fontSize: 12,
     },
@@ -280,6 +281,97 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     },
 }));
 
+const TextInput = styled(TextField)(({ theme }) => ({
+    marginLeft: 10,
+    ".MuiInputBase-root": {
+        paddingRight: 5,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        width: 230,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 280,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 290,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 400,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 390,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+}));
+
 const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
     display: "flex",
     justifyContent: "space-between",
@@ -340,4 +432,5 @@ export {
     FormGroupStyle,
     TextStyle,
     Title,
+    TextInput
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Badge, Box, Tooltip, Typography } from "@mui/material";
 import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../constants/Strings";
 import { RentedCarService } from "../../services/RentedCarServices";
@@ -13,10 +13,11 @@ import col from "./columnsRentedCarDataGrid";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../constants/RoutesPath";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { FabStyle } from "./rentedCarCustomStyles";
 
 function RentedCar() {
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -76,7 +77,7 @@ function RentedCar() {
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
-                            cancel: item.startDate //check startdate > current date => cancel schedule
+                            cancel: item.startDate, //check startdate > current date => cancel schedule
                         };
                     })
                 );
@@ -120,7 +121,7 @@ function RentedCar() {
     };
 
     const handleUpdateSchedulePending = (e) => {
-        navigate(RoutesPath.UPDATE_SCHEDULE_PENDING +"/"+ e)
+        navigate(RoutesPath.UPDATE_SCHEDULE_PENDING + "/" + e);
     };
 
     const handleCancelSchedule = async (e) => {
@@ -175,6 +176,20 @@ function RentedCar() {
             <Typography variant="h6" component="div">
                 {Strings.RentedCar.RENTED_CAR_LIST}
             </Typography>
+
+            <Tooltip title={Strings.Common.FILTER}>
+                <FabStyle
+                    color="primary"
+                    size="small"
+                    // onClick={() => setDialogDriverFilter(true)}
+                >
+                    <Badge 
+                    // badgeContent={totalDataFilter} 
+                    color="error">
+                        <FilterAltIcon />
+                    </Badge>
+                </FabStyle>
+            </Tooltip>
 
             <DataGridCustom
                 columns={col(

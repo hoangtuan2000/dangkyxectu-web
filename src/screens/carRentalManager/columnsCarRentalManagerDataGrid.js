@@ -6,11 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../constants/Strings";
 import Constants from "../../constants/Constants";
 
-const col = (
-    handleModalShowSchedule,
-    handleCancelSchedule,
-    handleUpdateSchedulePending
-) => {
+const col = (handleModalShowSchedule) => {
     let columns = [];
     return (columns = [
         {
@@ -27,15 +23,17 @@ const col = (
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <img
-                        src={params.row.imageCar}
-                        alt={params.row.imageCar}
-                        style={{
-                            width: "70px",
-                            borderRadius: "10px",
-                            padding: "3px",
-                        }}
-                    />
+                    <Tooltip title={params.row.type} arrow>
+                        <img
+                            src={params.row.imageCar}
+                            alt={params.row.imageCar}
+                            style={{
+                                width: "70px",
+                                borderRadius: "10px",
+                                padding: "3px",
+                            }}
+                        />
+                    </Tooltip>
                 );
             },
         },
@@ -45,21 +43,22 @@ const col = (
             description: Strings.Common.CAR_TYPE,
             width: 140,
             sortable: false,
-            renderCell: (params) => {
-                return (
-                    <Tooltip title={params.row.type} arrow>
-                        <span
-                            style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}
-                        >
-                            {params.row.type}
-                        </span>
-                    </Tooltip>
-                );
-            },
+            hide: true,
+            // renderCell: (params) => {
+            //     return (
+            //         <Tooltip title={params.row.type} arrow>
+            //             <span
+            //                 style={{
+            //                     whiteSpace: "nowrap",
+            //                     overflow: "hidden",
+            //                     textOverflow: "ellipsis",
+            //                 }}
+            //             >
+            //                 {params.row.type}
+            //             </span>
+            //         </Tooltip>
+            //     );
+            // },
         },
         {
             field: "licensePlates",
@@ -84,15 +83,15 @@ const col = (
             },
         },
         {
-            field: "reason",
-            headerName: Strings.Common.REASON,
-            description: Strings.Common.REASON,
             flex: 1,
-            minWidth: 190,
+            field: "fullName",
+            headerName: Strings.Common.FULL_NAME,
+            description: Strings.Common.FULL_NAME,
+            minWidth: 180,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.reason} arrow>
+                    <Tooltip title={params.row.fullName} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -100,17 +99,86 @@ const col = (
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.reason}
+                            {params.row.fullName}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
+            flex: 1,
+            field: "department",
+            headerName: Strings.Common.DEPARTMENT,
+            description: Strings.Common.DEPARTMENT,
+            minWidth: 180,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.department} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.department}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        // {
+        // flex: 1,
+        //     field: "startLocation",
+        //     headerName: Strings.Common.START_LOCATION,
+        //     description: Strings.Common.START_LOCATION,
+        //     minWidth: 180,
+        //     sortable: false,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Tooltip title={params.row.startLocation} arrow>
+        //                 <span
+        //                     style={{
+        //                         whiteSpace: "nowrap",
+        //                         overflow: "hidden",
+        //                         textOverflow: "ellipsis",
+        //                     }}
+        //                 >
+        //                     {params.row.startLocation}
+        //                 </span>
+        //             </Tooltip>
+        //         );
+        //     },
+        // },
+        // {
+        // flex: 1,
+        //     field: "endLocation",
+        //     headerName: Strings.Common.END_LOCATION,
+        //     description: Strings.Common.END_LOCATION,
+        //     minWidth: 180,
+        //     sortable: false,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Tooltip title={params.row.endLocation} arrow>
+        //                 <span
+        //                     style={{
+        //                         whiteSpace: "nowrap",
+        //                         overflow: "hidden",
+        //                         textOverflow: "ellipsis",
+        //                     }}
+        //                 >
+        //                     {params.row.endLocation}
+        //                 </span>
+        //             </Tooltip>
+        //         );
+        //     },
+        // },
+        {
+            flex: 1,
             field: "destination",
             headerName: Strings.Common.DESTINATION,
             description: Strings.Common.DESTINATION,
-            flex: 1,
             minWidth: 190,
             sortable: false,
             renderCell: (params) => {
@@ -130,14 +198,15 @@ const col = (
             },
         },
         {
-            field: "dateRange",
-            headerName: Strings.Common.TIME,
-            description: Strings.Common.TIME,
-            width: 200,
+            flex: 1,
+            field: "reason",
+            headerName: Strings.Common.REASON,
+            description: Strings.Common.REASON,
+            minWidth: 180,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.dateRange} arrow>
+                    <Tooltip title={params.row.reason} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -145,7 +214,51 @@ const col = (
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.dateRange}
+                            {params.row.reason}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "startDay",
+            headerName: Strings.Common.START_DAY,
+            description: Strings.Common.START_DAY,
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.startDay} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.startDay}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "endDay",
+            headerName: Strings.Common.END_DAY,
+            description: Strings.Common.END_DAY,
+            width: 100,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.endDay} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.endDay}
                         </span>
                     </Tooltip>
                 );
@@ -204,136 +317,21 @@ const col = (
             field: "update",
             headerName: Strings.Common.UPDATE,
             description: Strings.Common.UPDATE,
-            width: 85,
+            Width: 80,
             sortable: false,
             renderCell: (params) => {
-                if (params.row.status == Constants.ScheduleStatus.PENDING) {
-                    return (
-                        <Tooltip title="Cập Nhật" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    handleUpdateSchedulePending(
-                                        params.row.scheduleCode
-                                    );
-                                }}
-                            >
-                                <ModeEditIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                } else if (
+                if (
+                    params.row.status == Constants.ScheduleStatus.PENDING ||
                     params.row.status == Constants.ScheduleStatus.APPROVED
                 ) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    handleModalShowSchedule(
-                                        params.row.scheduleCode
-                                    );
-                                }}
-                            >
+                            <IconButton color="primary">
                                 <ModeEditIcon />
                             </IconButton>
                         </Tooltip>
                     );
-                } else {
-                    return (
-                        <Tooltip title="Xem Chi Tiết" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    handleModalShowSchedule(
-                                        params.row.scheduleCode
-                                    );
-                                }}
-                            >
-                                <VisibilityIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
                 }
-            },
-        },
-        {
-            field: "cancel",
-            headerName: Strings.Common.CANCEL,
-            description: Strings.Common.CANCEL,
-            width: 60,
-            sortable: false,
-            renderCell: (params) => {
-                if (
-                    (params.row.status == Constants.ScheduleStatus.PENDING ||
-                        params.row.status ==
-                            Constants.ScheduleStatus.APPROVED) &&
-                    new Date(
-                        new Date(params.row.cancel * 1000).toDateString()
-                    ) > new Date(new Date().toDateString())
-                ) {
-                    return (
-                        <Tooltip title="Hủy Đăng Ký Xe" arrow>
-                            <IconButton
-                                color="error"
-                                onClick={() => {
-                                    handleCancelSchedule(
-                                        params.row.scheduleCode
-                                    );
-                                }}
-                            >
-                                <DeleteForeverIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                } else {
-                    return "";
-                }
-            },
-        },
-        {
-            field: "review",
-            headerName: Strings.Common.REVIEW,
-            description: Strings.Common.REVIEW,
-            width: 120,
-            sortable: false,
-            renderCell: (params) => {
-                if (params.value) {
-                    return (
-                        params.row.status ==
-                            Constants.ScheduleStatus.COMPLETE && (
-                            <Rating
-                                name="read-only"
-                                defaultValue={params.row.review}
-                                precision={0.1}
-                                readOnly
-                                size="small"
-                            />
-                        )
-                    );
-                }
-            },
-        },
-        {
-            field: "scheduleCode",
-            headerName: Strings.Common.SCHEDULE_CODE,
-            description: Strings.Common.SCHEDULE_CODE,
-            width: 120,
-            sortable: false,
-            renderCell: (params) => {
-                return (
-                    <Tooltip title={params.row.scheduleCode} arrow>
-                        <span
-                            style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}
-                        >
-                            {params.row.scheduleCode}
-                        </span>
-                    </Tooltip>
-                );
             },
         },
     ]);

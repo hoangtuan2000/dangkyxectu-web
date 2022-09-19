@@ -176,6 +176,10 @@ const Strings = {
         CAR_TYPE: "Loại Xe:",
         CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
         CHOOSE_STATUS: "-- Chọn Trạng Thái --",
+        SCHEDULE_CODE: "Mã Lịch Trình:",
+        ENTER_SCHEDULE_CODE: "-- Nhập Mã Lịch Trình --",
+        TIME: "Thời Gian: ",
+        ADDRESS: "Địa Chỉ: ",
     },
 };
 
