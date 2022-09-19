@@ -169,10 +169,13 @@ const Strings = {
         TITLE_LOCATION: "Chọn Địa Chỉ",
     },
     DialogDriverFilter: {
+        TITLE: "Bộ Lọc Lịch Trình",
         CHOOSE_TIME: "-- Chọn Thời Gian --",
         ENTER_LOCATION: "-- Địa Điểm --",
         STATUS: "Trạng Thái:",
         CAR_TYPE: "Loại Xe:",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
+        CHOOSE_STATUS: "-- Chọn Trạng Thái --",
     },
 };
 

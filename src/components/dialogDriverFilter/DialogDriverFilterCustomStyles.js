@@ -1,4 +1,5 @@
 import {
+    Autocomplete,
     Box,
     Button,
     Dialog,
@@ -239,97 +240,6 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
     },
 }));
 
-const TextInput = styled(TextField)(({ theme }) => ({
-    marginTop: 5,
-    ".MuiInputBase-root": {
-        paddingRight: 5,
-    },
-    [theme.breakpoints.up("mobileS")]: {
-        width: 260,
-        ".MuiInputBase-input": {
-            fontSize: 12,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 12,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 15,
-        },
-    },
-    [theme.breakpoints.up("mobileM")]: {
-        width: 320,
-        ".MuiInputBase-input": {
-            fontSize: 12,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 12,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 16,
-        },
-    },
-    [theme.breakpoints.up("mobileL")]: {
-        width: 360,
-        ".MuiInputBase-input": {
-            fontSize: 12,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 12,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 16,
-        },
-    },
-    [theme.breakpoints.up("sm")]: {
-        width: 300,
-        ".MuiInputBase-input": {
-            fontSize: 13,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 18,
-        },
-    },
-    [theme.breakpoints.up("md")]: {
-        width: 410,
-        ".MuiInputBase-input": {
-            fontSize: 13,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 18,
-        },
-    },
-    [theme.breakpoints.up("lg")]: {
-        width: 430,
-        ".MuiInputBase-input": {
-            fontSize: 13,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 19,
-        },
-    },
-    [theme.breakpoints.up("xl")]: {
-        width: 450,
-        ".MuiInputBase-input": {
-            fontSize: 13,
-        },
-        ".MuiFormLabel-root": {
-            fontSize: 13,
-        },
-        ".MuiSvgIcon-root": {
-            fontSize: 19,
-        },
-    },
-}));
-
 const ButtonStyled = styled(Button)(({ theme }) => ({
     // float: "left",
     display: "flex",
@@ -370,13 +280,64 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     },
 }));
 
+const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
+    display: "flex",
+    justifyContent: "space-between",
+    marginLeft: 10,
+    textTransform: "capitalize",
+    color: theme.palette.text.disabled,
+    borderColor: theme.palette.action.disabled,
+    [theme.breakpoints.up("mobileS")]: {
+        width: 230,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 280,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 290,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 400,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 390,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+}));
+
 export {
-    Title,
-    DialogContainer,
-    ButtonFeatures,
+    AutocompleteStyle,
     BoxContent,
-    TextInput,
-    TextStyle,
-    FormGroupStyle,
+    ButtonFeatures,
     ButtonStyled,
+    DialogContainer,
+    FormGroupStyle,
+    TextStyle,
+    Title,
 };

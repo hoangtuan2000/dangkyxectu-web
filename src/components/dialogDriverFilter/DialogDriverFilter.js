@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from "react";
+import { useState, useEffect, forwardRef, useRef } from "react";
 import {
     Box,
     Button,
@@ -6,28 +6,17 @@ import {
     DialogActions,
     DialogContent,
     FormControlLabel,
-    FormGroup,
-    InputAdornment,
-    List,
-    ListItem,
-    ListItemText,
-    Rating,
+    TextField,
     Tooltip,
     useTheme,
 } from "@mui/material";
 import {
+    AutocompleteStyle,
     BoxContent,
-    BoxLeft,
-    BoxRight,
     ButtonFeatures,
     ButtonStyled,
-    CarTypeTitle,
     DialogContainer,
     FormGroupStyle,
-    Img,
-    Text,
-    TextContent,
-    TextInput,
     TextStyle,
     Title,
 } from "./DialogDriverFilterCustomStyles";
@@ -56,10 +45,13 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import ModalShowAddress from "../modalShowAddress/ModalShowAddress";
+import { GlobalService } from "../../services/GlobalServices";
 registerLocale("vi", vi);
 
 function DialogDriverFilter({ open, handleClose }) {
     const theme = useTheme();
+
+    const ModalShowEndAddressRef = useRef(); // use call reset address function
 
     const currentUser = useSelector((state) => state.currentUser.user);
 
@@ -77,6 +69,9 @@ function DialogDriverFilter({ open, handleClose }) {
         endDate: null,
     });
 
+    const [scheduleStatusList, setScheduleStatusList] = useState([]);
+    const [carTypeList, setCarTypeList] = useState([]);
+
     const [showAddress, setShowAddress] = useState();
     const [dataSendApi, setDataSendApi] = useState({
         status: [],
@@ -86,12 +81,18 @@ function DialogDriverFilter({ open, handleClose }) {
         startDate: null,
         endDate: null,
     });
+
     const ButtonDate = forwardRef(({ value, onClick }, ref) => {
         return (
             <Tooltip
                 title={value ? value : Strings.DialogDriverFilter.CHOOSE_TIME}
             >
-                <>
+                <Box
+                    sx={{
+                        position: "relative",
+                        width: "fit-content",
+                    }}
+                >
                     <ButtonStyled
                         onClick={onClick}
                         ref={ref}
@@ -107,9 +108,6 @@ function DialogDriverFilter({ open, handleClose }) {
                                 }}
                             />
                         }
-                        sx={{
-                            position: "relative",
-                        }}
                     >
                         {value ? value : Strings.DialogDriverFilter.CHOOSE_TIME}
                     </ButtonStyled>
@@ -123,20 +121,51 @@ function DialogDriverFilter({ open, handleClose }) {
                                 zIndex: 99999,
                                 position: "absolute",
                                 top: 5,
-                                right: 5,
+                                right: 10,
                                 p: 0,
                                 color: theme.palette.error.dark,
-                                width: "24px !important",
-                                minWidth: 24,
+                                width: "22px !important",
+                                minWidth: 22,
                             }}
                         >
                             <HighlightOffIcon />
                         </Button>
                     )}
-                </>
+                </Box>
             </Tooltip>
         );
     });
+
+    const getCommon = async () => {
+        const res = await GlobalService.getCommon({
+            group: "schedule_status, car_type",
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setCarTypeList(res.data.data.car_type);
+                setScheduleStatusList(res.data.data.schedule_status);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+    };
 
     const handleChangeDate = (dates) => {
         const [start, end] = dates;
@@ -161,47 +190,42 @@ function DialogDriverFilter({ open, handleClose }) {
         });
     };
 
-    const handleCheckStatus = (e, check) => {
-        if (check) {
-            setDataSendApi({
-                ...dataSendApi,
-                status: [...dataSendApi.status, e.target.value],
-            });
-        } else {
-            setDataSendApi({
-                ...dataSendApi,
-                status: [
-                    ...dataSendApi.status.filter((item) => {
-                        if (item != e.target.value) return item;
-                    }),
-                ],
-            });
-        }
+    const handleCheckStatus = (valueArray) => {
+        setDataSendApi({
+            ...dataSendApi,
+            status: [...valueArray],
+        });
     };
 
-    const handleCheckCarType = (e, check) => {
-        if (check) {
-            setDataSendApi({
-                ...dataSendApi,
-                carType: [...dataSendApi.carType, e.target.value],
-            });
-        } else {
-            setDataSendApi({
-                ...dataSendApi,
-                carType: [
-                    ...dataSendApi.carType.filter((item) => {
-                        if (item != e.target.value) return item;
-                    }),
-                ],
-            });
-        }
+    const handleCheckCarType = (valueArray) => {
+        setDataSendApi({
+            ...dataSendApi,
+            carType: [...valueArray],
+        });
     };
 
-    const handleRefreshFilter = () => {};
+    const handleRefreshFilter = () => {
+        setSelectedDates({
+            startDate: null,
+            endDate: null,
+        });
+        setShowAddress();
+        setDataSendApi({
+            status: [],
+            carType: [],
+            startLocation: null,
+            idWardStartLocation: null,
+            startDate: null,
+            endDate: null,
+        });
+        //call function of child component: modalShowEndAdderss
+        //=> reset value in modal choosse end address
+        ModalShowEndAddressRef.current.handleResetAddress();
+    };
 
     const run = async () => {
         await setBackDrop(true);
-        // (await open) && getSchedule();
+        await getCommon();
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -219,41 +243,65 @@ function DialogDriverFilter({ open, handleClose }) {
             fullWidth={true}
         >
             <DialogContent>
-                <Title>Bộ Lọc Lịch Trình</Title>
+                <Title>{Strings.DialogDriverFilter.TITLE}</Title>
                 <BoxContent>
                     <TextStyle>{Strings.DialogDriverFilter.STATUS}</TextStyle>
-                    <FormGroupStyle row>
-                        <FormControlLabel
-                            control={<Checkbox />}
-                            label="Chờ Xác Nhận"
-                            value="Chờ Xác Nhận"
-                            onChange={(e, check) => handleCheckStatus(e, check)}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox />}
-                            label="Đã Duyệt"
-                            value="Đã Duyệt"
-                            onChange={(e, check) => handleCheckStatus(e, check)}
-                        />
-                    </FormGroupStyle>
+                    <AutocompleteStyle
+                        disablePortal={false}
+                        multiple
+                        disableCloseOnSelect
+                        size="small"
+                        sx={{ marginBottom: 1 }}
+                        noOptionsText={Strings.Common.NO_DATA}
+                        options={scheduleStatusList}
+                        getOptionLabel={(option) => `${option.name}`}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                placeholder={
+                                    Strings.DialogDriverFilter.CHOOSE_STATUS
+                                }
+                            />
+                        )}
+                        onChange={(event, newValue) => {
+                            handleCheckStatus(newValue);
+                        }}
+                        value={dataSendApi.status || null}
+                        isOptionEqualToValue={(option, value) =>
+                            option.idScheduleStatus === value.idScheduleStatus
+                        }
+                    />
                 </BoxContent>
 
                 <BoxContent>
                     <TextStyle>{Strings.DialogDriverFilter.CAR_TYPE}</TextStyle>
-                    <FormGroupStyle row>
-                        <FormControlLabel
-                            control={<Checkbox />}
-                            label="4"
-                            value="4"
-                            onChange={(e, check) => handleCheckCarType(e, check)}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox />}
-                            label="16"
-                            value="16"
-                            onChange={(e, check) => handleCheckCarType(e, check)}
-                        />
-                    </FormGroupStyle>
+                    <AutocompleteStyle
+                        disablePortal={false}
+                        multiple
+                        disableCloseOnSelect
+                        size="small"
+                        sx={{ marginBottom: 1 }}
+                        noOptionsText={Strings.Common.NO_DATA}
+                        options={carTypeList}
+                        getOptionLabel={(option) =>
+                            `${option.name} ${option.seatNumber}`
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                placeholder={
+                                    Strings.DialogDriverFilter.CHOOSE_CAR_TYPE
+                                }
+                            />
+                        )}
+                        onChange={(event, newValue) => {
+                            handleCheckCarType(newValue);
+                        }}
+                        value={dataSendApi.carType || null}
+                        isOptionEqualToValue={(option, value) =>
+                            option.idCarType === value.idCarType
+                        }
+                    />
                 </BoxContent>
 
                 <BoxContent>
@@ -268,9 +316,6 @@ function DialogDriverFilter({ open, handleClose }) {
                         customInput={<ButtonDate />}
                         selected={selectedDates.startDate}
                         onChange={handleChangeDate}
-                        // excludeDates={[...disableDateSchedule]}
-                        // selectsDisabledDaysInRange
-                        // minDate={new Date()}
                     />
                 </BoxContent>
 
@@ -285,18 +330,6 @@ function DialogDriverFilter({ open, handleClose }) {
                                     color: theme.palette.primary.main,
                                 }}
                             />
-                        }
-                        sx={
-                            {
-                                // color:
-                                //     (errorData.errorStartLocation ||
-                                //         errorData.idWardStartLocation) &&
-                                //     theme.palette.error.light,
-                                // borderColor:
-                                //     (errorData.errorStartLocation ||
-                                //         errorData.idWardStartLocation) &&
-                                //     theme.palette.error.dark,
-                            }
                         }
                     >
                         <Tooltip
@@ -373,6 +406,7 @@ function DialogDriverFilter({ open, handleClose }) {
                 labelInput={Strings.DialogDriverFilter.ENTER_LOCATION}
                 titleModal={Strings.ModalShowAddress.TITLE_LOCATION}
                 onConfirm={(e) => handleShowStartAddress(e)}
+                ref={ModalShowEndAddressRef}
                 // defaultAddress={defaultStartAddress.address}
                 // defaultProvince={defaultStartAddress.province}
                 // defaultDistrict={defaultStartAddress.district}
