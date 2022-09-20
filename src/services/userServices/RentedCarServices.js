@@ -1,6 +1,6 @@
-import axiosInstance from "../common/axiosConfig";
-import Constants from "../constants/Constants";
-import { store } from "../redux/store";
+import axiosInstance from "../../common/axiosConfig";
+import Constants from "../../constants/Constants";
+import { store } from "../../redux/store";
 
 const RentedCarService = {
     getUserRegisteredScheduleList: async (data) => {

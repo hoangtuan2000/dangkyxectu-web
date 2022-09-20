@@ -85,8 +85,8 @@ const Strings = {
         PHONE: "Số Điện Thoại",
     },
 
-    CarRentalManager: {
-        CAR_RENTAL_LIST: "Danh Sách Yêu Cầu Đăng Ký Xe",
+    CarRegistrationManagement: {
+        LIST_OF_VEHICLE_REGISTRATION: "Danh Sách Đăng Ký Xe",
     },
 
     CarManager: {

@@ -5,7 +5,7 @@ const RoutesPath = {
     RENTAL_CAR: "/home/rental-car",
     RENDTED_CAR: "rented-car",
     UPDATE_SCHEDULE_PENDING: "/rented-car/updateSchedulePending",
-    CAR_RENTAL_MANAGER: "car-rental-manager",
+    CAR_REGISTRATION_MANAGEMENT: "car-registration-management",
     CAR_MANAGER: "car-manager",
     TRIP_MANAGER: "trip-manager",
     DRIVER_MANAGEMENT: "driver-management",

@@ -17,7 +17,6 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Button,
 } from "@mui/material";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -35,7 +34,6 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
-
 import {
     Main,
     AppBar,
@@ -46,11 +44,7 @@ import {
     drawerWidth,
 } from "./MainLayoutCustomStyles";
 import RoutesPath from "../../constants/RoutesPath";
-import {
-    changeCurrentUser,
-    deleteCurrentUser,
-} from "../../redux/currentUserSlice";
-
+import { deleteCurrentUser } from "../../redux/currentUserSlice";
 import { changeOpenDrawer } from "../../redux/globalReduxSlice";
 import BackDrop from "../backDrop/BackDrop";
 import Constants from "../../constants/Constants";
@@ -69,7 +63,7 @@ const DataListItems = [
         role: Constants.Role.USER,
     },
     {
-        path: RoutesPath.CAR_RENTAL_MANAGER,
+        path: RoutesPath.CAR_REGISTRATION_MANAGEMENT,
         icon: <FeedIcon />,
         name: "Quản Lý Đăng Ký",
         role: Constants.Role.ADMIN,
@@ -164,8 +158,10 @@ export default function MainLayout() {
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
 
+            {/* APP BAR */}
             <AppBar position="fixed" open={drawerOpen}>
                 <Toolbar>
+                    {/* ICON MENU*/}
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -176,11 +172,13 @@ export default function MainLayout() {
                         <MenuIcon />
                     </IconButton>
 
+                    {/* LOGO CTU */}
                     <Logo
                         src={LogoCTU}
                         onClick={() => navigate(RoutesPath.HOME)}
                     />
 
+                    {/* TITLE */}
                     <Title
                         variant="h6"
                         noWrap
@@ -192,6 +190,7 @@ export default function MainLayout() {
 
                     <Box sx={{ flexGrow: 1 }} />
 
+                    {/* TEXT SHOW FULL NAME AND CODE USER */}
                     <Box
                         sx={{
                             display: {
@@ -218,6 +217,7 @@ export default function MainLayout() {
                         </Typography>
                     </Box>
 
+                    {/* TOOLTIP ACCOUNT BUTTON */}
                     <Tooltip title="Tài Khoản">
                         <IconButton
                             onClick={handleClick}
@@ -242,6 +242,8 @@ export default function MainLayout() {
                             />
                         </IconButton>
                     </Tooltip>
+
+                    {/* ACCOUNT BUTTON / LOGOUT BUTTON */}
                     <Menu
                         anchorEl={anchorElAvatar}
                         open={openAccount}
@@ -288,6 +290,7 @@ export default function MainLayout() {
                             vertical: "bottom",
                         }}
                     >
+                        {/* LOGOUT */}
                         <MenuItem
                             sx={{
                                 fontSize: {
@@ -314,6 +317,7 @@ export default function MainLayout() {
                 </Toolbar>
             </AppBar>
 
+            {/* DRAWER */}
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -327,7 +331,9 @@ export default function MainLayout() {
                 anchor="left"
                 open={drawerOpen}
             >
+                {/* HEADER OF DRAWER */}
                 <DrawerHeader>
+                    {/* TEXT HEADER DRAWER */}
                     <Typography
                         variant="h6"
                         component="div"
@@ -344,6 +350,7 @@ export default function MainLayout() {
                 </DrawerHeader>
                 <Divider />
 
+                {/* LIST ITEM BUTTON / CHANGE DARK MODE BUTTON*/}
                 <ListFeatures>
                     {DataListItems.map((item, index) => {
                         if (
@@ -392,6 +399,7 @@ export default function MainLayout() {
                 </ListFeatures>
                 <Divider />
 
+                {/* CHANGE DARK MODE BUTTON */}
                 <List>
                     <ListItem key={"Dark mode"} disablePadding>
                         <ListItemButton
@@ -418,6 +426,7 @@ export default function MainLayout() {
                 </List>
             </Drawer>
 
+            {/* VIEW SHOW PAGE */}
             <Main open={drawerOpen}>
                 <DrawerHeader />
                 <Outlet />

@@ -1,13 +1,13 @@
-import axiosInstance from "../common/axiosConfig";
-import Constants from "../constants/Constants";
-import { store } from "../redux/store";
+import axiosInstance from "../../common/axiosConfig";
+import Constants from "../../constants/Constants";
+import { store } from "../../redux/store";
 
-const DialogDriverFilterService = {
-    getSchedule: async (data) => {
+const DriverTripManagerService = {
+    getDriverScheduleList: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogShowSchedule.GET_SCHEDULE, data, {
+            .post(Constants.ApiPath.DriverTripManager.GET_DRIVER_SCHEDULE_LIST, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },
@@ -21,4 +21,4 @@ const DialogDriverFilterService = {
     },
 };
 
-export { DialogDriverFilterService };
+export { DriverTripManagerService };

@@ -9,7 +9,7 @@ import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../../components/backDrop/BackDrop";
 import helper from "../../../common/helper";
 import Constants from "../../../constants/Constants";
-import { DriverTripManagerService } from "../../../services/DriverTripManagerServices";
+import { DriverTripManagerService } from "../../../services/driverServices/DriverTripManagerServices";
 import DialogShowSchedule from "../../../components/dialogShowSchedule/DialogShowSchedule";
 import { FabStyle } from "./DriverTripManagerCustomStyles";
 import DialogDriverTripManagerFilter from "../../../components/driverComponents/dialogDriverTripManagerFilter/DialogDriverTripManagerFilter";

@@ -16,7 +16,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import Strings from "../../constants/Strings";
+import Strings from "../../../constants/Strings";
 
 const data = [
     {

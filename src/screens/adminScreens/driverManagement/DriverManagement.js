@@ -9,8 +9,8 @@ import {
 import React from "react";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
-import Strings from "../../constants/Strings";
+import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../../constants/Strings";
 
 const rowsTest = [
     {

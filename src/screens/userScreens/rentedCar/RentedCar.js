@@ -2,7 +2,7 @@ import React from "react";
 import { Badge, Box, Tooltip, Typography } from "@mui/material";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../../constants/Strings";
-import { RentedCarService } from "../../../services/RentedCarServices";
+import { RentedCarService } from "../../../services/userServices/RentedCarServices";
 import ModalError from "../../../components/modalError/ModalError";
 import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../../components/backDrop/BackDrop";

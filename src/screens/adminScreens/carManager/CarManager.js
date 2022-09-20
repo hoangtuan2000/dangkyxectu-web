@@ -23,8 +23,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Strings from "../../constants/Strings";
-import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../../constants/Strings";
+import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 
 const rowsTest = [
     {

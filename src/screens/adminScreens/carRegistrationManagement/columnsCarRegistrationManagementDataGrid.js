@@ -3,8 +3,8 @@ import { Box, IconButton, Rating, Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Strings from "../../constants/Strings";
-import Constants from "../../constants/Constants";
+import Strings from "../../../constants/Strings";
+import Constants from "../../../constants/Constants";
 
 const col = (handleModalShowSchedule) => {
     let columns = [];

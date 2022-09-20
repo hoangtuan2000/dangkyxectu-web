@@ -11,16 +11,16 @@ import Home from "./screens/home/Home";
 import ProtectRoutesAdmin from "./components/protectRoutesAdmin/ProtectRoutesAdmin";
 import MainLayout from "./components/mainLayout/MainLayout";
 import RentedCar from "./screens/userScreens/rentedCar/RentedCar";
-import CarRentalManager from "./screens/carRentalManager/CarRentalManager";
-import CarManager from "./screens/carManager/CarManager";
-import DriverManagement from "./screens/driverManagement/DriverManagement";
-import Statistical from "./screens/statistical/Statistical";
+import CarRegistrationManagement from "./screens/adminScreens/carRegistrationManagement/CarRegistrationManagement";
+import CarManager from "./screens/adminScreens/carManager/CarManager";
+import DriverManagement from "./screens/adminScreens/driverManagement/DriverManagement";
+import Statistical from "./screens/adminScreens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
 import DriverTripManager from "./screens/driverScreens/driverTripManager/DriverTripManager";
-import TripManager from "./screens/tripManager/TripManager";
+import TripManager from "./screens/adminScreens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
-import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/UpdateSchedulePending"
+import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/UpdateSchedulePending";
 import Constants from "./constants/Constants";
 
 // init AOS library
@@ -55,13 +55,18 @@ function App() {
         <ThemeProvider theme={themeMode}>
             <BrowserRouter>
                 <Routes>
+                    {/* ROUTE LOGIN */}
                     <Route path={RoutesPath.LOGIN} element={<Login />} />
+
+                    {/* ROUTE PROTECT */}
                     <Route path={RoutesPath.INDEX}>
                         <Route element={<ProtectRoutesAdmin />}>
+                            {/* ROUTE MAIN LAYOUT */}
                             <Route
                                 path={RoutesPath.INDEX}
                                 element={<MainLayout />}
                             >
+                                {/* ROUTE ADMIN AND USER */}
                                 {currentUser.role != Constants.Role.DRIVER && (
                                     <>
                                         <Route
@@ -78,6 +83,7 @@ function App() {
                                     </>
                                 )}
 
+                                {/* ROUTE USER */}
                                 {currentUser.role == Constants.Role.USER && (
                                     <>
                                         <Route
@@ -94,11 +100,16 @@ function App() {
                                     </>
                                 )}
 
+                                {/* ROUTE ADMIN */}
                                 {currentUser.role == Constants.Role.ADMIN && (
                                     <>
                                         <Route
-                                            path={RoutesPath.CAR_RENTAL_MANAGER}
-                                            element={<CarRentalManager />}
+                                            path={
+                                                RoutesPath.CAR_REGISTRATION_MANAGEMENT
+                                            }
+                                            element={
+                                                <CarRegistrationManagement />
+                                            }
                                         />
                                         <Route
                                             path={RoutesPath.CAR_MANAGER}
@@ -119,6 +130,7 @@ function App() {
                                     </>
                                 )}
 
+                                {/* ROUTE DRIVER */}
                                 {currentUser.role == Constants.Role.DRIVER && (
                                     <Route
                                         path={RoutesPath.HOME}
@@ -126,6 +138,8 @@ function App() {
                                     />
                                 )}
                             </Route>
+
+                            {/* ROUTE NOT PAGE */}
                             <Route path="*" element={<NoPage />} />
                         </Route>
                     </Route>
