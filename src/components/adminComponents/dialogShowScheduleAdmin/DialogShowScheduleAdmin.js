@@ -3,7 +3,6 @@ import {
     Box,
     DialogActions,
     DialogContent,
-    List,
     ListItem,
     ListItemText,
     Tooltip,
@@ -19,7 +18,7 @@ import {
     ListStyle,
     TextContent,
     Title,
-} from "./DialogShowScheduleDriverCustomStyles";
+} from "./DialogShowScheduleAdminCustomStyles";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
@@ -29,14 +28,14 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import Constants from "../../../constants/Constants";
-import { DialogShowScheduleDriverServices } from "../../../services/driverServices/DialogShowScheduleDriverServices";
+import { DialogShowScheduleAdminServices } from "../../../services/adminServices/DialogShowScheduleAdminServices";
 import helper from "../../../common/helper";
 
-function DialogShowScheduleDriver({
+function DialogShowScheduleAdmin({
     open,
     handleClose,
     idSchedule,
@@ -55,7 +54,7 @@ function DialogShowScheduleDriver({
     const [schedule, setSchedule] = useState([]);
 
     const getSchedule = async () => {
-        const res = await DialogShowScheduleDriverServices.getSchedule({
+        const res = await DialogShowScheduleAdminServices.getSchedule({
             idSchedule: idSchedule,
         });
         // axios success
@@ -167,7 +166,7 @@ function DialogShowScheduleDriver({
                                             >
                                                 {
                                                     Strings
-                                                        .DialogShowScheduleDriver
+                                                        .DialogShowScheduleAdmin
                                                         .LICENSE_PLATES
                                                 }
                                                 <Tooltip
@@ -187,7 +186,7 @@ function DialogShowScheduleDriver({
                                             >
                                                 {
                                                     Strings
-                                                        .DialogShowScheduleDriver
+                                                        .DialogShowScheduleAdmin
                                                         .CAR_BRAND
                                                 }
                                                 <Tooltip
@@ -205,7 +204,7 @@ function DialogShowScheduleDriver({
                                             >
                                                 {
                                                     Strings
-                                                        .DialogShowScheduleDriver
+                                                        .DialogShowScheduleAdmin
                                                         .CAR_STATUS
                                                 }
                                                 <Tooltip
@@ -233,7 +232,7 @@ function DialogShowScheduleDriver({
                                             component="div"
                                         >
                                             {
-                                                Strings.DialogShowScheduleDriver
+                                                Strings.DialogShowScheduleAdmin
                                                     .TIME
                                             }
                                             <Tooltip
@@ -248,42 +247,13 @@ function DialogShowScheduleDriver({
                                             </Tooltip>
                                         </TextContent>
 
-                                        {/* INFO DRIVER */}
-                                        <TextContent
-                                            variant="p"
-                                            component="div"
-                                        >
-                                            {
-                                                Strings.DialogShowScheduleDriver
-                                                    .DRIVER
-                                            }
-                                            <Tooltip
-                                                title={
-                                                    item.fullNameDriver &&
-                                                    item.phoneDriver
-                                                        ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
-                                                        : Strings.Common
-                                                              .UPDATING
-                                                }
-                                                arrow
-                                            >
-                                                <span>
-                                                    {item.fullNameDriver &&
-                                                    item.phoneDriver
-                                                        ? `${item.fullNameDriver} (SĐT: ${item.phoneDriver})`
-                                                        : Strings.Common
-                                                              .UPDATING}
-                                                </span>
-                                            </Tooltip>
-                                        </TextContent>
-
                                         {/* STATUS SCHEDULE */}
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
                                             {
-                                                Strings.DialogShowScheduleDriver
+                                                Strings.DialogShowScheduleAdmin
                                                     .SCHEDULE_STATUS
                                             }
                                             <Tooltip
@@ -301,6 +271,107 @@ function DialogShowScheduleDriver({
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* INFO DRIVER */}
+                                        <Box>
+                                            <TextContent
+                                                variant="p"
+                                                component="div"
+                                            >
+                                                {
+                                                    Strings
+                                                        .DialogShowScheduleAdmin
+                                                        .DRIVER
+                                                }
+                                                {!item.fullNameDriver && (
+                                                    <Tooltip
+                                                        title={
+                                                            Strings.Common
+                                                                .UPDATING
+                                                        }
+                                                        arrow
+                                                    >
+                                                        <span>
+                                                            {
+                                                                Strings.Common
+                                                                    .UPDATING
+                                                            }
+                                                        </span>
+                                                    </Tooltip>
+                                                )}
+                                            </TextContent>
+
+                                            {/* LIST INFO DRIVER */}
+                                            {item.fullNameDriver && (
+                                                <ListStyle>
+                                                    {/* FULL NAME DRIVER */}
+                                                    <ListItem>
+                                                        <PersonIcon />
+                                                        <Tooltip
+                                                            title={
+                                                                item.fullNameDriver
+                                                            }
+                                                            arrow
+                                                        >
+                                                            <ListItemText
+                                                                primary={
+                                                                    Strings
+                                                                        .DialogShowScheduleAdmin
+                                                                        .FULL_NAME
+                                                                }
+                                                                secondary={
+                                                                    item.fullNameDriver
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    </ListItem>
+
+                                                    {/* PHONE DRIVER */}
+                                                    <ListItem>
+                                                        <LocalPhoneIcon />
+                                                        <Tooltip
+                                                            title={
+                                                                item.phoneDriver
+                                                            }
+                                                            arrow
+                                                        >
+                                                            <ListItemText
+                                                                primary={
+                                                                    Strings
+                                                                        .DialogShowScheduleAdmin
+                                                                        .PHONE
+                                                                }
+                                                                secondary={
+                                                                    item.phoneDriver
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    </ListItem>
+
+                                                    {/* EMAIL DRIVER */}
+                                                    <ListItem>
+                                                        <EmailIcon />
+                                                        <Tooltip
+                                                            title={
+                                                                item.emailDriver
+                                                            }
+                                                            arrow
+                                                        >
+                                                            <ListItemText
+                                                                primary={
+                                                                    Strings
+                                                                        .DialogShowScheduleAdmin
+                                                                        .EMAIL
+                                                                }
+                                                                secondary={
+                                                                    item.emailDriver
+                                                                }
+                                                            />
+                                                        </Tooltip>
+                                                    </ListItem>
+                                                </ListStyle>
+                                            )}
+                                        </Box>
+
                                         {/* INFO USER */}
                                         <Box>
                                             {/* TITLE */}
@@ -310,7 +381,7 @@ function DialogShowScheduleDriver({
                                             >
                                                 {
                                                     Strings
-                                                        .DialogShowScheduleDriver
+                                                        .DialogShowScheduleAdmin
                                                         .INFO_SUBSCRIBERS
                                                 }
                                             </TextContent>
@@ -329,8 +400,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                    .DialogShowScheduleDriver
-                                                                    .FULL_NAME_USER
+                                                                    .DialogShowScheduleAdmin
+                                                                    .FULL_NAME
                                                             }
                                                             secondary={
                                                                 item.fullNameUser
@@ -349,8 +420,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                    .DialogShowScheduleDriver
-                                                                    .PHONE_USER
+                                                                    .DialogShowScheduleAdmin
+                                                                    .PHONE
                                                             }
                                                             secondary={
                                                                 item.phoneUser
@@ -369,8 +440,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                    .DialogShowScheduleDriver
-                                                                    .EMAIL_USER
+                                                                    .DialogShowScheduleAdmin
+                                                                    .EMAIL
                                                             }
                                                             secondary={
                                                                 item.emailUser
@@ -390,7 +461,7 @@ function DialogShowScheduleDriver({
                                             >
                                                 {
                                                     Strings
-                                                        .DialogShowScheduleDriver
+                                                        .DialogShowScheduleAdmin
                                                         .SCHEDULE
                                                 }
                                             </TextContent>
@@ -407,7 +478,7 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                    .DialogShowScheduleDriver
+                                                                    .DialogShowScheduleAdmin
                                                                     .NOTE
                                                             }
                                                             secondary={
@@ -427,7 +498,7 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                    .DialogShowScheduleDriver
+                                                                    .DialogShowScheduleAdmin
                                                                     .CAR_RENTAL_REASON
                                                             }
                                                             secondary={
@@ -447,8 +518,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                .DialogShowScheduleDriver
-                                                                .START_LOCATION
+                                                                    .DialogShowScheduleAdmin
+                                                                    .START_LOCATION
                                                             }
                                                             secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
                                                         />
@@ -465,8 +536,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                .DialogShowScheduleDriver
-                                                                .END_LOCATION
+                                                                    .DialogShowScheduleAdmin
+                                                                    .END_LOCATION
                                                             }
                                                             secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
                                                         />
@@ -485,7 +556,6 @@ function DialogShowScheduleDriver({
                                 sx={{
                                     display: "flex",
                                     justifyContent: "flex-end",
-                                    marginTop: 4,
                                 }}
                             >
                                 {/* EXIT BUTTON */}
@@ -523,4 +593,4 @@ function DialogShowScheduleDriver({
     );
 }
 
-export default DialogShowScheduleDriver;
+export default DialogShowScheduleAdmin;

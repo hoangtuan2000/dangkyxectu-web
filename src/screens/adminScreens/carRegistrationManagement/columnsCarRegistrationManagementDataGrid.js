@@ -362,9 +362,9 @@ const col = (handleModalShowSchedule) => {
                             <IconButton
                                 color="primary"
                                 onClick={() => {
-                                    // handleModalShowSchedule(
-                                    //     params.row.scheduleCode
-                                    // );
+                                    handleModalShowSchedule(
+                                        params.row.scheduleCode
+                                    );
                                 }}
                             >
                                 <VisibilityIcon />

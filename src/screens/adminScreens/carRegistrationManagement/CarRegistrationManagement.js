@@ -11,6 +11,7 @@ import { CarRegistrationManagementService } from "../../../services/adminService
 import helper from "../../../common/helper";
 import { FabStyle } from "./CarRegistrationManagementCustomStyles";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import DialogShowScheduleAdmin from "../../../components/adminComponents/dialogShowScheduleAdmin/DialogShowScheduleAdmin";
 
 function CarRegistrationManagement() {
     const theme = useTheme();
@@ -24,7 +25,10 @@ function CarRegistrationManagement() {
     });
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
-    const [dialogCarRegistrationManagementFilter, setDialogCarRegistrationManagementFilter] = useState(false);
+    const [
+        dialogCarRegistrationManagementFilter,
+        setDialogCarRegistrationManagementFilter,
+    ] = useState(false);
     const [dataFilter, setDataFilter] = useState({
         status: [],
         carType: [],
@@ -35,6 +39,10 @@ function CarRegistrationManagement() {
         province: null,
         startDate: null,
         endDate: null,
+    });
+    const [dialogShowScheduleAdmin, setDialogShowScheduleAdmin] = useState({
+        open: false,
+        idSchedule: null,
     });
 
     const [scheduleList, setScheduleList] = useState([]);
@@ -130,6 +138,13 @@ function CarRegistrationManagement() {
                 content: res.name || null,
             });
         }
+    };
+
+    const handleOpenDialogSchedule = (e) => {
+        setDialogShowScheduleAdmin({
+            open: true,
+            idSchedule: e,
+        });
     };
 
     const handleChangePage = async (e) => {
@@ -277,7 +292,9 @@ function CarRegistrationManagement() {
                 <FabStyle
                     color="primary"
                     size="small"
-                    onClick={() => setDialogCarRegistrationManagementFilter(true)}
+                    onClick={() =>
+                        setDialogCarRegistrationManagementFilter(true)
+                    }
                 >
                     <Badge badgeContent={totalDataFilter} color="error">
                         <FilterAltIcon />
@@ -286,7 +303,9 @@ function CarRegistrationManagement() {
             </Tooltip>
 
             <DataGridCustom
-                columns={col()}
+                columns={col((e) => {
+                    handleOpenDialogSchedule(e);
+                })}
                 rows={scheduleList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -295,6 +314,18 @@ function CarRegistrationManagement() {
                 onChangeRowsPerPage={(e) => {
                     handleChangeRowsPerPage(e);
                 }}
+            />
+
+            <DialogShowScheduleAdmin
+                open={dialogShowScheduleAdmin.open}
+                handleClose={() =>
+                    setDialogShowScheduleAdmin({
+                        ...dialogShowScheduleAdmin,
+                        open: false,
+                    })
+                }
+                idSchedule={dialogShowScheduleAdmin.idSchedule}
+                titleDialog={Strings.Common.INFO_SCHEDULE}
             />
 
             {/* <DialogRentedCarFilter

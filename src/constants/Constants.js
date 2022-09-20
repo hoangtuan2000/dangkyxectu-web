@@ -50,6 +50,9 @@ const Constants = {
         DialogShowScheduleDriver: {
             GET_SCHEDULE: "/getSchedule",
         },
+        DialogShowScheduleAdmin: {
+            GET_SCHEDULE: "/getSchedule",
+        },
     },
 
     Styled: {
@@ -87,6 +90,13 @@ const Constants = {
             COMPLETE: "white",
             CANCELLED: "white",
             REFUSE: "white",
+        },
+        TextNoBackground: {
+            PENDING: "#ffcffb",
+            APPROVED: "green",
+            COMPLETE: "Blue",
+            CANCELLED: "gray",
+            REFUSE: "red",
         },
         Background: {
             PENDING: "#ffcffb",
