@@ -10,11 +10,11 @@ import Constants from "../../../constants/Constants";
 import { useState, useEffect } from "react";
 import helper from "../../../common/helper";
 import col from "./columnsRentedCarDataGrid";
-import DialogShowSchedule from "../../../components/dialogShowSchedule/DialogShowSchedule";
+import DialogShowScheduleUser from "../../../components/userComponents/dialogShowScheduleUser/DialogShowScheduleUser";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../../constants/RoutesPath";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { FabStyle } from "./rentedCarCustomStyles";
+import { FabStyle } from "./RentedCarCustomStyles";
 import DialogRentedCarFilter from "../../../components/userComponents/dialogRentedCarFilter/DialogRentedCarFilter";
 
 function RentedCar() {
@@ -30,7 +30,7 @@ function RentedCar() {
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogRentedCarFilter, setDialogRentedCarFilter] = useState(false);
-    const [dialogShowSchedule, setDialogShowSchedule] = useState({
+    const [dialogShowScheduleUser, setDialogShowScheduleUser] = useState({
         open: false,
         idSchedule: null,
     });
@@ -167,7 +167,7 @@ function RentedCar() {
     };
 
     const handleOpenDialogSchedule = (e) => {
-        setDialogShowSchedule({
+        setDialogShowScheduleUser({
             open: true,
             idSchedule: e,
         });
@@ -371,15 +371,15 @@ function RentedCar() {
                 }}
             />
 
-            <DialogShowSchedule
-                open={dialogShowSchedule.open}
+            <DialogShowScheduleUser
+                open={dialogShowScheduleUser.open}
                 handleClose={() =>
-                    setDialogShowSchedule({
-                        ...dialogShowSchedule,
+                    setDialogShowScheduleUser({
+                        ...dialogShowScheduleUser,
                         open: false,
                     })
                 }
-                idSchedule={dialogShowSchedule.idSchedule}
+                idSchedule={dialogShowScheduleUser.idSchedule}
                 titleDialog={Strings.Common.UPDATE_SCHEDULE}
             />
 

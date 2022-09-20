@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Dialog,
+    List,
     styled,
     TextField,
     Typography,
@@ -12,7 +13,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "100%",
-                maxWidth: "310px !important", 
+                maxWidth: "310px !important",
                 margin: 0,
             },
         },
@@ -22,7 +23,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "368px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -31,7 +32,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "410px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -40,7 +41,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "600px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -49,7 +50,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "700px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -58,7 +59,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "800px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -67,7 +68,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
             "& .MuiPaper-root": {
                 width: "100%",
                 maxWidth: "900px !important",
-                margin: 0, 
+                margin: 0,
             },
         },
     },
@@ -366,6 +367,61 @@ const TextInput = styled(TextField)(({ theme }) => ({
     },
 }));
 
+const ListStyle = styled(List)(({ theme }) => ({
+    width: "100%",
+    bgcolor: "background.paper",
+    padding: "0px",
+    marginLeft: 15,
+    ".MuiListItem-root": {
+        padding: "0px",
+    },
+    ".MuiSvgIcon-root": {
+        color: theme.palette.primary.main,
+        marginRight: 5,
+        [theme.breakpoints.up("mobileS")]: {
+            fontSize: 15,
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: 16,
+        },
+        [theme.breakpoints.up("md")]: {
+            fontSize: 18,
+        },
+    },
+    ".MuiTypography-body1": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        fontWeight: "bold",
+        color: theme.palette.primary.main,
+        [theme.breakpoints.up("mobileS")]: {
+            whiteSpace: "normal",
+            fontSize: 12,
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: 13,
+        },
+        [theme.breakpoints.up("md")]: {
+            whiteSpace: "nowrap",
+            fontSize: 13,
+        },
+    },
+    ".MuiTypography-body2": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        [theme.breakpoints.up("mobileS")]: {
+            whiteSpace: "normal",
+            fontSize: 12,
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: 13,
+        },
+        [theme.breakpoints.up("md")]: {
+            whiteSpace: "nowrap",
+            fontSize: 14,
+        },
+    },
+}));
+
 export {
     Title,
     DialogContainer,
@@ -376,4 +432,5 @@ export {
     CarTypeTitle,
     TextContent,
     TextInput,
+    ListStyle,
 };

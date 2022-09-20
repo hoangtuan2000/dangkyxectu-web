@@ -10,7 +10,7 @@ import BackDrop from "../../../components/backDrop/BackDrop";
 import helper from "../../../common/helper";
 import Constants from "../../../constants/Constants";
 import { DriverTripManagerService } from "../../../services/driverServices/DriverTripManagerServices";
-import DialogShowSchedule from "../../../components/dialogShowSchedule/DialogShowSchedule";
+import DialogShowScheduleDriver from "../../../components/driverComponents/dialogShowScheduleDriver/DialogShowScheduleDriver";
 import { FabStyle } from "./DriverTripManagerCustomStyles";
 import DialogDriverTripManagerFilter from "../../../components/driverComponents/dialogDriverTripManagerFilter/DialogDriverTripManagerFilter";
 
@@ -23,7 +23,7 @@ function DriverTripManager() {
         content: null,
     });
 
-    const [dialogShowSchedule, setDialogShowSchedule] = useState({
+    const [dialogShowScheduleDriver, setDialogShowScheduleDriver] = useState({
         open: false,
         idSchedule: null,
     });
@@ -128,7 +128,7 @@ function DriverTripManager() {
     };
 
     const handleOpenDialogSchedule = (e) => {
-        setDialogShowSchedule({
+        setDialogShowScheduleDriver({
             open: true,
             idSchedule: e,
         });
@@ -317,15 +317,15 @@ function DriverTripManager() {
                 handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
-            <DialogShowSchedule
-                open={dialogShowSchedule.open}
+            <DialogShowScheduleDriver
+                open={dialogShowScheduleDriver.open}
                 handleClose={() =>
-                    setDialogShowSchedule({
-                        ...dialogShowSchedule,
+                    setDialogShowScheduleDriver({
+                        ...dialogShowScheduleDriver,
                         open: false,
                     })
                 }
-                idSchedule={dialogShowSchedule.idSchedule}
+                idSchedule={dialogShowScheduleDriver.idSchedule}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
             />
 

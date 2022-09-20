@@ -91,7 +91,10 @@ const col = (handleModalShowSchedule) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.fullName} arrow>
+                    <Tooltip
+                        title={`${params.row.fullName} - ${params.row.faculty}`}
+                        arrow
+                    >
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -107,14 +110,15 @@ const col = (handleModalShowSchedule) => {
         },
         {
             flex: 1,
-            field: "department",
-            headerName: Strings.Common.DEPARTMENT,
-            description: Strings.Common.DEPARTMENT,
+            field: "faculty",
+            headerName: Strings.Common.FACULTY,
+            description: Strings.Common.FACULTY,
             minWidth: 180,
             sortable: false,
+            hide: true,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.department} arrow>
+                    <Tooltip title={params.row.faculty} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -122,7 +126,7 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.department}
+                            {params.row.faculty}
                         </span>
                     </Tooltip>
                 );
@@ -221,14 +225,14 @@ const col = (handleModalShowSchedule) => {
             },
         },
         {
-            field: "startDay",
-            headerName: Strings.Common.START_DAY,
-            description: Strings.Common.START_DAY,
+            field: "startDate",
+            headerName: Strings.Common.START_DATE,
+            description: Strings.Common.START_DATE,
             width: 100,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.startDay} arrow>
+                    <Tooltip title={params.row.startDate} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -236,21 +240,21 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.startDay}
+                            {params.row.startDate}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
-            field: "endDay",
-            headerName: Strings.Common.END_DAY,
-            description: Strings.Common.END_DAY,
+            field: "endDate",
+            headerName: Strings.Common.END_DATE,
+            description: Strings.Common.END_DATE,
             width: 100,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.endDay} arrow>
+                    <Tooltip title={params.row.endDate} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -258,7 +262,7 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.endDay}
+                            {params.row.endDate}
                         </span>
                     </Tooltip>
                 );
@@ -317,21 +321,102 @@ const col = (handleModalShowSchedule) => {
             field: "update",
             headerName: Strings.Common.UPDATE,
             description: Strings.Common.UPDATE,
-            Width: 80,
+            width: 85,
             sortable: false,
             renderCell: (params) => {
-                if (
-                    params.row.status == Constants.ScheduleStatus.PENDING ||
-                    params.row.status == Constants.ScheduleStatus.APPROVED
-                ) {
+                if (params.row.status == Constants.ScheduleStatus.PENDING) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
-                            <IconButton color="primary">
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    // handleUpdateSchedulePending(
+                                    //     params.row.scheduleCode
+                                    // );
+                                }}
+                            >
                                 <ModeEditIcon />
                             </IconButton>
                         </Tooltip>
                     );
+                } else if (
+                    params.row.status == Constants.ScheduleStatus.APPROVED
+                ) {
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    // handleModalShowSchedule(
+                                    //     params.row.scheduleCode
+                                    // );
+                                }}
+                            >
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                } else {
+                    return (
+                        <Tooltip title="Xem Chi Tiết" arrow>
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    // handleModalShowSchedule(
+                                    //     params.row.scheduleCode
+                                    // );
+                                }}
+                            >
+                                <VisibilityIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
                 }
+            },
+        },
+        {
+            field: "review",
+            headerName: Strings.Common.REVIEW,
+            description: Strings.Common.REVIEW,
+            width: 120,
+            sortable: false,
+            renderCell: (params) => {
+                if (params.value) {
+                    return (
+                        params.row.status ==
+                            Constants.ScheduleStatus.COMPLETE && (
+                            <Rating
+                                name="read-only"
+                                defaultValue={params.row.review}
+                                precision={0.1}
+                                readOnly
+                                size="small"
+                            />
+                        )
+                    );
+                }
+            },
+        },
+        {
+            field: "scheduleCode",
+            headerName: Strings.Common.SCHEDULE_CODE,
+            description: Strings.Common.SCHEDULE_CODE,
+            width: 120,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.scheduleCode} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.scheduleCode}
+                        </span>
+                    </Tooltip>
+                );
             },
         },
     ]);

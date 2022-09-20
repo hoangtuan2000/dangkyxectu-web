@@ -1,13 +1,13 @@
-import axiosInstance from "../common/axiosConfig";
-import Constants from "../constants/Constants";
-import { store } from "../redux/store";
+import axiosInstance from "../../common/axiosConfig";
+import Constants from "../../constants/Constants";
+import { store } from "../../redux/store";
 
-const DialogShowScheduleService = {
+const DialogShowScheduleUserServices = {
     getSchedule: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogShowSchedule.GET_SCHEDULE, data, {
+            .post(Constants.ApiPath.DialogShowScheduleUser.GET_SCHEDULE, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },
@@ -24,7 +24,7 @@ const DialogShowScheduleService = {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogShowSchedule.CREATE_OR_UPDATE_REVIEW, data, {
+            .post(Constants.ApiPath.DialogShowScheduleUser.CREATE_OR_UPDATE_REVIEW, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },
@@ -41,7 +41,7 @@ const DialogShowScheduleService = {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogShowSchedule.UPDATE_SCHEDULE_APPROVED, data, {
+            .post(Constants.ApiPath.DialogShowScheduleUser.UPDATE_SCHEDULE_APPROVED, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },
@@ -55,4 +55,4 @@ const DialogShowScheduleService = {
     },
 };
 
-export { DialogShowScheduleService };
+export { DialogShowScheduleUserServices };

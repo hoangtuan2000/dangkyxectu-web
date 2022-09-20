@@ -18,10 +18,11 @@ import {
     CarTypeTitle,
     DialogContainer,
     Img,
+    ListStyle,
     TextContent,
     TextInput,
     Title,
-} from "./DialogShowScheduleCustomStyles";
+} from "./DialogShowScheduleUserCustomStyles";
 import CreateIcon from "@mui/icons-material/Create";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -29,19 +30,21 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import Strings from "../../constants/Strings";
-import ModalError from "../modalError/ModalError";
-import ModalSuccess from "../modalSuccess/ModalSuccess";
-import BackDrop from "../backDrop/BackDrop";
-import Constants from "../../constants/Constants";
-import { DialogShowScheduleService } from "../../services/DialogShowScheduleServices";
-import helper from "../../common/helper";
-import { useSelector } from "react-redux";
+import Strings from "../../../constants/Strings";
+import ModalError from "../../modalError/ModalError";
+import ModalSuccess from "../../modalSuccess/ModalSuccess";
+import BackDrop from "../../backDrop/BackDrop";
+import Constants from "../../../constants/Constants";
+import { DialogShowScheduleUserServices } from "../../../services/userServices/DialogShowScheduleUserServices";
+import helper from "../../../common/helper";
 
-function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
+function DialogShowScheduleUser({
+    open,
+    handleClose,
+    idSchedule,
+    titleDialog,
+}) {
     const theme = useTheme();
-
-    const currentUser = useSelector((state) => state.currentUser.user);
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -61,7 +64,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
     });
 
     const getSchedule = async () => {
-        const res = await DialogShowScheduleService.getSchedule({
+        const res = await DialogShowScheduleUserServices.getSchedule({
             idSchedule: idSchedule,
         });
         // axios success
@@ -129,7 +132,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
             schedule.length > 0 &&
             schedule[0].scheduleStatus == Constants.ScheduleStatus.COMPLETE
         ) {
-            res = await DialogShowScheduleService.createOrUpdateReview({
+            res = await DialogShowScheduleUserServices.createOrUpdateReview({
                 idReview: dataSendApi.idReview,
                 idSchedule: dataSendApi.idSchedule,
                 comment: dataSendApi.comment,
@@ -139,7 +142,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
             schedule.length > 0 &&
             schedule[0].scheduleStatus == Constants.ScheduleStatus.APPROVED
         ) {
-            res = await DialogShowScheduleService.updateScheduleApproved({
+            res = await DialogShowScheduleUserServices.updateScheduleApproved({
                 idSchedule: dataSendApi.idSchedule,
                 phoneUser: dataSendApi.phoneUser,
             });
@@ -199,19 +202,23 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                 );
                 return (
                     <Box key={item.idSchedule}>
+                        {/* CONTENT */}
                         <DialogContent>
                             <Box>
+                                {/* TITLE */}
                                 <Title>
-                                    {titleDialog} (Số:{" "}
-                                    {item.idSchedule})
+                                    {titleDialog} (Số: {item.idSchedule})
                                 </Title>
 
                                 <Box>
+                                    {/* IMAGE CAR */}
                                     <BoxLeft>
                                         <Img src={item.image} />
                                     </BoxLeft>
 
+                                    {/* BOX CONTENT */}
                                     <BoxRight>
+                                        {/* SEAT NUMBER OF CAR */}
                                         <CarTypeTitle
                                             variant="p"
                                             component="div"
@@ -219,6 +226,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             {`${item.carType} ${item.seatNumber} Chổ`}
                                         </CarTypeTitle>
 
+                                        {/* LICENSEPLATES */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -234,6 +242,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* CAR BRAND */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -247,6 +256,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* INFO USER */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -272,6 +282,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* INFO DRIVER */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -297,6 +308,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* DATE */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -314,10 +326,9 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* RATING AND COMMENT */}
                                         {item.scheduleStatus ==
-                                            Constants.ScheduleStatus.COMPLETE &&
-                                        currentUser.role ==
-                                            Constants.Role.USER ? (
+                                        Constants.ScheduleStatus.COMPLETE ? (
                                             <Box>
                                                 <TextContent
                                                     variant="p"
@@ -389,11 +400,10 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                                 />
                                             </Box>
                                         ) : (
+                                            // PHONE NUMBER
                                             item.scheduleStatus ==
                                                 Constants.ScheduleStatus
-                                                    .APPROVED &&
-                                            currentUser.role ==
-                                                Constants.Role.USER && (
+                                                    .APPROVED && (
                                                 <Box>
                                                     <TextInput
                                                         placeholder={
@@ -442,133 +452,73 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                         )}
                                     </BoxRight>
 
+                                    {/* BOX INFO LOCATION */}
                                     <Box sx={{ clear: "both" }}></Box>
                                     <Box>
+                                        {/* TITLE */}
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
                                             {Strings.RentedCar.SCHEDULE}
                                         </TextContent>
-                                        <List
-                                            sx={{
-                                                width: "100%",
-                                                bgcolor: "background.paper",
-                                                padding: "0px",
-                                            }}
-                                        >
-                                            <ListItem
-                                                sx={{
-                                                    padding: "0px",
-                                                }}
-                                            >
-                                                <CreateIcon
-                                                    color="primary"
-                                                    fontSize="small"
-                                                    sx={{
-                                                        marginRight: "5px",
-                                                    }}
-                                                />
-                                                <ListItemText
-                                                    primary={
-                                                        "Mục Đích Sử Dụng Xe: "
-                                                    }
-                                                    secondary={item.reason}
-                                                    primaryTypographyProps={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "bold",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        color: theme.palette
-                                                            .primary.main,
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        fontSize: "12px",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                    }}
-                                                />
+
+                                        {/* LIST LOCATION */}
+                                        <ListStyle>
+                                            {/* REASON */}
+                                            <ListItem>
+                                                <CreateIcon />
+                                                <Tooltip
+                                                    title={item.reason}
+                                                    arrow
+                                                >
+                                                    <ListItemText
+                                                        primary={
+                                                            "Mục Đích Sử Dụng Xe: "
+                                                        }
+                                                        secondary={item.reason}
+                                                    />
+                                                </Tooltip>
                                             </ListItem>
 
-                                            <ListItem
-                                                sx={{
-                                                    padding: "0px",
-                                                }}
-                                            >
-                                                <NearMeIcon
-                                                    color="primary"
-                                                    fontSize="small"
-                                                    sx={{
-                                                        marginRight: "5px",
-                                                    }}
-                                                />
-                                                <ListItemText
-                                                    primary={"Điểm xuất phát:"}
-                                                    secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
-                                                    primaryTypographyProps={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "bold",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        color: theme.palette
-                                                            .primary.main,
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        fontSize: "12px",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                    }}
-                                                />
+                                            {/* START LOCATION */}
+                                            <ListItem>
+                                                <NearMeIcon />
+                                                <Tooltip
+                                                    title={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
+                                                    arrow
+                                                >
+                                                    <ListItemText
+                                                        primary={
+                                                            "Điểm xuất phát:"
+                                                        }
+                                                        secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
+                                                    />
+                                                </Tooltip>
                                             </ListItem>
 
-                                            <ListItem
-                                                sx={{
-                                                    padding: "0px",
-                                                }}
-                                            >
-                                                <LocationOnIcon
-                                                    color="primary"
-                                                    fontSize="small"
-                                                    sx={{
-                                                        marginRight: "5px",
-                                                    }}
-                                                />
-                                                <ListItemText
-                                                    primary={"Điểm kết thúc:"}
-                                                    secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
-                                                    primaryTypographyProps={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "bold",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        color: theme.palette
-                                                            .primary.main,
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        fontSize: "12px",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                    }}
-                                                />
+                                            {/* END LOCATION */}
+                                            <ListItem>
+                                                <LocationOnIcon />
+                                                <Tooltip
+                                                    title={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
+                                                    arrow
+                                                >
+                                                    <ListItemText
+                                                        primary={
+                                                            "Điểm kết thúc:"
+                                                        }
+                                                        secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
+                                                    />
+                                                </Tooltip>
                                             </ListItem>
-                                        </List>
+                                        </ListStyle>
                                     </Box>
                                 </Box>
                             </Box>
                         </DialogContent>
 
+                        {/* BUTTON */}
                         <DialogActions>
                             <Box
                                 sx={{
@@ -577,6 +527,7 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                     marginTop: 4,
                                 }}
                             >
+                                {/* EXIT BUTTON */}
                                 <ButtonFeatures
                                     size="small"
                                     variant="contained"
@@ -585,43 +536,41 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
                                     sx={{ marginRight: 1 }}
                                     onClick={handleClose}
                                 >
-                                    {currentUser.role == Constants.Role.USER &&
-                                    (item.scheduleStatus ==
+                                    {item.scheduleStatus ==
                                         Constants.ScheduleStatus.APPROVED ||
-                                        item.scheduleStatus ==
-                                            Constants.ScheduleStatus.COMPLETE)
+                                    item.scheduleStatus ==
+                                        Constants.ScheduleStatus.COMPLETE
                                         ? Strings.Common.CANCEL
                                         : Strings.Common.EXIT}
                                 </ButtonFeatures>
 
-                                {currentUser.role == Constants.Role.USER &&
-                                    (item.scheduleStatus ==
-                                        Constants.ScheduleStatus.APPROVED ||
-                                        item.scheduleStatus ==
-                                            Constants.ScheduleStatus
-                                                .COMPLETE) && (
-                                        <ButtonFeatures
-                                            size="small"
-                                            variant="contained"
-                                            endIcon={<CheckCircleIcon />}
-                                            color="primary"
-                                            sx={{ marginRight: 1 }}
-                                            onClick={handleSubmit}
-                                            disabled={
-                                                schedule.length > 0 &&
-                                                (dataSendApi.starNumber !=
-                                                    schedule[0].starNumber ||
-                                                    dataSendApi.comment !=
-                                                        schedule[0].comment ||
-                                                    dataSendApi.phoneUser !=
-                                                        schedule[0].phoneUser)
-                                                    ? false
-                                                    : true
-                                            }
-                                        >
-                                            {Strings.Common.UPDATE}
-                                        </ButtonFeatures>
-                                    )}
+                                {/* SUBMIT BUTTON */}
+                                {(item.scheduleStatus ==
+                                    Constants.ScheduleStatus.APPROVED ||
+                                    item.scheduleStatus ==
+                                        Constants.ScheduleStatus.COMPLETE) && (
+                                    <ButtonFeatures
+                                        size="small"
+                                        variant="contained"
+                                        endIcon={<CheckCircleIcon />}
+                                        color="primary"
+                                        sx={{ marginRight: 1 }}
+                                        onClick={handleSubmit}
+                                        disabled={
+                                            schedule.length > 0 &&
+                                            (dataSendApi.starNumber !=
+                                                schedule[0].starNumber ||
+                                                dataSendApi.comment !=
+                                                    schedule[0].comment ||
+                                                dataSendApi.phoneUser !=
+                                                    schedule[0].phoneUser)
+                                                ? false
+                                                : true
+                                        }
+                                    >
+                                        {Strings.Common.UPDATE}
+                                    </ButtonFeatures>
+                                )}
                             </Box>
                         </DialogActions>
                     </Box>
@@ -646,4 +595,4 @@ function DialogShowSchedule({ open, handleClose, idSchedule, titleDialog }) {
     );
 }
 
-export default DialogShowSchedule;
+export default DialogShowScheduleUser;

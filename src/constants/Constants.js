@@ -36,13 +36,19 @@ const Constants = {
             GET_USER_REGISTERED_SCHEDULE_LIST: "/getUserRegisteredScheduleList",
             CANCEL_SCHEDULE: "/cancelSchedule",
         },
+        CarRegistrationManagement: {
+            GET_ADMIN_SCHEDULE_LIST: "/getAdminScheduleList",
+        },
         DriverTripManager: {
             GET_DRIVER_SCHEDULE_LIST: "/getDriverScheduleList",
         },
-        DialogShowSchedule: {
+        DialogShowScheduleUser: {
             GET_SCHEDULE: "/getSchedule",
             CREATE_OR_UPDATE_REVIEW: "/createOrUpdateReview",
             UPDATE_SCHEDULE_APPROVED: "/updateScheduleApproved",
+        },
+        DialogShowScheduleDriver: {
+            GET_SCHEDULE: "/getSchedule",
         },
     },
 
@@ -59,6 +65,11 @@ const Constants = {
         WORK: 1,
         STOP_WORKING: 2,
         MAINTENANCE: 3,
+    },
+    ColorOfCarStatus: {
+        WORK: 'green',
+        STOP_WORKING: 'red',
+        MAINTENANCE: 'orange',
     },
 
     ScheduleStatus: {
