@@ -10,7 +10,7 @@ import Login from "./screens/login/Login";
 import Home from "./screens/home/Home";
 import ProtectRoutesAdmin from "./components/protectRoutesAdmin/ProtectRoutesAdmin";
 import MainLayout from "./components/mainLayout/MainLayout";
-import RentedCar from "./screens/rentedCar/RentedCar";
+import RentedCar from "./screens/userScreens/rentedCar/RentedCar";
 import CarRentalManager from "./screens/carRentalManager/CarRentalManager";
 import CarManager from "./screens/carManager/CarManager";
 import DriverManagement from "./screens/driverManagement/DriverManagement";
@@ -20,7 +20,7 @@ import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
-import UpdateSchedulePending from "./screens/updateSchedulePending/UpdateSchedulePending"
+import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/UpdateSchedulePending"
 import Constants from "./constants/Constants";
 
 // init AOS library

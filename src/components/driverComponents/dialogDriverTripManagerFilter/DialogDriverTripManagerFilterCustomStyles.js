@@ -242,11 +242,9 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
 }));
 
 const ButtonStyled = styled(Button)(({ theme }) => ({
-    // float: "left",
     display: "flex",
     justifyContent: "space-between",
     marginLeft: 10,
-    // marginRight: 25,
     textTransform: "capitalize",
     color: theme.palette.text.disabled,
     borderColor: theme.palette.action.disabled,

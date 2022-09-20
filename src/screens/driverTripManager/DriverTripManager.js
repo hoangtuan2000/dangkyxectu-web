@@ -1,14 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-    Badge,
-    Box,
-    Fab,
-    Tab,
-    Tabs,
-    Tooltip,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Badge, Box, Tooltip, Typography } from "@mui/material";
 import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../constants/Strings";
 import col from "./columnsDriverTripManagerDataGrid";
@@ -21,11 +12,9 @@ import Constants from "../../constants/Constants";
 import { DriverTripManagerService } from "../../services/DriverTripManagerServices";
 import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
 import { FabStyle } from "./DriverTripManagerCustomStyles";
-import DialogDriverFilter from "../../components/dialogDriverFilter/DialogDriverFilter";
+import DialogDriverTripManagerFilter from "../../components/driverComponents/dialogDriverTripManagerFilter/DialogDriverTripManagerFilter";
 
 function DriverTripManager() {
-    const theme = useTheme();
-
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
     const [modalError, setModalError] = useState({
@@ -38,7 +27,7 @@ function DriverTripManager() {
         open: false,
         idSchedule: null,
     });
-    const [dialogDriverFilter, setDialogDriverFilter] = useState(false);
+    const [dialogDriverTripManagerFilter, setDialogDriverTripManagerFilter] = useState(false);
     const [scheduleList, setScheduleList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -145,14 +134,62 @@ function DriverTripManager() {
         });
     };
 
-    const handleChangePage = (e) => {
+    const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
-        getDriverScheduleList(e);
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getDriverScheduleList(
+            e,
+            dataInfo.pageSize,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
     };
 
-    const handleChangeRowsPerPage = (e) => {
+    const handleChangeRowsPerPage = async (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
-        getDriverScheduleList(Constants.Common.PAGE, e);
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getDriverScheduleList(
+            dataInfo.page,
+            e,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
+    };
+
+    const handleFormatDataFilterSendApi = (data) => {
+        //format data to send API
+        let status = [];
+        let carType = [];
+        if (helper.isArray(data.status) && data.status.length > 0) {
+            status = data.status.map((item) => {
+                return item.idScheduleStatus;
+            });
+        }
+        if (helper.isArray(data.carType) && data.carType.length > 0) {
+            carType = data.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+
+        return {
+            status,
+            carType,
+            scheduleCode: data.scheduleCode,
+            address: data.address,
+            idWard: data.ward && data.ward.idWard,
+            startDate: data.startDate,
+            endDate: data.endDate,
+        };
     };
 
     const handleFilter = (e) => {
@@ -173,7 +210,7 @@ function DriverTripManager() {
         //reset page and pageSize => call getDriverScheduleList function
         getDriverScheduleList(
             Constants.Common.PAGE,
-            Constants.Common.LIMIT_ENTRY,
+            dataInfo.pageSize,
             status,
             carType,
             e.scheduleCode,
@@ -183,7 +220,7 @@ function DriverTripManager() {
             e.endDate
         );
 
-        // save data filter in dialogDriverFilter => default value in dialogDriverFilter
+        // save data filter in dialogDriverTripManagerFilter => default value in dialogDriverTripManagerFilter
         setDataFilter({
             status: [...e.status],
             carType: [...e.carType],
@@ -232,15 +269,17 @@ function DriverTripManager() {
 
     return (
         <Box>
+            {/* TITLE HEADER */}
             <Typography variant="h6" component="div">
                 {Strings.DriverTripManager.TRIP_LIST}
             </Typography>
 
+            {/* FILTER BUTTON */}
             <Tooltip title={Strings.Common.FILTER}>
                 <FabStyle
                     color="primary"
                     size="small"
-                    onClick={() => setDialogDriverFilter(true)}
+                    onClick={() => setDialogDriverTripManagerFilter(true)}
                 >
                     <Badge badgeContent={totalDataFilter} color="error">
                         <FilterAltIcon />
@@ -262,9 +301,9 @@ function DriverTripManager() {
                 }}
             />
 
-            <DialogDriverFilter
-                open={dialogDriverFilter}
-                handleClose={() => setDialogDriverFilter(false)}
+            <DialogDriverTripManagerFilter
+                open={dialogDriverTripManagerFilter}
+                handleClose={() => setDialogDriverTripManagerFilter(false)}
                 onSubmit={(e) => handleFilter(e)}
                 defaultStatus={dataFilter.status}
                 defaultCarType={dataFilter.carType}

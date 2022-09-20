@@ -2,10 +2,8 @@ import { useState, useEffect, forwardRef, useRef } from "react";
 import {
     Box,
     Button,
-    Checkbox,
     DialogActions,
     DialogContent,
-    FormControlLabel,
     InputAdornment,
     TextField,
     Tooltip,
@@ -17,40 +15,30 @@ import {
     ButtonFeatures,
     ButtonStyled,
     DialogContainer,
-    FormGroupStyle,
     TextInput,
     TextStyle,
     Title,
-} from "./DialogDriverFilterCustomStyles";
+} from "./DialogDriverTripManagerFilterCustomStyles";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import CommentIcon from "@mui/icons-material/Comment";
-import NearMeIcon from "@mui/icons-material/NearMe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
-import CreateIcon from "@mui/icons-material/Create";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import Strings from "../../constants/Strings";
-import ModalError from "../modalError/ModalError";
-import ModalSuccess from "../modalSuccess/ModalSuccess";
-import BackDrop from "../backDrop/BackDrop";
-import Constants from "../../constants/Constants";
-import { DialogShowScheduleService } from "../../services/DialogShowScheduleServices";
-import helper from "../../common/helper";
-import { useSelector } from "react-redux";
-import { Stack } from "@mui/system";
+import Strings from "../../../constants/Strings";
+import ModalError from "../../modalError/ModalError";
+import ModalSuccess from "../../modalSuccess/ModalSuccess";
+import BackDrop from "../../backDrop/BackDrop";
+import Constants from "../../../constants/Constants";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
-import ModalShowAddress from "../modalShowAddress/ModalShowAddress";
-import { GlobalService } from "../../services/GlobalServices";
+import ModalShowAddress from "../../modalShowAddress/ModalShowAddress";
+import { GlobalService } from "../../../services/GlobalServices";
 registerLocale("vi", vi);
 
-function DialogDriverFilter({
+function DialogDriverTripManagerFilter({
     open,
     handleClose,
     onSubmit = () => {},
@@ -68,8 +56,6 @@ function DialogDriverFilter({
     const theme = useTheme();
 
     const ModalShowEndAddressRef = useRef(); // use call reset address function
-
-    const currentUser = useSelector((state) => state.currentUser.user);
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -104,7 +90,11 @@ function DialogDriverFilter({
     const ButtonDate = forwardRef(({ value, onClick }, ref) => {
         return (
             <Tooltip
-                title={value ? value : Strings.DialogDriverFilter.CHOOSE_TIME}
+                title={
+                    value
+                        ? value
+                        : Strings.DialogDriverTripManagerFilter.CHOOSE_TIME
+                }
             >
                 <Box
                     sx={{
@@ -128,7 +118,9 @@ function DialogDriverFilter({
                             />
                         }
                     >
-                        {value ? value : Strings.DialogDriverFilter.CHOOSE_TIME}
+                        {value
+                            ? value
+                            : Strings.DialogDriverTripManagerFilter.CHOOSE_TIME}
                     </ButtonStyled>
                     {selectedDates.startDate && selectedDates.startDate && (
                         <Button
@@ -218,14 +210,14 @@ function DialogDriverFilter({
         });
     };
 
-    const handleCheckStatus = (valueArray) => {
+    const handleSelectStatus = (valueArray) => {
         setDataSendApi({
             ...dataSendApi,
             status: [...valueArray],
         });
     };
 
-    const handleCheckCarType = (valueArray) => {
+    const handleSelectCarType = (valueArray) => {
         setDataSendApi({
             ...dataSendApi,
             carType: [...valueArray],
@@ -233,6 +225,7 @@ function DialogDriverFilter({
     };
 
     const handleRefreshFilter = () => {
+        //call function => return submit
         onSubmit({
             status: [],
             carType: [],
@@ -244,11 +237,17 @@ function DialogDriverFilter({
             startDate: null,
             endDate: null,
         });
+
+        //refresh dates
         setSelectedDates({
             startDate: null,
             endDate: null,
         });
+
+        //refresh address
         setShowAddress();
+
+        //refresh data
         setDataSendApi({
             status: [],
             carType: [],
@@ -260,7 +259,10 @@ function DialogDriverFilter({
             startDate: null,
             endDate: null,
         });
+
+        //call function
         handleRefreshDataFilter();
+
         //call function of child component: modalShowEndAdderss
         //=> reset value in modal choosse end address
         ModalShowEndAddressRef.current.handleResetAddress();
@@ -290,15 +292,20 @@ function DialogDriverFilter({
             scroll="body"
             fullWidth={true}
         >
+            {/* FORM */}
             <DialogContent>
-                <Title>{Strings.DialogDriverFilter.TITLE}</Title>
+                {/* TITLE */}
+                <Title>{Strings.DialogDriverTripManagerFilter.TITLE}</Title>
+
+                {/* SCHEDULE CODE */}
                 <BoxContent>
                     <TextStyle>
-                        {Strings.DialogDriverFilter.SCHEDULE_CODE}
+                        {Strings.DialogDriverTripManagerFilter.SCHEDULE_CODE}
                     </TextStyle>
                     <TextInput
                         placeholder={
-                            Strings.DialogDriverFilter.ENTER_SCHEDULE_CODE
+                            Strings.DialogDriverTripManagerFilter
+                                .ENTER_SCHEDULE_CODE
                         }
                         variant="outlined"
                         size="small"
@@ -318,8 +325,11 @@ function DialogDriverFilter({
                     />
                 </BoxContent>
 
+                {/* SELECT STATUS */}
                 <BoxContent>
-                    <TextStyle>{Strings.DialogDriverFilter.STATUS}</TextStyle>
+                    <TextStyle>
+                        {Strings.DialogDriverTripManagerFilter.STATUS}
+                    </TextStyle>
                     <AutocompleteStyle
                         disablePortal={false}
                         multiple
@@ -333,12 +343,13 @@ function DialogDriverFilter({
                             <TextField
                                 {...params}
                                 placeholder={
-                                    Strings.DialogDriverFilter.CHOOSE_STATUS
+                                    Strings.DialogDriverTripManagerFilter
+                                        .CHOOSE_STATUS
                                 }
                             />
                         )}
                         onChange={(event, newValue) => {
-                            handleCheckStatus(newValue);
+                            handleSelectStatus(newValue);
                         }}
                         value={dataSendApi.status || null}
                         isOptionEqualToValue={(option, value) =>
@@ -347,8 +358,11 @@ function DialogDriverFilter({
                     />
                 </BoxContent>
 
+                {/* SELECT CAR TYPE */}
                 <BoxContent>
-                    <TextStyle>{Strings.DialogDriverFilter.CAR_TYPE}</TextStyle>
+                    <TextStyle>
+                        {Strings.DialogDriverTripManagerFilter.CAR_TYPE}
+                    </TextStyle>
                     <AutocompleteStyle
                         disablePortal={false}
                         multiple
@@ -364,12 +378,13 @@ function DialogDriverFilter({
                             <TextField
                                 {...params}
                                 placeholder={
-                                    Strings.DialogDriverFilter.CHOOSE_CAR_TYPE
+                                    Strings.DialogDriverTripManagerFilter
+                                        .CHOOSE_CAR_TYPE
                                 }
                             />
                         )}
                         onChange={(event, newValue) => {
-                            handleCheckCarType(newValue);
+                            handleSelectCarType(newValue);
                         }}
                         value={dataSendApi.carType || null}
                         isOptionEqualToValue={(option, value) =>
@@ -378,8 +393,11 @@ function DialogDriverFilter({
                     />
                 </BoxContent>
 
+                {/* SELECT DATES */}
                 <BoxContent>
-                    <TextStyle>{Strings.DialogDriverFilter.TIME} </TextStyle>
+                    <TextStyle>
+                        {Strings.DialogDriverTripManagerFilter.TIME}{" "}
+                    </TextStyle>
                     <DatePicker
                         locale="vi"
                         dateFormat={Constants.Styled.DATE_FORMAT}
@@ -393,8 +411,11 @@ function DialogDriverFilter({
                     />
                 </BoxContent>
 
+                {/* SELECT ADDRESS */}
                 <BoxContent>
-                    <TextStyle>{Strings.DialogDriverFilter.ADDRESS} </TextStyle>
+                    <TextStyle>
+                        {Strings.DialogDriverTripManagerFilter.ADDRESS}{" "}
+                    </TextStyle>
                     <ButtonStyled
                         onClick={() => setModalShowStartAdderss(true)}
                         variant="outlined"
@@ -410,7 +431,8 @@ function DialogDriverFilter({
                             title={
                                 showAddress
                                     ? showAddress
-                                    : Strings.DialogDriverFilter.ENTER_LOCATION
+                                    : Strings.DialogDriverTripManagerFilter
+                                          .ENTER_LOCATION
                             }
                         >
                             <Box
@@ -425,13 +447,15 @@ function DialogDriverFilter({
                             >
                                 {showAddress
                                     ? showAddress
-                                    : Strings.DialogDriverFilter.ENTER_LOCATION}
+                                    : Strings.DialogDriverTripManagerFilter
+                                          .ENTER_LOCATION}
                             </Box>
                         </Tooltip>
                     </ButtonStyled>
                 </BoxContent>
             </DialogContent>
 
+            {/* BUTTON */}
             <DialogActions>
                 <Box
                     sx={{
@@ -439,6 +463,7 @@ function DialogDriverFilter({
                         justifyContent: "flex-end",
                     }}
                 >
+                    {/* EXIT BUTTON */}
                     <ButtonFeatures
                         size="small"
                         variant="contained"
@@ -450,6 +475,7 @@ function DialogDriverFilter({
                         {Strings.Common.EXIT}
                     </ButtonFeatures>
 
+                    {/* REFRESH BUTTON */}
                     <ButtonFeatures
                         size="small"
                         variant="contained"
@@ -461,6 +487,7 @@ function DialogDriverFilter({
                         {Strings.Common.REFRESH}
                     </ButtonFeatures>
 
+                    {/* SEARCH BUTTON / SUBMIT BUTTON */}
                     <ButtonFeatures
                         size="small"
                         variant="contained"
@@ -477,7 +504,9 @@ function DialogDriverFilter({
             <ModalShowAddress
                 open={modalShowStartAdderss}
                 handleClose={() => setModalShowStartAdderss(false)}
-                labelInput={Strings.DialogDriverFilter.ENTER_LOCATION}
+                labelInput={
+                    Strings.DialogDriverTripManagerFilter.ENTER_LOCATION
+                }
                 titleModal={Strings.ModalShowAddress.TITLE_LOCATION}
                 onConfirm={(e) => handleShowAddress(e)}
                 ref={ModalShowEndAddressRef}
@@ -506,4 +535,4 @@ function DialogDriverFilter({
     );
 }
 
-export default DialogDriverFilter;
+export default DialogDriverTripManagerFilter;

@@ -283,7 +283,6 @@ const TextInput = styled(TextField)(({ theme }) => ({
 }));
 
 const ButtonStyled = styled(Button)(({ theme }) => ({
-    // float: "left",
     display: "flex",
     justifyContent: "space-between",
     margin: 10,
@@ -322,7 +321,6 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
 }));
 
 const TitleInput = styled(Typography)(({ theme }) => ({
-    // fontWeight: "bold",
     fontStyle: "italic",
     padding: 0,
     marginLeft: 10,

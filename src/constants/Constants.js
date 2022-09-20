@@ -24,8 +24,8 @@ const Constants = {
         },
         UpdateSchedulePending: {
             GET_SCHEDULE_DATE_FOR_CAR: "/getScheduledDateForCar",
-            GET_SCHEDULE: '/getSchedule',
-            UPDATE_SCHEDULE_PENDING: '/updateSchedulePending',
+            GET_SCHEDULE: "/getSchedule",
+            UPDATE_SCHEDULE_PENDING: "/updateSchedulePending",
         },
         Home: {
             GET_CAR_LIST: "/getCarList",
@@ -33,21 +33,32 @@ const Constants = {
             GET_SCHEDULE_LIST: "/getScheduleList",
         },
         RentedCar: {
-            GET_USER_REGISTERED_SCHEDULE_LIST: '/getUserRegisteredScheduleList',
-            CANCEL_SCHEDULE: '/cancelSchedule',
+            GET_USER_REGISTERED_SCHEDULE_LIST: "/getUserRegisteredScheduleList",
+            CANCEL_SCHEDULE: "/cancelSchedule",
         },
         DriverTripManager: {
-            GET_DRIVER_SCHEDULE_LIST: '/getDriverScheduleList',
+            GET_DRIVER_SCHEDULE_LIST: "/getDriverScheduleList",
         },
         DialogShowSchedule: {
-            GET_SCHEDULE: '/getSchedule',
-            CREATE_OR_UPDATE_REVIEW: '/createOrUpdateReview',
-            UPDATE_SCHEDULE_APPROVED: '/updateScheduleApproved',
+            GET_SCHEDULE: "/getSchedule",
+            CREATE_OR_UPDATE_REVIEW: "/createOrUpdateReview",
+            UPDATE_SCHEDULE_APPROVED: "/updateScheduleApproved",
         },
     },
 
     Styled: {
         DATE_FORMAT: "dd/MM/yyyy",
+    },
+
+    CarStatus: {
+        WORK: "Hoạt Động",
+        STOP_WORKING: "Ngừng Hoạt Động",
+        MAINTENANCE: "Bảo Trì",
+    },
+    CarStatusCode: {
+        WORK: 1,
+        STOP_WORKING: 2,
+        MAINTENANCE: 3,
     },
 
     ScheduleStatus: {
@@ -56,6 +67,23 @@ const Constants = {
         COMPLETE: "Hoàn Thành",
         CANCELLED: "Đã Hủy",
         REFUSE: "Từ Chối",
+    },
+
+    ColorOfScheduleStatus: {
+        Text: {
+            PENDING: "black",
+            APPROVED: "white",
+            COMPLETE: "white",
+            CANCELLED: "white",
+            REFUSE: "white",
+        },
+        Background: {
+            PENDING: "#ffcffb",
+            APPROVED: "green",
+            COMPLETE: "Blue",
+            CANCELLED: "gray",
+            REFUSE: "red",
+        },
     },
 
     Common: {
@@ -68,8 +96,8 @@ const Constants = {
         ADMIN: "admin",
         USER: "user",
         DRIVER: "driver",
-        ADMIN_USER: "admin user"
-    }
+        ADMIN_USER: "admin user",
+    },
 };
 
 export default Constants;

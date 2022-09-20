@@ -1,20 +1,21 @@
 import React from "react";
 import { Badge, Box, Tooltip, Typography } from "@mui/material";
-import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
-import Strings from "../../constants/Strings";
-import { RentedCarService } from "../../services/RentedCarServices";
-import ModalError from "../../components/modalError/ModalError";
-import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
-import BackDrop from "../../components/backDrop/BackDrop";
-import Constants from "../../constants/Constants";
+import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../../constants/Strings";
+import { RentedCarService } from "../../../services/RentedCarServices";
+import ModalError from "../../../components/modalError/ModalError";
+import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
+import BackDrop from "../../../components/backDrop/BackDrop";
+import Constants from "../../../constants/Constants";
 import { useState, useEffect } from "react";
-import helper from "../../common/helper";
+import helper from "../../../common/helper";
 import col from "./columnsRentedCarDataGrid";
-import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
+import DialogShowSchedule from "../../../components/dialogShowSchedule/DialogShowSchedule";
 import { useNavigate } from "react-router-dom";
-import RoutesPath from "../../constants/RoutesPath";
+import RoutesPath from "../../../constants/RoutesPath";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FabStyle } from "./rentedCarCustomStyles";
+import DialogRentedCarFilter from "../../../components/userComponents/dialogRentedCarFilter/DialogRentedCarFilter";
 
 function RentedCar() {
     const navigate = useNavigate();
@@ -27,6 +28,8 @@ function RentedCar() {
         content: null,
     });
 
+    const [totalDataFilter, setTotalDataFilter] = useState(null);
+    const [dialogRentedCarFilter, setDialogRentedCarFilter] = useState(false);
     const [dialogShowSchedule, setDialogShowSchedule] = useState({
         open: false,
         idSchedule: null,
@@ -37,14 +40,42 @@ function RentedCar() {
         pageSize: Constants.Common.LIMIT_ENTRY,
         totalRows: 0,
     });
+    const [dataFilter, setDataFilter] = useState({
+        status: [],
+        carType: [],
+        scheduleCode: null,
+        address: null,
+        ward: null,
+        district: null,
+        province: null,
+        startDate: null,
+        endDate: null,
+    });
 
     const getUserRegisteredScheduleList = async (
         page = dataInfo.page,
-        pageSize = dataInfo.pageSize
+        pageSize = dataInfo.pageSize,
+        status,
+        carType,
+        scheduleCode,
+        address,
+        idWard,
+        startDate,
+        endDate
     ) => {
-        const res = await RentedCarService.getUserRegisteredScheduleList({
+        const data = {
             page: page,
             limitEntry: pageSize,
+            status,
+            carType,
+            scheduleCode,
+            address,
+            idWard,
+            startDate,
+            endDate,
+        };
+        const res = await RentedCarService.getUserRegisteredScheduleList({
+            ...data,
         });
         // axios success
         if (res.data) {
@@ -103,14 +134,36 @@ function RentedCar() {
         }
     };
 
-    const handleChangePage = (e) => {
+    const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
-        getUserRegisteredScheduleList(e);
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getUserRegisteredScheduleList(
+            e,
+            dataInfo.pageSize,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
     };
 
-    const handleChangeRowsPerPage = (e) => {
+    const handleChangeRowsPerPage = async (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
-        getUserRegisteredScheduleList(Constants.Common.PAGE, e);
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getUserRegisteredScheduleList(
+            dataInfo.page,
+            e,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
     };
 
     const handleOpenDialogSchedule = (e) => {
@@ -159,6 +212,95 @@ function RentedCar() {
         }
     };
 
+    const handleFormatDataFilterSendApi = (data) => {
+        //format data to send API
+        let status = [];
+        let carType = [];
+        if (helper.isArray(data.status) && data.status.length > 0) {
+            status = data.status.map((item) => {
+                return item.idScheduleStatus;
+            });
+        }
+        if (helper.isArray(data.carType) && data.carType.length > 0) {
+            carType = data.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+
+        return {
+            status,
+            carType,
+            scheduleCode: data.scheduleCode,
+            address: data.address,
+            idWard: data.ward && data.ward.idWard,
+            startDate: data.startDate,
+            endDate: data.endDate,
+        };
+    };
+
+    const handleFilter = (e) => {
+        //format data to send API
+        let status = [];
+        let carType = [];
+        if (helper.isArray(e.status) && e.status.length > 0) {
+            status = e.status.map((item) => {
+                return item.idScheduleStatus;
+            });
+        }
+        if (helper.isArray(e.carType) && e.carType.length > 0) {
+            carType = e.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+
+        //reset page and pageSize => call getUserRegisteredScheduleList function
+        getUserRegisteredScheduleList(
+            Constants.Common.PAGE,
+            dataInfo.pageSize,
+            status,
+            carType,
+            e.scheduleCode,
+            e.address,
+            e.ward && e.ward.idWard,
+            e.startDate,
+            e.endDate
+        );
+
+        // save data filter in dialogRentedCarFilter => default value in dialogRentedCarFilter
+        setDataFilter({
+            status: [...e.status],
+            carType: [...e.carType],
+            scheduleCode: e.scheduleCode,
+            address: e.address,
+            ward: e.ward,
+            district: e.district,
+            province: e.province,
+            startDate: e.startDate,
+            endDate: e.endDate,
+        });
+
+        // show total data to filter in UI => button filter
+        let total = status.length + carType.length;
+        if (e.scheduleCode) total += 1;
+        if (e.ward) total += 1;
+        if (e.startDate && e.endDate) total += 1;
+        setTotalDataFilter(total > 0 ? total : null);
+    };
+
+    const handleRefreshDataFilter = () => {
+        setDataFilter({
+            status: [],
+            carType: [],
+            scheduleCode: null,
+            address: null,
+            ward: null,
+            district: null,
+            province: null,
+            startDate: null,
+            endDate: null,
+        });
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getUserRegisteredScheduleList();
@@ -173,23 +315,39 @@ function RentedCar() {
 
     return (
         <Box>
+            {/* TITLE HEADER */}
             <Typography variant="h6" component="div">
                 {Strings.RentedCar.RENTED_CAR_LIST}
             </Typography>
 
+            {/* FILTER BUTTON */}
             <Tooltip title={Strings.Common.FILTER}>
                 <FabStyle
                     color="primary"
                     size="small"
-                    // onClick={() => setDialogDriverFilter(true)}
+                    onClick={() => setDialogRentedCarFilter(true)}
                 >
-                    <Badge 
-                    // badgeContent={totalDataFilter} 
-                    color="error">
+                    <Badge badgeContent={totalDataFilter} color="error">
                         <FilterAltIcon />
                     </Badge>
                 </FabStyle>
             </Tooltip>
+
+            <DialogRentedCarFilter
+                open={dialogRentedCarFilter}
+                handleClose={() => setDialogRentedCarFilter(false)}
+                onSubmit={(e) => handleFilter(e)}
+                defaultStatus={dataFilter.status}
+                defaultCarType={dataFilter.carType}
+                defaultScheduleCode={dataFilter.scheduleCode}
+                defaultAddress={dataFilter.address}
+                defaultWard={dataFilter.ward}
+                defaultDistrict={dataFilter.district}
+                defaultProvince={dataFilter.province}
+                defaultStartDate={dataFilter.startDate}
+                defaultEndDate={dataFilter.endDate}
+                handleRefreshDataFilter={handleRefreshDataFilter}
+            />
 
             <DataGridCustom
                 columns={col(

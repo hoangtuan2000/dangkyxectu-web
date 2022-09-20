@@ -2,13 +2,10 @@ import { InputAdornment, Tooltip, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import BackDrop from "../../components/backDrop/BackDrop";
-import ModalError from "../../components/modalError/ModalError";
-import Constants from "../../constants/Constants";
-import Strings from "../../constants/Strings";
-import RoutesPath from "../../constants/RoutesPath";
-import { GlobalService } from "../../services/GlobalServices";
-import { RentalCarService } from "../../services/RentalCarServices";
+import Constants from "../../../constants/Constants";
+import Strings from "../../../constants/Strings";
+import RoutesPath from "../../../constants/RoutesPath";
+import { GlobalService } from "../../../services/GlobalServices";
 import {
     BoxContainerContent,
     BoxLeftContent,
@@ -29,22 +26,23 @@ import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import ModalShowAddress from "../../components/modalShowAddress/ModalShowAddress";
-import helper from "../../common/helper";
+import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
-import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
 import { useSelector } from "react-redux";
-import { UpdateSchedulePendingService } from "../../services/UpdateSchedulePendingServices";
+import { UpdateSchedulePendingService } from "../../../services/UpdateSchedulePendingServices";
+import BackDrop from "../../../components/backDrop/BackDrop";
+import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
+import ModalError from "../../../components/modalError/ModalError";
+import ModalShowAddress from "../../../components/modalShowAddress/ModalShowAddress";
 registerLocale("vi", vi);
 
-function RentalCar() {
+function UpdateSchedulePending() {
     const theme = useTheme();
     const ModalShowEndAddressRef = useRef(); // use call reset address function
 
     const navigate = useNavigate();
-    const currentUser = useSelector((state) => state.currentUser.user);
     const { idSchedule } = useParams();
 
     const [modalShowStartAdderss, setModalShowStartAdderss] = useState(false);
@@ -178,7 +176,7 @@ function RentalCar() {
     const getScheduledDateForCar = async (idCar) => {
         const res = await UpdateSchedulePendingService.getScheduledDateForCar({
             idCar: idCar,
-            notSchedule: idSchedule
+            notSchedule: idSchedule,
         });
         // axios success
         if (res.data) {
@@ -242,7 +240,6 @@ function RentalCar() {
         });
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 let result = res.data.data;
                 setSchedule(result);
@@ -334,7 +331,6 @@ function RentalCar() {
         });
         // axios success
         if (res.data) {
-            // login success
             if (res.data.status == Constants.ApiCode.OK) {
                 setCarTypeList(res.data.data.car_type);
                 setCarStatusList(res.data.data.car_status);
@@ -433,7 +429,6 @@ function RentalCar() {
 
     const handleCheckNullData = () => {
         if (
-            // helper.isNullOrEmpty(dataSendApi.idCar) ||
             helper.isNullOrEmpty(dataSendApi.startDate) ||
             helper.isNullOrEmpty(dataSendApi.endDate) ||
             helper.isNullOrEmpty(dataSendApi.startLocation) ||
@@ -445,7 +440,6 @@ function RentalCar() {
         ) {
             setErrorData({
                 ...errorData,
-                // errorIdCar: helper.isNullOrEmpty(dataSendApi.idCar) && true,
                 errorStartDate:
                     helper.isNullOrEmpty(dataSendApi.startDate) && true,
                 errorEndDate: helper.isNullOrEmpty(dataSendApi.endDate) && true,
@@ -459,7 +453,8 @@ function RentalCar() {
                     true,
                 errorIdWardEndLocation:
                     helper.isNullOrEmpty(dataSendApi.idWardEndLocation) && true,
-                errorPhone: !helper.isNullOrEmpty(dataSendApi.phoneUser) && true,
+                errorPhone:
+                    !helper.isNullOrEmpty(dataSendApi.phoneUser) && true,
             });
             return false;
         } else {
@@ -470,7 +465,6 @@ function RentalCar() {
     const handleResetErrorData = () => {
         setErrorData({
             ...errorData,
-            // errorIdCar: false,
             errorStartDate: false,
             errorEndDate: false,
             errorStartLocation: false,
@@ -529,7 +523,10 @@ function RentalCar() {
             const checkLength = await handleCheckLengthData();
             if (checkLength) {
                 await setBackDrop(true);
-                const res = await UpdateSchedulePendingService.updateSchedulePending(dataSendApi);
+                const res =
+                    await UpdateSchedulePendingService.updateSchedulePending(
+                        dataSendApi
+                    );
                 // axios success
                 if (res.data) {
                     if (res.data.status == Constants.ApiCode.OK) {
@@ -537,7 +534,7 @@ function RentalCar() {
                         //=> reset value in modal choosse end address
                         ModalShowEndAddressRef.current.handleResetAddress();
                         setModalSuccess(true);
-                        handleResetErrorData()
+                        handleResetErrorData();
                     } else {
                         setModalError({
                             ...modalError,
@@ -578,11 +575,13 @@ function RentalCar() {
 
     return (
         <Box>
+            {/* TITLE HEADER */}
             <Typography variant="h6" component="div">
                 {Strings.UpdateSchedulePending.UPDATE_SCHEDULE}
             </Typography>
 
             <BoxContainerContent>
+                {/* TITLE */}
                 <Title variant="h6" component="div">
                     {Strings.UpdateSchedulePending.UPDATE_SCHEDULE}
                     {" ( Số: " +
@@ -590,6 +589,7 @@ function RentalCar() {
                         " )"}
                 </Title>
 
+                {/* SHOW INFO CAR */}
                 <BoxLeftContent>
                     {schedule.length > 0 &&
                         schedule.map((val) => {
@@ -634,6 +634,7 @@ function RentalCar() {
                                     : null;
                             return (
                                 <Box key={val.idCar}>
+                                    {/* IMAGE */}
                                     <Box
                                         sx={{
                                             float: "left",
@@ -641,11 +642,14 @@ function RentalCar() {
                                     >
                                         <Img src={val.image} />
                                     </Box>
+
+                                    {/* CONTENT */}
                                     <Box
                                         sx={{
                                             float: "left",
                                         }}
                                     >
+                                        {/* TITLE CONTENT */}
                                         <CarTypeTitle
                                             variant="p"
                                             component="div"
@@ -653,6 +657,8 @@ function RentalCar() {
                                             {type &&
                                                 `${type[0].name} ${type[0].seatNumber} Chổ`}
                                         </CarTypeTitle>
+
+                                        {/* LICENSEPLATES */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -663,6 +669,8 @@ function RentalCar() {
                                             }{" "}
                                             {val.licensePlates}
                                         </TextContent>
+
+                                        {/* CAR STATUS */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -676,12 +684,17 @@ function RentalCar() {
                                                     fontWeight: "bold",
                                                     color: status
                                                         ? status[0]
-                                                              .idCarStatus == 2
+                                                              .idCarStatus ==
+                                                          Constants
+                                                              .CarStatusCode
+                                                              .STOP_WORKING
                                                             ? theme.palette
                                                                   .error.main
                                                             : status[0]
                                                                   .idCarStatus ==
-                                                              3
+                                                              Constants
+                                                                  .CarStatusCode
+                                                                  .MAINTENANCE
                                                             ? theme.palette
                                                                   .warning.main
                                                             : theme.palette
@@ -692,6 +705,8 @@ function RentalCar() {
                                                 {status && status[0].name}
                                             </span>
                                         </TextContent>
+
+                                        {/* CAR COLOR */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -702,6 +717,8 @@ function RentalCar() {
                                             }{" "}
                                             {color && color[0].name}
                                         </TextContent>
+
+                                        {/* CAR BRAND */}
                                         <TextContent
                                             variant="p"
                                             component="div"
@@ -718,12 +735,18 @@ function RentalCar() {
                         })}
                 </BoxLeftContent>
 
+                {/* FORM */}
                 <BoxRightContent>
+                    {/* INPUT: DATE PICKER AND REASON */}
                     <Box>
+                        {/* BOX DATE PICKER */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {Strings.UpdateSchedulePending.START_END_DAY}
                             </TitleInput>
+
+                            {/* DATE PICKER */}
                             <DatePicker
                                 locale="vi"
                                 dateFormat={Constants.Styled.DATE_FORMAT}
@@ -740,7 +763,9 @@ function RentalCar() {
                             />
                         </div>
 
+                        {/* INPUT REASON */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {
                                     Strings.UpdateSchedulePending
@@ -760,6 +785,8 @@ function RentalCar() {
                                     ( 1 - 250 Ký Tự )
                                 </span>
                             </TitleInput>
+
+                            {/* INPUT */}
                             <TextInput
                                 placeholder={
                                     Strings.UpdateSchedulePending
@@ -796,8 +823,11 @@ function RentalCar() {
 
                     <Box sx={{ clear: "both" }}></Box>
 
+                    {/* INPUT: START AND END LOCATION */}
                     <Box>
+                        {/* START LOCATION */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {Strings.UpdateSchedulePending.START_LOCATION}
                                 <span
@@ -814,6 +844,8 @@ function RentalCar() {
                                     ( 1 - 250 Ký Tự )
                                 </span>
                             </TitleInput>
+
+                            {/* BUTTON SELECT START LOCATION */}
                             <ButtonStyled
                                 onClick={() => setModalShowStartAdderss(true)}
                                 variant="outlined"
@@ -862,7 +894,9 @@ function RentalCar() {
                             </ButtonStyled>
                         </div>
 
+                        {/* END LOCATION */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {Strings.UpdateSchedulePending.END_LOCATION}
                                 <span
@@ -879,6 +913,8 @@ function RentalCar() {
                                     ( 1 - 250 Ký Tự )
                                 </span>
                             </TitleInput>
+
+                            {/* BUTTON SELECT END LOCATION */}
                             <ButtonStyled
                                 onClick={() => setModalShowEndAdderss(true)}
                                 variant="outlined"
@@ -928,8 +964,11 @@ function RentalCar() {
                         </div>
                     </Box>
 
+                    {/* INPUT: NOTE AND PHONE NUMBER */}
                     <Box>
+                        {/* NOTE */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {Strings.UpdateSchedulePending.NOTE}
                                 <span
@@ -946,6 +985,8 @@ function RentalCar() {
                                     ( 1 - 250 Ký Tự )
                                 </span>
                             </TitleInput>
+
+                            {/* INPUT NOTE */}
                             <TextInput
                                 placeholder={
                                     Strings.UpdateSchedulePending.ENTER_NOTE
@@ -969,7 +1010,9 @@ function RentalCar() {
                             />
                         </div>
 
+                        {/* PHONE NUMBER */}
                         <div style={{ float: "left" }}>
+                            {/* TITLE */}
                             <TitleInput variant="p" component="div">
                                 {Strings.UpdateSchedulePending.PHONE_NUMBER}
                                 <span
@@ -986,6 +1029,8 @@ function RentalCar() {
                                     ( {Strings.Common.INVALID_PHONE_NUMBER} )
                                 </span>
                             </TitleInput>
+
+                            {/* INPUT PHONE NUMBER */}
                             <TextInput
                                 placeholder={
                                     Strings.UpdateSchedulePending
@@ -1012,8 +1057,11 @@ function RentalCar() {
                     </Box>
 
                     <Box sx={{ clear: "both" }}></Box>
+
+                    {/* BUTTON */}
                     <Box>
                         <Box sx={{ marginLeft: 2 }}>
+                            {/* EXIT BUTTON */}
                             <ButtonFeatures
                                 size="small"
                                 variant="contained"
@@ -1026,15 +1074,15 @@ function RentalCar() {
                             >
                                 {Strings.Common.CANCEL}
                             </ButtonFeatures>
+
+                            {/* SUBMIT / UPDATE BUTTON */}
                             <ButtonFeatures
                                 size="small"
                                 variant="contained"
                                 endIcon={<SendIcon />}
                                 onClick={handleSubmit}
                             >
-                                {
-                                    Strings.Common.UPDATE
-                                }
+                                {Strings.Common.UPDATE}
                             </ButtonFeatures>
                         </Box>
                     </Box>
@@ -1079,9 +1127,10 @@ function RentalCar() {
                 open={modalSuccess}
                 handleClose={() => setModalSuccess(false)}
             />
+            
             <BackDrop open={backDrop} />
         </Box>
     );
 }
 
-export default RentalCar;
+export default UpdateSchedulePending;

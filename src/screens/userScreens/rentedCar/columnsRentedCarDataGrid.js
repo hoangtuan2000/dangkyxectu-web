@@ -3,8 +3,8 @@ import { Box, IconButton, Rating, Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Strings from "../../constants/Strings";
-import Constants from "../../constants/Constants";
+import Strings from "../../../constants/Strings";
+import Constants from "../../../constants/Constants";
 
 const col = (
     handleModalShowSchedule,
@@ -162,20 +162,34 @@ const col = (
                 let textColor = "white";
                 switch (params.value) {
                     case Constants.ScheduleStatus.COMPLETE:
-                        bgColor = "Blue";
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background.COMPLETE;
+                        textColor =
+                            Constants.ColorOfScheduleStatus.Text.COMPLETE;
                         break;
                     case Constants.ScheduleStatus.APPROVED:
-                        bgColor = "green";
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background.APPROVED;
+                        textColor =
+                            Constants.ColorOfScheduleStatus.Text.APPROVED;
                         break;
                     case Constants.ScheduleStatus.PENDING:
-                        bgColor = "#ffcffb";
-                        textColor = "black";
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background.PENDING;
+                        textColor =
+                            Constants.ColorOfScheduleStatus.Text.PENDING;
                         break;
                     case Constants.ScheduleStatus.CANCELLED:
-                        bgColor = "gray";
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background
+                                .CANCELLED;
+                        textColor =
+                            Constants.ColorOfScheduleStatus.Text.CANCELLED;
                         break;
                     case Constants.ScheduleStatus.REFUSE:
-                        bgColor = "red";
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background.REFUSE;
+                        textColor = Constants.ColorOfScheduleStatus.Text.REFUSE;
                         break;
                 }
                 return (
