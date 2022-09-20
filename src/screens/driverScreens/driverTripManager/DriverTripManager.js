@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { Badge, Box, Tooltip, Typography } from "@mui/material";
-import DataGridCustom from "../../components/dataGridCustom/DataGridCustom";
-import Strings from "../../constants/Strings";
+import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
+import Strings from "../../../constants/Strings";
 import col from "./columnsDriverTripManagerDataGrid";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import ModalError from "../../components/modalError/ModalError";
-import ModalSuccess from "../../components/modalSuccess/ModalSuccess";
-import BackDrop from "../../components/backDrop/BackDrop";
-import helper from "../../common/helper";
-import Constants from "../../constants/Constants";
-import { DriverTripManagerService } from "../../services/DriverTripManagerServices";
-import DialogShowSchedule from "../../components/dialogShowSchedule/DialogShowSchedule";
+import ModalError from "../../../components/modalError/ModalError";
+import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
+import BackDrop from "../../../components/backDrop/BackDrop";
+import helper from "../../../common/helper";
+import Constants from "../../../constants/Constants";
+import { DriverTripManagerService } from "../../../services/DriverTripManagerServices";
+import DialogShowSchedule from "../../../components/dialogShowSchedule/DialogShowSchedule";
 import { FabStyle } from "./DriverTripManagerCustomStyles";
-import DialogDriverTripManagerFilter from "../../components/driverComponents/dialogDriverTripManagerFilter/DialogDriverTripManagerFilter";
+import DialogDriverTripManagerFilter from "../../../components/driverComponents/dialogDriverTripManagerFilter/DialogDriverTripManagerFilter";
 
 function DriverTripManager() {
     const [backDrop, setBackDrop] = useState(false);

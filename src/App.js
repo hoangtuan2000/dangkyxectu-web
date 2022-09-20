@@ -16,7 +16,7 @@ import CarManager from "./screens/carManager/CarManager";
 import DriverManagement from "./screens/driverManagement/DriverManagement";
 import Statistical from "./screens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
-import DriverTripManager from "./screens/driverTripManager/DriverTripManager";
+import DriverTripManager from "./screens/driverScreens/driverTripManager/DriverTripManager";
 import TripManager from "./screens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";

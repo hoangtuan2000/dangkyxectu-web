@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Strings from "../../constants/Strings";
-import Constants from "../../constants/Constants";
+import Strings from "../../../constants/Strings";
+import Constants from "../../../constants/Constants";
 
 const col = (
     handleModalShowSchedule
