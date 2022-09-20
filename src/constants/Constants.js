@@ -92,7 +92,7 @@ const Constants = {
             REFUSE: "white",
         },
         TextNoBackground: {
-            PENDING: "#ffcffb",
+            PENDING: "#d400ff",
             APPROVED: "green",
             COMPLETE: "Blue",
             CANCELLED: "gray",

@@ -225,14 +225,14 @@ const col = (handleModalShowSchedule) => {
             },
         },
         {
-            field: "startDate",
-            headerName: Strings.Common.START_DATE,
-            description: Strings.Common.START_DATE,
-            width: 100,
+            field: "dateRange",
+            headerName: Strings.Common.TIME,
+            description: Strings.Common.TIME,
+            width: 190,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.startDate} arrow>
+                    <Tooltip title={params.row.dateRange} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -240,34 +240,56 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.startDate}
+                            {params.row.dateRange}
                         </span>
                     </Tooltip>
                 );
             },
         },
-        {
-            field: "endDate",
-            headerName: Strings.Common.END_DATE,
-            description: Strings.Common.END_DATE,
-            width: 100,
-            sortable: false,
-            renderCell: (params) => {
-                return (
-                    <Tooltip title={params.row.endDate} arrow>
-                        <span
-                            style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}
-                        >
-                            {params.row.endDate}
-                        </span>
-                    </Tooltip>
-                );
-            },
-        },
+        // {
+        //     field: "startDate",
+        //     headerName: Strings.Common.START_DATE,
+        //     description: Strings.Common.START_DATE,
+        //     width: 100,
+        //     sortable: false,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Tooltip title={params.row.startDate} arrow>
+        //                 <span
+        //                     style={{
+        //                         whiteSpace: "nowrap",
+        //                         overflow: "hidden",
+        //                         textOverflow: "ellipsis",
+        //                     }}
+        //                 >
+        //                     {params.row.startDate}
+        //                 </span>
+        //             </Tooltip>
+        //         );
+        //     },
+        // },
+        // {
+        //     field: "endDate",
+        //     headerName: Strings.Common.END_DATE,
+        //     description: Strings.Common.END_DATE,
+        //     width: 100,
+        //     sortable: false,
+        //     renderCell: (params) => {
+        //         return (
+        //             <Tooltip title={params.row.endDate} arrow>
+        //                 <span
+        //                     style={{
+        //                         whiteSpace: "nowrap",
+        //                         overflow: "hidden",
+        //                         textOverflow: "ellipsis",
+        //                     }}
+        //                 >
+        //                     {params.row.endDate}
+        //                 </span>
+        //             </Tooltip>
+        //         );
+        //     },
+        // },
         {
             field: "status",
             headerName: Strings.Common.STATUS,
@@ -324,7 +346,12 @@ const col = (handleModalShowSchedule) => {
             width: 85,
             sortable: false,
             renderCell: (params) => {
-                if (params.row.status == Constants.ScheduleStatus.PENDING) {
+                if (
+                    params.row.status == Constants.ScheduleStatus.PENDING &&
+                    new Date(
+                        new Date(params.row.update * 1000).toDateString()
+                    ) > new Date(new Date().toDateString())
+                ) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
                             <IconButton

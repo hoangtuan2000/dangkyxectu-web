@@ -108,13 +108,13 @@ function CarRegistrationManagement() {
                             faculty: item.nameFaculty,
                             reason: item.reason,
                             destination: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
-                            startDate: startDate,
-                            endDate: endDate,
-                            // dateRange: `${startDate} - ${endDate}`,
+                            // startDate: startDate,
+                            // endDate: endDate,
+                            dateRange: `${startDate} - ${endDate}`,
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
-                            // cancel: item.startDate, //check startdate > current date => cancel schedule
+                            update: item.startDate, //check startdate > current date => cancel schedule
                         };
                     })
                 );

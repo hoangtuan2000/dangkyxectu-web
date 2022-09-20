@@ -144,7 +144,7 @@ function DialogShowScheduleAdmin({
 
                                 {/* CONTENT */}
                                 <Box>
-                                    {/* INFO CAR */}
+                                    {/* INFO CAR AND INFO ADMIN */}
                                     <BoxLeft>
                                         {/* IMAGE CAR */}
                                         <Img src={item.image} />
@@ -221,6 +221,65 @@ function DialogShowScheduleAdmin({
                                                     </span>
                                                 </Tooltip>
                                             </TextContent>
+
+                                            {/* INFO ADMIN */}
+                                            <Box>
+                                                {/* TITLE */}
+                                                <TextContent
+                                                    variant="p"
+                                                    component="div"
+                                                >
+                                                    {
+                                                        Strings
+                                                            .DialogShowScheduleAdmin
+                                                            .INFO_ADMIN
+                                                    }
+                                                    {!item.fullNameAdmin && (
+                                                        <Tooltip
+                                                            title={
+                                                                Strings.Common
+                                                                    .UPDATING
+                                                            }
+                                                            arrow
+                                                        >
+                                                            <span>
+                                                                {
+                                                                    Strings
+                                                                        .Common
+                                                                        .UPDATING
+                                                                }
+                                                            </span>
+                                                        </Tooltip>
+                                                    )}
+                                                </TextContent>
+
+                                                {/* LIST INFO ADMIN */}
+                                                {item.fullNameAdmin && (
+                                                    <ListStyle>
+                                                        {/* FULL NAME ADMIN */}
+                                                        <ListItem>
+                                                            <PersonIcon />
+                                                            <Tooltip
+                                                                title={
+                                                                    item.fullNameAdmin
+                                                                }
+                                                                arrow
+                                                            >
+                                                                <ListItemText
+                                                                    primary={
+                                                                        Strings
+                                                                            .DialogShowScheduleAdmin
+                                                                            .FULL_NAME
+                                                                    }
+                                                                    secondary={
+                                                                        item.fullNameAdmin
+                                                                    }
+                                                                />
+                                                            </Tooltip>
+                                                        </ListItem>
+                                                    </ListStyle>
+                                                )}
+                                            </Box>
                                         </Box>
                                     </BoxLeft>
 

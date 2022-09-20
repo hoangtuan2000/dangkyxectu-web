@@ -119,6 +119,7 @@ const Strings = {
         CAR_RENTAL_REASON: "Mục Đích Sử Dụng Xe: ",
         START_LOCATION: "Điểm Xuất Phát: ",
         END_LOCATION: "Điểm Đến: ",
+        INFO_ADMIN: "Thông Tin Admin: ",
     },
 
     CarRegistrationManagement: {
