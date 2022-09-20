@@ -156,6 +156,7 @@ function DriverTripManager() {
     };
 
     const handleFilter = (e) => {
+        //format data to send API
         let status = [];
         let carType = [];
         if (helper.isArray(e.status) && e.status.length > 0) {
@@ -182,9 +183,10 @@ function DriverTripManager() {
             e.endDate
         );
 
+        // save data filter in dialogDriverFilter => default value in dialogDriverFilter
         setDataFilter({
-            status: [e.status],
-            carType: [e.carType],
+            status: [...e.status],
+            carType: [...e.carType],
             scheduleCode: e.scheduleCode,
             address: e.address,
             ward: e.ward,
@@ -197,10 +199,23 @@ function DriverTripManager() {
         // show total data to filter in UI => button filter
         let total = status.length + carType.length;
         if (e.scheduleCode) total += 1;
-        if (e.address) total += 1;
         if (e.ward) total += 1;
         if (e.startDate && e.endDate) total += 1;
         setTotalDataFilter(total > 0 ? total : null);
+    };
+
+    const handleRefreshDataFilter = () => {
+        setDataFilter({
+            status: [],
+            carType: [],
+            scheduleCode: null,
+            address: null,
+            ward: null,
+            district: null,
+            province: null,
+            startDate: null,
+            endDate: null,
+        });
     };
 
     const run = async () => {
@@ -260,6 +275,7 @@ function DriverTripManager() {
                 defaultProvince={dataFilter.province}
                 defaultStartDate={dataFilter.startDate}
                 defaultEndDate={dataFilter.endDate}
+                handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
             <DialogShowSchedule

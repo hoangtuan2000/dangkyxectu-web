@@ -91,14 +91,14 @@ function DialogDriverFilter({
     const [showAddress, setShowAddress] = useState();
     const [dataSendApi, setDataSendApi] = useState({
         status: defaultStatus ? [...defaultStatus] : [],
-        carType: [],
-        scheduleCode: null,
-        address: null,
-        ward: null,
-        district: null,
-        province: null,
-        startDate: null,
-        endDate: null,
+        carType: defaultCarType ? [...defaultCarType] : [],
+        scheduleCode: defaultScheduleCode || null,
+        address: defaultAddress || null,
+        ward: defaultWard || null,
+        district: defaultDistrict || null,
+        province: defaultProvince || null,
+        startDate: defaultStartDate || null,
+        endDate: defaultEndDate || null,
     });
 
     const ButtonDate = forwardRef(({ value, onClick }, ref) => {
@@ -249,21 +249,26 @@ function DialogDriverFilter({
             endDate: null,
         });
         setShowAddress();
-        // setDataSendApi({
-        //     status: [],
-        //     carType: [],
-        //     scheduleCode: null,
-        //     address: null,
-        //     ward: null,
-        //     district: null,
-        //     province: null,
-        //     startDate: null,
-        //     endDate: null,
-        // });
+        setDataSendApi({
+            status: [],
+            carType: [],
+            scheduleCode: null,
+            address: null,
+            ward: null,
+            district: null,
+            province: null,
+            startDate: null,
+            endDate: null,
+        });
         handleRefreshDataFilter();
         //call function of child component: modalShowEndAdderss
         //=> reset value in modal choosse end address
         ModalShowEndAddressRef.current.handleResetAddress();
+    };
+
+    const handleSubmit = () => {
+        onSubmit(dataSendApi);
+        handleClose();
     };
 
     const run = async () => {
@@ -353,7 +358,7 @@ function DialogDriverFilter({
                         noOptionsText={Strings.Common.NO_DATA}
                         options={carTypeList}
                         getOptionLabel={(option) =>
-                            `${option.name} ${option.seatNumber}`
+                            `${option.name} ${option.seatNumber} Chổ`
                         }
                         renderInput={(params) => (
                             <TextField
@@ -462,7 +467,7 @@ function DialogDriverFilter({
                         endIcon={<CheckCircleIcon />}
                         color="primary"
                         sx={{ marginRight: 1 }}
-                        onClick={() => onSubmit(dataSendApi)}
+                        onClick={() => handleSubmit()}
                     >
                         {Strings.Common.SEARCH}
                     </ButtonFeatures>
@@ -476,10 +481,10 @@ function DialogDriverFilter({
                 titleModal={Strings.ModalShowAddress.TITLE_LOCATION}
                 onConfirm={(e) => handleShowAddress(e)}
                 ref={ModalShowEndAddressRef}
-                // defaultAddress={defaultStartAddress.address}
-                // defaultProvince={defaultStartAddress.province}
-                // defaultDistrict={defaultStartAddress.district}
-                // defaultWard={defaultStartAddress.ward}
+                defaultAddress={defaultAddress}
+                defaultProvince={defaultProvince}
+                defaultDistrict={defaultDistrict}
+                defaultWard={defaultWard}
                 notValidateAddress={true}
             />
 
