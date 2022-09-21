@@ -19,6 +19,22 @@ const DialogShowScheduleAdminServices = {
                 return err;
             });
     },
+    getDriverListForSchedule: async (data) => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.DialogShowScheduleAdmin.GET_DRIVER_LIST_FOR_SCHEDULE, data, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { DialogShowScheduleAdminServices };

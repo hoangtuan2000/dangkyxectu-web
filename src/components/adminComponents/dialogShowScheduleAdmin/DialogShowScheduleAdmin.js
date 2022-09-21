@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import {
     Box,
+    Button,
     DialogActions,
     DialogContent,
     ListItem,
     ListItemText,
+    TextField,
     Tooltip,
     useTheme,
 } from "@mui/material";
 import {
+    AutocompleteStyle,
     BoxLeft,
     BoxRight,
     ButtonFeatures,
@@ -21,9 +24,11 @@ import {
 } from "./DialogShowScheduleAdminCustomStyles";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import NearMeIcon from "@mui/icons-material/NearMe";
+import UpdateIcon from "@mui/icons-material/Update";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Strings from "../../../constants/Strings";
@@ -34,6 +39,7 @@ import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
 import { DialogShowScheduleAdminServices } from "../../../services/adminServices/DialogShowScheduleAdminServices";
 import helper from "../../../common/helper";
+import { GlobalService } from "../../../services/GlobalServices";
 
 function DialogShowScheduleAdmin({
     open,
@@ -52,6 +58,12 @@ function DialogShowScheduleAdmin({
     });
 
     const [schedule, setSchedule] = useState([]);
+    const [driverList, setDriverList] = useState([]);
+    const [scheduleStatusList, setScheduleStatusList] = useState([]);
+    const [dataSendApi, setDataSendApi] = useState({
+        status: null,
+        driver: null
+    });
 
     const getSchedule = async () => {
         const res = await DialogShowScheduleAdminServices.getSchedule({
@@ -61,6 +73,34 @@ function DialogShowScheduleAdmin({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setSchedule(res.data.data);
+
+                if (
+                    res.data.data[0].scheduleStatus ==
+                        Constants.ScheduleStatus.PENDING &&
+                    helper.isDateTimeStampGreaterThanCurrentDate(
+                        res.data.data[0].startDate
+                    )
+                ) {
+                    getCommon();
+                    setDataSendApi({
+                        ...dataSendApi,
+                        status: {
+                            idScheduleStatus: res.data.data[0].idScheduleStatus,
+                            name: res.data.data[0].scheduleStatus,
+                        },
+                    });
+                }
+
+                if(res.data.data[0].idDriver){
+                    setDataSendApi({
+                        ...dataSendApi,
+                        driver: {
+                            idDriver: res.data.data[0].idDriver,
+                            fullNameDriver: res.data.data[0].fullNameDriver,
+                            codeDriver: res.data.data[0].codeDriver,
+                        },
+                    });
+                }
             } else {
                 setModalError({
                     ...modalError,
@@ -81,6 +121,77 @@ function DialogShowScheduleAdmin({
                 content: res.name || null,
             });
         }
+    };
+
+    const getDriverListForSchedule = async (idCar, startDate, endDate) => {
+        const res =
+            await DialogShowScheduleAdminServices.getDriverListForSchedule({
+                idCar,
+                startDate,
+                endDate,
+            });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setDriverList(res.data.data);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+    };
+
+    const getCommon = async () => {
+        const res = await GlobalService.getCommon({
+            group: "schedule_status",
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setScheduleStatusList(res.data.data.schedule_status);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+    };
+
+    const handleSelectStatus = (value) => {
+        setDataSendApi({
+            ...dataSendApi,
+            status: value,
+        });
+        getDriverListForSchedule(schedule[0].idCar, schedule[0].startDate, schedule[0].endDate)
     };
 
     const run = async () => {
@@ -222,6 +333,70 @@ function DialogShowScheduleAdmin({
                                                 </Tooltip>
                                             </TextContent>
 
+                                            {/* INFO CREATED AT AND UPDATED AT */}
+                                            <Box>
+                                                {/* TITLE */}
+                                                <TextContent
+                                                    variant="p"
+                                                    component="div"
+                                                >
+                                                    {
+                                                        Strings
+                                                            .DialogShowScheduleAdmin
+                                                            .TIME
+                                                    }
+                                                </TextContent>
+
+                                                {/* LIST INFO TIME */}
+                                                <ListStyle>
+                                                    {/* CREATED AT */}
+                                                    <ListItem>
+                                                        <AccessTimeIcon />
+                                                        <Tooltip
+                                                            title={helper.formatDateTimeStringFromTimeStamp(
+                                                                item.createdAt
+                                                            )}
+                                                            arrow
+                                                        >
+                                                            <ListItemText
+                                                                primary={
+                                                                    Strings
+                                                                        .DialogShowScheduleAdmin
+                                                                        .CREATED_AT
+                                                                }
+                                                                secondary={helper.formatDateTimeStringFromTimeStamp(
+                                                                    item.createdAt
+                                                                )}
+                                                            />
+                                                        </Tooltip>
+                                                    </ListItem>
+
+                                                    {/* UPDATED AT */}
+                                                    {item.updatedAt && (
+                                                        <ListItem>
+                                                            <UpdateIcon />
+                                                            <Tooltip
+                                                                title={helper.formatDateTimeStringFromTimeStamp(
+                                                                    item.updatedAt
+                                                                )}
+                                                                arrow
+                                                            >
+                                                                <ListItemText
+                                                                    primary={
+                                                                        Strings
+                                                                            .DialogShowScheduleAdmin
+                                                                            .UPDATED_AT
+                                                                    }
+                                                                    secondary={helper.formatDateTimeStringFromTimeStamp(
+                                                                        item.updatedAt
+                                                                    )}
+                                                                />
+                                                            </Tooltip>
+                                                        </ListItem>
+                                                    )}
+                                                </ListStyle>
+                                            </Box>
+
                                             {/* INFO ADMIN */}
                                             <Box>
                                                 {/* TITLE */}
@@ -260,20 +435,16 @@ function DialogShowScheduleAdmin({
                                                         <ListItem>
                                                             <PersonIcon />
                                                             <Tooltip
-                                                                title={
-                                                                    item.fullNameAdmin
-                                                                }
+                                                                title={`${item.fullNameAdmin} - ${item.codeAdmin}`}
                                                                 arrow
                                                             >
                                                                 <ListItemText
                                                                     primary={
                                                                         Strings
                                                                             .DialogShowScheduleAdmin
-                                                                            .FULL_NAME
+                                                                            .NAME_CODE
                                                                     }
-                                                                    secondary={
-                                                                        item.fullNameAdmin
-                                                                    }
+                                                                    secondary={`${item.fullNameAdmin} - ${item.codeAdmin}`}
                                                                 />
                                                             </Tooltip>
                                                         </ListItem>
@@ -301,37 +472,136 @@ function DialogShowScheduleAdmin({
                                                 <span
                                                     style={{
                                                         fontWeight: "bold",
-                                                    }}
-                                                >{`${startDate} - ${endDate}`}</span>
-                                            </Tooltip>
-                                        </TextContent>
-
-                                        {/* STATUS SCHEDULE */}
-                                        <TextContent
-                                            variant="p"
-                                            component="div"
-                                        >
-                                            {
-                                                Strings.DialogShowScheduleAdmin
-                                                    .SCHEDULE_STATUS
-                                            }
-                                            <Tooltip
-                                                title={item.scheduleStatus}
-                                                arrow
-                                            >
-                                                <span
-                                                    style={{
-                                                        fontWeight: "bold",
-                                                        color: colorScheduleStatus,
+                                                        color:
+                                                            !helper.isDateTimeStampGreaterThanCurrentDate(
+                                                                item.startDate
+                                                            ) &&
+                                                            item.scheduleStatus ==
+                                                                Constants
+                                                                    .ScheduleStatus
+                                                                    .PENDING
+                                                                ? theme.palette
+                                                                      .error
+                                                                      .main
+                                                                : theme.palette
+                                                                      .text
+                                                                      .primary,
                                                     }}
                                                 >
-                                                    {item.scheduleStatus}
+                                                    {`${startDate} - ${endDate}`}
+                                                    {!helper.isDateTimeStampGreaterThanCurrentDate(
+                                                        item.startDate
+                                                    ) &&
+                                                    item.scheduleStatus ==
+                                                        Constants.ScheduleStatus
+                                                            .PENDING
+                                                        ? ` ( ${Strings.Common.OUT_OF_DATE} )`
+                                                        : null}
                                                 </span>
                                             </Tooltip>
                                         </TextContent>
 
+                                        {/* STATUS SCHEDULE */}
+                                        <Box>
+                                            {/* TEXT SCHEDULE STATUS */}
+                                            <TextContent
+                                                variant="p"
+                                                component="div"
+                                            >
+                                                {
+                                                    Strings
+                                                        .DialogShowScheduleAdmin
+                                                        .SCHEDULE_STATUS
+                                                }
+                                                {(item.scheduleStatus ==
+                                                    Constants.ScheduleStatus
+                                                        .PENDING &&
+                                                    !helper.isDateTimeStampGreaterThanCurrentDate(
+                                                        item.startDate
+                                                    )) ||
+                                                item.scheduleStatus !=
+                                                    Constants.ScheduleStatus
+                                                        .PENDING ? (
+                                                    <Tooltip
+                                                        title={
+                                                            item.scheduleStatus
+                                                        }
+                                                        arrow
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                fontWeight:
+                                                                    "bold",
+                                                                color: colorScheduleStatus,
+                                                            }}
+                                                        >
+                                                            {
+                                                                item.scheduleStatus
+                                                            }
+                                                        </span>
+                                                    </Tooltip>
+                                                ) : null}
+                                            </TextContent>
+
+                                            {/* SELECTBOX UPDATE SCHEDULE STATUS */}
+                                            {item.scheduleStatus ==
+                                                Constants.ScheduleStatus
+                                                    .PENDING &&
+                                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                                    item.startDate
+                                                ) && (
+                                                    <AutocompleteStyle
+                                                        disablePortal={false}
+                                                        size="small"
+                                                        sx={{ marginBottom: 1 }}
+                                                        noOptionsText={
+                                                            Strings.Common
+                                                                .NO_DATA
+                                                        }
+                                                        options={
+                                                            scheduleStatusList
+                                                        }
+                                                        getOptionLabel={(
+                                                            option
+                                                        ) => `${option.name}`}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
+                                                            <TextField
+                                                                {...params}
+                                                                placeholder={
+                                                                    Strings
+                                                                        .DialogDriverTripManagerFilter
+                                                                        .CHOOSE_STATUS
+                                                                }
+                                                            />
+                                                        )}
+                                                        onChange={(
+                                                            event,
+                                                            newValue
+                                                        ) => {
+                                                            handleSelectStatus(
+                                                                newValue
+                                                            );
+                                                        }}
+                                                        value={
+                                                            dataSendApi.status ||
+                                                            null
+                                                        }
+                                                        isOptionEqualToValue={(
+                                                            option,
+                                                            value
+                                                        ) =>
+                                                            option.idScheduleStatus ===
+                                                            value.idScheduleStatus
+                                                        }
+                                                    />
+                                                )}
+                                        </Box>
+
                                         {/* INFO DRIVER */}
                                         <Box>
+                                            {/* TEXT INFO DRIVER */}
                                             <TextContent
                                                 variant="p"
                                                 component="div"
@@ -359,6 +629,66 @@ function DialogShowScheduleAdmin({
                                                 )}
                                             </TextContent>
 
+                                            {/* SELECTBOX UPDATE DRIVER*/}
+                                            {((dataSendApi.status &&
+                                                dataSendApi.status
+                                                    .idScheduleStatus ==
+                                                    Constants.ScheduleStatusCode
+                                                        .APPROVED) ||
+                                                item.scheduleStatus ==
+                                                    Constants.ScheduleStatus
+                                                        .APPROVED) &&
+                                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                                    item.startDate
+                                                ) && (
+                                                    <AutocompleteStyle
+                                                        disablePortal={false}
+                                                        size="small"
+                                                        sx={{ marginBottom: 1 }}
+                                                        noOptionsText={
+                                                            Strings.Common
+                                                                .NO_DATA
+                                                        }
+                                                        options={
+                                                            driverList
+                                                        }
+                                                        getOptionLabel={(
+                                                            option
+                                                        ) => `${option.fullNameDriver} - ${option.codeDriver}`}
+                                                        renderInput={(
+                                                            params
+                                                        ) => (
+                                                            <TextField
+                                                                {...params}
+                                                                placeholder={
+                                                                    Strings
+                                                                        .DialogDriverTripManagerFilter
+                                                                        .CHOOSE_STATUS
+                                                                }
+                                                            />
+                                                        )}
+                                                        onChange={(
+                                                            event,
+                                                            newValue
+                                                        ) => {
+                                                            handleSelectStatus(
+                                                                newValue
+                                                            );
+                                                        }}
+                                                        value={
+                                                            dataSendApi.driver ||
+                                                            null
+                                                        }
+                                                        isOptionEqualToValue={(
+                                                            option,
+                                                            value
+                                                        ) =>
+                                                            option.idDriver ===
+                                                            value.idDriver
+                                                        }
+                                                    />
+                                                )}
+
                                             {/* LIST INFO DRIVER */}
                                             {item.fullNameDriver && (
                                                 <ListStyle>
@@ -366,20 +696,16 @@ function DialogShowScheduleAdmin({
                                                     <ListItem>
                                                         <PersonIcon />
                                                         <Tooltip
-                                                            title={
-                                                                item.fullNameDriver
-                                                            }
+                                                            title={`${item.fullNameDriver} - ${item.codeDriver}`}
                                                             arrow
                                                         >
                                                             <ListItemText
                                                                 primary={
                                                                     Strings
                                                                         .DialogShowScheduleAdmin
-                                                                        .FULL_NAME
+                                                                        .NAME_CODE
                                                                 }
-                                                                secondary={
-                                                                    item.fullNameDriver
-                                                                }
+                                                                secondary={`${item.fullNameDriver} - ${item.codeDriver}`}
                                                             />
                                                         </Tooltip>
                                                     </ListItem>
@@ -451,20 +777,16 @@ function DialogShowScheduleAdmin({
                                                 <ListItem>
                                                     <PersonIcon />
                                                     <Tooltip
-                                                        title={
-                                                            item.fullNameUser
-                                                        }
+                                                        title={`${item.fullNameUser} - ${item.codeUser}`}
                                                         arrow
                                                     >
                                                         <ListItemText
                                                             primary={
                                                                 Strings
                                                                     .DialogShowScheduleAdmin
-                                                                    .FULL_NAME
+                                                                    .NAME_CODE_FACULTY
                                                             }
-                                                            secondary={
-                                                                item.fullNameUser
-                                                            }
+                                                            secondary={`${item.fullNameUser} - ${item.codeUser} - ${item.nameFaculty}`}
                                                         />
                                                     </Tooltip>
                                                 </ListItem>
@@ -531,7 +853,7 @@ function DialogShowScheduleAdmin({
                                                 <ListItem>
                                                     <CreateIcon />
                                                     <Tooltip
-                                                        title={item.note}
+                                                        title={item.note || ""}
                                                         arrow
                                                     >
                                                         <ListItemText

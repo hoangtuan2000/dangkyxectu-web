@@ -1,4 +1,5 @@
 import {
+    Autocomplete,
     Box,
     Button,
     Dialog,
@@ -422,6 +423,57 @@ const ListStyle = styled(List)(({ theme }) => ({
     },
 }));
 
+const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
+    display: "flex",
+    justifyContent: "space-between",
+    marginLeft: 10,
+    textTransform: "capitalize",
+    color: theme.palette.text.disabled,
+    borderColor: theme.palette.action.disabled,
+    [theme.breakpoints.up("mobileS")]: {
+        width: 220,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+}));
+
 export {
     Title,
     DialogContainer,
@@ -433,4 +485,5 @@ export {
     TextContent,
     TextInput,
     ListStyle,
+    AutocompleteStyle
 };

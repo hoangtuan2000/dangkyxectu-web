@@ -25,7 +25,14 @@ const helper = {
         timeStamp = parseInt(timeStamp);
         return new Date(timeStamp * 1000).toLocaleDateString("en-GB");
     },
-    
+
+    formatDateTimeStringFromTimeStamp: (timeStamp) => {
+        timeStamp = parseInt(timeStamp);
+        let date = new Date(timeStamp * 1000).toLocaleDateString("en-GB")
+        let time = new Date(timeStamp * 1000).toLocaleTimeString('en-US')
+        return timeStamp ? `${date} ${time}` : false
+    },
+
     isValidStarNumber: (value) => {
         return parseFloat(value) > 0 && parseFloat(value) <= 5.0 ? true : false;
     },
@@ -38,6 +45,13 @@ const helper = {
 
     isArray: (value) => {
         return Array.isArray(value);
+    },
+
+    isDateTimeStampGreaterThanCurrentDate: (timeStamp) => {
+        return (
+            new Date(new Date(timeStamp * 1000).toDateString()) >
+            new Date(new Date().toDateString())
+        );
     },
 };
 

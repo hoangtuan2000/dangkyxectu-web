@@ -46,6 +46,7 @@ const Strings = {
         FILTER: "Bộ Lọc",
         SEARCH: "Tìm Kiếm",
         REFRESH: "Làm Mới",
+        OUT_OF_DATE: "Quá Hạn",
     },
 
     Login: {
@@ -112,7 +113,8 @@ const Strings = {
         DRIVER: "Tài Xế: ",
         SCHEDULE_STATUS: "Trạng Thái Lịch Trình: ",
         TIME: "Thời Gian: ",
-        FULL_NAME: "Họ Tên:",
+        NAME_CODE: "Họ Tên - Mã Cán Bộ:",
+        NAME_CODE_FACULTY: "Họ Tên - Mã Cán Bộ - Thuộc Khoa: ",
         PHONE: "Số Điện Thoại:",
         EMAIL: "Email:",
         NOTE: "Ghi Chú:",
@@ -120,6 +122,8 @@ const Strings = {
         START_LOCATION: "Điểm Xuất Phát: ",
         END_LOCATION: "Điểm Đến: ",
         INFO_ADMIN: "Thông Tin Admin: ",
+        CREATED_AT: "Ngày Đăng Ký: ",
+        UPDATED_AT: "Ngày Cập Nhật: ",
     },
 
     CarRegistrationManagement: {

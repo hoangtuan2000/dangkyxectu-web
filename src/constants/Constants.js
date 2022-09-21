@@ -52,6 +52,7 @@ const Constants = {
         },
         DialogShowScheduleAdmin: {
             GET_SCHEDULE: "/getSchedule",
+            GET_DRIVER_LIST_FOR_SCHEDULE: "/getDriverListForSchedule",
         },
     },
 
@@ -81,6 +82,13 @@ const Constants = {
         COMPLETE: "Hoàn Thành",
         CANCELLED: "Đã Hủy",
         REFUSE: "Từ Chối",
+    },
+    ScheduleStatusCode: {
+        PENDING: 1,
+        APPROVED: 2,
+        COMPLETE: 3,
+        CANCELLED: 4,
+        REFUSE: 5,
     },
 
     ColorOfScheduleStatus: {
