@@ -47,6 +47,8 @@ const Strings = {
         SEARCH: "Tìm Kiếm",
         REFRESH: "Làm Mới",
         OUT_OF_DATE: "Quá Hạn",
+        COMPLETE: "Hoàn Thành",
+        CONFIRM_COMPLETED: "Xác Nhận Đã Hoàn Thành",
     },
 
     Login: {
@@ -217,6 +219,7 @@ const Strings = {
         CAR_TYPE: "Loại Xe:",
         CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
         CHOOSE_STATUS: "-- Chọn Trạng Thái --",
+        CHOOSE_DRIVER: "-- Chọn Tài Xế --",
         SCHEDULE_CODE: "Mã Lịch Trình:",
         ENTER_SCHEDULE_CODE: "-- Nhập Mã Lịch Trình --",
         TIME: "Thời Gian: ",

@@ -53,6 +53,7 @@ const Constants = {
         DialogShowScheduleAdmin: {
             GET_SCHEDULE: "/getSchedule",
             GET_DRIVER_LIST_FOR_SCHEDULE: "/getDriverListForSchedule",
+            GET_SCHEDULE_STATUS_LIST: "/getScheduleStatusList",
         },
     },
 

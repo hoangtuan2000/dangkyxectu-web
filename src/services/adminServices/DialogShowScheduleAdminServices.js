@@ -35,6 +35,22 @@ const DialogShowScheduleAdminServices = {
                 return err;
             });
     },
+    getScheduleStatusList: async () => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.DialogShowScheduleAdmin.GET_SCHEDULE_STATUS_LIST, null, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { DialogShowScheduleAdminServices };

@@ -324,7 +324,7 @@ function CarRegistrationManagement() {
                         open: false,
                     })
                 }
-                idSchedule={dialogShowScheduleAdmin.idSchedule}
+                idSchedule={dialogShowScheduleAdmin.open ? dialogShowScheduleAdmin.idSchedule : null}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
             />
 
