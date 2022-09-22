@@ -130,39 +130,6 @@ function DialogShowScheduleAdmin({
                     res.data.data[0].startDate,
                     res.data.data[0].endDate
                 );
-
-                // if (
-                //     res.data.data[0].scheduleStatus ==
-                //         Constants.ScheduleStatus.PENDING &&
-                //     helper.isDateTimeStampGreaterThanCurrentDate(
-                //         res.data.data[0].startDate
-                //     )
-                // ) {
-                //     getScheduleStatusList();
-                //     setDataSendApi({
-                //         ...dataSendApi,
-                //         status: {
-                //             idScheduleStatus: res.data.data[0].idScheduleStatus,
-                //             name: res.data.data[0].scheduleStatus,
-                //         },
-                //     });
-                // }
-
-                // if (res.data.data[0].idDriver) {
-                //     setDataSendApi({
-                //         ...dataSendApi,
-                //         driver: {
-                //             idDriver: res.data.data[0].idDriver,
-                //             fullNameDriver: res.data.data[0].fullNameDriver,
-                //             codeDriver: res.data.data[0].codeDriver,
-                //         },
-                //     });
-                //     getDriverListForSchedule(
-                //         res.data.data[0].idCar,
-                //         res.data.data[0].startDate,
-                //         res.data.data[0].endDate
-                //     );
-                // }
             } else {
                 setModalError({
                     ...modalError,
@@ -280,15 +247,16 @@ function DialogShowScheduleAdmin({
         //update status complete
     };
 
-    const handleUpdateSchedule = () => {
-        const data = handleFormatDataSendApi();
-        // if schedule approved => only update driver
+    const handleUpdateSchedule = async () => {
+        const data = await handleFormatDataSendApi();
+
+        // if schedule old is approved => only update driver
         if (
             schedule[0].idScheduleStatus ==
                 Constants.ScheduleStatusCode.APPROVED &&
             helper.isDateTimeStampGreaterThanCurrentDate(schedule[0].startDate)
         ) {
-            if (!dataSendApi.driver) {
+            if (!data.idDriver) {
                 setErrorDataSendApi({
                     ...errorDataSendApi,
                     errorDriver: true,
@@ -299,15 +267,15 @@ function DialogShowScheduleAdmin({
                 handleGetAdminScheduleListWithFilter();
             }
         }
-        // if schedule pending => update status or driver
+        // if schedule old is pending => update status or driver
         else {
-            if (dataSendApi.status) {
+            if (data.idScheduleStatus) {
                 // if select the schedule status as approved => update status and driver
                 if (
-                    dataSendApi.status.idScheduleStatus ==
+                    data.idScheduleStatus ==
                     Constants.ScheduleStatusCode.APPROVED
                 ) {
-                    if (!dataSendApi.driver) {
+                    if (!data.idDriver) {
                         setErrorDataSendApi({
                             ...errorDataSendApi,
                             errorDriver: true,
@@ -321,7 +289,7 @@ function DialogShowScheduleAdmin({
 
                 // if selecting schedule status is not approved => only update status
                 else if (
-                    dataSendApi.status.idScheduleStatus !=
+                    data.idScheduleStatus !=
                     Constants.ScheduleStatusCode.APPROVED
                 ) {
                     updateSchedule(data);
@@ -1133,6 +1101,23 @@ function DialogShowScheduleAdmin({
                                         color="primary"
                                         sx={{ marginRight: 1 }}
                                         onClick={handleUpdateSchedule}
+                                        disabled={
+                                            (schedule[0].idScheduleStatus ==
+                                                Constants.ScheduleStatusCode
+                                                    .PENDING &&
+                                                dataSendApi.status &&
+                                                dataSendApi.status
+                                                    .idScheduleStatus ==
+                                                    Constants.ScheduleStatusCode
+                                                        .PENDING) ||
+                                            (schedule[0].idScheduleStatus ==
+                                                Constants.ScheduleStatusCode
+                                                    .APPROVED &&
+                                                dataSendApi.driver &&
+                                                schedule.length > 0 &&
+                                                dataSendApi.driver.idDriver ==
+                                                    schedule[0].idDriver)
+                                        }
                                     >
                                         {Strings.Common.UPDATE}
                                     </ButtonFeatures>
