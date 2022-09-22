@@ -186,7 +186,7 @@ function RentedCar() {
             if (res.data.status == Constants.ApiCode.OK) {
                 setModalSuccess(true);
                 await setBackDrop(true);
-                await getUserRegisteredScheduleList();
+                await handleGetUserRegisteredScheduleListWithFilter();
                 await setTimeout(() => {
                     setBackDrop(false);
                 }, 1000);
@@ -237,6 +237,21 @@ function RentedCar() {
             endDate: data.endDate,
         };
     };
+
+    const handleGetUserRegisteredScheduleListWithFilter = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getUserRegisteredScheduleList(
+            dataInfo.page,
+            dataInfo.pageSize,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
+    }
 
     const handleFilter = (e) => {
         //format data to send API
@@ -381,6 +396,7 @@ function RentedCar() {
                 }
                 idSchedule={dialogShowScheduleUser.idSchedule}
                 titleDialog={Strings.Common.UPDATE_SCHEDULE}
+                handleGetUserRegisteredScheduleListWithFilter={handleGetUserRegisteredScheduleListWithFilter}
             />
 
             <ModalError

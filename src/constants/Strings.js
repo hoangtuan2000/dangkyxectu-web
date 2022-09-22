@@ -126,6 +126,8 @@ const Strings = {
         INFO_ADMIN: "Thông Tin Admin: ",
         CREATED_AT: "Ngày Đăng Ký: ",
         UPDATED_AT: "Ngày Cập Nhật: ",
+        PLEASE_CHOOSE_STATUS: "Vui Lòng Chọn Trạng Thái",
+        PLEASE_CHOOSE_DRIVER: "Vui Lòng Chọn Tài Xế",
     },
 
     CarRegistrationManagement: {

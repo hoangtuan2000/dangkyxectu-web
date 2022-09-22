@@ -205,6 +205,21 @@ function CarRegistrationManagement() {
         };
     };
 
+    const handleGetAdminScheduleListWithFilter = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getAdminScheduleList(
+            dataInfo.page,
+            dataInfo.pageSize,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
+    }
+
     const handleFilter = (e) => {
         //format data to send API
         let status = [];
@@ -326,6 +341,7 @@ function CarRegistrationManagement() {
                 }
                 idSchedule={dialogShowScheduleAdmin.open ? dialogShowScheduleAdmin.idSchedule : null}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
+                handleGetAdminScheduleListWithFilter={handleGetAdminScheduleListWithFilter}
             />
 
             {/* <DialogRentedCarFilter

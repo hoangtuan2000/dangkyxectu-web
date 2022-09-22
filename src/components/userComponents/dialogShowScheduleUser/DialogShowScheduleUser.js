@@ -43,6 +43,7 @@ function DialogShowScheduleUser({
     handleClose,
     idSchedule,
     titleDialog,
+    handleGetUserRegisteredScheduleListWithFilter,
 }) {
     const theme = useTheme();
 
@@ -152,6 +153,7 @@ function DialogShowScheduleUser({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setModalSuccess(true);
+                handleGetUserRegisteredScheduleListWithFilter()
             } else {
                 setModalError({
                     ...modalError,

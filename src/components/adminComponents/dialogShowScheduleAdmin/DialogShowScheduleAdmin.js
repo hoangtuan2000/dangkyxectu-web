@@ -46,6 +46,7 @@ function DialogShowScheduleAdmin({
     handleClose,
     idSchedule,
     titleDialog,
+    handleGetAdminScheduleListWithFilter,
 }) {
     const theme = useTheme();
 
@@ -61,7 +62,7 @@ function DialogShowScheduleAdmin({
     const [driverList, setDriverList] = useState([]);
     const [scheduleStatusList, setScheduleStatusList] = useState([]);
     const [dataSendApi, setDataSendApi] = useState({
-        idSchedule: idSchedule || null,
+        idSchedule: null,
         status: null,
         driver: null,
     });
@@ -69,6 +70,38 @@ function DialogShowScheduleAdmin({
         errorStatus: false,
         errorDriver: false,
     });
+
+    const updateSchedule = async (data) => {
+        const res = await DialogShowScheduleAdminServices.updateSchedule({
+            ...data,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                handleGetAdminScheduleListWithFilter();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+    };
 
     const getSchedule = async () => {
         const res = await DialogShowScheduleAdminServices.getSchedule({
@@ -78,39 +111,58 @@ function DialogShowScheduleAdmin({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setSchedule(res.data.data);
+                setDataSendApi({
+                    ...dataSendApi,
+                    idSchedule: res.data.data[0].idSchedule,
+                    status: {
+                        idScheduleStatus: res.data.data[0].idScheduleStatus,
+                        name: res.data.data[0].scheduleStatus,
+                    },
+                    driver: {
+                        idDriver: res.data.data[0].idDriver,
+                        fullNameDriver: res.data.data[0].fullNameDriver,
+                        codeDriver: res.data.data[0].codeDriver,
+                    },
+                });
+                getScheduleStatusList();
+                getDriverListForSchedule(
+                    res.data.data[0].idCar,
+                    res.data.data[0].startDate,
+                    res.data.data[0].endDate
+                );
 
-                if (
-                    res.data.data[0].scheduleStatus ==
-                        Constants.ScheduleStatus.PENDING &&
-                    helper.isDateTimeStampGreaterThanCurrentDate(
-                        res.data.data[0].startDate
-                    )
-                ) {
-                    getScheduleStatusList();
-                    setDataSendApi({
-                        ...dataSendApi,
-                        status: {
-                            idScheduleStatus: res.data.data[0].idScheduleStatus,
-                            name: res.data.data[0].scheduleStatus,
-                        },
-                    });
-                }
+                // if (
+                //     res.data.data[0].scheduleStatus ==
+                //         Constants.ScheduleStatus.PENDING &&
+                //     helper.isDateTimeStampGreaterThanCurrentDate(
+                //         res.data.data[0].startDate
+                //     )
+                // ) {
+                //     getScheduleStatusList();
+                //     setDataSendApi({
+                //         ...dataSendApi,
+                //         status: {
+                //             idScheduleStatus: res.data.data[0].idScheduleStatus,
+                //             name: res.data.data[0].scheduleStatus,
+                //         },
+                //     });
+                // }
 
-                if (res.data.data[0].idDriver) {
-                    setDataSendApi({
-                        ...dataSendApi,
-                        driver: {
-                            idDriver: res.data.data[0].idDriver,
-                            fullNameDriver: res.data.data[0].fullNameDriver,
-                            codeDriver: res.data.data[0].codeDriver,
-                        },
-                    });
-                    getDriverListForSchedule(
-                        res.data.data[0].idCar,
-                        res.data.data[0].startDate,
-                        res.data.data[0].endDate
-                    );
-                }
+                // if (res.data.data[0].idDriver) {
+                //     setDataSendApi({
+                //         ...dataSendApi,
+                //         driver: {
+                //             idDriver: res.data.data[0].idDriver,
+                //             fullNameDriver: res.data.data[0].fullNameDriver,
+                //             codeDriver: res.data.data[0].codeDriver,
+                //         },
+                //     });
+                //     getDriverListForSchedule(
+                //         res.data.data[0].idCar,
+                //         res.data.data[0].startDate,
+                //         res.data.data[0].endDate
+                //     );
+                // }
             } else {
                 setModalError({
                     ...modalError,
@@ -215,63 +267,71 @@ function DialogShowScheduleAdmin({
         });
     };
 
+    const handleFormatDataSendApi = () => {
+        return {
+            idSchedule: dataSendApi.idSchedule,
+            idScheduleStatus:
+                dataSendApi.status && dataSendApi.status.idScheduleStatus,
+            idDriver: dataSendApi.driver && dataSendApi.driver.idDriver,
+        };
+    };
+
     const handleScheduleCompletionConfirmation = () => {
         //update status complete
     };
 
     const handleUpdateSchedule = () => {
+        const data = handleFormatDataSendApi();
         // if schedule approved => only update driver
         if (
             schedule[0].idScheduleStatus ==
-            Constants.ScheduleStatusCode.APPROVED
+                Constants.ScheduleStatusCode.APPROVED &&
+            helper.isDateTimeStampGreaterThanCurrentDate(schedule[0].startDate)
         ) {
-            if (helper.isNullOrEmpty(dataSendApi.driver.idDriver)) {
+            if (!dataSendApi.driver) {
                 setErrorDataSendApi({
                     ...errorDataSendApi,
                     errorDriver: true,
                 });
             } else {
                 //submit
+                updateSchedule(data);
+                handleGetAdminScheduleListWithFilter();
             }
         }
         // if schedule pending => update status or driver
         else {
-            // if select the schedule status as approved => update status and driver
-            if (
-                dataSendApi.status.idScheduleStatus ==
-                Constants.ScheduleStatusCode.APPROVED
-            ) {
+            if (dataSendApi.status) {
+                // if select the schedule status as approved => update status and driver
                 if (
-                    helper.isNullOrEmpty(dataSendApi.driver.idDriver) ||
-                    helper.isNullOrEmpty(dataSendApi.status.idScheduleStatus)
+                    dataSendApi.status.idScheduleStatus ==
+                    Constants.ScheduleStatusCode.APPROVED
                 ) {
-                    setErrorDataSendApi({
-                        ...errorDataSendApi,
-                        errorDriver: helper.isNullOrEmpty(
-                            dataSendApi.driver.idDriver
-                        )
-                            ? true
-                            : false,
-                        errorStatus: helper.isNullOrEmpty(
-                            dataSendApi.status.idScheduleStatus
-                        )
-                            ? true
-                            : false,
-                    });
-                } else {
-                    //submit
+                    if (!dataSendApi.driver) {
+                        setErrorDataSendApi({
+                            ...errorDataSendApi,
+                            errorDriver: true,
+                        });
+                    } else {
+                        //submit
+                        updateSchedule(data);
+                        handleGetAdminScheduleListWithFilter();
+                    }
                 }
-            }
-            // if selecting schedule status is not approved => only update status
-            else {
-                if (helper.isNullOrEmpty(dataSendApi.status.idScheduleStatus)) {
-                    setErrorDataSendApi({
-                        ...errorDataSendApi,
-                        errorStatus: true,
-                    });
-                } else {
-                    //submit
+
+                // if selecting schedule status is not approved => only update status
+                else if (
+                    dataSendApi.status.idScheduleStatus !=
+                    Constants.ScheduleStatusCode.APPROVED
+                ) {
+                    updateSchedule(data);
+                    handleGetAdminScheduleListWithFilter();
                 }
+            } else {
+                setErrorDataSendApi({
+                    ...errorDataSendApi,
+                    errorStatus: true,
+                });
             }
         }
     };
@@ -285,6 +345,10 @@ function DialogShowScheduleAdmin({
     };
 
     useEffect(() => {
+        setErrorDataSendApi({
+            errorDriver: false,
+            errorStatus: false,
+        });
         run();
     }, [idSchedule]);
 
@@ -656,7 +720,16 @@ function DialogShowScheduleAdmin({
                                                                         .DialogDriverTripManagerFilter
                                                                         .CHOOSE_STATUS
                                                                 }
-                                                                error={true}
+                                                                error={
+                                                                    errorDataSendApi.errorStatus
+                                                                }
+                                                                helperText={
+                                                                    errorDataSendApi.errorStatus
+                                                                        ? Strings
+                                                                              .DialogShowScheduleAdmin
+                                                                              .PLEASE_CHOOSE_STATUS
+                                                                        : null
+                                                                }
                                                             />
                                                         )}
                                                         onChange={(
@@ -747,6 +820,16 @@ function DialogShowScheduleAdmin({
                                                                     Strings
                                                                         .DialogDriverTripManagerFilter
                                                                         .CHOOSE_DRIVER
+                                                                }
+                                                                error={
+                                                                    errorDataSendApi.errorDriver
+                                                                }
+                                                                helperText={
+                                                                    errorDataSendApi.errorDriver
+                                                                        ? Strings
+                                                                              .DialogShowScheduleAdmin
+                                                                              .PLEASE_CHOOSE_DRIVER
+                                                                        : null
                                                                 }
                                                             />
                                                         )}
@@ -1035,13 +1118,14 @@ function DialogShowScheduleAdmin({
                                 </ButtonFeatures>
 
                                 {/* SUBMIT BUTTON */}
-                                {schedule[0].idScheduleStatus ==
+                                {(schedule[0].idScheduleStatus ==
                                     Constants.ScheduleStatusCode.PENDING ||
-                                (schedule[0].idScheduleStatus ==
-                                    Constants.ScheduleStatusCode.APPROVED &&
-                                    !helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
-                                        schedule[0].startDate
-                                    )) ? (
+                                    schedule[0].idScheduleStatus ==
+                                        Constants.ScheduleStatusCode
+                                            .APPROVED) &&
+                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                    schedule[0].startDate
+                                ) ? (
                                     <ButtonFeatures
                                         size="small"
                                         variant="contained"
@@ -1057,7 +1141,7 @@ function DialogShowScheduleAdmin({
                                 {/* COMPLETE BUTTON */}
                                 {schedule[0].idScheduleStatus ==
                                     Constants.ScheduleStatusCode.APPROVED &&
-                                    helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                    !helper.isDateTimeStampGreaterThanCurrentDate(
                                         schedule[0].startDate
                                     ) && (
                                         <Tooltip
