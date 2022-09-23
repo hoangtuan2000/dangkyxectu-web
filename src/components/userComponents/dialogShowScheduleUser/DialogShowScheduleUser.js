@@ -37,6 +37,7 @@ import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
 import { DialogShowScheduleUserServices } from "../../../services/userServices/DialogShowScheduleUserServices";
 import helper from "../../../common/helper";
+import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 
 function DialogShowScheduleUser({
     open,
@@ -53,6 +54,12 @@ function DialogShowScheduleUser({
         open: false,
         title: null,
         content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_UPDATE,
+        content: Strings.Common.SCHEDULE_UPDATE_CONFIRMATION,
+        handleSubmit: () => {},
     });
 
     const [schedule, setSchedule] = useState([]);
@@ -153,12 +160,13 @@ function DialogShowScheduleUser({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setModalSuccess(true);
-                handleGetUserRegisteredScheduleListWithFilter()
+                handleGetUserRegisteredScheduleListWithFilter();
             } else {
                 setModalError({
                     ...modalError,
                     open: true,
                     title: res.data.message,
+                    content: null,
                 });
             }
         }
@@ -174,6 +182,17 @@ function DialogShowScheduleUser({
                 content: res.name || null,
             });
         }
+    };
+
+    const onSubmit = () => {
+        // call dialog confirm => submit
+        setDialogConfirmation({
+            ...dialogConfirmation,
+            open: true,
+            handleSubmit: () => {
+                handleSubmit();
+            },
+        });
     };
 
     const run = async () => {
@@ -557,7 +576,7 @@ function DialogShowScheduleUser({
                                         endIcon={<CheckCircleIcon />}
                                         color="primary"
                                         sx={{ marginRight: 1 }}
-                                        onClick={handleSubmit}
+                                        onClick={onSubmit}
                                         disabled={
                                             schedule.length > 0 &&
                                             (dataSendApi.starNumber !=
@@ -578,6 +597,19 @@ function DialogShowScheduleUser({
                     </Box>
                 );
             })}
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                handleSubmit={dialogConfirmation.handleSubmit}
+            />
 
             <ModalError
                 open={modalError.open}

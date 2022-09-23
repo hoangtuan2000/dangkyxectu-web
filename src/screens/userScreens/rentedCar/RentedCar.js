@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Box, Tooltip, Typography } from "@mui/material";
+import { Badge, Box, Tooltip, Typography, useTheme } from "@mui/material";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../../constants/Strings";
 import { RentedCarService } from "../../../services/userServices/RentedCarServices";
@@ -16,8 +16,10 @@ import RoutesPath from "../../../constants/RoutesPath";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FabStyle } from "./RentedCarCustomStyles";
 import DialogRentedCarFilter from "../../../components/userComponents/dialogRentedCarFilter/DialogRentedCarFilter";
+import DialogConfirmation from "../../../components/dialogConfirmation/DialogConfirmation";
 
 function RentedCar() {
+    const theme = useTheme()
     const navigate = useNavigate();
 
     const [backDrop, setBackDrop] = useState(false);
@@ -26,6 +28,12 @@ function RentedCar() {
         open: false,
         title: null,
         content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_CANCEL_SCHEDULE,
+        content: Strings.Common.SCHEDULE_CANCEL_CONFIRMATION,
+        handleSubmit: () => {},
     });
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
@@ -212,6 +220,17 @@ function RentedCar() {
         }
     };
 
+    const onCancelSchedule = (e) => {
+        // call dialog confirm => submit
+        setDialogConfirmation({
+            ...dialogConfirmation,
+            open: true,
+            handleSubmit: () => {
+                handleCancelSchedule(e);
+            },
+        });
+    };
+
     const handleFormatDataFilterSendApi = (data) => {
         //format data to send API
         let status = [];
@@ -251,7 +270,7 @@ function RentedCar() {
             data.startDate,
             data.endDate
         );
-    }
+    };
 
     const handleFilter = (e) => {
         //format data to send API
@@ -370,7 +389,7 @@ function RentedCar() {
                         handleOpenDialogSchedule(e);
                     },
                     (e) => {
-                        handleCancelSchedule(e);
+                        onCancelSchedule(e);
                     },
                     (e) => {
                         handleUpdateSchedulePending(e);
@@ -396,7 +415,24 @@ function RentedCar() {
                 }
                 idSchedule={dialogShowScheduleUser.idSchedule}
                 titleDialog={Strings.Common.UPDATE_SCHEDULE}
-                handleGetUserRegisteredScheduleListWithFilter={handleGetUserRegisteredScheduleListWithFilter}
+                handleGetUserRegisteredScheduleListWithFilter={
+                    handleGetUserRegisteredScheduleListWithFilter
+                }
+            />
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                colorTitle={theme.palette.error.main}
+                colorButtonSubmit={theme.palette.error.main}
+                handleSubmit={dialogConfirmation.handleSubmit}
             />
 
             <ModalError

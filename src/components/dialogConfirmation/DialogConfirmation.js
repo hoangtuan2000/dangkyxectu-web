@@ -18,17 +18,18 @@ function DialogConfirmation({
     title,
     colorTitle,
     content,
+    colorButtonSubmit,
     handleSubmit,
 }) {
     const theme = useTheme();
 
     const handleCancel = () => {
-        handleClose()
+        handleClose();
     };
 
     const handleConfirm = () => {
         handleSubmit();
-        handleClose()
+        handleClose();
     };
 
     return (
@@ -75,7 +76,9 @@ function DialogConfirmation({
                         size="small"
                         sx={{
                             marginRight: 1,
-                            color: theme.palette.primary.main,
+                            color: colorButtonSubmit
+                                ? colorButtonSubmit
+                                : theme.palette.primary.main,
                         }}
                         onClick={handleConfirm}
                     >
