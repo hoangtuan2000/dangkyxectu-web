@@ -159,7 +159,7 @@ const BoxContent = styled(Box)(({ theme }) => ({
 }));
 
 const TextStyle = styled(Typography)(({ theme }) => ({
-    width: 90,
+    width: 100,
     [theme.breakpoints.up("mobileS")]: {
         fontSize: 12,
     },

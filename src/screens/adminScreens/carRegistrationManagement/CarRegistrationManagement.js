@@ -12,6 +12,7 @@ import helper from "../../../common/helper";
 import { FabStyle } from "./CarRegistrationManagementCustomStyles";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import DialogShowScheduleAdmin from "../../../components/adminComponents/dialogShowScheduleAdmin/DialogShowScheduleAdmin";
+import DialogCarRegistrationManagementFilter from "../../../components/adminComponents/dialogCarRegistrationManagementFilter/DialogCarRegistrationManagementFilter";
 
 function CarRegistrationManagement() {
     const theme = useTheme();
@@ -32,6 +33,10 @@ function CarRegistrationManagement() {
     const [dataFilter, setDataFilter] = useState({
         status: [],
         carType: [],
+        faculty: [],
+        infoUser: null,
+        infoDriver: null,
+        licensePlates: null,
         scheduleCode: null,
         address: null,
         ward: null,
@@ -57,6 +62,10 @@ function CarRegistrationManagement() {
         pageSize = dataInfo.pageSize,
         status,
         carType,
+        faculty,
+        infoUser,
+        infoDriver,
+        licensePlates,
         scheduleCode,
         address,
         idWard,
@@ -68,6 +77,10 @@ function CarRegistrationManagement() {
             limitEntry: pageSize,
             status,
             carType,
+            faculty,
+            infoUser,
+            infoDriver,
+            licensePlates,
             scheduleCode,
             address,
             idWard,
@@ -115,6 +128,10 @@ function CarRegistrationManagement() {
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
                             update: item.startDate, //check startdate > current date => cancel schedule
+                            driver:
+                                item.fullNameDriver && item.codeDriver
+                                    ? `${item.fullNameDriver} - ${item.codeDriver}`
+                                    : null,
                         };
                     })
                 );
@@ -123,6 +140,7 @@ function CarRegistrationManagement() {
                     ...modalError,
                     open: true,
                     title: res.data.message,
+                    content: null,
                 });
             }
         }
@@ -183,6 +201,7 @@ function CarRegistrationManagement() {
         //format data to send API
         let status = [];
         let carType = [];
+        let faculty = [];
         if (helper.isArray(data.status) && data.status.length > 0) {
             status = data.status.map((item) => {
                 return item.idScheduleStatus;
@@ -193,10 +212,19 @@ function CarRegistrationManagement() {
                 return item.idCarType;
             });
         }
+        if (helper.isArray(data.faculty) && data.faculty.length > 0) {
+            faculty = data.faculty.map((item) => {
+                return item.idFaculty;
+            });
+        }
 
         return {
             status,
             carType,
+            faculty,
+            infoUser: data.infoUser,
+            infoDriver: data.infoDriver,
+            licensePlates: data.licensePlates,
             scheduleCode: data.scheduleCode,
             address: data.address,
             idWard: data.ward && data.ward.idWard,
@@ -212,18 +240,23 @@ function CarRegistrationManagement() {
             dataInfo.pageSize,
             data.status,
             data.carType,
+            data.faculty,
+            data.infoUser,
+            data.infoDriver,
+            data.licensePlates,
             data.scheduleCode,
             data.address,
             data.idWard,
             data.startDate,
             data.endDate
         );
-    }
+    };
 
     const handleFilter = (e) => {
         //format data to send API
         let status = [];
         let carType = [];
+        let faculty = [];
         if (helper.isArray(e.status) && e.status.length > 0) {
             status = e.status.map((item) => {
                 return item.idScheduleStatus;
@@ -234,6 +267,11 @@ function CarRegistrationManagement() {
                 return item.idCarType;
             });
         }
+        if (helper.isArray(e.faculty) && e.faculty.length > 0) {
+            faculty = e.faculty.map((item) => {
+                return item.idFaculty;
+            });
+        }
 
         //reset page and pageSize => call getUserRegisteredScheduleList function
         getAdminScheduleList(
@@ -241,6 +279,10 @@ function CarRegistrationManagement() {
             dataInfo.pageSize,
             status,
             carType,
+            faculty,
+            e.infoUser,
+            e.infoDriver,
+            e.licensePlates,
             e.scheduleCode,
             e.address,
             e.ward && e.ward.idWard,
@@ -252,6 +294,10 @@ function CarRegistrationManagement() {
         setDataFilter({
             status: [...e.status],
             carType: [...e.carType],
+            faculty: [...e.faculty],
+            infoUser: e.infoUser,
+            infoDriver: e.infoDriver,
+            licensePlates: e.licensePlates,
             scheduleCode: e.scheduleCode,
             address: e.address,
             ward: e.ward,
@@ -262,9 +308,12 @@ function CarRegistrationManagement() {
         });
 
         // show total data to filter in UI => button filter
-        let total = status.length + carType.length;
+        let total = status.length + carType.length + faculty.length;
         if (e.scheduleCode) total += 1;
         if (e.ward) total += 1;
+        if (e.infoUser) total += 1;
+        if (e.infoDriver) total += 1;
+        if (e.licensePlates) total += 1;
         if (e.startDate && e.endDate) total += 1;
         setTotalDataFilter(total > 0 ? total : null);
     };
@@ -273,6 +322,10 @@ function CarRegistrationManagement() {
         setDataFilter({
             status: [],
             carType: [],
+            faculty: [],
+            infoUser: null,
+            infoDriver: null,
+            licensePlates: null,
             scheduleCode: null,
             address: null,
             ward: null,
@@ -282,6 +335,8 @@ function CarRegistrationManagement() {
             endDate: null,
         });
     };
+
+    // console.log(handleFormatDataFilterSendApi(dataFilter));
 
     const run = async () => {
         await setBackDrop(true);
@@ -339,17 +394,29 @@ function CarRegistrationManagement() {
                         open: false,
                     })
                 }
-                idSchedule={dialogShowScheduleAdmin.open ? dialogShowScheduleAdmin.idSchedule : null}
+                idSchedule={
+                    dialogShowScheduleAdmin.open
+                        ? dialogShowScheduleAdmin.idSchedule
+                        : null
+                }
                 titleDialog={Strings.Common.INFO_SCHEDULE}
-                handleGetAdminScheduleListWithFilter={handleGetAdminScheduleListWithFilter}
+                handleGetAdminScheduleListWithFilter={
+                    handleGetAdminScheduleListWithFilter
+                }
             />
 
-            {/* <DialogRentedCarFilter
+            <DialogCarRegistrationManagementFilter
                 open={dialogCarRegistrationManagementFilter}
-                handleClose={() => setDialogCarRegistrationManagementFilter(false)}
+                handleClose={() =>
+                    setDialogCarRegistrationManagementFilter(false)
+                }
                 onSubmit={(e) => handleFilter(e)}
                 defaultStatus={dataFilter.status}
                 defaultCarType={dataFilter.carType}
+                defaultFaculty={dataFilter.faculty}
+                defaultInfoUser={dataFilter.infoUser}
+                defaultInfoDriver={dataFilter.infoDriver}
+                defaultLicensePlates={dataFilter.licensePlates}
                 defaultScheduleCode={dataFilter.scheduleCode}
                 defaultAddress={dataFilter.address}
                 defaultWard={dataFilter.ward}
@@ -358,7 +425,7 @@ function CarRegistrationManagement() {
                 defaultStartDate={dataFilter.startDate}
                 defaultEndDate={dataFilter.endDate}
                 handleRefreshDataFilter={handleRefreshDataFilter}
-            /> */}
+            />
 
             <ModalError
                 open={modalError.open}

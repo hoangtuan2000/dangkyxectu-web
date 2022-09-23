@@ -53,6 +53,7 @@ const Strings = {
         DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
         SCHEDULE_CANCEL_CONFIRMATION: "Xác Nhận Hủy Lịch Trình",
         DO_YOU_WANT_TO_CANCEL_SCHEDULE: "Bạn Có Muốn Hủy Lịch Trình?",
+        DRIVER: "Tài Xế",
     },
 
     Login: {
@@ -188,6 +189,7 @@ const Strings = {
         VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
     },
+
     UpdateSchedulePending: {
         UPDATE_SCHEDULE: "Cập Nhật Lịch Trình",
         ENTER_START_LOCATION: "-- Địa Điểm Xuất Phát --",
@@ -217,6 +219,7 @@ const Strings = {
         TITLE_END_LOCATION: "Chọn Địa Chỉ Kết Thúc",
         TITLE_LOCATION: "Chọn Địa Chỉ",
     },
+
     DialogDriverTripManagerFilter: {
         TITLE: "Bộ Lọc Lịch Trình",
         CHOOSE_TIME: "-- Chọn Thời Gian --",
@@ -231,6 +234,7 @@ const Strings = {
         TIME: "Thời Gian: ",
         ADDRESS: "Địa Chỉ: ",
     },
+
     DialogRentedCarFilter: {
         TITLE: "Bộ Lọc Lịch Trình",
         CHOOSE_TIME: "-- Chọn Thời Gian --",
@@ -241,6 +245,28 @@ const Strings = {
         CHOOSE_STATUS: "-- Chọn Trạng Thái --",
         SCHEDULE_CODE: "Mã Lịch Trình:",
         ENTER_SCHEDULE_CODE: "-- Nhập Mã Lịch Trình --",
+        TIME: "Thời Gian: ",
+        ADDRESS: "Địa Chỉ: ",
+    },
+
+    DialogCarRegistrationManagementFilter: {
+        TITLE: "Bộ Lọc Lịch Trình",
+        CHOOSE_TIME: "-- Chọn Thời Gian --",
+        ENTER_LOCATION: "-- Địa Điểm --",
+        STATUS: "Trạng Thái:",
+        FACULTY: "Khoa:",
+        CAR_TYPE: "Loại Xe:",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
+        CHOOSE_STATUS: "-- Chọn Trạng Thái --",
+        CHOOSE_FACULTY: "-- Chọn Khoa --",
+        SCHEDULE_CODE: "Mã Lịch Trình:",
+        SUBSCRIBERS: "Người Đăng Ký:",
+        DRIVER: "Tài Xế:",
+        LICENSE_PLATES: "Biển Số Xe:",
+        ENTER_SCHEDULE_CODE: "-- Nhập Mã Lịch Trình --",
+        ENTER_NAME_CODE_USER: "-- Nhập Tên Hoặc Mã CB Người Đăng Ký --",
+        ENTER_NAME_CODE_DRIVER: "-- Nhập Tên Hoặc Mã CB Tài Xế --",
+        ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
         TIME: "Thời Gian: ",
         ADDRESS: "Địa Chỉ: ",
     },

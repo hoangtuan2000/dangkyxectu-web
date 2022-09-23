@@ -160,7 +160,6 @@ const BoxContent = styled(Box)(({ theme }) => ({
 
 const TextStyle = styled(Typography)(({ theme }) => ({
     width: 90,
-    textAlign: 'right',
     [theme.breakpoints.up("mobileS")]: {
         fontSize: 12,
     },
@@ -172,15 +171,19 @@ const TextStyle = styled(Typography)(({ theme }) => ({
     },
     [theme.breakpoints.up("sm")]: {
         fontSize: 14,
+        textAlign: 'right',
     },
     [theme.breakpoints.up("md")]: {
         fontSize: 14,
+        textAlign: 'right',
     },
     [theme.breakpoints.up("lg")]: {
         fontSize: 14,
+        textAlign: 'right',
     },
     [theme.breakpoints.up("xl")]: {
         fontSize: 14,
+        textAlign: 'right',
     },
 }));
 

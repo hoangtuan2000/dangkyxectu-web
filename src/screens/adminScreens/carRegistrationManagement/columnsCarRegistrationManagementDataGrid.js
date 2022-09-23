@@ -12,7 +12,7 @@ const col = (handleModalShowSchedule) => {
         {
             field: "id",
             headerName: "STT",
-            width: 50,
+            width: 30,
             sortable: false,
         },
         {
@@ -23,7 +23,7 @@ const col = (handleModalShowSchedule) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.type} arrow>
+                    <Tooltip title={`${params.row.type} - ${params.row.licensePlates}`} arrow>
                         <img
                             src={params.row.imageCar}
                             alt={params.row.imageCar}
@@ -66,6 +66,7 @@ const col = (handleModalShowSchedule) => {
             description: Strings.Common.LICENSE_PLATES,
             width: 100,
             sortable: false,
+            hide: true,
             renderCell: (params) => {
                 return (
                     <Tooltip title={params.row.licensePlates} arrow>
@@ -87,7 +88,7 @@ const col = (handleModalShowSchedule) => {
             field: "fullName",
             headerName: Strings.Common.FULL_NAME,
             description: Strings.Common.FULL_NAME,
-            minWidth: 180,
+            minWidth: 160,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -183,7 +184,7 @@ const col = (handleModalShowSchedule) => {
             field: "destination",
             headerName: Strings.Common.DESTINATION,
             description: Strings.Common.DESTINATION,
-            minWidth: 190,
+            minWidth: 130,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -206,7 +207,7 @@ const col = (handleModalShowSchedule) => {
             field: "reason",
             headerName: Strings.Common.REASON,
             description: Strings.Common.REASON,
-            minWidth: 180,
+            minWidth: 120,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -294,7 +295,7 @@ const col = (handleModalShowSchedule) => {
             field: "status",
             headerName: Strings.Common.STATUS,
             description: Strings.Common.STATUS,
-            width: 120,
+            width: 110,
             sortable: false,
             renderCell: (params) => {
                 let bgColor = "#969696";
@@ -343,7 +344,7 @@ const col = (handleModalShowSchedule) => {
             field: "update",
             headerName: Strings.Common.UPDATE,
             description: Strings.Common.UPDATE,
-            width: 85,
+            width: 80,
             sortable: false,
             renderCell: (params) => {
                 if (
@@ -428,7 +429,7 @@ const col = (handleModalShowSchedule) => {
             field: "scheduleCode",
             headerName: Strings.Common.SCHEDULE_CODE,
             description: Strings.Common.SCHEDULE_CODE,
-            width: 120,
+            width: 110,
             sortable: false,
             renderCell: (params) => {
                 return (
@@ -441,6 +442,28 @@ const col = (handleModalShowSchedule) => {
                             }}
                         >
                             {params.row.scheduleCode}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "driver",
+            headerName: Strings.Common.DRIVER,
+            description: Strings.Common.DRIVER,
+            width: 150,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.driver} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.driver}
                         </span>
                     </Tooltip>
                 );
