@@ -40,6 +40,7 @@ import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
 import { DialogShowScheduleAdminServices } from "../../../services/adminServices/DialogShowScheduleAdminServices";
 import helper from "../../../common/helper";
+import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 
 function DialogShowScheduleAdmin({
     open,
@@ -56,6 +57,12 @@ function DialogShowScheduleAdmin({
         open: false,
         title: null,
         content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_UPDATE,
+        content: Strings.Common.SCHEDULE_UPDATE_CONFIRMATION,
+        handleSubmit: () => {},
     });
 
     const [schedule, setSchedule] = useState([]);
@@ -124,7 +131,13 @@ function DialogShowScheduleAdmin({
                         codeDriver: res.data.data[0].codeDriver,
                     },
                 });
-                getScheduleStatusList();
+
+                res.data.data[0].idScheduleStatus ==
+                    Constants.ScheduleStatusCode.PENDING &&
+                    getAdminScheduleStatusListToUpdate(
+                        res.data.data[0].idScheduleStatus
+                    );
+
                 getDriverListForSchedule(
                     res.data.data[0].idCar,
                     res.data.data[0].startDate,
@@ -185,9 +198,11 @@ function DialogShowScheduleAdmin({
         }
     };
 
-    const getScheduleStatusList = async () => {
+    const getAdminScheduleStatusListToUpdate = async (idScheduleStatus) => {
         const res =
-            await DialogShowScheduleAdminServices.getScheduleStatusList();
+            await DialogShowScheduleAdminServices.getAdminScheduleStatusListToUpdate(
+                { idScheduleStatus }
+            );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -244,7 +259,24 @@ function DialogShowScheduleAdmin({
     };
 
     const handleScheduleCompletionConfirmation = () => {
-        //update status complete
+        // update status complete
+        if (
+            schedule[0].idScheduleStatus ==
+                Constants.ScheduleStatusCode.APPROVED &&
+            !helper.isDateTimeStampGreaterThanCurrentDate(schedule[0].startDate)
+        ) {
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                open: true,
+                handleSubmit: () => {
+                    updateSchedule({
+                        idSchedule: schedule[0].idSchedule,
+                        idScheduleStatus: Constants.ScheduleStatusCode.COMPLETE
+                    });
+                    handleGetAdminScheduleListWithFilter();
+                },
+            });
+        }
     };
 
     const handleUpdateSchedule = async () => {
@@ -262,9 +294,15 @@ function DialogShowScheduleAdmin({
                     errorDriver: true,
                 });
             } else {
-                //submit
-                updateSchedule(data);
-                handleGetAdminScheduleListWithFilter();
+                // call dialog confirm => submit
+                setDialogConfirmation({
+                    ...dialogConfirmation,
+                    open: true,
+                    handleSubmit: () => {
+                        updateSchedule(data);
+                        handleGetAdminScheduleListWithFilter();
+                    },
+                });
             }
         }
         // if schedule old is pending => update status or driver
@@ -281,9 +319,15 @@ function DialogShowScheduleAdmin({
                             errorDriver: true,
                         });
                     } else {
-                        //submit
-                        updateSchedule(data);
-                        handleGetAdminScheduleListWithFilter();
+                        // call dialog confirm => submit
+                        setDialogConfirmation({
+                            ...dialogConfirmation,
+                            open: true,
+                            handleSubmit: () => {
+                                updateSchedule(data);
+                                handleGetAdminScheduleListWithFilter();
+                            },
+                        });
                     }
                 }
 
@@ -292,8 +336,15 @@ function DialogShowScheduleAdmin({
                     data.idScheduleStatus !=
                     Constants.ScheduleStatusCode.APPROVED
                 ) {
-                    updateSchedule(data);
-                    handleGetAdminScheduleListWithFilter();
+                    // call dialog confirm => submit
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: true,
+                        handleSubmit: () => {
+                            updateSchedule(data);
+                            handleGetAdminScheduleListWithFilter();
+                        },
+                    });
                 }
             } else {
                 setErrorDataSendApi({
@@ -1154,6 +1205,19 @@ function DialogShowScheduleAdmin({
                     </Box>
                 );
             })}
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                handleSubmit={dialogConfirmation.handleSubmit}
+            />
 
             <ModalError
                 open={modalError.open}

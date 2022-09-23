@@ -49,6 +49,8 @@ const Strings = {
         OUT_OF_DATE: "Quá Hạn",
         COMPLETE: "Hoàn Thành",
         CONFIRM_COMPLETED: "Xác Nhận Đã Hoàn Thành",
+        SCHEDULE_UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật Lịch Trình",
+        DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
     },
 
     Login: {
