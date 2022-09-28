@@ -12,49 +12,53 @@ const Constants = {
 
     ApiPath: {
         Common: {
-            GET_COMMON: "/getCommon",
+            GET_COMMON: "/global/getCommon",
         },
         Login: {
-            LOGIN: "/login",
+            LOGIN: "/global/login",
         },
         RentalCar: {
-            GET_CAR: "/getCar",
-            GET_SCHEDULE_DATE_FOR_CAR: "/getScheduledDateForCar",
-            CREATE_SCHEDULE: "/createSchedule",
+            GET_CAR: "/global/getCar",
+            GET_SCHEDULE_DATE_FOR_CAR: "/global/getScheduledDateForCar",
+            CREATE_SCHEDULE: "/global/createSchedule",
         },
         UpdateSchedulePending: {
-            GET_SCHEDULE_DATE_FOR_CAR: "/getScheduledDateForCar",
-            GET_SCHEDULE: "/getSchedule",
-            UPDATE_SCHEDULE_PENDING: "/updateSchedulePending",
+            GET_SCHEDULE_DATE_FOR_CAR: "/global/getScheduledDateForCar",
+            GET_SCHEDULE: "/global/getSchedule",
+            UPDATE_SCHEDULE_PENDING: "/user/updateSchedulePending",
         },
         Home: {
-            GET_CAR_LIST: "/getCarList",
-            GET_CAR: "/getCar",
-            GET_SCHEDULE_LIST: "/getScheduleList",
+            GET_CAR_LIST: "/global/getCarList",
+            GET_CAR: "/global/getCar",
+            GET_SCHEDULE_LIST: "/global/getScheduleList",
         },
         RentedCar: {
-            GET_USER_REGISTERED_SCHEDULE_LIST: "/getUserRegisteredScheduleList",
-            CANCEL_SCHEDULE: "/cancelSchedule",
+            GET_USER_REGISTERED_SCHEDULE_LIST: "/user/getUserRegisteredScheduleList",
+            CANCEL_SCHEDULE: "/user/cancelSchedule",
         },
         CarRegistrationManagement: {
-            GET_ADMIN_SCHEDULE_LIST: "/getAdminScheduleList",
+            GET_ADMIN_SCHEDULE_LIST: "/admin/getAdminScheduleList",
         },
         DriverTripManager: {
-            GET_DRIVER_SCHEDULE_LIST: "/getDriverScheduleList",
+            GET_DRIVER_SCHEDULE_LIST: "/driver/getDriverScheduleList",
         },
         DialogShowScheduleUser: {
-            GET_SCHEDULE: "/getSchedule",
-            CREATE_OR_UPDATE_REVIEW: "/createOrUpdateReview",
-            UPDATE_SCHEDULE_APPROVED: "/updateScheduleApproved",
+            GET_SCHEDULE: "/global/getSchedule",
+            CREATE_OR_UPDATE_REVIEW: "/user/createOrUpdateReview",
+            UPDATE_SCHEDULE_APPROVED: "/user/updateScheduleApproved",
         },
         DialogShowScheduleDriver: {
-            GET_SCHEDULE: "/getSchedule",
+            GET_SCHEDULE: "/global/getSchedule",
         },
         DialogShowScheduleAdmin: {
-            GET_SCHEDULE: "/getSchedule",
-            GET_DRIVER_LIST_FOR_SCHEDULE: "/getDriverListForSchedule",
-            GET_ADMIN_SCHEDULE_STATUS_LIST_TO_UPDATE: "/getAdminScheduleStatusListToUpdate",
-            UPDATE_SCHEDULE: "/updateSchedule",
+            GET_SCHEDULE: "/global/getSchedule",
+            GET_DRIVER_LIST_FOR_SCHEDULE: "/admin/getDriverListForSchedule",
+            GET_ADMIN_SCHEDULE_STATUS_LIST_TO_UPDATE:
+                "/admin/getAdminScheduleStatusListToUpdate",
+            UPDATE_SCHEDULE: "/admin/updateSchedule",
+        },
+        CarManager: {
+            GET_CAR_LIST_FOR_ADMIN: "/admin/getCarListForAdmin",
         },
     },
 
@@ -72,10 +76,19 @@ const Constants = {
         STOP_WORKING: 2,
         MAINTENANCE: 3,
     },
+
     ColorOfCarStatus: {
-        WORK: 'green',
-        STOP_WORKING: 'red',
-        MAINTENANCE: 'orange',
+        Text: {
+            WORK: "green",
+            STOP_WORKING: "red",
+            MAINTENANCE: "orange",
+        },
+        TextHaveBackground: {},
+        Background: {
+            WORK: "green",
+            STOP_WORKING: "red",
+            MAINTENANCE: "orange",
+        },
     },
 
     ScheduleStatus: {

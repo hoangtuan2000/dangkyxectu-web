@@ -54,6 +54,8 @@ const Strings = {
         SCHEDULE_CANCEL_CONFIRMATION: "Xác Nhận Hủy Lịch Trình",
         DO_YOU_WANT_TO_CANCEL_SCHEDULE: "Bạn Có Muốn Hủy Lịch Trình?",
         DRIVER: "Tài Xế",
+        EXPIRED: "Hết Hạn",
+        NOT_EXPIRED: "Còn Hạn",
     },
 
     Login: {
@@ -140,7 +142,9 @@ const Strings = {
     },
 
     CarManager: {
+        TITLE: "Danh Sách Xe",
         ADD_CAR: "Thêm Xe",
+        CAR_CODE: "Mã Xe",
     },
 
     DriverManagement: {

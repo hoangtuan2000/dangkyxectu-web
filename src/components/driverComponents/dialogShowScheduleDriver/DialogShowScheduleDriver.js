@@ -129,7 +129,7 @@ function DialogShowScheduleDriver({
                 let colorCarStatus = theme.palette.text.primary;
                 for (const property in objCarStatus) {
                     if (item.idCarStatus == `${objCarStatus[property]}`) {
-                        colorCarStatus = Constants.ColorOfCarStatus[property];
+                        colorCarStatus = Constants.ColorOfCarStatus.Text[property];
                         break;
                     }
                 }

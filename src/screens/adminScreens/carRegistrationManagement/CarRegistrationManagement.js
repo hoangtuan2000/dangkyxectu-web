@@ -336,8 +336,6 @@ function CarRegistrationManagement() {
         });
     };
 
-    // console.log(handleFormatDataFilterSendApi(dataFilter));
-
     const run = async () => {
         await setBackDrop(true);
         await getAdminScheduleList();
