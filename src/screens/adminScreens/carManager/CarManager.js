@@ -1,4 +1,5 @@
 import {
+    Badge,
     Box,
     Button,
     IconButton,
@@ -26,75 +27,16 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Strings from "../../../constants/Strings";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Constants from "../../../constants/Constants";
 import col from "./columnsCarManagerDataGrid";
 import ModalError from "../../../components/modalError/ModalError";
 import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../../components/backDrop/BackDrop";
 import { CarManagerServices } from "../../../services/adminServices/CarManagerServices";
-
-const rowsTest = [
-    {
-        id: 1,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        carBrand: "Honda",
-        type: "46 Chỗ",
-        licensePlates: "65A - 123456",
-        numberOfTrips: "20",
-        numberOfFailures: "1",
-        status: "Hoạt Động",
-        license: "Còn Hạn",
-    },
-    {
-        id: 2,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        carBrand: "Honda",
-        type: "46 Chỗ",
-        licensePlates: "65A - 123456",
-        numberOfTrips: "20",
-        numberOfFailures: "1",
-        status: "Đang Bảo Trì",
-        license: "Còn Hạn",
-    },
-    {
-        id: 3,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        carBrand: "Honda",
-        type: "46 Chỗ",
-        licensePlates: "65A - 123456",
-        numberOfTrips: "20",
-        numberOfFailures: "1",
-        status: "Hỏng Hóc",
-        license: "Hết Hạn",
-    },
-    {
-        id: 4,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        carBrand: "Honda",
-        type: "46 Chỗ",
-        licensePlates: "65A - 123456",
-        numberOfTrips: "20",
-        numberOfFailures: "1",
-        status: "Ngừng Hoạt Động",
-        license: "Còn Hạn",
-    },
-    {
-        id: 5,
-        imageCar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBl_xuk80F5PI3pXBK0L45rf652XU583ITA&usqp=CAU",
-        carBrand: "Honda",
-        type: "46 Chỗ",
-        licensePlates: "65A - 123456",
-        numberOfTrips: "20",
-        numberOfFailures: "1",
-        status: "Hoạt Động",
-        license: "Còn Hạn",
-    },
-];
+import { FabStyle, ButtonStyle } from "./CarManagerCustomStyles";
+import DialogCarManagerFilter from "../../../components/adminComponents/dialogCarManagerFilter/DialogCarManagerFilter";
+import helper from "../../../common/helper";
 
 function CarManager() {
     const theme = useTheme();
@@ -107,6 +49,16 @@ function CarManager() {
         content: null,
     });
 
+    const [totalDataFilter, setTotalDataFilter] = useState(null);
+    const [dialogCarManagerFilter, setDialogCarManagerFilter] = useState(false);
+    const [dataFilter, setDataFilter] = useState({
+        carStatus: [],
+        carType: [],
+        carBrand: [],
+        licensePlates: null,
+        carCode: null,
+    });
+
     const [carList, setCarList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -116,33 +68,21 @@ function CarManager() {
 
     const getCarListForAdmin = async (
         page = dataInfo.page,
-        pageSize = dataInfo.pageSize
-        // status,
-        // carType,
-        // faculty,
-        // infoUser,
-        // infoDriver,
-        // licensePlates,
-        // scheduleCode,
-        // address,
-        // idWard,
-        // startDate,
-        // endDate
+        pageSize = dataInfo.pageSize,
+        carStatus,
+        carType,
+        carBrand,
+        licensePlates,
+        carCode
     ) => {
         const data = {
             page: page,
             limitEntry: pageSize,
-            // status,
-            // carType,
-            // faculty,
-            // infoUser,
-            // infoDriver,
-            // licensePlates,
-            // scheduleCode,
-            // address,
-            // idWard,
-            // startDate,
-            // endDate,
+            carStatus,
+            carType,
+            carBrand,
+            licensePlates,
+            carCode,
         };
         const res = await CarManagerServices.getCarListForAdmin({
             ...data,
@@ -167,8 +107,8 @@ function CarManager() {
                             carBrand: item.nameCarBrand,
                             type: `${item.nameCarType} ${item.seatNumber} Chổ`,
                             licensePlates: item.licensePlates,
-                            numberOfTrips: item.numberOfTrips,
-                            numberOfFailures: item.numberOfFailures,
+                            numberOfTrips: item.numberOfTrips || "",
+                            numberOfFailures: item.numberOfFailures || "",
                             status: item.nameCarStatus,
                             license: item.licenseNumberExpired,
                             carCode: item.idCar,
@@ -198,6 +138,118 @@ function CarManager() {
         }
     };
 
+    const handleFormatDataFilterSendApi = (data) => {
+        //format data to send API
+        let carStatus = [];
+        let carType = [];
+        let carBrand = [];
+        if (helper.isArray(data.carStatus) && data.carStatus.length > 0) {
+            carStatus = data.carStatus.map((item) => {
+                return item.idCarStatus;
+            });
+        }
+        if (helper.isArray(data.carType) && data.carType.length > 0) {
+            carType = data.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+        if (helper.isArray(data.carBrand) && data.carBrand.length > 0) {
+            carBrand = data.carBrand.map((item) => {
+                return item.idCarBrand;
+            });
+        }
+        return {
+            carStatus,
+            carType,
+            carBrand,
+            licensePlates: data.licensePlates,
+            carCode: data.carCode,
+        };
+    };
+
+    const handleChangePage = async (e) => {
+        setDataInfo({ ...dataInfo, page: e });
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getCarListForAdmin(
+            e,
+            dataInfo.pageSize,
+            data.carStatus,
+            data.carType,
+            data.carBrand,
+            data.carCode,
+            data.licensePlates
+        );
+    };
+
+    const handleChangeRowsPerPage = async (e) => {
+        setDataInfo({ ...dataInfo, pageSize: e });
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getCarListForAdmin(
+            dataInfo.page,
+            e,
+            data.carStatus,
+            data.carType,
+            data.carBrand,
+            data.carCode,
+            data.licensePlates
+        );
+    };
+
+    const handleFilter = (e) => {
+        //format data to send API
+        let carStatus = [];
+        let carType = [];
+        let carBrand = [];
+        if (helper.isArray(e.carStatus) && e.carStatus.length > 0) {
+            carStatus = e.carStatus.map((item) => {
+                return item.idCarStatus;
+            });
+        }
+        if (helper.isArray(e.carType) && e.carType.length > 0) {
+            carType = e.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+        if (helper.isArray(e.carBrand) && e.carBrand.length > 0) {
+            carBrand = e.carBrand.map((item) => {
+                return item.idCarBrand;
+            });
+        }
+        //reset page and pageSize => call getCarListForAdmin function
+        getCarListForAdmin(
+            Constants.Common.PAGE,
+            dataInfo.pageSize,
+            carStatus,
+            carType,
+            carBrand,
+            e.licensePlates,
+            e.carCode
+        );
+        // save data filter in dialogCarManagerFilter => default value in dialogCarManagerFilter
+        setDataFilter({
+            carStatus: [...e.carStatus],
+            carType: [...e.carType],
+            carBrand: [...e.carBrand],
+            licensePlates: e.licensePlates,
+            carCode: e.carCode,
+        });
+        // show total data to filter in UI => button filter
+        let total = carStatus.length + carType.length + carBrand.length;
+        if (e.carCode) total += 1;
+        if (e.licensePlates) total += 1;
+        setTotalDataFilter(total > 0 ? total : null);
+    };
+
+    const handleRefreshDataFilter = () => {
+        setDataFilter({
+            carStatus: [],
+            carType: [],
+            carBrand: [],
+            licensePlates: null,
+            carCode: null,
+        });
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getCarListForAdmin();
@@ -217,28 +269,58 @@ function CarManager() {
                 {Strings.CarManager.TITLE}
             </Typography>
 
-            <Button
-                variant="contained"
-                size="small"
+            <Box
                 sx={{
-                    marginBottom: "10px",
-                    backgroundColor: theme.palette.success.main,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                 }}
-                startIcon={<DirectionsCarIcon />}
             >
-                {Strings.CarManager.ADD_CAR}
-            </Button>
+                {/* FILTER BUTTON */}
+                <Tooltip title={Strings.Common.FILTER}>
+                    <FabStyle
+                        color="primary"
+                        size="small"
+                        onClick={() => setDialogCarManagerFilter(true)}
+                    >
+                        <Badge badgeContent={totalDataFilter} color="error">
+                            <FilterAltIcon />
+                        </Badge>
+                    </FabStyle>
+                </Tooltip>
+
+                {/* BUTTON ADD CAR */}
+                <ButtonStyle
+                    variant="contained"
+                    size="small"
+                    startIcon={<DirectionsCarIcon />}
+                >
+                    {Strings.CarManager.ADD_CAR}
+                </ButtonStyle>
+            </Box>
 
             <DataGridCustom
                 columns={col()}
                 rows={carList}
                 {...dataInfo}
-                // onChangePage={(e) => {
-                //     handleChangePage(e);
-                // }}
-                // onChangeRowsPerPage={(e) => {
-                //     handleChangeRowsPerPage(e);
-                // }}
+                onChangePage={(e) => {
+                    handleChangePage(e);
+                }}
+                onChangeRowsPerPage={(e) => {
+                    handleChangeRowsPerPage(e);
+                }}
+            />
+
+            <DialogCarManagerFilter
+                open={dialogCarManagerFilter}
+                handleClose={() => setDialogCarManagerFilter(false)}
+                onSubmit={(e) => handleFilter(e)}
+                defaultCarStatus={dataFilter.carStatus}
+                defaultCarType={dataFilter.carType}
+                defaultCarBrand={dataFilter.carBrand}
+                defaultLicensePlates={dataFilter.licensePlates}
+                defaultCarCode={dataFilter.carCode}
+                handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
             <ModalError
