@@ -56,6 +56,8 @@ const Strings = {
         DRIVER: "Tài Xế",
         EXPIRED: "Hết Hạn",
         NOT_EXPIRED: "Còn Hạn",
+        // CREATE: "Tạo",
+        ADD: "Thêm",
     },
 
     Login: {
@@ -286,6 +288,32 @@ const Strings = {
         CAR_TYPE: "Loại Xe:",
         CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
         CHOOSE_CAR_STATUS: "-- Chọn Trạng Thái Xe --",
+    },
+    DialogCreateCar: {
+        TITLE: "Thêm Xe",
+        LICENSE_PLATES: "Biển Số Xe: ",
+        ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
+        CAR_TYPE: "Loại Xe: ",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
+        CAR_BRAND: "Thương Hiệu: ",
+        CHOOSE_CAR_BRAND: "-- Chọn Thương Hiệu --",
+        CAR_COLOR: "Màu Xe: ",
+        CHOOSE_CAR_COLOR: "-- Chọn Màu Xe --",
+        CAR_REGISTRATION_CERTIFICATE: "Giấy Đăng Ký Xe: ",
+        CHOOSE_TIME_CAR_REGISTRATION_CERTIFICATE:
+            "-- Chọn Thời Gian Giấy Đăng Ký Xe --",
+        CHOOSE_TIME_PERIODIC_INSPECTION_CERTIFICATE:
+            "-- Chọn Thời Gian Giấy Đăng Kiểm Xe --",
+        CHOOSE_TIME_CAR_INSURANCE: "-- Chọn Thời Gian Giấy Bảo Hiểm Xe --",
+        PERIODIC_INSPECTION_CERTIFICATE: "Giấy Đăng Kiểm Xe: ",
+        CAR_INSURANCE: "Giấy Bảo Hiểm Xe: ",
+        CHOOSE_TIME: "-- Chọn Thời Gian -- ",
+        CHOOSE_IMAGE_PLEASE: "Vui Lòng Chọn Hình Ảnh",
+        ENTER_LICENSE_PLATES_PLEASE: "Vui Lòng Nhập Biển Số Xe",
+        CHOOSE_CAR_TYPE_PLEASE: "Vui Lòng Chọn Loại Xe",
+        CHOOSE_CAR_BRAND_PLEASE: "Vui Lòng Chọn Thương Hiệu",
+        CHOOSE_CAR_COLOR_PLEASE: "Vui Lòng Chọn Màu Xe",
+        CHOOSE_TIME_PLEASE: "Vui Lòng Chọn Thời Gian",
     },
 };
 

@@ -37,6 +37,7 @@ import { CarManagerServices } from "../../../services/adminServices/CarManagerSe
 import { FabStyle, ButtonStyle } from "./CarManagerCustomStyles";
 import DialogCarManagerFilter from "../../../components/adminComponents/dialogCarManagerFilter/DialogCarManagerFilter";
 import helper from "../../../common/helper";
+import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar/DialogCreateCar";
 
 function CarManager() {
     const theme = useTheme();
@@ -51,6 +52,7 @@ function CarManager() {
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogCarManagerFilter, setDialogCarManagerFilter] = useState(false);
+    const [dialogCreateCar, setDialogCreateCar] = useState(false);
     const [dataFilter, setDataFilter] = useState({
         carStatus: [],
         carType: [],
@@ -294,6 +296,7 @@ function CarManager() {
                     variant="contained"
                     size="small"
                     startIcon={<DirectionsCarIcon />}
+                    onClick={() => setDialogCreateCar(true)}
                 >
                     {Strings.CarManager.ADD_CAR}
                 </ButtonStyle>
@@ -309,6 +312,18 @@ function CarManager() {
                 onChangeRowsPerPage={(e) => {
                     handleChangeRowsPerPage(e);
                 }}
+            />
+
+            <DialogCreateCar
+                open={dialogCreateCar}
+                handleClose={() => setDialogCreateCar(false)}
+                // onSubmit={(e) => handleFilter(e)}
+                // defaultCarStatus={dataFilter.carStatus}
+                // defaultCarType={dataFilter.carType}
+                // defaultCarBrand={dataFilter.carBrand}
+                // defaultLicensePlates={dataFilter.licensePlates}
+                // defaultCarCode={dataFilter.carCode}
+                // handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
             <DialogCarManagerFilter
