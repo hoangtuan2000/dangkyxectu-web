@@ -51,6 +51,8 @@ const Strings = {
         CONFIRM_COMPLETED: "Xác Nhận Đã Hoàn Thành",
         SCHEDULE_UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật Lịch Trình",
         DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
+        DO_YOU_WANT_TO_ADD_CAR: "Bạn Có Muốn Thêm Xe?",
+        ADD_CAR_CONFIRMATION: "Xác Nhận Thêm Xe",
         SCHEDULE_CANCEL_CONFIRMATION: "Xác Nhận Hủy Lịch Trình",
         DO_YOU_WANT_TO_CANCEL_SCHEDULE: "Bạn Có Muốn Hủy Lịch Trình?",
         DRIVER: "Tài Xế",

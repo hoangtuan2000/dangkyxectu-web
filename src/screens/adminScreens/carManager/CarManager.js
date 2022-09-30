@@ -252,6 +252,19 @@ function CarManager() {
         });
     };
 
+    const handleGetCarListForAdminWithFilter = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getCarListForAdmin(
+            dataInfo.page,
+            dataInfo.pageSize,
+            data.carStatus,
+            data.carType,
+            data.carBrand,
+            data.carCode,
+            data.licensePlates
+        );
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getCarListForAdmin();
@@ -317,13 +330,7 @@ function CarManager() {
             <DialogCreateCar
                 open={dialogCreateCar}
                 handleClose={() => setDialogCreateCar(false)}
-                // onSubmit={(e) => handleFilter(e)}
-                // defaultCarStatus={dataFilter.carStatus}
-                // defaultCarType={dataFilter.carType}
-                // defaultCarBrand={dataFilter.carBrand}
-                // defaultLicensePlates={dataFilter.licensePlates}
-                // defaultCarCode={dataFilter.carCode}
-                // handleRefreshDataFilter={handleRefreshDataFilter}
+                handleGetCarListForAdminWithFilter={handleGetCarListForAdminWithFilter}
             />
 
             <DialogCarManagerFilter

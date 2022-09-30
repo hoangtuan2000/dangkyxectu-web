@@ -60,6 +60,9 @@ const Constants = {
         CarManager: {
             GET_CAR_LIST_FOR_ADMIN: "/admin/getCarListForAdmin",
         },
+        DialogCreateCar: {
+            CREATE_CAR: "/admin/createCar",
+        },
     },
 
     Styled: {

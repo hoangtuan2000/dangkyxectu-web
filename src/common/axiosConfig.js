@@ -22,7 +22,7 @@ const Authentication = async () => {
     const accessToken = store.getState().currentUser.user.accessToken;
     return await axios
         .post(
-            process.env.REACT_APP_BASE_URL + "/authentication",
+            process.env.REACT_APP_BASE_URL + "/global/authentication",
             {},
             {
                 headers: {
@@ -66,7 +66,7 @@ axiosInstance.interceptors.request.use(
         const token = store.getState().currentUser.user.token;
         let decoded = jwt_decode(token);
         // If the token expires, then send
-        if (new Date() >= new Date(decoded.exp * 1000)) {
+        if (new Date() >= new Date(decoded.exp)) {
             const resultAuthentication = await Authentication();
             return resultAuthentication ? config : false;
         }

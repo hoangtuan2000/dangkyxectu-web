@@ -44,9 +44,16 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import helper from "../../../common/helper";
+import axios from "axios";
+import { DialogCreateCarServices } from "../../../services/adminServices/DialogCreateCarServices";
+import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 registerLocale("vi", vi);
 
-function DialogCreateCar({ open, handleClose }) {
+function DialogCreateCar({
+    open,
+    handleClose,
+    handleGetCarListForAdminWithFilter,
+}) {
     const theme = useTheme();
 
     const inputImage = useRef();
@@ -57,6 +64,12 @@ function DialogCreateCar({ open, handleClose }) {
         open: false,
         title: null,
         content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_ADD_CAR,
+        content: Strings.Common.ADD_CAR_CONFIRMATION,
+        handleSubmit: () => {},
     });
 
     const [selectDates, setSelectDates] = useState({
@@ -260,7 +273,8 @@ function DialogCreateCar({ open, handleClose }) {
         });
         setErrorData({
             ...errorData,
-            errorDatePeriodicInspectionCertificate: !start || !end ? true : false,
+            errorDatePeriodicInspectionCertificate:
+                !start || !end ? true : false,
         });
     };
 
@@ -394,10 +408,129 @@ function DialogCreateCar({ open, handleClose }) {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleRefreshInput = () => {
+        // REFRESH SELECTED DATES
+        setSelectDates({
+            carRegistrationCertificate: {
+                startDate: null,
+                endDate: null,
+            },
+            periodicInspectionCertificate: {
+                startDate: null,
+                endDate: null,
+            },
+            carInsurance: {
+                startDate: null,
+                endDate: null,
+            },
+        });
+
+        //REFRESH IMAGE PREVIEW
+        setImagePreview();
+
+        setDataSendApi({
+            image: null,
+            licensePlates: null,
+            carType: null,
+            carBrand: null,
+            carColor: null,
+            dateCarRegistrationCertificate: [],
+            datePeriodicInspectionCertificate: [],
+            dateCarInsurance: [],
+        });
+    };
+
+    const handleFormDataSendApi = () => {
+        const formData = new FormData();
+        formData.append("imageCar", dataSendApi.image);
+        formData.append(
+            "idCarType",
+            dataSendApi.carType && dataSendApi.carType.idCarType
+        );
+        formData.append(
+            "idCarBrand",
+            dataSendApi.carBrand && dataSendApi.carBrand.idCarBrand
+        );
+        formData.append(
+            "idCarColor",
+            dataSendApi.carColor && dataSendApi.carColor.idCarColor
+        );
+        formData.append("licensePlates", dataSendApi.licensePlates);
+        for (
+            var i = 0;
+            i < dataSendApi.dateCarRegistrationCertificate.length;
+            i++
+        ) {
+            formData.append(
+                "dateCarRegistrationCertificate",
+                dataSendApi.dateCarRegistrationCertificate[i]
+            );
+        }
+        for (
+            var i = 0;
+            i < dataSendApi.datePeriodicInspectionCertificate.length;
+            i++
+        ) {
+            formData.append(
+                "datePeriodicInspectionCertificate",
+                dataSendApi.datePeriodicInspectionCertificate[i]
+            );
+        }
+        for (var i = 0; i < dataSendApi.dateCarInsurance.length; i++) {
+            formData.append(
+                "dateCarInsurance",
+                dataSendApi.dateCarInsurance[i]
+            );
+        }
+        return formData;
+    };
+
+    const createCar = async () => {
+        await setBackDrop(true);
+        const formData = await handleFormDataSendApi();
+        const res = await DialogCreateCarServices.createCar(formData);
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                handleRefreshInput();
+                handleGetCarListForAdminWithFilter();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
+    };
+
+    const onSubmit = async () => {
         const resultValidate = await handleValidateData();
         if (resultValidate) {
-            console.log("submits");
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                open: true,
+                handleSubmit: () => {
+                    createCar();
+                },
+            });
         }
     };
 
@@ -798,12 +931,25 @@ function DialogCreateCar({ open, handleClose }) {
                         endIcon={<CheckCircleIcon />}
                         color="primary"
                         sx={{ marginRight: 1 }}
-                        onClick={handleSubmit}
+                        onClick={onSubmit}
                     >
                         {Strings.Common.ADD}
                     </ButtonFeatures>
                 </Box>
             </DialogActions>
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                handleSubmit={dialogConfirmation.handleSubmit}
+            />
 
             <ModalError
                 open={modalError.open}
