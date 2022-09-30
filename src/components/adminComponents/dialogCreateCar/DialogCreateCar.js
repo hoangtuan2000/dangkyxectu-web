@@ -90,6 +90,7 @@ function DialogCreateCar({
     const [errorData, setErrorData] = useState({
         errorImage: false,
         errorLicensePlates: false,
+        errorLicensePlatesLength: false,
         errorCarType: false,
         errorCarBrand: false,
         errorCarColor: false,
@@ -331,6 +332,11 @@ function DialogCreateCar({
         setErrorData({
             ...errorData,
             errorLicensePlates: false,
+            errorLicensePlatesLength: !helper.isValidStringBetweenMinMaxLength(
+                e.target.value,
+                Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES,
+                Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES
+            ),
         });
     };
 
@@ -381,7 +387,12 @@ function DialogCreateCar({
             helper.isArrayEmpty(
                 dataSendApi.datePeriodicInspectionCertificate
             ) ||
-            helper.isArrayEmpty(dataSendApi.dateCarInsurance)
+            helper.isArrayEmpty(dataSendApi.dateCarInsurance) ||
+            !helper.isValidStringBetweenMinMaxLength(
+                dataSendApi.licensePlates,
+                Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES,
+                Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES
+            )
         ) {
             setErrorData({
                 ...errorData,
@@ -389,6 +400,12 @@ function DialogCreateCar({
                 errorLicensePlates: helper.isNullOrEmpty(
                     dataSendApi.licensePlates
                 ),
+                errorLicensePlatesLength:
+                    !helper.isValidStringBetweenMinMaxLength(
+                        dataSendApi.licensePlates,
+                        Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES,
+                        Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES
+                    ),
                 errorCarType: helper.isNullOrEmpty(dataSendApi.carType),
                 errorCarBrand: helper.isNullOrEmpty(dataSendApi.carBrand),
                 errorCarColor: helper.isNullOrEmpty(dataSendApi.carColor),
@@ -636,11 +653,17 @@ function DialogCreateCar({
                                         </InputAdornment>
                                     ),
                                 }}
-                                error={errorData.errorLicensePlates}
+                                error={
+                                    errorData.errorLicensePlates ||
+                                    errorData.errorLicensePlatesLength
+                                }
                                 helperText={
-                                    errorData.errorLicensePlates &&
-                                    Strings.DialogCreateCar
-                                        .ENTER_LICENSE_PLATES_PLEASE
+                                    errorData.errorLicensePlates
+                                        ? Strings.DialogCreateCar
+                                              .ENTER_LICENSE_PLATES_PLEASE
+                                        : errorData.errorLicensePlatesLength &&
+                                          Strings.DialogCreateCar
+                                              .SUPPORT_LENGTH_LICENSE_PLATES
                                 }
                             />
                         </Box>
@@ -760,58 +783,6 @@ function DialogCreateCar({
                             />
                         </Box>
 
-                        {/* CAR REGISTRATION CERTIFICATE */}
-                        <Box sx={{ marginBottom: 1 }}>
-                            <TextStyle>
-                                {
-                                    Strings.DialogCreateCar
-                                        .CAR_REGISTRATION_CERTIFICATE
-                                }
-                            </TextStyle>
-                            <DatePicker
-                                locale="vi"
-                                dateFormat={Constants.Styled.DATE_FORMAT}
-                                selectsRange={true}
-                                startDate={
-                                    selectDates.carRegistrationCertificate
-                                        .startDate
-                                }
-                                endDate={
-                                    selectDates.carRegistrationCertificate
-                                        .endDate
-                                }
-                                withPortal
-                                customInput={
-                                    <ButtonDate
-                                        handleRemoveDate={() =>
-                                            handleChangeDateCarRegistrationCertificate(
-                                                [null, null]
-                                            )
-                                        }
-                                        titleContent={
-                                            Strings.DialogCreateCar
-                                                .CHOOSE_TIME_CAR_REGISTRATION_CERTIFICATE
-                                        }
-                                        error={
-                                            errorData.errorDateCarRegistrationCertificate
-                                        }
-                                        helperText={
-                                            Strings.DialogCreateCar
-                                                .CHOOSE_TIME_PLEASE
-                                        }
-                                    />
-                                }
-                                selected={
-                                    selectDates.carRegistrationCertificate
-                                        .startDate
-                                }
-                                onChange={
-                                    handleChangeDateCarRegistrationCertificate
-                                }
-                                showYearDropdown
-                            />
-                        </Box>
-
                         {/* PERIODIC INSPECTION CERTIFICATE */}
                         <Box sx={{ marginBottom: 1 }}>
                             <TextStyle>
@@ -899,6 +870,68 @@ function DialogCreateCar({
                                 onChange={handleChangeDateCarInsurance}
                                 showYearDropdown
                             />
+                        </Box>
+
+                        {/* CAR REGISTRATION CERTIFICATE */}
+                        <Box sx={{ marginBottom: 1 }}>
+                            <TextStyle>
+                                {
+                                    Strings.DialogCreateCar
+                                        .CAR_REGISTRATION_CERTIFICATE
+                                }
+                            </TextStyle>
+
+                            <DatePicker
+                                locale="vi"
+                                dateFormat={Constants.Styled.DATE_FORMAT}
+                                selectsRange={true}
+                                startDate={
+                                    selectDates.carRegistrationCertificate
+                                        .startDate
+                                }
+                                endDate={
+                                    selectDates.carRegistrationCertificate
+                                        .endDate
+                                }
+                                withPortal
+                                customInput={
+                                    <ButtonDate
+                                        handleRemoveDate={() =>
+                                            handleChangeDateCarRegistrationCertificate(
+                                                [null, null]
+                                            )
+                                        }
+                                        titleContent={
+                                            Strings.DialogCreateCar
+                                                .CHOOSE_TIME_CAR_REGISTRATION_CERTIFICATE
+                                        }
+                                        error={
+                                            errorData.errorDateCarRegistrationCertificate
+                                        }
+                                        helperText={
+                                            Strings.DialogCreateCar
+                                                .CHOOSE_TIME_PLEASE
+                                        }
+                                    />
+                                }
+                                selected={
+                                    selectDates.carRegistrationCertificate
+                                        .startDate
+                                }
+                                onChange={
+                                    handleChangeDateCarRegistrationCertificate
+                                }
+                                showYearDropdown
+                            />
+                            <span
+                                style={{
+                                    fontSize: "11px",
+                                    fontStyle: "italic",
+                                    color: theme.palette.warning.main,
+                                }}
+                            >
+                                Chọn Cùng Ngày Nếu Giấy Phép Không Có Thời Hạn
+                            </span>
                         </Box>
                     </BoxRight>
                 </Box>

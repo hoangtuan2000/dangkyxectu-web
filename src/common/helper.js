@@ -16,6 +16,19 @@ const helper = {
         }
     },
 
+    isValidStringBetweenMinMaxLength: (value, minLen, maxLen) => {
+        if ((typeof value == "string" || typeof value == "number") && minLen && maxLen) {
+            value = value.toString();
+            if (value.length >= minLen && value.length <= maxLen) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    },
+
     isValidPhoneNumber: (phoneNumber) => {
         const regExp = new RegExp(/^([0]{1})([1-9]{1})([0-9]{8})$/);
         return regExp.test(phoneNumber);
@@ -61,6 +74,7 @@ const helper = {
             new Date(new Date().toDateString())
         );
     },
+
 
     // isDateTimeStampGreaterThanOrEqualCurrentDate: (timeStamp) => {
     //     return (

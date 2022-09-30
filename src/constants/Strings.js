@@ -1,3 +1,5 @@
+import Constants from "./Constants";
+
 const Strings = {
     App: {
         TITLE: "Hệ Thống Đăng Ký Sử Dụng Xe",
@@ -316,6 +318,7 @@ const Strings = {
         CHOOSE_CAR_BRAND_PLEASE: "Vui Lòng Chọn Thương Hiệu",
         CHOOSE_CAR_COLOR_PLEASE: "Vui Lòng Chọn Màu Xe",
         CHOOSE_TIME_PLEASE: "Vui Lòng Chọn Thời Gian",
+        SUPPORT_LENGTH_LICENSE_PLATES: `Từ ${Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES} - ${Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES} Ký Tự`,
     },
 };
 
