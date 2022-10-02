@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import {
     AutocompleteStyle,
-    BoxContent,
     BoxImg,
     BoxLeft,
     BoxRight,
@@ -25,18 +24,14 @@ import {
     Title,
 } from "./DialogCreateCarCustomStyles";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import BackDrop from "../../backDrop/BackDrop";
-import CodeIcon from "@mui/icons-material/Code";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Constants from "../../../constants/Constants";
 import { GlobalService } from "../../../services/GlobalServices";
@@ -44,7 +39,6 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import helper from "../../../common/helper";
-import axios from "axios";
 import { DialogCreateCarServices } from "../../../services/adminServices/DialogCreateCarServices";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 registerLocale("vi", vi);
@@ -142,6 +136,42 @@ function DialogCreateCar({
                 content: res.name || null,
             });
         }
+    };
+
+    const createCar = async () => {
+        await setBackDrop(true);
+        const formData = await handleFormDataSendApi();
+        const res = await DialogCreateCarServices.createCar(formData);
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                handleRefreshInput();
+                handleGetCarListForAdminWithFilter();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
     };
 
     const ButtonDate = forwardRef(
@@ -501,43 +531,7 @@ function DialogCreateCar({
         }
         return formData;
     };
-
-    const createCar = async () => {
-        await setBackDrop(true);
-        const formData = await handleFormDataSendApi();
-        const res = await DialogCreateCarServices.createCar(formData);
-        // axios success
-        if (res.data) {
-            if (res.data.status == Constants.ApiCode.OK) {
-                setModalSuccess(true);
-                handleRefreshInput();
-                handleGetCarListForAdminWithFilter();
-            } else {
-                setModalError({
-                    ...modalError,
-                    open: true,
-                    title: res.data.message,
-                    content: null,
-                });
-            }
-        }
-        // axios fail
-        else {
-            setModalError({
-                ...modalError,
-                open: true,
-                title:
-                    (res.request &&
-                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
-                    Strings.Common.ERROR,
-                content: res.name || null,
-            });
-        }
-        await setTimeout(() => {
-            setBackDrop(false);
-        }, 1000);
-    };
-
+    
     const onSubmit = async () => {
         const resultValidate = await handleValidateData();
         if (resultValidate) {
@@ -930,7 +924,7 @@ function DialogCreateCar({
                                     color: theme.palette.warning.main,
                                 }}
                             >
-                                Chọn Cùng Ngày Nếu Giấy Phép Không Có Thời Hạn
+                                {Strings.DialogCreateCar.NOTE_REGISTRATION_CERTIFICATE}
                             </span>
                         </Box>
                     </BoxRight>

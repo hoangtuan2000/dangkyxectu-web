@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Dialog,
+    RadioGroup,
     styled,
     TextField,
     Typography,
@@ -110,19 +111,19 @@ const TextStyle = styled(Typography)(({ theme }) => ({
     },
     [theme.breakpoints.up("sm")]: {
         fontSize: 14,
-        textAlign: 'right',
+        textAlign: "right",
     },
     [theme.breakpoints.up("md")]: {
         fontSize: 14,
-        textAlign: 'right',
+        textAlign: "right",
     },
     [theme.breakpoints.up("lg")]: {
         fontSize: 14,
-        textAlign: 'right',
+        textAlign: "right",
     },
     [theme.breakpoints.up("xl")]: {
         fontSize: 14,
-        textAlign: 'right',
+        textAlign: "right",
     },
 }));
 
@@ -325,6 +326,16 @@ const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
     },
 }));
 
+const RadioGroupStyle = styled(RadioGroup)(({ theme }) => ({
+    marginLeft: 10,
+    "& .MuiSvgIcon-root": {
+        fontSize: 13,
+    },
+    "& .MuiFormControlLabel-label": {
+        fontSize: 13,
+    },
+}));
+
 export {
     AutocompleteStyle,
     BoxContent,
@@ -333,4 +344,5 @@ export {
     TextInput,
     TextStyle,
     Title,
+    RadioGroupStyle,
 };

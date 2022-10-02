@@ -59,6 +59,9 @@ function CarManager() {
         carBrand: [],
         licensePlates: null,
         carCode: null,
+        licenseExpires: null,
+        haveTrip: null,
+        haveMaintenance: null,
     });
 
     const [carList, setCarList] = useState([]);
@@ -75,7 +78,10 @@ function CarManager() {
         carType,
         carBrand,
         licensePlates,
-        carCode
+        carCode,
+        licenseExpires,
+        haveTrip,
+        haveMaintenance
     ) => {
         const data = {
             page: page,
@@ -85,6 +91,9 @@ function CarManager() {
             carBrand,
             licensePlates,
             carCode,
+            licenseExpires,
+            haveTrip,
+            haveMaintenance,
         };
         const res = await CarManagerServices.getCarListForAdmin({
             ...data,
@@ -110,7 +119,7 @@ function CarManager() {
                             type: `${item.nameCarType} ${item.seatNumber} Chổ`,
                             licensePlates: item.licensePlates,
                             numberOfTrips: item.numberOfTrips || "",
-                            numberOfFailures: item.numberOfFailures || "",
+                            numberOfMaintenance: item.numberOfMaintenance || "",
                             status: item.nameCarStatus,
                             license: item.licenseNumberExpired,
                             carCode: item.idCar,
@@ -166,6 +175,9 @@ function CarManager() {
             carBrand,
             licensePlates: data.licensePlates,
             carCode: data.carCode,
+            licenseExpires: data.licenseExpires,
+            haveTrip: data.haveTrip,
+            haveMaintenance: data.haveMaintenance,
         };
     };
 
@@ -179,7 +191,10 @@ function CarManager() {
             data.carType,
             data.carBrand,
             data.carCode,
-            data.licensePlates
+            data.licensePlates,
+            data.licenseExpires,
+            data.haveTrip,
+            data.haveMaintenance,
         );
     };
 
@@ -193,7 +208,10 @@ function CarManager() {
             data.carType,
             data.carBrand,
             data.carCode,
-            data.licensePlates
+            data.licensePlates,
+            data.licenseExpires,
+            data.haveTrip,
+            data.haveMaintenance,
         );
     };
 
@@ -225,7 +243,10 @@ function CarManager() {
             carType,
             carBrand,
             e.licensePlates,
-            e.carCode
+            e.carCode,
+            e.licenseExpires,
+            e.haveTrip,
+            e.haveMaintenance
         );
         // save data filter in dialogCarManagerFilter => default value in dialogCarManagerFilter
         setDataFilter({
@@ -234,11 +255,17 @@ function CarManager() {
             carBrand: [...e.carBrand],
             licensePlates: e.licensePlates,
             carCode: e.carCode,
+            licenseExpires: e.licenseExpires,
+            haveTrip: e.haveTrip,
+            haveMaintenance: e.haveMaintenance,
         });
         // show total data to filter in UI => button filter
         let total = carStatus.length + carType.length + carBrand.length;
         if (e.carCode) total += 1;
         if (e.licensePlates) total += 1;
+        if (e.licenseExpires) total += 1;
+        if (e.haveTrip) total += 1;
+        if (e.haveMaintenance) total += 1;
         setTotalDataFilter(total > 0 ? total : null);
     };
 
@@ -249,6 +276,9 @@ function CarManager() {
             carBrand: [],
             licensePlates: null,
             carCode: null,
+            licenseExpires: null,
+            haveTrip: null,
+            haveMaintenance: null,
         });
     };
 
@@ -261,7 +291,9 @@ function CarManager() {
             data.carType,
             data.carBrand,
             data.carCode,
-            data.licensePlates
+            data.licensePlates,
+            data.haveTrip,
+            data.haveMaintenance,
         );
     };
 
@@ -330,7 +362,9 @@ function CarManager() {
             <DialogCreateCar
                 open={dialogCreateCar}
                 handleClose={() => setDialogCreateCar(false)}
-                handleGetCarListForAdminWithFilter={handleGetCarListForAdminWithFilter}
+                handleGetCarListForAdminWithFilter={
+                    handleGetCarListForAdminWithFilter
+                }
             />
 
             <DialogCarManagerFilter
@@ -342,6 +376,9 @@ function CarManager() {
                 defaultCarBrand={dataFilter.carBrand}
                 defaultLicensePlates={dataFilter.licensePlates}
                 defaultCarCode={dataFilter.carCode}
+                defaultLicenseExpires={dataFilter.licenseExpires}
+                defaultHaveTrip={dataFilter.haveTrip}
+                defaultHaveMaintenance={dataFilter.haveMaintenance}
                 handleRefreshDataFilter={handleRefreshDataFilter}
             />
 

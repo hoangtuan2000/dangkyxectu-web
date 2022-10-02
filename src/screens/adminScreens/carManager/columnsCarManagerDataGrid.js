@@ -129,14 +129,14 @@ const col = (handleModalShowSchedule) => {
             },
         },
         {
-            field: "numberOfFailures",
-            headerName: Strings.Common.NUMBER_OF_FAILURES,
-            description: Strings.Common.NUMBER_OF_FAILURES,
-            width: 140,
+            field: "numberOfMaintenance",
+            headerName: Strings.Common.NUMBER_OF_MAINTENANCE,
+            description: Strings.Common.NUMBER_OF_MAINTENANCE,
+            width: 120,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.numberOfFailures} arrow>
+                    <Tooltip title={params.row.numberOfMaintenance} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -144,7 +144,7 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.numberOfFailures}
+                            {params.row.numberOfMaintenance}
                         </span>
                     </Tooltip>
                 );

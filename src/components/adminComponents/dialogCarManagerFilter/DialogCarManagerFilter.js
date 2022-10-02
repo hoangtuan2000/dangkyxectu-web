@@ -3,8 +3,13 @@ import {
     Box,
     DialogActions,
     DialogContent,
+    FormControlLabel,
+    IconButton,
     InputAdornment,
+    Radio,
+    RadioGroup,
     TextField,
+    Tooltip,
     useTheme,
 } from "@mui/material";
 import {
@@ -12,6 +17,7 @@ import {
     BoxContent,
     ButtonFeatures,
     DialogContainer,
+    RadioGroupStyle,
     TextInput,
     TextStyle,
     Title,
@@ -20,6 +26,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ClearIcon from "@mui/icons-material/Clear";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
@@ -27,6 +34,7 @@ import BackDrop from "../../backDrop/BackDrop";
 import CodeIcon from "@mui/icons-material/Code";
 import Constants from "../../../constants/Constants";
 import { GlobalService } from "../../../services/GlobalServices";
+import helper from "../../../common/helper";
 
 function DialogCarManagerFilter({
     open,
@@ -38,6 +46,9 @@ function DialogCarManagerFilter({
     defaultCarBrand,
     defaultLicensePlates,
     defaultCarCode,
+    defaultLicenseExpires,
+    defaultHaveTrip,
+    defaultHaveMaintenance,
 }) {
     const theme = useTheme();
 
@@ -59,6 +70,9 @@ function DialogCarManagerFilter({
         carBrand: defaultCarBrand ? [...defaultCarBrand] : [],
         licensePlates: defaultLicensePlates || null,
         carCode: defaultCarCode || null,
+        licenseExpires: defaultLicenseExpires || null,
+        haveTrip: defaultHaveTrip || null,
+        haveMaintenance: defaultHaveMaintenance || null,
     });
 
     const getCommon = async () => {
@@ -92,6 +106,48 @@ function DialogCarManagerFilter({
                 content: res.name || null,
             });
         }
+    };
+
+    const handleChangeHaveMaintenance = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            haveMaintenance: e.target.value === "true", // e.target.value === 'true' => convert boolean
+        });
+    };
+
+    const handleDeleteHaveMaintenance = () => {
+        setDataSendApi({
+            ...dataSendApi,
+            haveMaintenance: null,
+        });
+    };
+
+    const handleChangeHaveTrip = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            haveTrip: e.target.value === "true", // e.target.value === 'true' => convert boolean
+        });
+    };
+
+    const handleDeleteHaveTrip = () => {
+        setDataSendApi({
+            ...dataSendApi,
+            haveTrip: null,
+        });
+    };
+
+    const handleChangeLicense = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            licenseExpires: e.target.value === "true", // e.target.value === 'true' => convert boolean
+        });
+    };
+
+    const handleDeleteLicense = () => {
+        setDataSendApi({
+            ...dataSendApi,
+            licenseExpires: null,
+        });
     };
 
     const handleChangeCarCode = (e) => {
@@ -137,6 +193,9 @@ function DialogCarManagerFilter({
             carBrand: [],
             licensePlates: null,
             carCode: null,
+            licenseExpires: null,
+            haveTrip: null,
+            haveMaintenance: null,
         });
         //refresh data
         setDataSendApi({
@@ -145,6 +204,9 @@ function DialogCarManagerFilter({
             carBrand: [],
             licensePlates: null,
             carCode: null,
+            licenseExpires: null,
+            haveTrip: null,
+            haveMaintenance: null,
         });
         //call function
         handleRefreshDataFilter();
@@ -178,6 +240,120 @@ function DialogCarManagerFilter({
             <DialogContent>
                 {/* TITLE */}
                 <Title>{Strings.DialogCarManagerFilter.TITLE}</Title>
+
+                {/* HAVE MAINTENANCE */}
+                <BoxContent>
+                    <TextStyle>
+                        {Strings.DialogCarManagerFilter.HAVE_MAINTENANCE}
+                    </TextStyle>
+                    <RadioGroupStyle
+                        row
+                        onChange={handleChangeHaveMaintenance}
+                        value={dataSendApi.haveMaintenance}
+                    >
+                        <FormControlLabel
+                            value={true}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.YES}
+                        />
+                        <FormControlLabel
+                            value={false}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.NO}
+                        />
+                        {!helper.isNullOrEmpty(dataSendApi.haveMaintenance) && (
+                            <Tooltip arrow title={Strings.Common.DETELE}>
+                                <IconButton
+                                    color="error"
+                                    onClick={handleDeleteHaveMaintenance}
+                                >
+                                    <ClearIcon
+                                        sx={{
+                                            fontSize: "17px !important",
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </RadioGroupStyle>
+                </BoxContent>
+
+                {/* HAVE TRIPS */}
+                <BoxContent>
+                    <TextStyle>
+                        {Strings.DialogCarManagerFilter.HAVE_TRIP}
+                    </TextStyle>
+                    <RadioGroupStyle
+                        row
+                        onChange={handleChangeHaveTrip}
+                        value={dataSendApi.haveTrip}
+                    >
+                        <FormControlLabel
+                            value={true}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.YES}
+                        />
+                        <FormControlLabel
+                            value={false}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.NO}
+                        />
+                        {!helper.isNullOrEmpty(dataSendApi.haveTrip) && (
+                            <Tooltip arrow title={Strings.Common.DETELE}>
+                                <IconButton
+                                    color="error"
+                                    onClick={handleDeleteHaveTrip}
+                                >
+                                    <ClearIcon
+                                        sx={{
+                                            fontSize: "17px !important",
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </RadioGroupStyle>
+                </BoxContent>
+
+                {/* CHOOSE EXPIRE LICENSE */}
+                <BoxContent>
+                    <TextStyle>
+                        {Strings.DialogCarManagerFilter.LICENSE}
+                    </TextStyle>
+                    <RadioGroupStyle
+                        row
+                        onChange={handleChangeLicense}
+                        value={dataSendApi.licenseExpires}
+                    >
+                        <FormControlLabel
+                            value={false}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.NOT_EXPIRES}
+                        />
+                        <FormControlLabel
+                            value={true}
+                            control={<Radio />}
+                            label={Strings.DialogCarManagerFilter.EXPIRES}
+                        />
+                        {!helper.isNullOrEmpty(dataSendApi.licenseExpires) && (
+                            <Tooltip arrow title={Strings.Common.DETELE}>
+                                <IconButton
+                                    color="error"
+                                    onClick={handleDeleteLicense}
+                                >
+                                    <ClearIcon
+                                        sx={{
+                                            fontSize: "17px !important",
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </RadioGroupStyle>
+                </BoxContent>
 
                 {/* CAR CODE */}
                 <BoxContent>
