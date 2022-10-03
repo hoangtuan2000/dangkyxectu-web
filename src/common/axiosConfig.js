@@ -65,13 +65,18 @@ axiosInstance.interceptors.request.use(
     async function (config) {
         const token = store.getState().currentUser.user.token;
         let decoded = jwt_decode(token);
+        // console.log("date", new Date(decoded.exp));
+        // console.log("date2", new Date());
+        // console.log("date3", new Date() >= new Date(decoded.exp));
         // If the token expires, then send
         if (new Date() >= new Date(decoded.exp)) {
+            // console.log("call auth");
             const resultAuthentication = await Authentication();
             return resultAuthentication ? config : false;
         }
         // token has not expired
         else {
+            // console.log("call not auth");
             return config;
         }
     },

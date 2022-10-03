@@ -64,6 +64,10 @@ const Constants = {
         DialogCreateCar: {
             CREATE_CAR: "/admin/createCar",
         },
+        DialogUpdateCar: {
+            GET_CAR_TO_UPDATE: "/admin/getCarToUpdate",
+            GET_CAR_LICENSE: "/admin/getCarLicense",
+        },
     },
 
     Styled: {
@@ -132,6 +136,12 @@ const Constants = {
             CANCELLED: "gray",
             REFUSE: "red",
         },
+    },
+
+    CarLicense: {
+        REGISTRATION_CERTIFICATE: "registrationCertificate",
+        PERIODIC_INSPECTION_CERTIFICATE: "periodicInspectionCertificate",
+        INSURANCE: "insurance",
     },
 
     Common: {

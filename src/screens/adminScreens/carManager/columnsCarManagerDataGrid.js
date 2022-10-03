@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
 
-const col = (handleModalShowSchedule) => {
+const col = (handleOpenDialogUpdateCar) => {
     let columns = [];
     return (columns = [
         {
@@ -246,7 +246,12 @@ const col = (handleModalShowSchedule) => {
             renderCell: (params) => {
                 return (
                     <Tooltip title="Cập Nhật" arrow>
-                        <IconButton color="primary">
+                        <IconButton
+                            color="primary"
+                            onClick={() =>
+                                handleOpenDialogUpdateCar(params.row.carCode)
+                            }
+                        >
                             <ModeEditIcon />
                         </IconButton>
                     </Tooltip>

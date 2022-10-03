@@ -1,30 +1,12 @@
 import {
     Badge,
     Box,
-    Button,
-    IconButton,
-    Pagination,
-    Rating,
-    Tab,
-    Tabs,
     Tooltip,
     Typography,
     useTheme,
 } from "@mui/material";
-import {
-    DataGrid,
-    gridPageCountSelector,
-    gridPageSelector,
-    gridPaginationRowRangeSelector,
-    gridRowCountSelector,
-    useGridApiContext,
-    useGridSelector,
-} from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Strings from "../../../constants/Strings";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -38,6 +20,7 @@ import { FabStyle, ButtonStyle } from "./CarManagerCustomStyles";
 import DialogCarManagerFilter from "../../../components/adminComponents/dialogCarManagerFilter/DialogCarManagerFilter";
 import helper from "../../../common/helper";
 import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar/DialogCreateCar";
+import DialogUpdateCar from "../../../components/adminComponents/dialogUpdateCar/DialogUpdateCar";
 
 function CarManager() {
     const theme = useTheme();
@@ -53,6 +36,10 @@ function CarManager() {
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogCarManagerFilter, setDialogCarManagerFilter] = useState(false);
     const [dialogCreateCar, setDialogCreateCar] = useState(false);
+    const [dialogUpdateCar, setDialogUpdateCar] = useState({
+        open: false,
+        idCar: null
+    });
     const [dataFilter, setDataFilter] = useState({
         carStatus: [],
         carType: [],
@@ -348,7 +335,11 @@ function CarManager() {
             </Box>
 
             <DataGridCustom
-                columns={col()}
+                columns={col((e) => setDialogUpdateCar({
+                    ...dialogUpdateCar,
+                    open: true,
+                    idCar: e
+                }))}
                 rows={carList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -365,6 +356,18 @@ function CarManager() {
                 handleGetCarListForAdminWithFilter={
                     handleGetCarListForAdminWithFilter
                 }
+            />
+
+            <DialogUpdateCar
+                open={dialogUpdateCar.open}
+                handleClose={() => setDialogUpdateCar({
+                    ...dialogUpdateCar,
+                    open: false
+                })}
+                handleGetCarListForAdminWithFilter={
+                    handleGetCarListForAdminWithFilter
+                }
+                idCar={dialogUpdateCar.idCar}
             />
 
             <DialogCarManagerFilter
