@@ -148,9 +148,10 @@ function DialogShowScheduleUser({
             });
         } else if (
             schedule.length > 0 &&
-            schedule[0].scheduleStatus == Constants.ScheduleStatus.APPROVED
+            (schedule[0].scheduleStatus == Constants.ScheduleStatus.APPROVED ||
+                schedule[0].scheduleStatus == Constants.ScheduleStatus.RECEIVED)
         ) {
-            res = await DialogShowScheduleUserServices.updateScheduleApproved({
+            res = await DialogShowScheduleUserServices.updatePhoneNumberUserInSchedule({
                 idSchedule: dataSendApi.idSchedule,
                 phoneUser: dataSendApi.phoneUser,
             });
@@ -347,7 +348,7 @@ function DialogShowScheduleUser({
                                             </Tooltip>
                                         </TextContent>
 
-                                        {/* RATING AND COMMENT */}
+                                        {/* RATING AND COMMENT OR PHONE */}
                                         {item.scheduleStatus ==
                                         Constants.ScheduleStatus.COMPLETE ? (
                                             <Box>
@@ -422,9 +423,12 @@ function DialogShowScheduleUser({
                                             </Box>
                                         ) : (
                                             // PHONE NUMBER
-                                            item.scheduleStatus ==
+                                            (item.scheduleStatus ==
                                                 Constants.ScheduleStatus
-                                                    .APPROVED && (
+                                                    .APPROVED ||
+                                                item.scheduleStatus ==
+                                                    Constants.ScheduleStatus
+                                                        .RECEIVED) && (
                                                 <Box>
                                                     <TextInput
                                                         placeholder={
@@ -568,6 +572,8 @@ function DialogShowScheduleUser({
                                 {/* SUBMIT BUTTON */}
                                 {(item.scheduleStatus ==
                                     Constants.ScheduleStatus.APPROVED ||
+                                    item.scheduleStatus ==
+                                        Constants.ScheduleStatus.RECEIVED ||
                                     item.scheduleStatus ==
                                         Constants.ScheduleStatus.COMPLETE) && (
                                     <ButtonFeatures

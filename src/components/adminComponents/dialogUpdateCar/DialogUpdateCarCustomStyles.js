@@ -59,7 +59,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "800px !important",
+                maxWidth: "750px !important",
                 margin: 0,
             },
         },
@@ -68,7 +68,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "900px !important",
+                maxWidth: "740px !important",
                 margin: 0,
             },
         },
@@ -571,6 +571,20 @@ const ListStyle = styled(List)(({ theme }) => ({
     },
 }));
 
+const BoxHelperDisable = styled(Box)(({ theme }) => ({
+    // margin: 0,
+    fontSize: "12px",
+    color: theme.palette.text.disabled,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    [theme.breakpoints.up("mobileS")]: {
+        whiteSpace: "normal",
+    },
+    [theme.breakpoints.up("md")]: {
+        whiteSpace: "nowrap",
+    },
+}));
+
 export {
     AutocompleteStyle,
     BoxContent,
@@ -585,5 +599,6 @@ export {
     BoxImg,
     ButtonStyled,
     TextError,
-    ListStyle
+    ListStyle,
+    BoxHelperDisable,
 };

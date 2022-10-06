@@ -300,23 +300,17 @@ const col = (handleModalShowSchedule) => {
             renderCell: (params) => {
                 let bgColor = "#969696";
                 let textColor = "white";
-                switch (params.value) {
-                    case Constants.ScheduleStatus.COMPLETE:
-                        bgColor = "Blue";
+                const objScheduleStatus = Constants.ScheduleStatus;
+                for (const property in objScheduleStatus) {
+                    if (params.value == `${objScheduleStatus[property]}`) {
+                        bgColor =
+                            Constants.ColorOfScheduleStatus.Background[
+                                property
+                            ];
+                        textColor =
+                            Constants.ColorOfScheduleStatus.Text[property];
                         break;
-                    case Constants.ScheduleStatus.APPROVED:
-                        bgColor = "green";
-                        break;
-                    case Constants.ScheduleStatus.PENDING:
-                        bgColor = "#ffcffb";
-                        textColor = "black";
-                        break;
-                    case Constants.ScheduleStatus.CANCELLED:
-                        bgColor = "gray";
-                        break;
-                    case Constants.ScheduleStatus.REFUSE:
-                        bgColor = "red";
-                        break;
+                    }
                 }
                 return (
                     <>

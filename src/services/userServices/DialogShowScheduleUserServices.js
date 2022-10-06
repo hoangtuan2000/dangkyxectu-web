@@ -37,11 +37,11 @@ const DialogShowScheduleUserServices = {
             });
     },
 
-    updateScheduleApproved: async (data) => {
+    updatePhoneNumberUserInSchedule: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogShowScheduleUser.UPDATE_SCHEDULE_APPROVED, data, {
+            .post(Constants.ApiPath.DialogShowScheduleUser.UPDATE_PHONE_NUMBER_USER_SCHEDULE, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },

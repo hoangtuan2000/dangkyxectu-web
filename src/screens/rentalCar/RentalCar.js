@@ -176,7 +176,9 @@ function RentalCar() {
                                 dateTemp <= new Date(endDate.toDateString());
 
                             ) {
-                                dateRange.push(new Date(dateTemp.toDateString()));
+                                dateRange.push(
+                                    new Date(dateTemp.toDateString())
+                                );
                                 dateTemp = new Date(
                                     dateTemp.setDate(dateTemp.getDate() + 1)
                                 );
@@ -198,7 +200,10 @@ function RentalCar() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -224,7 +229,10 @@ function RentalCar() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -255,7 +263,10 @@ function RentalCar() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -471,7 +482,10 @@ function RentalCar() {
                     setModalError({
                         ...modalError,
                         open: true,
-                        title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                        title:
+                            (res.request &&
+                                `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                            Strings.Common.ERROR,
                         content: res.name || null,
                     });
                 }
@@ -486,8 +500,8 @@ function RentalCar() {
         await getCar(idCar);
         await getScheduledDateForCar(idCar);
         await setTimeout(() => {
-            setBackDrop(false)
-        }, 1000)
+            setBackDrop(false);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -583,7 +597,10 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {Strings.RentalCar.VEHICLE_CONDITION}{" "}
+                                            {
+                                                Strings.RentalCar
+                                                    .VEHICLE_CONDITION
+                                            }{" "}
                                             <span
                                                 style={{
                                                     fontWeight: "bold",

@@ -22,6 +22,7 @@ import {
     Img,
     ListStyle,
     TextError,
+    BoxHelperDisable,
     TextInput,
     TextStyle,
     Title,
@@ -125,6 +126,7 @@ function DialogUpdateCar({
     const [carBrandList, setCarBrandList] = useState([]);
     const [carColorList, setCarColorList] = useState([]);
     const [carStatusList, setCarStatusList] = useState([]);
+    const [carLicenseList, setCarLicenseList] = useState({});
 
     const getCommon = async () => {
         const res = await GlobalService.getCommon({
@@ -214,6 +216,7 @@ function DialogUpdateCar({
                                 ),
                             },
                         });
+                        setCarLicenseList(resCarLicense.data.data);
                         setDataOld({
                             image: data.image,
                             fullNameAdmin: data.fullNameAdmin,
@@ -304,33 +307,33 @@ function DialogUpdateCar({
         await setBackDrop(true);
         let data = handleFormatData();
 
-        // const res = await DialogUpdateCarServices.createCar(formData);
-        // // axios success
-        // if (res.data) {
-        //     if (res.data.status == Constants.ApiCode.OK) {
-        //         setModalSuccess(true);
-        //         handleGetCarListForAdminWithFilter();
-        //     } else {
-        //         setModalError({
-        //             ...modalError,
-        //             open: true,
-        //             title: res.data.message,
-        //             content: null,
-        //         });
-        //     }
-        // }
-        // // axios fail
-        // else {
-        //     setModalError({
-        //         ...modalError,
-        //         open: true,
-        //         title:
-        //             (res.request &&
-        //                 `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
-        //             Strings.Common.ERROR,
-        //         content: res.name || null,
-        //     });
-        // }
+        const res = await DialogUpdateCarServices.updateCar(data);
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                handleGetCarListForAdminWithFilter();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -732,20 +735,20 @@ function DialogUpdateCar({
     const handleFormatData = () => {
         let data = {};
 
-        data.idCar = idCar
+        data.idCar = idCar;
         data.image = dataUpdateSendApi.hasOwnProperty("image")
             ? dataUpdateSendApi.image
             : null;
         dataUpdateSendApi.hasOwnProperty("licensePlates") &&
             (data.licensePlates = dataUpdateSendApi.licensePlates);
         dataUpdateSendApi.hasOwnProperty("carType") &&
-            (data.carType = dataUpdateSendApi.carType.idCarType);
+            (data.idCarType = dataUpdateSendApi.carType.idCarType);
         dataUpdateSendApi.hasOwnProperty("carBrand") &&
-            (data.carBrand = dataUpdateSendApi.carBrand.idCarBrand);
+            (data.idCarBrand = dataUpdateSendApi.carBrand.idCarBrand);
         dataUpdateSendApi.hasOwnProperty("carColor") &&
-            (data.carColor = dataUpdateSendApi.carColor.idCarColor);
+            (data.idCarColor = dataUpdateSendApi.carColor.idCarColor);
         dataUpdateSendApi.hasOwnProperty("carStatus") &&
-            (data.carStatus = dataUpdateSendApi.carStatus.idCarStatus);
+            (data.idCarStatus = dataUpdateSendApi.carStatus.idCarStatus);
         dataUpdateSendApi.hasOwnProperty("dateCarRegistrationCertificate") &&
             (data.dateCarRegistrationCertificate =
                 dataUpdateSendApi.dateCarRegistrationCertificate);
@@ -1202,6 +1205,48 @@ function DialogUpdateCar({
                                         .PERIODIC_INSPECTION_CERTIFICATE
                                 }
                             </TextStyle>
+                            {/* UPDATED AT */}
+                            {carLicenseList.periodicInspectionCertificate &&
+                                carLicenseList.periodicInspectionCertificate[0]
+                                    .updatedAt && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${helper.formatDateTimeStringFromTimeStamp(
+                                            carLicenseList
+                                                .periodicInspectionCertificate[0]
+                                                .updatedAt
+                                        )}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .UPDATED_AT +
+                                                helper.formatDateTimeStringFromTimeStamp(
+                                                    carLicenseList
+                                                        .periodicInspectionCertificate[0]
+                                                        .updatedAt
+                                                )}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
+                            {/* PEOPLE UPDATED */}
+                            {carLicenseList.periodicInspectionCertificate &&
+                                carLicenseList.periodicInspectionCertificate[0]
+                                    .updatedAt &&
+                                carLicenseList.periodicInspectionCertificate[0]
+                                    .fullNameAdmin &&
+                                carLicenseList.periodicInspectionCertificate[0]
+                                    .codeAdmin && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${carLicenseList.periodicInspectionCertificate[0].fullNameAdmin}-${carLicenseList.periodicInspectionCertificate[0].codeAdmin}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .PEOPLE_UPDATED +
+                                                `${carLicenseList.periodicInspectionCertificate[0].fullNameAdmin}-${carLicenseList.periodicInspectionCertificate[0].codeAdmin}`}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
                             <DatePicker
                                 locale="vi"
                                 dateFormat={Constants.Styled.DATE_FORMAT}
@@ -1251,6 +1296,42 @@ function DialogUpdateCar({
                             <TextStyle>
                                 {Strings.DialogUpdateCar.CAR_INSURANCE}
                             </TextStyle>
+                            {/* UPDATED AT */}
+                            {carLicenseList.insurance &&
+                                carLicenseList.insurance[0].updatedAt && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${helper.formatDateTimeStringFromTimeStamp(
+                                            carLicenseList.insurance[0]
+                                                .updatedAt
+                                        )}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .UPDATED_AT +
+                                                helper.formatDateTimeStringFromTimeStamp(
+                                                    carLicenseList.insurance[0]
+                                                        .updatedAt
+                                                )}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
+                            {/* PEOPLE UPDATED */}
+                            {carLicenseList.insurance &&
+                                carLicenseList.insurance[0].updatedAt &&
+                                carLicenseList.insurance[0].fullNameAdmin &&
+                                carLicenseList.insurance[0].codeAdmin && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${carLicenseList.insurance[0].fullNameAdmin}-${carLicenseList.insurance[0].codeAdmin}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .PEOPLE_UPDATED +
+                                                `${carLicenseList.insurance[0].fullNameAdmin}-${carLicenseList.insurance[0].codeAdmin}`}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
                             <DatePicker
                                 locale="vi"
                                 dateFormat={Constants.Styled.DATE_FORMAT}
@@ -1291,8 +1372,50 @@ function DialogUpdateCar({
                                         .CAR_REGISTRATION_CERTIFICATE
                                 }
                             </TextStyle>
-
+                            {/* UPDATED AT */}
+                            {carLicenseList.registrationCertificate &&
+                                carLicenseList.registrationCertificate[0]
+                                    .updatedAt && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${helper.formatDateTimeStringFromTimeStamp(
+                                            carLicenseList
+                                                .registrationCertificate[0]
+                                                .updatedAt
+                                        )}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .UPDATED_AT +
+                                                helper.formatDateTimeStringFromTimeStamp(
+                                                    carLicenseList
+                                                        .registrationCertificate[0]
+                                                        .updatedAt
+                                                )}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
+                            {/* PEOPLE UPDATED */}
+                            {carLicenseList.registrationCertificate &&
+                                carLicenseList.registrationCertificate[0]
+                                    .updatedAt &&
+                                carLicenseList.registrationCertificate[0]
+                                    .fullNameAdmin &&
+                                carLicenseList.registrationCertificate[0]
+                                    .codeAdmin && (
+                                    <Tooltip
+                                        arrow
+                                        title={`${carLicenseList.registrationCertificate[0].fullNameAdmin}-${carLicenseList.registrationCertificate[0].codeAdmin}`}
+                                    >
+                                        <BoxHelperDisable>
+                                            {Strings.DialogUpdateCar
+                                                .PEOPLE_UPDATED +
+                                                `${carLicenseList.registrationCertificate[0].fullNameAdmin}-${carLicenseList.registrationCertificate[0].codeAdmin}`}
+                                        </BoxHelperDisable>
+                                    </Tooltip>
+                                )}
                             <DatePicker
+                                showTimeSelect
                                 locale="vi"
                                 dateFormat={Constants.Styled.DATE_FORMAT}
                                 selectsRange={true}

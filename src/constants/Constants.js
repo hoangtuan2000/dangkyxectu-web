@@ -46,7 +46,7 @@ const Constants = {
         DialogShowScheduleUser: {
             GET_SCHEDULE: "/global/getSchedule",
             CREATE_OR_UPDATE_REVIEW: "/user/createOrUpdateReview",
-            UPDATE_SCHEDULE_APPROVED: "/user/updateScheduleApproved",
+            UPDATE_PHONE_NUMBER_USER_SCHEDULE: "/user/updatePhoneNumberUserInSchedule",
         },
         DialogShowScheduleDriver: {
             GET_SCHEDULE: "/global/getSchedule",
@@ -67,6 +67,7 @@ const Constants = {
         DialogUpdateCar: {
             GET_CAR_TO_UPDATE: "/admin/getCarToUpdate",
             GET_CAR_LICENSE: "/admin/getCarLicense",
+            UPDATE_CAR: "/admin/updateCar",
         },
     },
 
@@ -105,6 +106,7 @@ const Constants = {
         COMPLETE: "Hoàn Thành",
         CANCELLED: "Đã Hủy",
         REFUSE: "Từ Chối",
+        RECEIVED: "Đã Nhận",
     },
     ScheduleStatusCode: {
         PENDING: 1,
@@ -112,22 +114,25 @@ const Constants = {
         COMPLETE: 3,
         CANCELLED: 4,
         REFUSE: 5,
+        RECEIVED: 6,
     },
 
     ColorOfScheduleStatus: {
-        Text: {
-            PENDING: "black",
-            APPROVED: "white",
-            COMPLETE: "white",
-            CANCELLED: "white",
-            REFUSE: "white",
-        },
         TextNoBackground: {
             PENDING: "#d400ff",
             APPROVED: "green",
             COMPLETE: "Blue",
             CANCELLED: "gray",
             REFUSE: "red",
+            RECEIVED: "#03a882",
+        },
+        Text: {
+            PENDING: "black",
+            APPROVED: "white",
+            COMPLETE: "white",
+            CANCELLED: "white",
+            REFUSE: "white",
+            RECEIVED: "white",
         },
         Background: {
             PENDING: "#ffcffb",
@@ -135,6 +140,7 @@ const Constants = {
             COMPLETE: "Blue",
             CANCELLED: "gray",
             REFUSE: "red",
+            RECEIVED: "#03a882",
         },
     },
 

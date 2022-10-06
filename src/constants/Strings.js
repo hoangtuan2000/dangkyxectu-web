@@ -333,8 +333,9 @@ const Strings = {
     },
     DialogUpdateCar: {
         TITLE: "Cập Nhật Thông Tin Xe",
-        CREATED_AT: "Ngày Tạo:",
-        UPDATED_AT: "Ngày Cập Nhật:",
+        CREATED_AT: "Ngày Tạo: ",
+        UPDATED_AT: "Ngày Cập Nhật: ",
+        PEOPLE_UPDATED: "Người Cập Nhật: ",
         LICENSE_PLATES: "Biển Số Xe: ",
         ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
         INFO_ADMIN: "Thông Tin Admin: ",
