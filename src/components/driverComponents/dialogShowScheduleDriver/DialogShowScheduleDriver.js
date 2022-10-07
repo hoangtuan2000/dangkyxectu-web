@@ -20,10 +20,12 @@ import {
     TextContent,
     Title,
 } from "./DialogShowScheduleDriverCustomStyles";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -35,6 +37,7 @@ import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import Constants from "../../../constants/Constants";
 import { DialogShowScheduleDriverServices } from "../../../services/driverServices/DialogShowScheduleDriverServices";
 import helper from "../../../common/helper";
+import DialogCarStatusConfirmation from "../dialogCarStatusConfirmation/DialogCarStatusConfirmation";
 
 function DialogShowScheduleDriver({
     open,
@@ -129,7 +132,8 @@ function DialogShowScheduleDriver({
                 let colorCarStatus = theme.palette.text.primary;
                 for (const property in objCarStatus) {
                     if (item.idCarStatus == `${objCarStatus[property]}`) {
-                        colorCarStatus = Constants.ColorOfCarStatus.Text[property];
+                        colorCarStatus =
+                            Constants.ColorOfCarStatus.Text[property];
                         break;
                     }
                 }
@@ -447,8 +451,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                .DialogShowScheduleDriver
-                                                                .START_LOCATION
+                                                                    .DialogShowScheduleDriver
+                                                                    .START_LOCATION
                                                             }
                                                             secondary={`${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`}
                                                         />
@@ -465,8 +469,8 @@ function DialogShowScheduleDriver({
                                                         <ListItemText
                                                             primary={
                                                                 Strings
-                                                                .DialogShowScheduleDriver
-                                                                .END_LOCATION
+                                                                    .DialogShowScheduleDriver
+                                                                    .END_LOCATION
                                                             }
                                                             secondary={`${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`}
                                                         />
@@ -499,11 +503,64 @@ function DialogShowScheduleDriver({
                                 >
                                     {Strings.Common.EXIT}
                                 </ButtonFeatures>
+
+                                {helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                    item.startDate
+                                ) &&
+                                    item.idScheduleStatus ==
+                                        Constants.ScheduleStatusCode
+                                            .APPROVED && (
+                                        <ButtonFeatures
+                                            size="small"
+                                            variant="contained"
+                                            endIcon={<CheckCircleIcon />}
+                                            color="primary"
+                                            sx={{
+                                                marginRight: 1,
+                                                backgroundColor:
+                                                    Constants
+                                                        .ColorOfScheduleStatus
+                                                        .Background.RECEIVED,
+                                            }}
+                                            onClick={handleClose}
+                                        >
+                                            {
+                                                Strings.DialogShowScheduleDriver
+                                                    .RECEIVE_CAR
+                                            }
+                                        </ButtonFeatures>
+                                    )}
+
+                                {item.idScheduleStatus ==
+                                    Constants.ScheduleStatusCode.RECEIVED && (
+                                    <ButtonFeatures
+                                        size="small"
+                                        variant="contained"
+                                        endIcon={<CheckCircleIcon />}
+                                        sx={{
+                                            marginRight: 1,
+                                            backgroundColor:
+                                                Constants.ColorOfScheduleStatus
+                                                    .Background.MOVING,
+                                        }}
+                                        onClick={handleClose}
+                                    >
+                                        {
+                                            Strings.DialogShowScheduleDriver
+                                                .MOVING_COMFIRMATION
+                                        }
+                                    </ButtonFeatures>
+                                )}
                             </Box>
                         </DialogActions>
                     </Box>
                 );
             })}
+
+            <DialogCarStatusConfirmation
+                open={true}
+                titleDialog={"Tình Trạng Xe Khi Xuất Phát"}
+            />
 
             <ModalError
                 open={modalError.open}

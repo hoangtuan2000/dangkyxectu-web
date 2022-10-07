@@ -5,6 +5,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
+import helper from "../../../common/helper";
 
 const col = (
     handleModalShowSchedule,
@@ -176,7 +177,7 @@ const col = (
                     <>
                         <Box
                             style={{
-                                width: "90px",
+                                width: "100px",
                                 textAlign: "center",
                                 backgroundColor: bgColor,
                                 color: textColor,
@@ -262,9 +263,9 @@ const col = (
                     (params.row.status == Constants.ScheduleStatus.PENDING ||
                         params.row.status ==
                             Constants.ScheduleStatus.APPROVED) &&
-                    new Date(
-                        new Date(params.row.cancel * 1000).toDateString()
-                    ) > new Date(new Date().toDateString())
+                    helper.isDateTimeStampGreaterThanCurrentDate(
+                        params.row.cancel
+                    )
                 ) {
                     return (
                         <Tooltip title="Hủy Đăng Ký Xe" arrow>

@@ -5,6 +5,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
+import helper from "../../../common/helper";
 
 const col = (handleModalShowSchedule) => {
     let columns = [];
@@ -23,7 +24,10 @@ const col = (handleModalShowSchedule) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={`${params.row.type} - ${params.row.licensePlates}`} arrow>
+                    <Tooltip
+                        title={`${params.row.type} - ${params.row.licensePlates}`}
+                        arrow
+                    >
                         <img
                             src={params.row.imageCar}
                             alt={params.row.imageCar}
@@ -316,7 +320,7 @@ const col = (handleModalShowSchedule) => {
                     <>
                         <Box
                             style={{
-                                width: "90px",
+                                width: "100px",
                                 textAlign: "center",
                                 backgroundColor: bgColor,
                                 color: textColor,
@@ -343,9 +347,9 @@ const col = (handleModalShowSchedule) => {
             renderCell: (params) => {
                 if (
                     params.row.status == Constants.ScheduleStatus.PENDING &&
-                    new Date(
-                        new Date(params.row.update * 1000).toDateString()
-                    ) > new Date(new Date().toDateString())
+                    helper.isDateTimeStampGreaterThanCurrentDate(
+                        params.row.update
+                    )
                 ) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
@@ -372,6 +376,23 @@ const col = (handleModalShowSchedule) => {
                                     handleModalShowSchedule(
                                         params.row.scheduleCode
                                     );
+                                }}
+                            >
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                } else if (
+                    params.row.status == Constants.ScheduleStatus.RECEIVED
+                ) {
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    // handleModalShowSchedule(
+                                    //     params.row.scheduleCode
+                                    // );
                                 }}
                             >
                                 <ModeEditIcon />

@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import CreateIcon from "@mui/icons-material/Create";
 import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
+import helper from "../../../common/helper";
 
 const col = (handleModalShowSchedule) => {
     let columns = [];
@@ -124,14 +126,15 @@ const col = (handleModalShowSchedule) => {
             },
         },
         {
-            field: "dateRange",
-            headerName: Strings.Common.TIME,
-            description: Strings.Common.TIME,
+            field: "startDate",
+            headerName: Strings.Common.START_DATE,
+            description: Strings.Common.START_DATE,
             width: 200,
             sortable: false,
+            hide: true,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.dateRange} arrow>
+                    <Tooltip title={params.row.startDate} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -139,7 +142,63 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.dateRange}
+                            {params.row.startDate}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "endDate",
+            headerName: Strings.Common.END_DATE,
+            description: Strings.Common.END_DATE,
+            width: 200,
+            sortable: false,
+            hide: true,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.endDate} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.endDate}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "dateRange",
+            headerName: Strings.Common.TIME,
+            description: Strings.Common.TIME,
+            width: 200,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip
+                        title={`${helper.formatDateStringFromTimeStamp(
+                            params.row.startDate
+                        )} - ${helper.formatDateStringFromTimeStamp(
+                            params.row.endDate
+                        )}`}
+                        arrow
+                    >
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {`${helper.formatDateStringFromTimeStamp(
+                                params.row.startDate
+                            )} - ${helper.formatDateStringFromTimeStamp(
+                                params.row.endDate
+                            )}`}
                         </span>
                     </Tooltip>
                 );
@@ -170,7 +229,7 @@ const col = (handleModalShowSchedule) => {
                     <>
                         <Box
                             style={{
-                                width: "90px",
+                                width: "100px",
                                 textAlign: "center",
                                 backgroundColor: bgColor,
                                 color: textColor,
@@ -205,7 +264,17 @@ const col = (handleModalShowSchedule) => {
                                 );
                             }}
                         >
-                            <VisibilityIcon />
+                            {(params.row.status ==
+                                Constants.ScheduleStatus.APPROVED &&
+                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                    params.row.startDate
+                                )) ||
+                            params.row.status ==
+                                Constants.ScheduleStatus.RECEIVED ? (
+                                <CreateIcon />
+                            ) : (
+                                <VisibilityIcon />
+                            )}
                         </IconButton>
                     </Tooltip>
                 );

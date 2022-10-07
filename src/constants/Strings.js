@@ -119,6 +119,9 @@ const Strings = {
         CAR_RENTAL_REASON: "Mục Đích Sử Dụng Xe: ",
         START_LOCATION: "Điểm Xuất Phát: ",
         END_LOCATION: "Điểm Đến: ",
+        RECEIVE_CAR: "Nhận Xe",
+        COMPLETE_COMFIRMATION: "Xác Nhận Hoàn Thành",
+        MOVING_COMFIRMATION: "Xác Nhận Di Chuyển",
     },
 
     DialogShowScheduleAdmin: {
@@ -370,6 +373,11 @@ const Strings = {
         NOTE_REGISTRATION_CERTIFICATE:
             "Chọn Cùng Ngày Nếu Giấy Phép Không Có Thời Hạn",
         SUPPORT_LENGTH_LICENSE_PLATES: `Từ ${Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES} - ${Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES} Ký Tự`,
+    },
+
+    DialogCarStatusConfirmation: {
+        GOOD: "Tốt",
+        HAVE_BROKEN_PARTS: "Có Bộ Phận Bị Hỏng",
     },
 };
 

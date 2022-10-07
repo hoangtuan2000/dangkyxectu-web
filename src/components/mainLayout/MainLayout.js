@@ -218,7 +218,7 @@ export default function MainLayout() {
                     </Box>
 
                     {/* TOOLTIP ACCOUNT BUTTON */}
-                    <Tooltip title="Tài Khoản">
+                    {/* <Tooltip title="Tài Khoản">
                         <IconButton
                             onClick={handleClick}
                             size="small"
@@ -241,10 +241,10 @@ export default function MainLayout() {
                                 }}
                             />
                         </IconButton>
-                    </Tooltip>
+                    </Tooltip> */}
 
                     {/* ACCOUNT BUTTON / LOGOUT BUTTON */}
-                    <Menu
+                    {/* <Menu
                         anchorEl={anchorElAvatar}
                         open={openAccount}
                         onClose={handleClose}
@@ -290,8 +290,7 @@ export default function MainLayout() {
                             vertical: "bottom",
                         }}
                     >
-                        {/* LOGOUT */}
-                        <MenuItem
+                    <MenuItem
                             sx={{
                                 fontSize: {
                                     xs: "12px",
@@ -313,7 +312,23 @@ export default function MainLayout() {
                             />
                             {Strings.Common.LOGOUT}
                         </MenuItem>
-                    </Menu>
+                    </Menu> */}
+
+                    {/* TOOLTIP ACCOUNT BUTTON */}
+                    <Tooltip title={Strings.Common.LOGOUT}>
+                        <IconButton onClick={handleLogout} sx={{ ml: 1 }}>
+                            <LogoutIcon
+                                sx={{
+                                    color: "white",
+                                    fontSize: {
+                                        xs: "18px",
+                                        sm: "25px",
+                                        md: "25px",
+                                    },
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
                 </Toolbar>
             </AppBar>
 

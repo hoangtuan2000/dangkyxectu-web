@@ -99,7 +99,8 @@ function DriverTripManager() {
                             licensePlates: item.licensePlates,
                             startLocation: `${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`,
                             endLocation: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
-                            dateRange: `${startDate} - ${endDate}`,
+                            startDate: item.startDate,
+                            endDate: item.endDate,
                             status: item.scheduleStatus,
                             scheduleCode: item.idSchedule,
                         };
