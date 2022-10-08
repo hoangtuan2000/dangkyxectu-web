@@ -49,6 +49,11 @@ function DialogShowScheduleDriver({
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
+    const [dialogCarStatusConfirmation, setDialogCarStatusConfirmation] =
+        useState({
+            open: false,
+            idSchedule: idSchedule,
+        });
     const [modalError, setModalError] = useState({
         open: false,
         title: null,
@@ -85,6 +90,13 @@ function DialogShowScheduleDriver({
                 content: res.name || null,
             });
         }
+    };
+
+    const handleOpenDialogCarStatusConfirmation = () => {
+        setDialogCarStatusConfirmation({
+            ...dialogCarStatusConfirmation,
+            open: true,
+        });
     };
 
     const run = async () => {
@@ -405,7 +417,7 @@ function DialogShowScheduleDriver({
                                                 <ListItem>
                                                     <CreateIcon />
                                                     <Tooltip
-                                                        title={item.note}
+                                                        title={item.note || ""}
                                                         arrow
                                                     >
                                                         <ListItemText
@@ -522,7 +534,7 @@ function DialogShowScheduleDriver({
                                                         .ColorOfScheduleStatus
                                                         .Background.RECEIVED,
                                             }}
-                                            onClick={handleClose}
+                                            onClick={handleOpenDialogCarStatusConfirmation}
                                         >
                                             {
                                                 Strings.DialogShowScheduleDriver
@@ -558,8 +570,14 @@ function DialogShowScheduleDriver({
             })}
 
             <DialogCarStatusConfirmation
-                open={true}
-                titleDialog={"Tình Trạng Xe Khi Xuất Phát"}
+                open={dialogCarStatusConfirmation.open}
+                handleClose={() =>
+                    setDialogCarStatusConfirmation({
+                        ...dialogCarStatusConfirmation,
+                        open: false,
+                    })
+                }
+                idSchedule={dialogCarStatusConfirmation.idSchedule}
             />
 
             <ModalError

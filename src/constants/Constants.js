@@ -128,7 +128,7 @@ const Constants = {
             CANCELLED: "gray",
             REFUSE: "red",
             RECEIVED: "#03a882",
-            MOVING: '#ab8e00',
+            MOVING: "#ab8e00",
         },
         Text: {
             PENDING: "black",
@@ -137,7 +137,7 @@ const Constants = {
             CANCELLED: "white",
             REFUSE: "white",
             RECEIVED: "white",
-            MOVING: 'white',
+            MOVING: "white",
         },
         Background: {
             PENDING: "#ffcffb",
@@ -146,7 +146,7 @@ const Constants = {
             CANCELLED: "gray",
             REFUSE: "red",
             RECEIVED: "#03a882",
-            MOVING: '#ab8e00',
+            MOVING: "#ab8e00",
         },
     },
 
@@ -154,6 +154,28 @@ const Constants = {
         REGISTRATION_CERTIFICATE: "registrationCertificate",
         PERIODIC_INSPECTION_CERTIFICATE: "periodicInspectionCertificate",
         INSURANCE: "insurance",
+    },
+
+    BrokenCarParts: {
+        FRONT_OF_CAR: "Đầu Xe",
+        BACK_OF_CAR: "Đuôi Xe",
+        LEFT_CAR_BODY: "Thân Xe Bên Trái",
+        RIGHT_CAR_BODY: "Thân Xe Bên Phải",
+        CAR_FRONT_LIGHTS: "Đèn Trước",
+        CAR_BACK_LIGHTS: "Đèn Sau",
+        OTHER_CAR_PARTS: "Bộ Phận Khác",
+        CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
+    },
+
+    BrokenCarPartsCode: {
+        FRONT_OF_CAR: 1,
+        BACK_OF_CAR: 2,
+        LEFT_CAR_BODY: 3,
+        RIGHT_CAR_BODY: 4,
+        CAR_FRONT_LIGHTS: 5,
+        CAR_BACK_LIGHTS: 6,
+        OTHER_CAR_PARTS: 7,
+        CAR_CONTROL_CENTER: 8,
     },
 
     Common: {

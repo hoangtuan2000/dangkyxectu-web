@@ -64,6 +64,7 @@ const Strings = {
         NOT_EXPIRED: "Còn Hạn",
         // CREATE: "Tạo",
         ADD: "Thêm",
+        DESCRIPTION: "Mô Tả",
     },
 
     Login: {
@@ -376,8 +377,17 @@ const Strings = {
     },
 
     DialogCarStatusConfirmation: {
+        CAR_STATUS_BEFORE_DEPARTURE: "Tình Trạng Xe Khi Xuất Phát",
         GOOD: "Tốt",
         HAVE_BROKEN_PARTS: "Có Bộ Phận Bị Hỏng",
+        FRONT_OF_CAR: "Đầu Xe",
+        BACK_OF_CAR: "Đuôi Xe",
+        LEFT_CAR_BODY: "Thân Xe Bên Trái",
+        RIGHT_CAR_BODY: "Thân Xe Bên Phải",
+        CAR_FRONT_LIGHTS: "Đèn Trước",
+        CAR_BACK_LIGHTS: "Đèn Sau",
+        OTHER_CAR_PARTS: "Bộ Phận Khác",
+        CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
     },
 };
 

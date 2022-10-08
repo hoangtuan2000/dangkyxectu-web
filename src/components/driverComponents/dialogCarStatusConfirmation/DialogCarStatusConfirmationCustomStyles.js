@@ -5,16 +5,16 @@ import {
     FormGroup,
     RadioGroup,
     styled,
+    TextField,
     Typography,
 } from "@mui/material";
 
 const DialogContainer = styled(Dialog)(({ theme }) => ({
-   
     [theme.breakpoints.up("mobileS")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "310px !important",
+                maxWidth: "300px !important",
                 margin: 0,
             },
         },
@@ -23,7 +23,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "368px !important",
+                maxWidth: "350px !important",
                 margin: 0,
             },
         },
@@ -32,7 +32,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "410px !important",
+                maxWidth: "390px !important",
                 margin: 0,
             },
         },
@@ -50,84 +50,53 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
                 width: "fit-content",
-                maxWidth: "700px !important",
-                margin: 0,
-            },
-        },
-    },
-    [theme.breakpoints.up("lg")]: {
-        "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-                width: "fit-content",
-                maxWidth: "800px !important",
-                margin: 0,
-            },
-        },
-    },
-    [theme.breakpoints.up("xl")]: {
-        "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-                width: "fit-content",
                 maxWidth: "900px !important",
                 margin: 0,
-                transition:'width .8s ease',
+            },
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "fit-content",
+                maxWidth: "1200px !important",
+                margin: 0,
+            },
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+                width: "fit-content",
+                maxWidth: "1200px !important",
+                margin: 0,
             },
         },
     },
 }));
 
-const BoxLeft = styled(Box)(({ theme }) => ({
-    textAlign: "center",
+const BoxFloatLeft = styled(Box)(({ theme }) => ({
     float: "left",
     [theme.breakpoints.up("mobileS")]: {
-        width: 265,
+        width: '100%',
     },
     [theme.breakpoints.up("mobileM")]: {
-        width: 320,
+        width: '100%',
     },
     [theme.breakpoints.up("mobileL")]: {
-        width: 360,
+        width: '100%',
     },
     [theme.breakpoints.up("sm")]: {
-        width: 210,
+        width: 270,
     },
     [theme.breakpoints.up("md")]: {
-        width: 210,
+        width: 270,
     },
     [theme.breakpoints.up("lg")]: {
-        width: 250,
+        width: 280,
     },
     [theme.breakpoints.up("xl")]: {
-        width: 250,
-    },
-}));
-
-const BoxRight = styled(Box)(({ theme }) => ({
-    float: "left",
-    [theme.breakpoints.up("mobileS")]: {
-        width: 265,
-    },
-    [theme.breakpoints.up("mobileM")]: {
-        width: 320,
-    },
-    [theme.breakpoints.up("mobileL")]: {
-        width: 360,
-    },
-    [theme.breakpoints.up("sm")]: {
-        width: `calc(100% - 210px)`,
-        paddingLeft: 20,
-    },
-    [theme.breakpoints.up("md")]: {
-        width: `calc(100% - 210px)`,
-        paddingLeft: 20,
-    },
-    [theme.breakpoints.up("lg")]: {
-        width: `calc(100% - 250px)`,
-        paddingLeft: 20,
-    },
-    [theme.breakpoints.up("xl")]: {
-        width: `calc(100% - 250px)`,
-        paddingLeft: 20,
+        width: 280,
     },
 }));
 
@@ -206,12 +175,152 @@ const FormGroupStyle = styled(FormGroup)(({ theme }) => ({
     },
 }));
 
+const BoxImg = styled(Box)(({ theme }) => ({
+    borderRadius: 11,
+    padding: 1,
+    paddingTop: 2,
+    border: "1px solid #c2c0c0",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    [theme.breakpoints.up("mobileS")]: {
+        width: 250,
+        height: 160,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 300,
+        height: 180,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 340,
+        height: 190,
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 260,
+        height: 160,
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 250,
+        height: 160,
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 260,
+        height: 160,
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 260,
+        height: 160,
+    },
+}));
+
+const Img = styled("img")(({ theme }) => ({
+    borderRadius: 10,
+    objectFit: "cover",
+    width: "100%",
+    height: "100%",
+}));
+
+const TextInput = styled(TextField)(({ theme }) => ({
+    ".MuiInputBase-root": {
+        padding: 10,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 340,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 260,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 260,
+        ".MuiInputBase-input": {
+            fontSize: 14,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 14,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+}));
+
 export {
     Title,
     DialogContainer,
     ButtonFeatures,
-    BoxLeft,
-    BoxRight,
+    BoxFloatLeft,
+    // BoxLeft,
+    // BoxRight,
     RadioGroupStyle,
-    FormGroupStyle
+    FormGroupStyle,
+    BoxImg,
+    Img,
+    TextInput,
 };
