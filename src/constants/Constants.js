@@ -70,6 +70,9 @@ const Constants = {
             GET_CAR_LICENSE: "/admin/getCarLicense",
             UPDATE_CAR: "/admin/updateCar",
         },
+        DialogCarStatusConfirmation: {
+            CAR_BROKEN_PARTS_CONFIRMATION: "/driver/carBrokenPartsConfirmation",
+        },
     },
 
     Styled: {

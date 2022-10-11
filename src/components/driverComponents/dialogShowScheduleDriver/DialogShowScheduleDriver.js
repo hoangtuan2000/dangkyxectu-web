@@ -52,7 +52,8 @@ function DialogShowScheduleDriver({
     const [dialogCarStatusConfirmation, setDialogCarStatusConfirmation] =
         useState({
             open: false,
-            idSchedule: idSchedule,
+            idSchedule: null,
+            idScheduleStatus: null,
         });
     const [modalError, setModalError] = useState({
         open: false,
@@ -70,6 +71,11 @@ function DialogShowScheduleDriver({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setSchedule(res.data.data);
+                setDialogCarStatusConfirmation({
+                    ...dialogCarStatusConfirmation,
+                    idSchedule: res.data.data[0].idSchedule,
+                    idScheduleStatus: res.data.data[0].idScheduleStatus,
+                });
             } else {
                 setModalError({
                     ...modalError,
@@ -534,11 +540,13 @@ function DialogShowScheduleDriver({
                                                         .ColorOfScheduleStatus
                                                         .Background.RECEIVED,
                                             }}
-                                            onClick={handleOpenDialogCarStatusConfirmation}
+                                            onClick={
+                                                handleOpenDialogCarStatusConfirmation
+                                            }
                                         >
                                             {
                                                 Strings.DialogShowScheduleDriver
-                                                    .RECEIVE_CAR
+                                                    .RECEIVE_SCHEDULE
                                             }
                                         </ButtonFeatures>
                                     )}
@@ -578,6 +586,7 @@ function DialogShowScheduleDriver({
                     })
                 }
                 idSchedule={dialogCarStatusConfirmation.idSchedule}
+                idScheduleStatus={dialogCarStatusConfirmation.idScheduleStatus}
             />
 
             <ModalError

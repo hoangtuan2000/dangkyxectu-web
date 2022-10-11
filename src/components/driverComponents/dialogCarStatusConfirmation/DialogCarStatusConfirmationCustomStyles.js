@@ -78,13 +78,13 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
 const BoxFloatLeft = styled(Box)(({ theme }) => ({
     float: "left",
     [theme.breakpoints.up("mobileS")]: {
-        width: '100%',
+        width: "100%",
     },
     [theme.breakpoints.up("mobileM")]: {
-        width: '100%',
+        width: "100%",
     },
     [theme.breakpoints.up("mobileL")]: {
-        width: '100%',
+        width: "100%",
     },
     [theme.breakpoints.up("sm")]: {
         width: 270,
@@ -103,6 +103,7 @@ const BoxFloatLeft = styled(Box)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
+    textAlign: "center",
     justifyContent: "center",
     fontWeight: "bold",
     marginBottom: 10,

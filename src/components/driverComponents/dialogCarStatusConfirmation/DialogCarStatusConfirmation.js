@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
     Box,
-    Checkbox,
     Collapse,
     DialogActions,
     DialogContent,
@@ -11,25 +10,30 @@ import {
     useTheme,
 } from "@mui/material";
 import {
-    BoxImg,
     ButtonFeatures,
     BoxFloatLeft,
     DialogContainer,
-    FormGroupStyle,
-    Img,
     RadioGroupStyle,
-    TextInput,
     Title,
 } from "./DialogCarStatusConfirmationCustomStyles";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CheckBoxBrokenCar from "./CheckBoxBrokenCar";
+import { DialogShowScheduleDriverServices } from "../../../services/driverServices/DialogShowScheduleDriverServices";
+import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
+import { DialogCarStatusConfirmationServices } from "../../../services/driverServices/DialogCarStatusConfirmationServices";
 
-function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
+function DialogCarStatusConfirmation({
+    open,
+    handleClose,
+    idSchedule,
+    idScheduleStatus,
+}) {
     const theme = useTheme();
 
     const inputImgFrontOfCar = useRef();
@@ -47,6 +51,12 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
         open: false,
         title: null,
         content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_ADD_CAR,
+        content: Strings.Common.ADD_CAR_CONFIRMATION,
+        handleSubmit: () => {},
     });
 
     const nameBrokenCarParts = {
@@ -77,9 +87,13 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
         comment: "",
     };
 
-    const [schedule, setSchedule] = useState([]);
+    const [formatContentDialog, setFormatContentDialog] = useState({
+        title: "",
+        nameButtonSubmit: "",
+        colorButtonSubmit: "",
+    });
     const [dataSendApi, setDataSendApi] = useState({
-        isCarFail: false,
+        isCarBroken: false,
         brokenCarParts: {
             frontOfCar: { ...interfaceBrokenCarParts },
             backOfCar: { ...interfaceBrokenCarParts },
@@ -91,12 +105,13 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
             otherCarParts: { ...interfaceBrokenCarParts },
         },
     });
+
     const [checkedBrokenCarParts, setCheckedBrokenCarParts] = useState([]);
 
-    const handleChangeIsCarFail = (e) => {
+    const handleChangeIsCarBroken = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            isCarFail: e.target.value === "true", // e.target.value === 'true' => convert boolean
+            isCarBroken: e.target.value === "true", // e.target.value === 'true' => convert boolean
         });
     };
 
@@ -129,15 +144,10 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
     };
 
     const handleFormatArrayChecked = (objDataBrokenCarParts) => {
-        console.log("call handleFormatArrayChecked", objDataBrokenCarParts);
         if (objDataBrokenCarParts) {
             let arr = [];
             for (const nameBroken in objDataBrokenCarParts) {
                 if (objDataBrokenCarParts[nameBroken]["idBrokenCarParts"]) {
-                    console.log(
-                        "push",
-                        objDataBrokenCarParts[nameBroken]["idBrokenCarParts"]
-                    );
                     arr.push(
                         parseInt(
                             objDataBrokenCarParts[nameBroken][
@@ -179,11 +189,9 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
         //     errorImage: false,
         // });
     };
-    
+
     const handleChangeDescription = (e, nameBrokenCarParts) => {
-        // console.log("e.target.value", e.target.value);
-        // console.log("e", e);
-        let data =  dataSendApi.brokenCarParts;
+        let data = dataSendApi.brokenCarParts;
         data[`${nameBrokenCarParts}`] = {
             ...data[`${nameBrokenCarParts}`],
             comment: e.target.value,
@@ -194,132 +202,98 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
         });
     };
 
-    console.log("3", dataSendApi);
-    console.log("4", checkedBrokenCarParts);
+    const carBrokenPartsConfirmation = async () => {
+        let formData = new FormData();
+        formData.append("isCarBroken", dataSendApi.isCarBroken);
 
-    // const getSchedule = async () => {
-    //     const res = await DialogShowScheduleDriverServices.getSchedule({
-    //         idSchedule: idSchedule,
-    //     });
-    //     // axios success
-    //     if (res.data) {
-    //         if (res.data.status == Constants.ApiCode.OK) {
-    //             setSchedule(res.data.data);
-    //         } else {
-    //             setModalError({
-    //                 ...modalError,
-    //                 open: true,
-    //                 title: res.data.message,
-    //             });
-    //         }
-    //     }
-    //     // axios fail
-    //     else {
-    //         setModalError({
-    //             ...modalError,
-    //             open: true,
-    //             title:
-    //                 (res.request &&
-    //                     `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
-    //                 Strings.Common.ERROR,
-    //             content: res.name || null,
-    //         });
-    //     }
-    // };
+        for (const property in dataSendApi.brokenCarParts) {
+            if (dataSendApi.brokenCarParts[property].idBrokenCarParts) {
+                formData.append(
+                    "arrayIdBrokenCarParts[]",
+                    dataSendApi.brokenCarParts[property].idBrokenCarParts
+                );
+            }
+            if (dataSendApi.brokenCarParts[property].image) {
+                formData.append(
+                    "multipleImages",
+                    dataSendApi.brokenCarParts[property].image
+                );
+            }
+            if (dataSendApi.brokenCarParts[property].comment) {
+                formData.append(
+                    "arrayComment[]",
+                    dataSendApi.brokenCarParts[property].comment
+                );
+            }
+        }
+
+        const res =
+            await DialogCarStatusConfirmationServices.carBrokenPartsConfirmation(
+                formData
+            );
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+    };
+
+    const onSubmit = async () => {
+        // const resultValidate = await handleValidateData();
+        // if (resultValidate) {
+        setDialogConfirmation({
+            ...dialogConfirmation,
+            open: true,
+            handleSubmit: () => {
+                carBrokenPartsConfirmation();
+            },
+        });
+        // }
+    };
 
     const run = async () => {
         await setBackDrop(true);
-        // (await open) && getSchedule();
+        if (idScheduleStatus == Constants.ScheduleStatusCode.APPROVED) {
+            setFormatContentDialog({
+                title: `${Strings.DialogCarStatusConfirmation.CAR_STATUS_BEFORE_DEPARTURE} (Số: ${idSchedule})`,
+                nameButtonSubmit:
+                    Strings.DialogCarStatusConfirmation.RECEIVE_CAR,
+                colorButtonSubmit:
+                    Constants.ColorOfScheduleStatus.Background.RECEIVED,
+            });
+        } else if (idScheduleStatus == Constants.ScheduleStatusCode.MOVING) {
+            setFormatContentDialog({
+                title: `${Strings.DialogCarStatusConfirmation.CAR_STATUS_AFTER_DEPARTURE} (Số: ${idSchedule})`,
+                nameButtonSubmit:
+                    Strings.DialogCarStatusConfirmation.COMPLETE_SCHEDULE,
+                colorButtonSubmit:
+                    Constants.ColorOfScheduleStatus.Background.COMPLETE,
+            });
+        }
         await handleFormatArrayChecked({ ...dataSendApi.brokenCarParts });
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
-    };
-
-    const CheckBoxBrokenCar = ({
-        handleCheckBrokenCarParts,
-        handleChangeDescription,
-        nameBrokenCarParts,
-        brokenCarPartsCode,
-        labelCheckBox,
-        inputImageRef,
-    }) => {
-        return (
-            <Box>
-                <FormGroupStyle
-                    onChange={(e) =>
-                        handleCheckBrokenCarParts(e, nameBrokenCarParts)
-                    }
-                >
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={checkedBrokenCarParts.includes(
-                                    brokenCarPartsCode
-                                )}
-                            />
-                        }
-                        label={labelCheckBox}
-                        value={brokenCarPartsCode}
-                    />
-                </FormGroupStyle>
-                <Collapse
-                    in={checkedBrokenCarParts.includes(brokenCarPartsCode)}
-                >
-                    <Box mb={1}>
-                        <TextInput
-                            id={`${nameBrokenCarParts}`}
-                            onChange={(e) =>
-                                handleChangeDescription(e, nameBrokenCarParts)
-                            }
-                            label={Strings.Common.DESCRIPTION}
-                            value={dataSendApi.brokenCarParts[`${nameBrokenCarParts}`].comment}
-                            multiline
-                        />
-                    </Box>
-                    <Box>
-                        <input
-                            ref={inputImageRef}
-                            type="file"
-                            style={{ display: "none" }}
-                            accept="image/*"
-                            onChange={(e) =>
-                                handleChooseImage(e, nameBrokenCarParts)
-                            }
-                        />
-                        <BoxImg
-                            onClick={() => onOpenChooseImage(inputImageRef)}
-                            sx={
-                                {
-                                    // borderColor:
-                                    //     errorData.errorImage &&
-                                    //     theme.palette.error.main,
-                                }
-                            }
-                        >
-                            {imagePreview[`${nameBrokenCarParts}`] && (
-                                <Img
-                                    src={imagePreview[`${nameBrokenCarParts}`]}
-                                />
-                            )}
-                            <CameraAltIcon
-                                sx={{
-                                    fontSize: "40px !important",
-                                    // color: errorData.errorImage
-                                    //     ? theme.palette.error.main
-                                    //     : theme.palette.text
-                                    //           .secondary,
-                                    opacity: "0.3 !important",
-                                    zIndex: 999999,
-                                    position: "absolute",
-                                    top: "35%",
-                                }}
-                            />
-                        </BoxImg>
-                    </Box>
-                </Collapse>
-            </Box>
-        );
     };
 
     useEffect(() => {
@@ -337,27 +311,22 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
             <DialogContent>
                 <Box>
                     {/* TITLE */}
-                    <Title>
-                        {
-                            Strings.DialogCarStatusConfirmation
-                                .CAR_STATUS_BEFORE_DEPARTURE
-                        }
-                    </Title>
+                    <Title>{formatContentDialog.title}</Title>
 
                     {/* CONTENT */}
                     <Box>
                         <Box>
                             <RadioGroupStyle
                                 row
-                                onChange={handleChangeIsCarFail}
-                                value={dataSendApi.isCarFail}
+                                onChange={handleChangeIsCarBroken}
+                                value={dataSendApi.isCarBroken}
                             >
                                 <FormControlLabel
                                     value={false}
                                     control={
                                         <Radio
                                             checked={
-                                                dataSendApi.isCarFail == false
+                                                dataSendApi.isCarBroken == false
                                             }
                                         />
                                     }
@@ -370,7 +339,7 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     control={
                                         <Radio
                                             checked={
-                                                dataSendApi.isCarFail == true
+                                                dataSendApi.isCarBroken == true
                                             }
                                         />
                                     }
@@ -384,7 +353,7 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
 
                         <Divider />
 
-                        <Collapse in={dataSendApi.isCarFail}>
+                        <Collapse in={dataSendApi.isCarBroken}>
                             <BoxFloatLeft>
                                 {/* FRONT OF CAR */}
                                 <CheckBoxBrokenCar
@@ -394,6 +363,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.frontOfCar
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.frontOfCar}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.FRONT_OF_CAR
                                     }
@@ -416,6 +395,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts
+                                            .carFrontLights.comment
+                                    }
+                                    imagePreview={imagePreview.carFrontLights}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.CAR_FRONT_LIGHTS
                                     }
@@ -446,6 +435,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.backOfCar
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.backOfCar}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.BACK_OF_CAR
                                     }
@@ -467,6 +466,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.carBackLights
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.carBackLights}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.CAR_BACK_LIGHTS
                                     }
@@ -497,6 +506,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.leftCarBody
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.leftCarBody}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.LEFT_CAR_BODY
                                     }
@@ -519,6 +538,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.rightCarBody
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.rightCarBody}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.RIGHT_CAR_BODY
                                     }
@@ -549,6 +578,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts
+                                            .carControlCenter.comment
+                                    }
+                                    imagePreview={imagePreview.carControlCenter}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.CAR_CONTROL_CENTER
                                     }
@@ -571,6 +610,16 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                                     handleChangeDescription={
                                         handleChangeDescription
                                     }
+                                    onOpenChooseImage={onOpenChooseImage}
+                                    handleChooseImage={handleChooseImage}
+                                    checkedBrokenCarParts={
+                                        checkedBrokenCarParts
+                                    }
+                                    valueInput={
+                                        dataSendApi.brokenCarParts.otherCarParts
+                                            .comment
+                                    }
+                                    imagePreview={imagePreview.otherCarParts}
                                     nameBrokenCarParts={
                                         nameBrokenCarParts.OTHER_CAR_PARTS
                                     }
@@ -610,8 +659,37 @@ function DialogCarStatusConfirmation({ open, handleClose, idSchedule }) {
                     >
                         {Strings.Common.EXIT}
                     </ButtonFeatures>
+
+                    {/* SUBMIT BUTTON */}
+                    <ButtonFeatures
+                        size="small"
+                        variant="contained"
+                        endIcon={<CheckCircleIcon />}
+                        sx={{
+                            marginRight: 1,
+                            backgroundColor:
+                                formatContentDialog.colorButtonSubmit ||
+                                theme.palette.primary.main,
+                        }}
+                        onClick={onSubmit}
+                    >
+                        {formatContentDialog.nameButtonSubmit}
+                    </ButtonFeatures>
                 </Box>
             </DialogActions>
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                handleSubmit={dialogConfirmation.handleSubmit}
+            />
 
             <ModalError
                 open={modalError.open}

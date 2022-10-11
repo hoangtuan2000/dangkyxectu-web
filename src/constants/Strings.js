@@ -120,7 +120,7 @@ const Strings = {
         CAR_RENTAL_REASON: "Mục Đích Sử Dụng Xe: ",
         START_LOCATION: "Điểm Xuất Phát: ",
         END_LOCATION: "Điểm Đến: ",
-        RECEIVE_CAR: "Nhận Xe",
+        RECEIVE_SCHEDULE: "Nhận Lịch Trình",
         COMPLETE_COMFIRMATION: "Xác Nhận Hoàn Thành",
         MOVING_COMFIRMATION: "Xác Nhận Di Chuyển",
     },
@@ -378,6 +378,7 @@ const Strings = {
 
     DialogCarStatusConfirmation: {
         CAR_STATUS_BEFORE_DEPARTURE: "Tình Trạng Xe Khi Xuất Phát",
+        CAR_STATUS_AFTER_DEPARTURE: "Tình Trạng Xe Sau Khi Xuất Phát",
         GOOD: "Tốt",
         HAVE_BROKEN_PARTS: "Có Bộ Phận Bị Hỏng",
         FRONT_OF_CAR: "Đầu Xe",
@@ -388,6 +389,8 @@ const Strings = {
         CAR_BACK_LIGHTS: "Đèn Sau",
         OTHER_CAR_PARTS: "Bộ Phận Khác",
         CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
+        RECEIVE_CAR: "Nhận Xe",
+        COMPLETE_SCHEDULE: "Hoàn Thành Lịch Trình",
     },
 };
 
