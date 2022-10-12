@@ -57,7 +57,7 @@ function DialogCarStatusConfirmation({
     idScheduleStatus,
     openModalSuccessOfDialogShowSheduleDriver,
     getScheduleOfDialogShowSheduleDriver,
-    getDriverScheduleListOfDriverTripManager
+    getDriverScheduleListOfDriverTripManager,
 }) {
     const theme = useTheme();
 
@@ -225,6 +225,57 @@ function DialogCarStatusConfirmation({
         });
     };
 
+    const handleRefreshData = () => {
+        setImagePreview({
+            frontOfCar: null,
+            backOfCar: null,
+            carFrontLights: null,
+            carBackLights: null,
+            leftCarBody: null,
+            rightCarBody: null,
+            carControlCenter: null,
+            otherCarParts: null,
+        });
+
+        setDataSendApi({
+            isCarBroken: false,
+            brokenCarParts: {
+                frontOfCar: { ...interfaceBrokenCarParts },
+                backOfCar: { ...interfaceBrokenCarParts },
+                carFrontLights: { ...interfaceBrokenCarParts },
+                carBackLights: { ...interfaceBrokenCarParts },
+                leftCarBody: { ...interfaceBrokenCarParts },
+                rightCarBody: { ...interfaceBrokenCarParts },
+                carControlCenter: { ...interfaceBrokenCarParts },
+                otherCarParts: { ...interfaceBrokenCarParts },
+            },
+        });
+
+        setErrorData({
+            isCarBroken: false,
+            errorAllCarParts: false,
+            frontOfCar: { ...interfaceErrorData },
+            backOfCar: { ...interfaceErrorData },
+            carFrontLights: { ...interfaceErrorData },
+            carBackLights: { ...interfaceErrorData },
+            leftCarBody: { ...interfaceErrorData },
+            rightCarBody: { ...interfaceErrorData },
+            carControlCenter: { ...interfaceErrorData },
+            otherCarParts: { ...interfaceErrorData },
+        });
+
+        handleFormatArrayChecked({
+            frontOfCar: { ...interfaceBrokenCarParts },
+            backOfCar: { ...interfaceBrokenCarParts },
+            carFrontLights: { ...interfaceBrokenCarParts },
+            carBackLights: { ...interfaceBrokenCarParts },
+            leftCarBody: { ...interfaceBrokenCarParts },
+            rightCarBody: { ...interfaceBrokenCarParts },
+            carControlCenter: { ...interfaceBrokenCarParts },
+            otherCarParts: { ...interfaceBrokenCarParts },
+        });
+    };
+
     const confirmReceivedOrCompleteOfSchedule = async () => {
         await setBackDrop(true);
         let formData = new FormData();
@@ -259,10 +310,11 @@ function DialogCarStatusConfirmation({
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                openModalSuccessOfDialogShowSheduleDriver()
-                getScheduleOfDialogShowSheduleDriver()
-                getDriverScheduleListOfDriverTripManager()
-                handleClose()
+                openModalSuccessOfDialogShowSheduleDriver();
+                getScheduleOfDialogShowSheduleDriver();
+                getDriverScheduleListOfDriverTripManager();
+                handleRefreshData();
+                handleClose();
             } else {
                 setModalError({
                     ...modalError,
@@ -330,7 +382,7 @@ function DialogCarStatusConfirmation({
             if (numberBrokenCarParts <= 0) {
                 error.errorAllCarParts = true;
                 numberError += 1;
-            }else{
+            } else {
                 error.errorAllCarParts = false;
             }
 
@@ -404,7 +456,7 @@ function DialogCarStatusConfirmation({
 
     useEffect(() => {
         run();
-    }, [idSchedule]);
+    }, [idSchedule, idScheduleStatus]);
 
     return (
         <DialogContainer

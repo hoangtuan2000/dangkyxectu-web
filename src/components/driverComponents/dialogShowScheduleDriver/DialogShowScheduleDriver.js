@@ -639,7 +639,7 @@ function DialogShowScheduleDriver({
                                                 Constants.ColorOfScheduleStatus
                                                     .Background.COMPLETE,
                                         }}
-                                        onClick={handleClose}
+                                        onClick={handleOpenDialogCarStatusConfirmation}
                                     >
                                         {
                                             Strings.DialogShowScheduleDriver
