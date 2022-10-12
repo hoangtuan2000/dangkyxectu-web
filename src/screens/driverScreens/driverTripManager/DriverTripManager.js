@@ -256,6 +256,21 @@ function DriverTripManager() {
         });
     };
 
+    const handleGetDriverScheduleListWithFilter = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getDriverScheduleList(
+            dataInfo.page,
+            dataInfo.pageSize,
+            data.status,
+            data.carType,
+            data.scheduleCode,
+            data.address,
+            data.idWard,
+            data.startDate,
+            data.endDate
+        );
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverScheduleList();
@@ -328,7 +343,7 @@ function DriverTripManager() {
                 }
                 idSchedule={dialogShowScheduleDriver.idSchedule}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
-                getDriverScheduleListOfDriverTripManager={getDriverScheduleList}
+                getDriverScheduleListOfDriverTripManager={handleGetDriverScheduleListWithFilter}
             />
 
             <ModalError

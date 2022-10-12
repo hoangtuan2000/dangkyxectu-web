@@ -225,7 +225,7 @@ function DialogCarStatusConfirmation({
         });
     };
 
-    const carBrokenPartsConfirmation = async () => {
+    const confirmReceivedOrCompleteOfSchedule = async () => {
         await setBackDrop(true);
         let formData = new FormData();
         formData.append("idSchedule", idSchedule);
@@ -253,7 +253,7 @@ function DialogCarStatusConfirmation({
         }
 
         const res =
-            await DialogCarStatusConfirmationServices.carBrokenPartsConfirmation(
+            await DialogCarStatusConfirmationServices.confirmReceivedOrCompleteOfSchedule(
                 formData
             );
         // axios success
@@ -361,7 +361,7 @@ function DialogCarStatusConfirmation({
                 ...dialogConfirmation,
                 open: true,
                 handleSubmit: () => {
-                    carBrokenPartsConfirmation();
+                    confirmReceivedOrCompleteOfSchedule();
                 },
             });
         }

@@ -3,11 +3,11 @@ import Constants from "../../constants/Constants";
 import { store } from "../../redux/store";
 
 const DialogCarStatusConfirmationServices = {
-    carBrokenPartsConfirmation: async (data) => {
+    confirmReceivedOrCompleteOfSchedule: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.DialogCarStatusConfirmation.CAR_BROKEN_PARTS_CONFIRMATION, data, {
+            .post(Constants.ApiPath.DialogCarStatusConfirmation.CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },

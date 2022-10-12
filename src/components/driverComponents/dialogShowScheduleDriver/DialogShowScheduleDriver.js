@@ -36,6 +36,7 @@ import Constants from "../../../constants/Constants";
 import { DialogShowScheduleDriverServices } from "../../../services/driverServices/DialogShowScheduleDriverServices";
 import helper from "../../../common/helper";
 import DialogCarStatusConfirmation from "../dialogCarStatusConfirmation/DialogCarStatusConfirmation";
+import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 
 function DialogShowScheduleDriver({
     open,
@@ -48,19 +49,63 @@ function DialogShowScheduleDriver({
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
+    const [modalError, setModalError] = useState({
+        open: false,
+        title: null,
+        content: null,
+    });
+    const [dialogConfirmation, setDialogConfirmation] = useState({
+        open: false,
+        title: Strings.Common.DO_YOU_WANT_TO_CONFIRM_MOVING,
+        content: Strings.Common.MOVING_CONFIRMATION,
+        handleSubmit: () => {},
+    });
+
     const [dialogCarStatusConfirmation, setDialogCarStatusConfirmation] =
         useState({
             open: false,
             idSchedule: null,
             idScheduleStatus: null,
         });
-    const [modalError, setModalError] = useState({
-        open: false,
-        title: null,
-        content: null,
-    });
 
     const [schedule, setSchedule] = useState([]);
+
+    const confirmMoving = async () => {
+        await setBackDrop(true);
+        const res = await DialogShowScheduleDriverServices.confirmMoving({
+            idSchedule: idSchedule,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                getDriverScheduleListOfDriverTripManager();
+                getSchedule()
+                setModalSuccess(true);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
+    };
 
     const getSchedule = async () => {
         const res = await DialogShowScheduleDriverServices.getSchedule({
@@ -96,6 +141,16 @@ function DialogShowScheduleDriver({
                 content: res.name || null,
             });
         }
+    };
+
+    const handleConfirmMoving = async () => {
+        setDialogConfirmation({
+            ...dialogConfirmation,
+            open: true,
+            handleSubmit: () => {
+                confirmMoving();
+            },
+        });
     };
 
     const handleOpenDialogCarStatusConfirmation = () => {
@@ -563,11 +618,32 @@ function DialogShowScheduleDriver({
                                                 Constants.ColorOfScheduleStatus
                                                     .Background.MOVING,
                                         }}
-                                        onClick={handleClose}
+                                        onClick={handleConfirmMoving}
                                     >
                                         {
                                             Strings.DialogShowScheduleDriver
                                                 .MOVING_COMFIRMATION
+                                        }
+                                    </ButtonFeatures>
+                                )}
+
+                                {item.idScheduleStatus ==
+                                    Constants.ScheduleStatusCode.MOVING && (
+                                    <ButtonFeatures
+                                        size="small"
+                                        variant="contained"
+                                        endIcon={<CheckCircleIcon />}
+                                        sx={{
+                                            marginRight: 1,
+                                            backgroundColor:
+                                                Constants.ColorOfScheduleStatus
+                                                    .Background.COMPLETE,
+                                        }}
+                                        onClick={handleClose}
+                                    >
+                                        {
+                                            Strings.DialogShowScheduleDriver
+                                                .COMPLETE_COMFIRMATION
                                         }
                                     </ButtonFeatures>
                                 )}
@@ -587,9 +663,26 @@ function DialogShowScheduleDriver({
                 }
                 idSchedule={dialogCarStatusConfirmation.idSchedule}
                 idScheduleStatus={dialogCarStatusConfirmation.idScheduleStatus}
-                openModalSuccessOfDialogShowSheduleDriver={() => setModalSuccess(true)}
+                openModalSuccessOfDialogShowSheduleDriver={() =>
+                    setModalSuccess(true)
+                }
                 getScheduleOfDialogShowSheduleDriver={getSchedule}
-                getDriverScheduleListOfDriverTripManager={getDriverScheduleListOfDriverTripManager}
+                getDriverScheduleListOfDriverTripManager={
+                    getDriverScheduleListOfDriverTripManager
+                }
+            />
+
+            <DialogConfirmation
+                open={dialogConfirmation.open}
+                handleClose={() =>
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: false,
+                    })
+                }
+                content={dialogConfirmation.content}
+                title={dialogConfirmation.title}
+                handleSubmit={dialogConfirmation.handleSubmit}
             />
 
             <ModalError

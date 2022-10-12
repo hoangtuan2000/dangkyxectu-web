@@ -51,6 +51,7 @@ const Constants = {
         },
         DialogShowScheduleDriver: {
             GET_SCHEDULE: "/global/getSchedule",
+            CONFIRM_MOVING: "/driver/confirmMoving",
         },
         DialogShowScheduleAdmin: {
             GET_SCHEDULE: "/global/getSchedule",
@@ -71,7 +72,7 @@ const Constants = {
             UPDATE_CAR: "/admin/updateCar",
         },
         DialogCarStatusConfirmation: {
-            CAR_BROKEN_PARTS_CONFIRMATION: "/driver/carBrokenPartsConfirmation",
+            CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE: "/driver/confirmReceivedOrCompleteOfSchedule",
         },
     },
 
