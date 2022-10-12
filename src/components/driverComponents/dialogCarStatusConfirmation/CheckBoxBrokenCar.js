@@ -1,4 +1,4 @@
-import { Checkbox, Collapse, FormControlLabel } from "@mui/material";
+import { Checkbox, Collapse, FormControlLabel, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import {
     BoxImg,
@@ -14,43 +14,43 @@ const CheckBoxBrokenCar = ({
     handleChangeDescription,
     onOpenChooseImage,
     handleChooseImage,
-    checkedBrokenCarParts,
+    checkedCarParts,
     valueInput,
     imagePreview,
-    nameBrokenCarParts,
-    brokenCarPartsCode,
+    nameCarParts,
+    carPartsCode,
     labelCheckBox,
     inputImageRef,
+    errorComment,
+    errorImage,
 }) => {
+    const theme = useTheme();
     return (
         <Box>
             <FormGroupStyle
-                onChange={(e) =>
-                    handleCheckBrokenCarParts(e, nameBrokenCarParts)
-                }
+                onChange={(e) => handleCheckBrokenCarParts(e, nameCarParts)}
             >
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={checkedBrokenCarParts.includes(
-                                brokenCarPartsCode
-                            )}
+                            checked={checkedCarParts.includes(carPartsCode)}
                         />
                     }
                     label={labelCheckBox}
-                    value={brokenCarPartsCode}
+                    value={carPartsCode}
                 />
             </FormGroupStyle>
-            <Collapse in={checkedBrokenCarParts.includes(brokenCarPartsCode)}>
+            <Collapse in={checkedCarParts.includes(carPartsCode)}>
                 <Box mb={1}>
                     <TextInput
-                        id={`${nameBrokenCarParts}`}
+                        id={`${nameCarParts}`}
                         onChange={(e) =>
-                            handleChangeDescription(e, nameBrokenCarParts)
+                            handleChangeDescription(e, nameCarParts)
                         }
                         label={Strings.Common.DESCRIPTION}
                         value={valueInput}
                         multiline
+                        error={errorComment}
                     />
                 </Box>
                 <Box>
@@ -59,30 +59,21 @@ const CheckBoxBrokenCar = ({
                         type="file"
                         style={{ display: "none" }}
                         accept="image/*"
-                        onChange={(e) =>
-                            handleChooseImage(e, nameBrokenCarParts)
-                        }
+                        onChange={(e) => handleChooseImage(e, nameCarParts)}
                     />
                     <BoxImg
                         onClick={() => onOpenChooseImage(inputImageRef)}
-                        sx={
-                            {
-                                // borderColor:
-                                //     errorData.errorImage &&
-                                //     theme.palette.error.main,
-                            }
-                        }
+                        sx={{
+                            borderColor: errorImage && theme.palette.error.main,
+                        }}
                     >
-                        {imagePreview && (
-                            <Img src={imagePreview} />
-                        )}
+                        {imagePreview && <Img src={imagePreview} />}
                         <CameraAltIcon
                             sx={{
                                 fontSize: "40px !important",
-                                // color: errorData.errorImage
-                                //     ? theme.palette.error.main
-                                //     : theme.palette.text
-                                //           .secondary,
+                                color: errorImage
+                                    ? theme.palette.error.main
+                                    : theme.palette.text.secondary,
                                 opacity: "0.3 !important",
                                 zIndex: 999999,
                                 position: "absolute",

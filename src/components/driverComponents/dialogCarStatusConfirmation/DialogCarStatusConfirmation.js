@@ -6,6 +6,7 @@ import {
     DialogContent,
     Divider,
     FormControlLabel,
+    FormHelperText,
     Radio,
     useTheme,
 } from "@mui/material";
@@ -24,15 +25,39 @@ import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckBoxBrokenCar from "./CheckBoxBrokenCar";
-import { DialogShowScheduleDriverServices } from "../../../services/driverServices/DialogShowScheduleDriverServices";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import { DialogCarStatusConfirmationServices } from "../../../services/driverServices/DialogCarStatusConfirmationServices";
+
+const nameCarParts = {
+    FRONT_OF_CAR: "frontOfCar",
+    BACK_OF_CAR: "backOfCar",
+    CAR_FRONT_LIGHTS: "carFrontLights",
+    CAR_BACK_LIGHTS: "carBackLights",
+    LEFT_CAR_BODY: "leftCarBody",
+    RIGHT_CAR_BODY: "rightCarBody",
+    CAR_CONTROL_CENTER: "carControlCenter",
+    OTHER_CAR_PARTS: "otherCarParts",
+};
+
+const interfaceBrokenCarParts = {
+    idCarParts: null,
+    image: null,
+    comment: "",
+};
+
+const interfaceErrorData = {
+    image: false,
+    comment: false,
+};
 
 function DialogCarStatusConfirmation({
     open,
     handleClose,
     idSchedule,
     idScheduleStatus,
+    openModalSuccessOfDialogShowSheduleDriver,
+    getScheduleOfDialogShowSheduleDriver,
+    getDriverScheduleListOfDriverTripManager
 }) {
     const theme = useTheme();
 
@@ -54,21 +79,10 @@ function DialogCarStatusConfirmation({
     });
     const [dialogConfirmation, setDialogConfirmation] = useState({
         open: false,
-        title: Strings.Common.DO_YOU_WANT_TO_ADD_CAR,
-        content: Strings.Common.ADD_CAR_CONFIRMATION,
+        title: Strings.Common.DO_YOU_WANT_TO_UPDATE,
+        content: Strings.Common.UPDATE_CONFIRMATION,
         handleSubmit: () => {},
     });
-
-    const nameBrokenCarParts = {
-        FRONT_OF_CAR: "frontOfCar",
-        BACK_OF_CAR: "backOfCar",
-        CAR_FRONT_LIGHTS: "carFrontLights",
-        CAR_BACK_LIGHTS: "carBackLights",
-        LEFT_CAR_BODY: "leftCarBody",
-        RIGHT_CAR_BODY: "rightCarBody",
-        CAR_CONTROL_CENTER: "carControlCenter",
-        OTHER_CAR_PARTS: "otherCarParts",
-    };
 
     const [imagePreview, setImagePreview] = useState({
         frontOfCar: null,
@@ -81,17 +95,14 @@ function DialogCarStatusConfirmation({
         otherCarParts: null,
     });
 
-    const interfaceBrokenCarParts = {
-        idBrokenCarParts: null,
-        image: null,
-        comment: "",
-    };
-
     const [formatContentDialog, setFormatContentDialog] = useState({
         title: "",
         nameButtonSubmit: "",
         colorButtonSubmit: "",
     });
+
+    const [checkedCarParts, setCheckedCarParts] = useState([]);
+
     const [dataSendApi, setDataSendApi] = useState({
         isCarBroken: false,
         brokenCarParts: {
@@ -106,7 +117,18 @@ function DialogCarStatusConfirmation({
         },
     });
 
-    const [checkedBrokenCarParts, setCheckedBrokenCarParts] = useState([]);
+    const [errorData, setErrorData] = useState({
+        isCarBroken: false,
+        errorAllCarParts: false,
+        frontOfCar: { ...interfaceErrorData },
+        backOfCar: { ...interfaceErrorData },
+        carFrontLights: { ...interfaceErrorData },
+        carBackLights: { ...interfaceErrorData },
+        leftCarBody: { ...interfaceErrorData },
+        rightCarBody: { ...interfaceErrorData },
+        carControlCenter: { ...interfaceErrorData },
+        otherCarParts: { ...interfaceErrorData },
+    });
 
     const handleChangeIsCarBroken = (e) => {
         setDataSendApi({
@@ -115,12 +137,12 @@ function DialogCarStatusConfirmation({
         });
     };
 
-    const handleCheckBrokenCarParts = async (e, nameBrokenCarParts) => {
+    const handleCheckBrokenCarParts = async (e, nameCarParts) => {
         if (e.target.checked) {
             let data = await { ...dataSendApi.brokenCarParts };
-            data[`${nameBrokenCarParts}`] = await {
-                ...data[`${nameBrokenCarParts}`],
-                idBrokenCarParts: e.target.value,
+            data[`${nameCarParts}`] = await {
+                ...data[`${nameCarParts}`],
+                idCarParts: e.target.value,
             };
             handleFormatArrayChecked(data);
             setDataSendApi({
@@ -131,9 +153,9 @@ function DialogCarStatusConfirmation({
             });
         } else {
             let data = await dataSendApi.brokenCarParts;
-            data[`${nameBrokenCarParts}`] = await {
-                ...data[`${nameBrokenCarParts}`],
-                idBrokenCarParts: null,
+            data[`${nameCarParts}`] = await {
+                ...data[`${nameCarParts}`],
+                idCarParts: null,
             };
             handleFormatArrayChecked(data);
             setDataSendApi({
@@ -141,23 +163,24 @@ function DialogCarStatusConfirmation({
                 brokenCarParts: { ...data },
             });
         }
+
+        setErrorData({
+            ...errorData,
+            errorAllCarParts: false,
+        });
     };
 
-    const handleFormatArrayChecked = (objDataBrokenCarParts) => {
-        if (objDataBrokenCarParts) {
+    const handleFormatArrayChecked = (objDataCarParts) => {
+        if (objDataCarParts) {
             let arr = [];
-            for (const nameBroken in objDataBrokenCarParts) {
-                if (objDataBrokenCarParts[nameBroken]["idBrokenCarParts"]) {
+            for (const nameBroken in objDataCarParts) {
+                if (objDataCarParts[nameBroken]["idCarParts"]) {
                     arr.push(
-                        parseInt(
-                            objDataBrokenCarParts[nameBroken][
-                                "idBrokenCarParts"
-                            ]
-                        )
+                        parseInt(objDataCarParts[nameBroken]["idCarParts"])
                     );
                 }
             }
-            setCheckedBrokenCarParts([...arr]);
+            setCheckedCarParts([...arr]);
         }
     };
 
@@ -167,17 +190,17 @@ function DialogCarStatusConfirmation({
     };
 
     // CHOOSE IMAGE
-    const handleChooseImage = async (e, nameBrokenCarParts) => {
+    const handleChooseImage = async (e, nameCarParts) => {
         let urlImgPreview = await URL.createObjectURL(e.target.files[0]);
         // IMAGE PREVIEW
         let obj = await { ...imagePreview };
-        obj[`${nameBrokenCarParts}`] = urlImgPreview;
+        obj[`${nameCarParts}`] = urlImgPreview;
         setImagePreview({ ...obj });
 
         // SET DATA SEND API
         let data = await dataSendApi.brokenCarParts;
-        data[`${nameBrokenCarParts}`] = {
-            ...data[`${nameBrokenCarParts}`],
+        data[`${nameCarParts}`] = {
+            ...data[`${nameCarParts}`],
             image: e.target.files[0],
         };
         setDataSendApi({
@@ -190,10 +213,10 @@ function DialogCarStatusConfirmation({
         // });
     };
 
-    const handleChangeDescription = (e, nameBrokenCarParts) => {
+    const handleChangeDescription = (e, nameCarParts) => {
         let data = dataSendApi.brokenCarParts;
-        data[`${nameBrokenCarParts}`] = {
-            ...data[`${nameBrokenCarParts}`],
+        data[`${nameCarParts}`] = {
+            ...data[`${nameCarParts}`],
             comment: e.target.value,
         };
         setDataSendApi({
@@ -203,27 +226,29 @@ function DialogCarStatusConfirmation({
     };
 
     const carBrokenPartsConfirmation = async () => {
+        await setBackDrop(true);
         let formData = new FormData();
+        formData.append("idSchedule", idSchedule);
         formData.append("isCarBroken", dataSendApi.isCarBroken);
 
         for (const property in dataSendApi.brokenCarParts) {
-            if (dataSendApi.brokenCarParts[property].idBrokenCarParts) {
+            if (dataSendApi.brokenCarParts[property].idCarParts) {
                 formData.append(
-                    "arrayIdBrokenCarParts[]",
-                    dataSendApi.brokenCarParts[property].idBrokenCarParts
+                    "arrayIdCarParts[]",
+                    dataSendApi.brokenCarParts[property].idCarParts
                 );
-            }
-            if (dataSendApi.brokenCarParts[property].image) {
-                formData.append(
-                    "multipleImages",
-                    dataSendApi.brokenCarParts[property].image
-                );
-            }
-            if (dataSendApi.brokenCarParts[property].comment) {
-                formData.append(
-                    "arrayComment[]",
-                    dataSendApi.brokenCarParts[property].comment
-                );
+                if (dataSendApi.brokenCarParts[property].image) {
+                    formData.append(
+                        "multipleImages",
+                        dataSendApi.brokenCarParts[property].image
+                    );
+                }
+                if (dataSendApi.brokenCarParts[property].comment) {
+                    formData.append(
+                        "arrayComment[]",
+                        dataSendApi.brokenCarParts[property].comment
+                    );
+                }
             }
         }
 
@@ -234,13 +259,16 @@ function DialogCarStatusConfirmation({
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setModalSuccess(true);
+                openModalSuccessOfDialogShowSheduleDriver()
+                getScheduleOfDialogShowSheduleDriver()
+                getDriverScheduleListOfDriverTripManager()
+                handleClose()
             } else {
                 setModalError({
                     ...modalError,
                     open: true,
                     title: res.data.message,
-                    content: null
+                    content: null,
                 });
             }
         }
@@ -256,19 +284,87 @@ function DialogCarStatusConfirmation({
                 content: res.name || null,
             });
         }
+
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
+    };
+
+    const handleValidateData = () => {
+        if (dataSendApi.isCarBroken == true) {
+            const arrNameCarParts = [
+                nameCarParts.FRONT_OF_CAR,
+                nameCarParts.BACK_OF_CAR,
+                nameCarParts.CAR_FRONT_LIGHTS,
+                nameCarParts.CAR_BACK_LIGHTS,
+                nameCarParts.LEFT_CAR_BODY,
+                nameCarParts.RIGHT_CAR_BODY,
+                nameCarParts.CAR_CONTROL_CENTER,
+                nameCarParts.OTHER_CAR_PARTS,
+            ];
+
+            let error = errorData;
+            let numberBrokenCarParts = 0;
+            let numberError = 0;
+            // CHECK EMPTY IMAGE OR COMMENT
+            arrNameCarParts.map((item) => {
+                if (dataSendApi.brokenCarParts[`${item}`].idCarParts) {
+                    numberBrokenCarParts += 1;
+                    if (!dataSendApi.brokenCarParts[`${item}`].image) {
+                        error[`${item}`].image = true;
+                        numberError += 1;
+                    } else {
+                        error[`${item}`].image = false;
+                    }
+
+                    if (!dataSendApi.brokenCarParts[`${item}`].comment) {
+                        error[`${item}`].comment = true;
+                        numberError += 1;
+                    } else {
+                        error[`${item}`].comment = false;
+                    }
+                }
+            });
+
+            // NOT CHECK CAR PARTS
+            if (numberBrokenCarParts <= 0) {
+                error.errorAllCarParts = true;
+                numberError += 1;
+            }else{
+                error.errorAllCarParts = false;
+            }
+
+            setErrorData({
+                ...error,
+            });
+
+            return numberError > 0 ? false : true;
+        } else if (dataSendApi.isCarBroken == false) {
+            setErrorData({
+                ...errorData,
+                isCarBroken: false,
+            });
+            return true;
+        } else {
+            setErrorData({
+                ...errorData,
+                isCarBroken: true,
+            });
+            return false;
+        }
     };
 
     const onSubmit = async () => {
-        // const resultValidate = await handleValidateData();
-        // if (resultValidate) {
-        setDialogConfirmation({
-            ...dialogConfirmation,
-            open: true,
-            handleSubmit: () => {
-                carBrokenPartsConfirmation();
-            },
-        });
-        // }
+        const resultValidate = await handleValidateData();
+        if (resultValidate) {
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                open: true,
+                handleSubmit: () => {
+                    carBrokenPartsConfirmation();
+                },
+            });
+        }
     };
 
     const run = async () => {
@@ -281,6 +377,11 @@ function DialogCarStatusConfirmation({
                 colorButtonSubmit:
                     Constants.ColorOfScheduleStatus.Background.RECEIVED,
             });
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                title: Strings.Common.DO_YOU_WANT_TO_RECEIVE_CAR,
+                content: Strings.Common.RECEIVE_CAR_CONFIRMATION,
+            });
         } else if (idScheduleStatus == Constants.ScheduleStatusCode.MOVING) {
             setFormatContentDialog({
                 title: `${Strings.DialogCarStatusConfirmation.CAR_STATUS_AFTER_DEPARTURE} (Số: ${idSchedule})`,
@@ -288,6 +389,11 @@ function DialogCarStatusConfirmation({
                     Strings.DialogCarStatusConfirmation.COMPLETE_SCHEDULE,
                 colorButtonSubmit:
                     Constants.ColorOfScheduleStatus.Background.COMPLETE,
+            });
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                title: Strings.Common.DO_YOU_WANT_TO_RETURN_CAR,
+                content: Strings.Common.RETURN_CAR_CONFIRMATION,
             });
         }
         await handleFormatArrayChecked({ ...dataSendApi.brokenCarParts });
@@ -348,6 +454,22 @@ function DialogCarStatusConfirmation({
                                             .HAVE_BROKEN_PARTS
                                     }
                                 />
+                                {errorData.isCarBroken && (
+                                    <FormHelperText error={true}>
+                                        {
+                                            Strings.DialogCarStatusConfirmation
+                                                .PLEASE_CHOOSE_CAR_STATUS
+                                        }
+                                    </FormHelperText>
+                                )}
+                                {errorData.errorAllCarParts && (
+                                    <FormHelperText error={true}>
+                                        {
+                                            Strings.DialogCarStatusConfirmation
+                                                .PLEASE_CHOOSE_BROKEN_CAR_PARTS
+                                        }
+                                    </FormHelperText>
+                                )}
                             </RadioGroupStyle>
                         </Box>
 
@@ -365,26 +487,23 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.frontOfCar
                                             .comment
                                     }
                                     imagePreview={imagePreview.frontOfCar}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.FRONT_OF_CAR
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .FRONT_OF_CAR
+                                    nameCarParts={nameCarParts.FRONT_OF_CAR}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.FRONT_OF_CAR
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .FRONT_OF_CAR
                                     }
                                     inputImageRef={inputImgFrontOfCar}
+                                    errorComment={errorData.frontOfCar.comment}
+                                    errorImage={errorData.frontOfCar.image}
                                 />
 
                                 {/* CAR_FRONT_LIGHTS */}
@@ -397,26 +516,25 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts
                                             .carFrontLights.comment
                                     }
                                     imagePreview={imagePreview.carFrontLights}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.CAR_FRONT_LIGHTS
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .CAR_FRONT_LIGHTS
+                                    nameCarParts={nameCarParts.CAR_FRONT_LIGHTS}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.CAR_FRONT_LIGHTS
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .CAR_FRONT_LIGHTS
                                     }
                                     inputImageRef={inputImgCarFrontLights}
+                                    errorComment={
+                                        errorData.carFrontLights.comment
+                                    }
+                                    errorImage={errorData.carFrontLights.image}
                                 />
                             </BoxFloatLeft>
 
@@ -437,25 +555,23 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.backOfCar
                                             .comment
                                     }
                                     imagePreview={imagePreview.backOfCar}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.BACK_OF_CAR
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode.BACK_OF_CAR
+                                    nameCarParts={nameCarParts.BACK_OF_CAR}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.BACK_OF_CAR
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .BACK_OF_CAR
                                     }
                                     inputImageRef={inputImgBackOfCar}
+                                    errorComment={errorData.backOfCar.comment}
+                                    errorImage={errorData.backOfCar.image}
                                 />
 
                                 {/* CAR_BACK_LIGHTS */}
@@ -468,26 +584,25 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.carBackLights
                                             .comment
                                     }
                                     imagePreview={imagePreview.carBackLights}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.CAR_BACK_LIGHTS
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .CAR_BACK_LIGHTS
+                                    nameCarParts={nameCarParts.CAR_BACK_LIGHTS}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.CAR_BACK_LIGHTS
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .CAR_BACK_LIGHTS
                                     }
                                     inputImageRef={inputImgCarBackLights}
+                                    errorComment={
+                                        errorData.carBackLights.comment
+                                    }
+                                    errorImage={errorData.carBackLights.image}
                                 />
                             </BoxFloatLeft>
 
@@ -508,26 +623,23 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.leftCarBody
                                             .comment
                                     }
                                     imagePreview={imagePreview.leftCarBody}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.LEFT_CAR_BODY
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .LEFT_CAR_BODY
+                                    nameCarParts={nameCarParts.LEFT_CAR_BODY}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.LEFT_CAR_BODY
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .LEFT_CAR_BODY
                                     }
                                     inputImageRef={inputImgLeftCarBody}
+                                    errorComment={errorData.leftCarBody.comment}
+                                    errorImage={errorData.leftCarBody.image}
                                 />
 
                                 {/* RIGHT_CAR_BODY */}
@@ -540,26 +652,25 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.rightCarBody
                                             .comment
                                     }
                                     imagePreview={imagePreview.rightCarBody}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.RIGHT_CAR_BODY
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .RIGHT_CAR_BODY
+                                    nameCarParts={nameCarParts.RIGHT_CAR_BODY}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.RIGHT_CAR_BODY
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .RIGHT_CAR_BODY
                                     }
                                     inputImageRef={inputImgRightCarBody}
+                                    errorComment={
+                                        errorData.rightCarBody.comment
+                                    }
+                                    errorImage={errorData.rightCarBody.image}
                                 />
                             </BoxFloatLeft>
 
@@ -580,19 +691,17 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts
                                             .carControlCenter.comment
                                     }
                                     imagePreview={imagePreview.carControlCenter}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.CAR_CONTROL_CENTER
+                                    nameCarParts={
+                                        nameCarParts.CAR_CONTROL_CENTER
                                     }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
+                                    carPartsCode={
+                                        Constants.CarPartsCode
                                             .CAR_CONTROL_CENTER
                                     }
                                     labelCheckBox={
@@ -600,6 +709,12 @@ function DialogCarStatusConfirmation({
                                             .CAR_CONTROL_CENTER
                                     }
                                     inputImageRef={inputImgCarControlCenter}
+                                    errorComment={
+                                        errorData.carControlCenter.comment
+                                    }
+                                    errorImage={
+                                        errorData.carControlCenter.image
+                                    }
                                 />
 
                                 {/* OTHER_CAR_PARTS */}
@@ -612,26 +727,25 @@ function DialogCarStatusConfirmation({
                                     }
                                     onOpenChooseImage={onOpenChooseImage}
                                     handleChooseImage={handleChooseImage}
-                                    checkedBrokenCarParts={
-                                        checkedBrokenCarParts
-                                    }
+                                    checkedCarParts={checkedCarParts}
                                     valueInput={
                                         dataSendApi.brokenCarParts.otherCarParts
                                             .comment
                                     }
                                     imagePreview={imagePreview.otherCarParts}
-                                    nameBrokenCarParts={
-                                        nameBrokenCarParts.OTHER_CAR_PARTS
-                                    }
-                                    brokenCarPartsCode={
-                                        Constants.BrokenCarPartsCode
-                                            .OTHER_CAR_PARTS
+                                    nameCarParts={nameCarParts.OTHER_CAR_PARTS}
+                                    carPartsCode={
+                                        Constants.CarPartsCode.OTHER_CAR_PARTS
                                     }
                                     labelCheckBox={
                                         Strings.DialogCarStatusConfirmation
                                             .OTHER_CAR_PARTS
                                     }
                                     inputImageRef={inputImgOtherCarParts}
+                                    errorComment={
+                                        errorData.otherCarParts.comment
+                                    }
+                                    errorImage={errorData.otherCarParts.image}
                                 />
                             </BoxFloatLeft>
                         </Collapse>

@@ -159,18 +159,18 @@ const Constants = {
         INSURANCE: "insurance",
     },
 
-    BrokenCarParts: {
-        FRONT_OF_CAR: "Đầu Xe",
-        BACK_OF_CAR: "Đuôi Xe",
-        LEFT_CAR_BODY: "Thân Xe Bên Trái",
-        RIGHT_CAR_BODY: "Thân Xe Bên Phải",
-        CAR_FRONT_LIGHTS: "Đèn Trước",
-        CAR_BACK_LIGHTS: "Đèn Sau",
-        OTHER_CAR_PARTS: "Bộ Phận Khác",
-        CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
-    },
+    // CarParts: {
+    //     FRONT_OF_CAR: "Đầu Xe",
+    //     BACK_OF_CAR: "Đuôi Xe",
+    //     LEFT_CAR_BODY: "Thân Xe Bên Trái",
+    //     RIGHT_CAR_BODY: "Thân Xe Bên Phải",
+    //     CAR_FRONT_LIGHTS: "Đèn Trước",
+    //     CAR_BACK_LIGHTS: "Đèn Sau",
+    //     OTHER_CAR_PARTS: "Bộ Phận Khác",
+    //     CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
+    // },
 
-    BrokenCarPartsCode: {
+    CarPartsCode: {
         FRONT_OF_CAR: 1,
         BACK_OF_CAR: 2,
         LEFT_CAR_BODY: 3,

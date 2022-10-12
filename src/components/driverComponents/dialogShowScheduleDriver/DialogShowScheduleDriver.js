@@ -3,7 +3,6 @@ import {
     Box,
     DialogActions,
     DialogContent,
-    List,
     ListItem,
     ListItemText,
     Tooltip,
@@ -25,7 +24,6 @@ import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -44,6 +42,7 @@ function DialogShowScheduleDriver({
     handleClose,
     idSchedule,
     titleDialog,
+    getDriverScheduleListOfDriverTripManager,
 }) {
     const theme = useTheme();
 
@@ -73,6 +72,7 @@ function DialogShowScheduleDriver({
                 setSchedule(res.data.data);
                 setDialogCarStatusConfirmation({
                     ...dialogCarStatusConfirmation,
+                    open: false,
                     idSchedule: res.data.data[0].idSchedule,
                     idScheduleStatus: res.data.data[0].idScheduleStatus,
                 });
@@ -587,6 +587,9 @@ function DialogShowScheduleDriver({
                 }
                 idSchedule={dialogCarStatusConfirmation.idSchedule}
                 idScheduleStatus={dialogCarStatusConfirmation.idScheduleStatus}
+                openModalSuccessOfDialogShowSheduleDriver={() => setModalSuccess(true)}
+                getScheduleOfDialogShowSheduleDriver={getSchedule}
+                getDriverScheduleListOfDriverTripManager={getDriverScheduleListOfDriverTripManager}
             />
 
             <ModalError

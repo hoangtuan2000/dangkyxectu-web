@@ -54,7 +54,11 @@ const Strings = {
         CONFIRM_COMPLETED: "Xác Nhận Đã Hoàn Thành",
         SCHEDULE_UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật Lịch Trình",
         UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật",
+        RECEIVE_CAR_CONFIRMATION: "Xác Nhận Nhận Xe",
+        RETURN_CAR_CONFIRMATION: "Xác Nhận Trả Xe",
         DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
+        DO_YOU_WANT_TO_RECEIVE_CAR: "Bạn Có Muốn Nhận Xe?",
+        DO_YOU_WANT_TO_RETURN_CAR: "Bạn Có Muốn Trả Xe?",
         DO_YOU_WANT_TO_ADD_CAR: "Bạn Có Muốn Thêm Xe?",
         ADD_CAR_CONFIRMATION: "Xác Nhận Thêm Xe",
         SCHEDULE_CANCEL_CONFIRMATION: "Xác Nhận Hủy Lịch Trình",
@@ -391,6 +395,8 @@ const Strings = {
         CAR_CONTROL_CENTER: "Trung Tâm Điều Khiển",
         RECEIVE_CAR: "Nhận Xe",
         COMPLETE_SCHEDULE: "Hoàn Thành Lịch Trình",
+        PLEASE_CHOOSE_CAR_STATUS: "Vui Lòng Chọn Tình Trạng Xe",
+        PLEASE_CHOOSE_BROKEN_CAR_PARTS: "Vui Lòng Chọn Bộ Phận Xe Bị Hỏng",
     },
 };
 

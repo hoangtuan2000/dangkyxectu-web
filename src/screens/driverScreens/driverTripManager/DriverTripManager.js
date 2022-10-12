@@ -82,12 +82,12 @@ function DriverTripManager() {
                 });
                 setScheduleList(
                     res.data.data.map((item, index) => {
-                        const startDate = helper.formatDateStringFromTimeStamp(
-                            item.startDate
-                        );
-                        const endDate = helper.formatDateStringFromTimeStamp(
-                            item.endDate
-                        );
+                        // const startDate = helper.formatDateStringFromTimeStamp(
+                        //     item.startDate
+                        // );
+                        // const endDate = helper.formatDateStringFromTimeStamp(
+                        //     item.endDate
+                        // );
                         return {
                             id:
                                 res.data.limitEntry * res.data.page -
@@ -328,6 +328,7 @@ function DriverTripManager() {
                 }
                 idSchedule={dialogShowScheduleDriver.idSchedule}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
+                getDriverScheduleListOfDriverTripManager={getDriverScheduleList}
             />
 
             <ModalError
