@@ -236,8 +236,14 @@ const col = (handleModalShowSchedule) => {
             width: 190,
             sortable: false,
             renderCell: (params) => {
+                const startDate = helper.formatDateStringFromTimeStamp(
+                    params.row.startDate
+                );
+                const endDate = helper.formatDateStringFromTimeStamp(
+                    params.row.endDate
+                );
                 return (
-                    <Tooltip title={params.row.dateRange} arrow>
+                    <Tooltip title={`${startDate} - ${endDate}`} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -245,61 +251,33 @@ const col = (handleModalShowSchedule) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.dateRange}
+                            {`${startDate} - ${endDate}`}
                         </span>
                     </Tooltip>
                 );
             },
         },
-        // {
-        //     field: "startDate",
-        //     headerName: Strings.Common.START_DATE,
-        //     description: Strings.Common.START_DATE,
-        //     width: 100,
-        //     sortable: false,
-        //     renderCell: (params) => {
-        //         return (
-        //             <Tooltip title={params.row.startDate} arrow>
-        //                 <span
-        //                     style={{
-        //                         whiteSpace: "nowrap",
-        //                         overflow: "hidden",
-        //                         textOverflow: "ellipsis",
-        //                     }}
-        //                 >
-        //                     {params.row.startDate}
-        //                 </span>
-        //             </Tooltip>
-        //         );
-        //     },
-        // },
-        // {
-        //     field: "endDate",
-        //     headerName: Strings.Common.END_DATE,
-        //     description: Strings.Common.END_DATE,
-        //     width: 100,
-        //     sortable: false,
-        //     renderCell: (params) => {
-        //         return (
-        //             <Tooltip title={params.row.endDate} arrow>
-        //                 <span
-        //                     style={{
-        //                         whiteSpace: "nowrap",
-        //                         overflow: "hidden",
-        //                         textOverflow: "ellipsis",
-        //                     }}
-        //                 >
-        //                     {params.row.endDate}
-        //                 </span>
-        //             </Tooltip>
-        //         );
-        //     },
-        // },
+        {
+            field: "startDate",
+            headerName: Strings.Common.START_DATE,
+            description: Strings.Common.START_DATE,
+            width: 100,
+            sortable: false,
+            hide: true,
+        },
+        {
+            field: "endDate",
+            headerName: Strings.Common.END_DATE,
+            description: Strings.Common.END_DATE,
+            width: 100,
+            sortable: false,
+            hide: true,
+        },
         {
             field: "status",
             headerName: Strings.Common.STATUS,
             description: Strings.Common.STATUS,
-            width: 110,
+            width: 120,
             sortable: false,
             renderCell: (params) => {
                 let bgColor = "#969696";
@@ -348,7 +326,7 @@ const col = (handleModalShowSchedule) => {
                 if (
                     params.row.status == Constants.ScheduleStatus.PENDING &&
                     helper.isDateTimeStampGreaterThanCurrentDate(
-                        params.row.update
+                        params.row.startDate
                     )
                 ) {
                     return (
@@ -366,7 +344,10 @@ const col = (handleModalShowSchedule) => {
                         </Tooltip>
                     );
                 } else if (
-                    params.row.status == Constants.ScheduleStatus.APPROVED
+                    params.row.status == Constants.ScheduleStatus.APPROVED &&
+                    helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                        params.row.startDate
+                    )
                 ) {
                     return (
                         <Tooltip title="Cập Nhật" arrow>
@@ -376,23 +357,6 @@ const col = (handleModalShowSchedule) => {
                                     handleModalShowSchedule(
                                         params.row.scheduleCode
                                     );
-                                }}
-                            >
-                                <ModeEditIcon />
-                            </IconButton>
-                        </Tooltip>
-                    );
-                } else if (
-                    params.row.status == Constants.ScheduleStatus.RECEIVED
-                ) {
-                    return (
-                        <Tooltip title="Cập Nhật" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    // handleModalShowSchedule(
-                                    //     params.row.scheduleCode
-                                    // );
                                 }}
                             >
                                 <ModeEditIcon />

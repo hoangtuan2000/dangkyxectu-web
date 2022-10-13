@@ -22,6 +22,7 @@ import {
     TextContent,
     Title,
 } from "./DialogShowScheduleAdminCustomStyles";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
 import CreateIcon from "@mui/icons-material/Create";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PersonIcon from "@mui/icons-material/Person";
@@ -41,6 +42,7 @@ import Constants from "../../../constants/Constants";
 import { DialogShowScheduleAdminServices } from "../../../services/adminServices/DialogShowScheduleAdminServices";
 import helper from "../../../common/helper";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
+import DialogChangeCar from "../dialogChangeCar/DialogChangeCar"
 
 function DialogShowScheduleAdmin({
     open,
@@ -48,6 +50,7 @@ function DialogShowScheduleAdmin({
     idSchedule,
     titleDialog,
     handleGetAdminScheduleListWithFilter,
+    openModalSuccessOfCarRegistrationManagement,
 }) {
     const theme = useTheme();
 
@@ -64,6 +67,9 @@ function DialogShowScheduleAdmin({
         content: Strings.Common.SCHEDULE_UPDATE_CONFIRMATION,
         handleSubmit: () => {},
     });
+    const [dialogChangeCar, setDialogChangeCar] = useState({
+        open: false,
+    });
 
     const [schedule, setSchedule] = useState([]);
     const [driverList, setDriverList] = useState([]);
@@ -78,15 +84,18 @@ function DialogShowScheduleAdmin({
         errorDriver: false,
     });
 
-    const updateSchedule = async (data) => {
-        const res = await DialogShowScheduleAdminServices.updateSchedule({
-            ...data,
-        });
+    const updateSchedulePending = async (data) => {
+        await setBackDrop(false);
+        const res = await DialogShowScheduleAdminServices.updateSchedulePending(
+            {
+                ...data,
+            }
+        );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setModalSuccess(true);
-                handleGetAdminScheduleListWithFilter();
+                openModalSuccessOfCarRegistrationManagement();
+                handleClose();
             } else {
                 setModalError({
                     ...modalError,
@@ -108,6 +117,48 @@ function DialogShowScheduleAdmin({
                 content: res.name || null,
             });
         }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
+        await handleGetAdminScheduleListWithFilter();
+    };
+
+    const updateScheduleApproved = async (data) => {
+        await setBackDrop(false);
+        const res =
+            await DialogShowScheduleAdminServices.updateScheduleApproved({
+                ...data,
+            });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                setModalSuccess(true);
+                handleGetAdminScheduleListWithFilter();
+                getSchedule();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
     };
 
     const getSchedule = async () => {
@@ -258,102 +309,69 @@ function DialogShowScheduleAdmin({
         };
     };
 
-    const handleScheduleCompletionConfirmation = () => {
-        // update status complete
-        if (
-            schedule[0].idScheduleStatus ==
-                Constants.ScheduleStatusCode.APPROVED &&
-            !helper.isDateTimeStampGreaterThanCurrentDate(schedule[0].startDate)
-        ) {
+    const handleUpdateScheduleApproved = async () => {
+        const data = await handleFormatDataSendApi();
+        if (!data.idDriver) {
+            setErrorDataSendApi({
+                ...errorDataSendApi,
+                errorDriver: true,
+            });
+        } else {
             setDialogConfirmation({
-                ...dialogConfirmation,
+                ...dialogChangeCar,
                 open: true,
                 handleSubmit: () => {
-                    updateSchedule({
-                        idSchedule: schedule[0].idSchedule,
-                        idScheduleStatus: Constants.ScheduleStatusCode.COMPLETE
-                    });
-                    handleGetAdminScheduleListWithFilter();
+                    updateScheduleApproved(data);
                 },
             });
         }
     };
 
-    const handleUpdateSchedule = async () => {
+    const handleUpdateSchedulePending = async () => {
         const data = await handleFormatDataSendApi();
-
-        // if schedule old is approved => only update driver
-        if (
-            schedule[0].idScheduleStatus ==
-                Constants.ScheduleStatusCode.APPROVED &&
-            helper.isDateTimeStampGreaterThanCurrentDate(schedule[0].startDate)
-        ) {
-            if (!data.idDriver) {
-                setErrorDataSendApi({
-                    ...errorDataSendApi,
-                    errorDriver: true,
-                });
-            } else {
-                // call dialog confirm => submit
-                setDialogConfirmation({
-                    ...dialogConfirmation,
-                    open: true,
-                    handleSubmit: () => {
-                        updateSchedule(data);
-                        handleGetAdminScheduleListWithFilter();
-                    },
-                });
-            }
-        }
-        // if schedule old is pending => update status or driver
-        else {
-            if (data.idScheduleStatus) {
-                // if select the schedule status as approved => update status and driver
-                if (
-                    data.idScheduleStatus ==
-                    Constants.ScheduleStatusCode.APPROVED
-                ) {
-                    if (!data.idDriver) {
-                        setErrorDataSendApi({
-                            ...errorDataSendApi,
-                            errorDriver: true,
-                        });
-                    } else {
-                        // call dialog confirm => submit
-                        setDialogConfirmation({
-                            ...dialogConfirmation,
-                            open: true,
-                            handleSubmit: () => {
-                                updateSchedule(data);
-                                handleGetAdminScheduleListWithFilter();
-                            },
-                        });
-                    }
-                }
-
-                // if selecting schedule status is not approved => only update status
-                else if (
-                    data.idScheduleStatus !=
-                    Constants.ScheduleStatusCode.APPROVED
-                ) {
-                    // call dialog confirm => submit
+        if (data.idScheduleStatus) {
+            if (
+                data.idScheduleStatus == Constants.ScheduleStatusCode.APPROVED
+            ) {
+                if (!data.idDriver) {
+                    setErrorDataSendApi({
+                        ...errorDataSendApi,
+                        errorDriver: true,
+                    });
+                } else {
                     setDialogConfirmation({
                         ...dialogConfirmation,
                         open: true,
                         handleSubmit: () => {
-                            updateSchedule(data);
-                            handleGetAdminScheduleListWithFilter();
+                            updateSchedulePending(data);
                         },
                     });
                 }
-            } else {
-                setErrorDataSendApi({
-                    ...errorDataSendApi,
-                    errorStatus: true,
+            } else if (
+                data.idScheduleStatus == Constants.ScheduleStatusCode.REFUSE
+            ) {
+                setDialogConfirmation({
+                    ...dialogConfirmation,
+                    open: true,
+                    handleSubmit: () => {
+                        updateSchedulePending(data);
+                    },
                 });
             }
+        } else {
+            setErrorDataSendApi({
+                ...errorDataSendApi,
+                errorStatus: true,
+            });
         }
     };
+
+    const handleChangeCar = () => {
+        setDialogChangeCar({
+            ...dialogChangeCar,
+            open: true,
+        })
+    }
 
     const run = async () => {
         await setBackDrop(true);
@@ -404,7 +422,8 @@ function DialogShowScheduleAdmin({
                 let colorCarStatus = theme.palette.text.primary;
                 for (const property in objCarStatus) {
                     if (item.idCarStatus == `${objCarStatus[property]}`) {
-                        colorCarStatus = Constants.ColorOfCarStatus.Text[property];
+                        colorCarStatus =
+                            Constants.ColorOfCarStatus.Text[property];
                         break;
                     }
                 }
@@ -813,7 +832,7 @@ function DialogShowScheduleAdmin({
                                                 item.scheduleStatus ==
                                                     Constants.ScheduleStatus
                                                         .APPROVED) &&
-                                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                                     item.startDate
                                                 ) && (
                                                     <AutocompleteStyle
@@ -1136,12 +1155,9 @@ function DialogShowScheduleAdmin({
                                     {Strings.Common.EXIT}
                                 </ButtonFeatures>
 
-                                {/* SUBMIT BUTTON */}
-                                {(schedule[0].idScheduleStatus ==
-                                    Constants.ScheduleStatusCode.PENDING ||
-                                    schedule[0].idScheduleStatus ==
-                                        Constants.ScheduleStatusCode
-                                            .APPROVED) &&
+                                {/* UPDATE SCHEDULE PENDING BUTTON */}
+                                {schedule[0].idScheduleStatus ==
+                                    Constants.ScheduleStatusCode.PENDING &&
                                 helper.isDateTimeStampGreaterThanCurrentDate(
                                     schedule[0].startDate
                                 ) ? (
@@ -1151,55 +1167,68 @@ function DialogShowScheduleAdmin({
                                         endIcon={<CheckCircleIcon />}
                                         color="primary"
                                         sx={{ marginRight: 1 }}
-                                        onClick={handleUpdateSchedule}
+                                        onClick={handleUpdateSchedulePending}
                                         disabled={
-                                            (schedule[0].idScheduleStatus ==
+                                            schedule[0].idScheduleStatus ==
                                                 Constants.ScheduleStatusCode
                                                     .PENDING &&
-                                                dataSendApi.status &&
-                                                dataSendApi.status
-                                                    .idScheduleStatus ==
-                                                    Constants.ScheduleStatusCode
-                                                        .PENDING) ||
-                                            (schedule[0].idScheduleStatus ==
+                                            dataSendApi.status &&
+                                            dataSendApi.status
+                                                .idScheduleStatus ==
                                                 Constants.ScheduleStatusCode
-                                                    .APPROVED &&
-                                                dataSendApi.driver &&
-                                                schedule.length > 0 &&
-                                                dataSendApi.driver.idDriver ==
-                                                    schedule[0].idDriver)
+                                                    .PENDING
                                         }
                                     >
                                         {Strings.Common.UPDATE}
                                     </ButtonFeatures>
                                 ) : null}
 
-                                {/* COMPLETE BUTTON */}
+                                {/* CHANGE CAR OF SCHEDULE BUTTON */}
                                 {schedule[0].idScheduleStatus ==
                                     Constants.ScheduleStatusCode.APPROVED &&
-                                    !helper.isDateTimeStampGreaterThanCurrentDate(
-                                        schedule[0].startDate
-                                    ) && (
-                                        <Tooltip
-                                            title={
-                                                Strings.Common.CONFIRM_COMPLETED
-                                            }
-                                            arrow
-                                        >
-                                            <ButtonFeatures
-                                                size="small"
-                                                variant="contained"
-                                                endIcon={<CheckCircleIcon />}
-                                                color="success"
-                                                sx={{ marginRight: 1 }}
-                                                onClick={
-                                                    handleScheduleCompletionConfirmation
-                                                }
-                                            >
-                                                {Strings.Common.COMPLETE}
-                                            </ButtonFeatures>
-                                        </Tooltip>
-                                    )}
+                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                    schedule[0].startDate
+                                ) ? (
+                                    <ButtonFeatures
+                                        size="small"
+                                        variant="contained"
+                                        endIcon={<CarCrashIcon />}
+                                        color="warning"
+                                        sx={{ marginRight: 1 }}
+                                        onClick={handleChangeCar}
+                                    >
+                                        {Strings.Common.CHANGE_CAR}
+                                    </ButtonFeatures>
+                                ) : null}
+
+                                {/* UPDATE DRIVER OF SCHEDULE BUTTON */}
+                                {schedule[0].idScheduleStatus ==
+                                    Constants.ScheduleStatusCode.APPROVED &&
+                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                    schedule[0].startDate
+                                ) ? (
+                                    <ButtonFeatures
+                                        size="small"
+                                        variant="contained"
+                                        endIcon={<CheckCircleIcon />}
+                                        color="primary"
+                                        sx={{ marginRight: 1 }}
+                                        onClick={handleUpdateScheduleApproved}
+                                        disabled={
+                                            (!helper.isNullOrEmpty(
+                                                dataSendApi.driver
+                                            ) &&
+                                                schedule[0].codeDriver ==
+                                                    dataSendApi.driver
+                                                        .codeDriver) ||
+                                            helper.isNullOrEmpty(
+                                                dataSendApi.driver
+                                            )
+                                        }
+                                    >
+                                        {Strings.Common.UPDATE}
+                                    </ButtonFeatures>
+                                ) : null}
                             </Box>
                         </DialogActions>
                     </Box>
@@ -1217,6 +1246,16 @@ function DialogShowScheduleAdmin({
                 content={dialogConfirmation.content}
                 title={dialogConfirmation.title}
                 handleSubmit={dialogConfirmation.handleSubmit}
+            />
+
+            <DialogChangeCar
+                open={dialogChangeCar.open}
+                handleClose={() =>
+                    setDialogChangeCar({
+                        ...dialogChangeCar,
+                        open: false,
+                    })
+                }
             />
 
             <ModalError

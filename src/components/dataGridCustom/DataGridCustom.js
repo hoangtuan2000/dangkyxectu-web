@@ -21,6 +21,8 @@ function DataGridCustom({
     pageSize,
     page,
     totalRows,
+    handleSelectRow = () => {},
+    selectSingleRowOnClick,
     onChangePage = () => {},
     onChangeRowsPerPage = () => {},
 }) {
@@ -115,8 +117,18 @@ function DataGridCustom({
             rows={rows}
             autoHeight
             disableColumnMenu
-            disableSelectionOnClick
+            disableSelectionOnClick={selectSingleRowOnClick ? false : true}
             pageSize={pageSize ? pageSize : 10}
+            onSelectionModelChange={(ids) => {
+                const selectedIDs = new Set(ids);
+                const selectedRowData = rows.filter((row) =>
+                    selectedIDs.has(row.id)
+                );
+                handleSelectRow(selectedRowData);
+            }}
+            localeText={{
+                footerRowSelected: (count) => `Đã Chọn ${count}`,
+            }}
             sx={{
                 // ".MuiDataGrid-columnSeparator": {
                 //     display: "none"

@@ -58,7 +58,8 @@ const Constants = {
             GET_DRIVER_LIST_FOR_SCHEDULE: "/admin/getDriverListForSchedule",
             GET_ADMIN_SCHEDULE_STATUS_LIST_TO_UPDATE:
                 "/admin/getAdminScheduleStatusListToUpdate",
-            UPDATE_SCHEDULE: "/admin/updateSchedule",
+            UPDATE_SCHEDULE_PENDING: "/admin/updateSchedulePending",
+            UPDATE_SCHEDULE_APPROVED: "/admin/updateScheduleApproved",
         },
         CarManager: {
             GET_CAR_LIST_FOR_ADMIN: "/admin/getCarListForAdmin",

@@ -102,12 +102,6 @@ function CarRegistrationManagement() {
                 });
                 setScheduleList(
                     res.data.data.map((item, index) => {
-                        const startDate = helper.formatDateStringFromTimeStamp(
-                            item.startDate
-                        );
-                        const endDate = helper.formatDateStringFromTimeStamp(
-                            item.endDate
-                        );
                         return {
                             id:
                                 res.data.limitEntry * res.data.page -
@@ -121,9 +115,8 @@ function CarRegistrationManagement() {
                             faculty: item.nameFaculty,
                             reason: item.reason,
                             destination: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
-                            // startDate: startDate,
-                            // endDate: endDate,
-                            dateRange: `${startDate} - ${endDate}`,
+                            startDate: item.startDate,
+                            endDate: item.endDate,
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
@@ -131,7 +124,7 @@ function CarRegistrationManagement() {
                             driver:
                                 item.fullNameDriver && item.codeDriver
                                     ? `${item.fullNameDriver} - ${item.codeDriver}`
-                                    : null,
+                                    : "",
                         };
                     })
                 );
@@ -408,6 +401,9 @@ function CarRegistrationManagement() {
                 titleDialog={Strings.Common.INFO_SCHEDULE}
                 handleGetAdminScheduleListWithFilter={
                     handleGetAdminScheduleListWithFilter
+                }
+                openModalSuccessOfCarRegistrationManagement={() =>
+                    setModalSuccess(true)
                 }
             />
 
