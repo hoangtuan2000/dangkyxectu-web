@@ -151,10 +151,13 @@ function DialogShowScheduleUser({
             (schedule[0].scheduleStatus == Constants.ScheduleStatus.APPROVED ||
                 schedule[0].scheduleStatus == Constants.ScheduleStatus.RECEIVED)
         ) {
-            res = await DialogShowScheduleUserServices.updatePhoneNumberUserInSchedule({
-                idSchedule: dataSendApi.idSchedule,
-                phoneUser: dataSendApi.phoneUser,
-            });
+            res =
+                await DialogShowScheduleUserServices.updatePhoneNumberUserInSchedule(
+                    {
+                        idSchedule: dataSendApi.idSchedule,
+                        phoneUser: dataSendApi.phoneUser,
+                    }
+                );
         }
 
         // axios success
@@ -222,6 +225,19 @@ function DialogShowScheduleUser({
                 const endDate = helper.formatDateStringFromTimeStamp(
                     item.endDate
                 );
+                let textColor = "black";
+                const objScheduleStatus = Constants.ScheduleStatus;
+                for (const property in objScheduleStatus) {
+                    if (
+                        item.scheduleStatus == `${objScheduleStatus[property]}`
+                    ) {
+                        textColor =
+                            Constants.ColorOfScheduleStatus.TextNoBackground[
+                                property
+                            ];
+                        break;
+                    }
+                }
                 return (
                     <Box key={item.idSchedule}>
                         {/* CONTENT */}
@@ -247,6 +263,27 @@ function DialogShowScheduleUser({
                                         >
                                             {`${item.carType} ${item.seatNumber} Chổ`}
                                         </CarTypeTitle>
+
+                                        {/* SCHEDULE STATUS */}
+                                        <TextContent
+                                            variant="p"
+                                            component="div"
+                                        >
+                                            {Strings.RentedCar.SCHEDULE_STATUS}
+                                            <Tooltip
+                                                title={item.scheduleStatus}
+                                                arrow
+                                            >
+                                                <span
+                                                    style={{
+                                                        color: textColor,
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >
+                                                    {item.scheduleStatus}
+                                                </span>
+                                            </Tooltip>
+                                        </TextContent>
 
                                         {/* LICENSEPLATES */}
                                         <TextContent
@@ -428,7 +465,10 @@ function DialogShowScheduleUser({
                                                     .APPROVED ||
                                                 item.scheduleStatus ==
                                                     Constants.ScheduleStatus
-                                                        .RECEIVED) && (
+                                                        .RECEIVED) &&
+                                            helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                                item.startDate
+                                            ) && (
                                                 <Box>
                                                     <TextInput
                                                         placeholder={
@@ -445,6 +485,9 @@ function DialogShowScheduleUser({
                                                             )
                                                         }
                                                         helperText={
+                                                            !helper.isValidPhoneNumber(
+                                                                dataSendApi.phoneUser
+                                                            ) &&
                                                             Strings.Common
                                                                 .INVALID_PHONE_NUMBER
                                                         }
@@ -561,8 +604,14 @@ function DialogShowScheduleUser({
                                     sx={{ marginRight: 1 }}
                                     onClick={handleClose}
                                 >
-                                    {item.scheduleStatus ==
+                                    {((item.scheduleStatus ==
                                         Constants.ScheduleStatus.APPROVED ||
+                                        item.scheduleStatus ==
+                                            Constants.ScheduleStatus
+                                                .RECEIVED) &&
+                                        helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                            item.startDate
+                                        )) ||
                                     item.scheduleStatus ==
                                         Constants.ScheduleStatus.COMPLETE
                                         ? Strings.Common.CANCEL
@@ -573,9 +622,36 @@ function DialogShowScheduleUser({
                                 {(item.scheduleStatus ==
                                     Constants.ScheduleStatus.APPROVED ||
                                     item.scheduleStatus ==
-                                        Constants.ScheduleStatus.RECEIVED ||
-                                    item.scheduleStatus ==
-                                        Constants.ScheduleStatus.COMPLETE) && (
+                                        Constants.ScheduleStatus.RECEIVED) &&
+                                    helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                        item.startDate
+                                    ) && (
+                                        <ButtonFeatures
+                                            size="small"
+                                            variant="contained"
+                                            endIcon={<CheckCircleIcon />}
+                                            color="primary"
+                                            sx={{ marginRight: 1 }}
+                                            onClick={onSubmit}
+                                            disabled={
+                                                schedule.length > 0 &&
+                                                (dataSendApi.starNumber !=
+                                                    schedule[0].starNumber ||
+                                                    dataSendApi.comment !=
+                                                        schedule[0].comment ||
+                                                    dataSendApi.phoneUser !=
+                                                        schedule[0].phoneUser)
+                                                    ? false
+                                                    : true
+                                            }
+                                        >
+                                            {Strings.Common.UPDATE}
+                                        </ButtonFeatures>
+                                    )}
+
+                                {/* SUBMIT COMPLETE BUTTON */}
+                                {item.scheduleStatus ==
+                                    Constants.ScheduleStatus.COMPLETE && (
                                     <ButtonFeatures
                                         size="small"
                                         variant="contained"

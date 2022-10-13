@@ -108,6 +108,7 @@ const Strings = {
         REVIEW: "Đánh Giá: ",
         COMMENT: "Bình Luận",
         PHONE: "Số Điện Thoại",
+        SCHEDULE_STATUS: "Trạng Thái Lịch Trình: ",
     },
 
     DialogShowScheduleDriver: {
