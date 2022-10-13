@@ -131,14 +131,36 @@ const col = (
             },
         },
         {
+            field: "startDate",
+            headerName: Strings.Common.START_DATE,
+            description: Strings.Common.START_DATE,
+            width: 200,
+            sortable: false,
+            hide: true,
+        },
+        {
+            field: "endDate",
+            headerName: Strings.Common.END_DATE,
+            description: Strings.Common.END_DATE,
+            width: 200,
+            sortable: false,
+            hide: true,
+        },
+        {
             field: "dateRange",
             headerName: Strings.Common.TIME,
             description: Strings.Common.TIME,
             width: 200,
             sortable: false,
             renderCell: (params) => {
+                let startDate = helper.formatDateStringFromTimeStamp(
+                    params.row.startDate
+                );
+                let endDate = helper.formatDateStringFromTimeStamp(
+                    params.row.endDate
+                );
                 return (
-                    <Tooltip title={params.row.dateRange} arrow>
+                    <Tooltip title={`${startDate} - ${endDate}`} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -146,7 +168,7 @@ const col = (
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.dateRange}
+                            {`${startDate} - ${endDate}`}
                         </span>
                     </Tooltip>
                 );
@@ -262,9 +284,11 @@ const col = (
                 if (
                     (params.row.status == Constants.ScheduleStatus.PENDING ||
                         params.row.status ==
-                            Constants.ScheduleStatus.APPROVED) &&
-                    helper.isDateTimeStampGreaterThanCurrentDate(
-                        params.row.cancel
+                            Constants.ScheduleStatus.APPROVED ||
+                        params.row.status ==
+                            Constants.ScheduleStatus.RECEIVED) &&
+                    helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                        params.row.startDate
                     )
                 ) {
                     return (

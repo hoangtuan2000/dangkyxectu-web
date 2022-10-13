@@ -270,7 +270,9 @@ const col = (handleModalShowSchedule) => {
                                     params.row.startDate
                                 )) ||
                             params.row.status ==
-                                Constants.ScheduleStatus.RECEIVED ? (
+                                Constants.ScheduleStatus.RECEIVED ||
+                            params.row.status ==
+                                Constants.ScheduleStatus.MOVING ? (
                                 <CreateIcon />
                             ) : (
                                 <VisibilityIcon />

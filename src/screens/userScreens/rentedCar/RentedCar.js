@@ -19,7 +19,7 @@ import DialogRentedCarFilter from "../../../components/userComponents/dialogRent
 import DialogConfirmation from "../../../components/dialogConfirmation/DialogConfirmation";
 
 function RentedCar() {
-    const theme = useTheme()
+    const theme = useTheme();
     const navigate = useNavigate();
 
     const [backDrop, setBackDrop] = useState(false);
@@ -95,12 +95,6 @@ function RentedCar() {
                 });
                 setScheduleList(
                     res.data.data.map((item, index) => {
-                        const startDate = helper.formatDateStringFromTimeStamp(
-                            item.startDate
-                        );
-                        const endDate = helper.formatDateStringFromTimeStamp(
-                            item.endDate
-                        );
                         return {
                             id:
                                 res.data.limitEntry * res.data.page -
@@ -112,11 +106,11 @@ function RentedCar() {
                             licensePlates: item.licensePlates,
                             reason: item.reason,
                             destination: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
-                            dateRange: `${startDate} - ${endDate}`,
+                            startDate: item.startDate,
+                            endDate: item.endDate,
                             status: item.scheduleStatus,
                             review: item.starNumber,
                             scheduleCode: item.idSchedule,
-                            cancel: item.startDate, //check startdate > current date => cancel schedule
                         };
                     })
                 );
