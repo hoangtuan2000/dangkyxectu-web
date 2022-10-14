@@ -1,4 +1,4 @@
-import { Button, Dialog, styled, TextField, Typography } from "@mui/material";
+import { Button, Dialog, RadioGroup, styled, TextField, Typography } from "@mui/material";
 
 const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("mobileS")]: {
@@ -122,4 +122,104 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
     },
 }));
 
-export { DialogContainer, Title, ButtonFeatures };
+const MultipleTextInput = styled(TextField)(({ theme }) => ({
+    marginTop: 8,
+    ".MuiInputBase-root": {
+        padding: 10,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 340,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 280,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 280,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 14,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 14,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+}));
+
+const RadioGroupStyle = styled(RadioGroup)(({ theme }) => ({
+    "& .MuiSvgIcon-root": {
+        fontSize: 15,
+    },
+    "& .MuiFormControlLabel-label": {
+        fontSize: 15,
+    },
+}));
+
+export { DialogContainer, Title, ButtonFeatures, MultipleTextInput, RadioGroupStyle };

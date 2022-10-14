@@ -42,7 +42,7 @@ import Constants from "../../../constants/Constants";
 import { DialogShowScheduleAdminServices } from "../../../services/adminServices/DialogShowScheduleAdminServices";
 import helper from "../../../common/helper";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
-import DialogChangeCar from "../dialogChangeCar/DialogChangeCar"
+import DialogChangeCar from "../dialogChangeCar/DialogChangeCar";
 
 function DialogShowScheduleAdmin({
     open,
@@ -69,6 +69,7 @@ function DialogShowScheduleAdmin({
     });
     const [dialogChangeCar, setDialogChangeCar] = useState({
         open: false,
+        idCar: null,
     });
 
     const [schedule, setSchedule] = useState([]);
@@ -188,6 +189,13 @@ function DialogShowScheduleAdmin({
                     getAdminScheduleStatusListToUpdate(
                         res.data.data[0].idScheduleStatus
                     );
+
+                res.data.data[0].idScheduleStatus ==
+                    Constants.ScheduleStatusCode.APPROVED &&
+                    setDialogChangeCar({
+                        ...dialogChangeCar,
+                        idCar: res.data.data[0].idCar,
+                    });
 
                 getDriverListForSchedule(
                     res.data.data[0].idCar,
@@ -370,8 +378,8 @@ function DialogShowScheduleAdmin({
         setDialogChangeCar({
             ...dialogChangeCar,
             open: true,
-        })
-    }
+        });
+    };
 
     const run = async () => {
         await setBackDrop(true);

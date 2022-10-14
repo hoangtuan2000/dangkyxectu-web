@@ -112,6 +112,7 @@ const Strings = {
         COMMENT: "Bình Luận",
         PHONE: "Số Điện Thoại",
         SCHEDULE_STATUS: "Trạng Thái Lịch Trình: ",
+        REASON_CANCEL_SCHEDULE: "Lý Do Hủy Lịch Trình?",
     },
 
     DialogShowScheduleDriver: {
@@ -214,6 +215,8 @@ const Strings = {
         CAR_BRAND: "Thương Hiệu: ",
         VEHICLE_CONDITION: "Tình Trạng: ",
         SCHEDULE: "Lịch Trình: ",
+        ENTER_REASON_CANCEL_SCHEDULE: "Nhập Lý Do Hủy Lịch Trình",
+        PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
     },
 
     UpdateSchedulePending: {
@@ -403,6 +406,12 @@ const Strings = {
         COMPLETE_SCHEDULE: "Hoàn Thành Lịch Trình",
         PLEASE_CHOOSE_CAR_STATUS: "Vui Lòng Chọn Tình Trạng Xe",
         PLEASE_CHOOSE_BROKEN_CAR_PARTS: "Vui Lòng Chọn Bộ Phận Xe Bị Hỏng",
+    },
+
+    DialogConfirmationCancel: {
+        PLEASE_CHOOSE_REASON: "Vui Lòng Chọn Lý Do",
+        PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
+        ENTER_REASON: "Nhập Lý Do",
     },
 };
 

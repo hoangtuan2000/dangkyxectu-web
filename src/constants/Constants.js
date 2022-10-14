@@ -73,7 +73,8 @@ const Constants = {
             UPDATE_CAR: "/admin/updateCar",
         },
         DialogCarStatusConfirmation: {
-            CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE: "/driver/confirmReceivedOrCompleteOfSchedule",
+            CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE:
+                "/driver/confirmReceivedOrCompleteOfSchedule",
         },
     },
 
@@ -188,6 +189,8 @@ const Constants = {
         LIMIT_ENTRY: 10,
         CHARACTERS_MIN_LENGTH_LICENSE_PLATES: 7,
         CHARACTERS_MAX_LENGTH_LICENSE_PLATES: 10,
+        CHARACTERS_MIN_LENGTH_REASON_CANCEL_SCHEDULE: 5,
+        CHARACTERS_MAX_LENGTH_REASON_CANCEL_SCHEDULE: 250,
     },
 
     Role: {

@@ -17,6 +17,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FabStyle } from "./RentedCarCustomStyles";
 import DialogRentedCarFilter from "../../../components/userComponents/dialogRentedCarFilter/DialogRentedCarFilter";
 import DialogConfirmation from "../../../components/dialogConfirmation/DialogConfirmation";
+import DialogConfirmationCancel from "../../../components/userComponents/dialogConfirmationCancel/DialogConfirmationCancel";
 
 function RentedCar() {
     const theme = useTheme();
@@ -29,13 +30,19 @@ function RentedCar() {
         title: null,
         content: null,
     });
-    const [dialogConfirmation, setDialogConfirmation] = useState({
+    // const [dialogConfirmation, setDialogConfirmation] = useState({
+    //     open: false,
+    //     title: Strings.Common.DO_YOU_WANT_TO_CANCEL_SCHEDULE,
+    //     content: Strings.Common.SCHEDULE_CANCEL_CONFIRMATION,
+    //     handleSubmit: () => {},
+    // });
+
+    const [dialogConfirmationCancel, setDialogConfirmationCancel] = useState({
         open: false,
-        title: Strings.Common.DO_YOU_WANT_TO_CANCEL_SCHEDULE,
-        content: Strings.Common.SCHEDULE_CANCEL_CONFIRMATION,
-        handleSubmit: () => {},
+        idSchedule: null,
     });
 
+    const [reasonCancelSchedule, setReasonCancelSchedule] = useState();
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogRentedCarFilter, setDialogRentedCarFilter] = useState(false);
     const [dialogShowScheduleUser, setDialogShowScheduleUser] = useState({
@@ -216,12 +223,10 @@ function RentedCar() {
 
     const onCancelSchedule = (e) => {
         // call dialog confirm => submit
-        setDialogConfirmation({
-            ...dialogConfirmation,
+        setDialogConfirmationCancel({
+            ...dialogConfirmationCancel,
             open: true,
-            handleSubmit: () => {
-                handleCancelSchedule(e);
-            },
+            idSchedule: e,
         });
     };
 
@@ -414,19 +419,19 @@ function RentedCar() {
                 }
             />
 
-            <DialogConfirmation
-                open={dialogConfirmation.open}
+            <DialogConfirmationCancel
+                open={dialogConfirmationCancel.open}
                 handleClose={() =>
-                    setDialogConfirmation({
-                        ...dialogConfirmation,
+                    setDialogConfirmationCancel({
+                        ...dialogConfirmationCancel,
                         open: false,
                     })
                 }
-                content={dialogConfirmation.content}
-                title={dialogConfirmation.title}
-                colorTitle={theme.palette.error.main}
-                colorButtonSubmit={theme.palette.error.main}
-                handleSubmit={dialogConfirmation.handleSubmit}
+                idSchedule={dialogConfirmationCancel.idSchedule}
+                handleOpenModalSuccessOfParent={() => setModalSuccess(true)}
+                handleGetUserRegisteredScheduleListWithFilter={
+                    handleGetUserRegisteredScheduleListWithFilter
+                }
             />
 
             <ModalError
