@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import {
     Box,
     Button,
+    Collapse,
     DialogActions,
     DialogContent,
+    FormControlLabel,
+    FormHelperText,
     ListItem,
     ListItemText,
+    Radio,
     TextField,
     Tooltip,
     useTheme,
@@ -19,6 +23,8 @@ import {
     DialogContainer,
     Img,
     ListStyle,
+    MultipleTextInput,
+    RadioGroupStyle,
     TextContent,
     Title,
 } from "./DialogShowScheduleAdminCustomStyles";
@@ -43,6 +49,8 @@ import { DialogShowScheduleAdminServices } from "../../../services/adminServices
 import helper from "../../../common/helper";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import DialogChangeCar from "../dialogChangeCar/DialogChangeCar";
+
+const nameReason = ["Xe Bị Hỏng", "Không Còn Tài Xế"];
 
 function DialogShowScheduleAdmin({
     open,
@@ -79,10 +87,16 @@ function DialogShowScheduleAdmin({
         idSchedule: null,
         status: null,
         driver: null,
+        reasonRefuse: null,
+        reasonRefuseOther: null,
     });
     const [errorDataSendApi, setErrorDataSendApi] = useState({
         errorStatus: false,
         errorDriver: false,
+        errorReasonRefuse: false,
+        errorReasonRefuseOther: false,
+        helperTextReasonRefuse: null,
+        helperTextReasonRefuseOther: null,
     });
 
     const updateSchedulePending = async (data) => {
@@ -95,6 +109,7 @@ function DialogShowScheduleAdmin({
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
+                handleRefesh();
                 openModalSuccessOfCarRegistrationManagement();
                 handleClose();
             } else {
@@ -135,6 +150,7 @@ function DialogShowScheduleAdmin({
             if (res.data.status == Constants.ApiCode.OK) {
                 setModalSuccess(true);
                 handleGetAdminScheduleListWithFilter();
+                handleRefesh();
                 getSchedule();
             } else {
                 setModalError({
@@ -314,6 +330,10 @@ function DialogShowScheduleAdmin({
             idScheduleStatus:
                 dataSendApi.status && dataSendApi.status.idScheduleStatus,
             idDriver: dataSendApi.driver && dataSendApi.driver.idDriver,
+            reasonRefuse:
+                dataSendApi.reasonRefuse == "false"
+                    ? dataSendApi.reasonRefuseOther
+                    : dataSendApi.reasonRefuse,
         };
     };
 
@@ -333,6 +353,40 @@ function DialogShowScheduleAdmin({
                 },
             });
         }
+    };
+
+    const handleChangeIsCarBroken = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            reasonRefuse: e.target.value,
+        });
+        e.target.value == "false" &&
+            setErrorDataSendApi({
+                ...errorDataSendApi,
+                errorReasonRefuse: false,
+            });
+    };
+
+    const handleReasonRefuseOther = (e) => {
+        setDataSendApi({
+            ...dataSendApi,
+            reasonRefuseOther: e.target.value,
+        });
+        helper.isValidStringBetweenMinMaxLength(
+            e.target.value,
+            Constants.Common.CHARACTERS_MIN_LENGTH_REASON_CANCEL_SCHEDULE,
+            Constants.Common.CHARACTERS_MAX_LENGTH_REASON_CANCEL_SCHEDULE
+        )
+            ? setErrorDataSendApi({
+                  ...errorDataSendApi,
+                  errorReasonRefuseOther: false,
+                  helperTextReasonRefuseOther: null,
+              })
+            : setErrorDataSendApi({
+                  ...errorDataSendApi,
+                  errorReasonRefuseOther: true,
+                  helperTextReasonRefuseOther: `Từ ${Constants.Common.CHARACTERS_MIN_LENGTH_REASON_CANCEL_SCHEDULE} - ${Constants.Common.CHARACTERS_MAX_LENGTH_REASON_CANCEL_SCHEDULE} Ký Tự`,
+              });
     };
 
     const handleUpdateSchedulePending = async () => {
@@ -358,13 +412,60 @@ function DialogShowScheduleAdmin({
             } else if (
                 data.idScheduleStatus == Constants.ScheduleStatusCode.REFUSE
             ) {
-                setDialogConfirmation({
-                    ...dialogConfirmation,
-                    open: true,
-                    handleSubmit: () => {
-                        updateSchedulePending(data);
-                    },
-                });
+                if (dataSendApi.reasonRefuse == "false") {
+                    if (dataSendApi.reasonRefuseOther) {
+                        if (
+                            helper.isValidStringBetweenMinMaxLength(
+                                dataSendApi.reasonRefuseOther,
+                                Constants.Common
+                                    .CHARACTERS_MIN_LENGTH_REASON_CANCEL_SCHEDULE,
+                                Constants.Common
+                                    .CHARACTERS_MAX_LENGTH_REASON_CANCEL_SCHEDULE
+                            )
+                        ) {
+                            setDialogConfirmation({
+                                ...dialogConfirmation,
+                                open: true,
+                                handleSubmit: () => {
+                                    updateSchedulePending(data);
+                                },
+                            });
+                        } else {
+                            setErrorDataSendApi({
+                                ...errorDataSendApi,
+                                errorReasonRefuseOther: true,
+                                helperTextReasonRefuseOther: `Từ ${Constants.Common.CHARACTERS_MIN_LENGTH_REASON_CANCEL_SCHEDULE} - ${Constants.Common.CHARACTERS_MAX_LENGTH_REASON_CANCEL_SCHEDULE} Ký Tự`,
+                            });
+                        }
+                    } else {
+                        setErrorDataSendApi({
+                            ...errorDataSendApi,
+                            errorReasonRefuseOther: true,
+                            helperTextReasonRefuseOther:
+                                Strings.DialogShowScheduleAdmin
+                                    .PLEASE_ENTER_REASON,
+                        });
+                    }
+                } else if (
+                    !helper.isNullOrEmpty(dataSendApi.reasonRefuse) &&
+                    dataSendApi.reasonRefuse != "false"
+                ) {
+                    setDialogConfirmation({
+                        ...dialogConfirmation,
+                        open: true,
+                        handleSubmit: () => {
+                            updateSchedulePending(data);
+                        },
+                    });
+                } else {
+                    setErrorDataSendApi({
+                        ...errorDataSendApi,
+                        errorReasonRefuse: true,
+                        helperTextReasonRefuse:
+                            Strings.DialogShowScheduleAdmin
+                                .PLEASE_CHOOSE_REASON,
+                    });
+                }
             }
         } else {
             setErrorDataSendApi({
@@ -381,6 +482,24 @@ function DialogShowScheduleAdmin({
         });
     };
 
+    const handleRefesh = () => {
+        setDataSendApi({
+            idSchedule: null,
+            status: null,
+            driver: null,
+            reasonRefuse: null,
+            reasonRefuseOther: null,
+        });
+        setErrorDataSendApi({
+            errorStatus: false,
+            errorDriver: false,
+            errorReasonRefuse: false,
+            errorReasonRefuseOther: false,
+            helperTextReasonRefuse: null,
+            helperTextReasonRefuseOther: null,
+        });
+    };
+
     const run = async () => {
         await setBackDrop(true);
         (await open) && getSchedule();
@@ -390,12 +509,9 @@ function DialogShowScheduleAdmin({
     };
 
     useEffect(() => {
-        setErrorDataSendApi({
-            errorDriver: false,
-            errorStatus: false,
-        });
+        handleRefesh();
         run();
-    }, [idSchedule]);
+    }, [idSchedule, open]);
 
     return (
         <DialogContainer
@@ -799,6 +915,95 @@ function DialogShowScheduleAdmin({
                                                         }
                                                     />
                                                 )}
+
+                                            {/* REASON REFUSE */}
+                                            <Collapse
+                                                in={
+                                                    dataSendApi.status &&
+                                                    dataSendApi.status
+                                                        .idScheduleStatus ==
+                                                        Constants
+                                                            .ScheduleStatusCode
+                                                            .REFUSE
+                                                }
+                                            >
+                                                <RadioGroupStyle
+                                                    onChange={
+                                                        handleChangeIsCarBroken
+                                                    }
+                                                    value={
+                                                        dataSendApi.reasonRefuse
+                                                    }
+                                                >
+                                                    {nameReason.map(
+                                                        (item, index) => {
+                                                            return (
+                                                                <FormControlLabel
+                                                                    key={index}
+                                                                    value={item}
+                                                                    control={
+                                                                        <Radio />
+                                                                    }
+                                                                    label={item}
+                                                                />
+                                                            );
+                                                        }
+                                                    )}
+                                                    <FormControlLabel
+                                                        value={false}
+                                                        control={<Radio />}
+                                                        label={"Khác"}
+                                                    />
+                                                    {errorDataSendApi.errorReasonRefuse && (
+                                                        <FormHelperText
+                                                            error={true}
+                                                        >
+                                                            {
+                                                                errorDataSendApi.helperTextReasonRefuse
+                                                            }
+                                                        </FormHelperText>
+                                                    )}
+                                                </RadioGroupStyle>
+                                            </Collapse>
+
+                                            {/* REASON REFUSE OTHER */}
+                                            <Collapse
+                                                in={
+                                                    dataSendApi.status &&
+                                                    dataSendApi.status
+                                                        .idScheduleStatus ==
+                                                        Constants
+                                                            .ScheduleStatusCode
+                                                            .REFUSE &&
+                                                    dataSendApi.reasonRefuse ==
+                                                        "false"
+                                                }
+                                            >
+                                                <MultipleTextInput
+                                                    multiline
+                                                    onChange={(e) =>
+                                                        handleReasonRefuseOther(
+                                                            e
+                                                        )
+                                                    }
+                                                    label={
+                                                        Strings
+                                                            .DialogShowScheduleAdmin
+                                                            .ENTER_REASON_REFUSE
+                                                    }
+                                                    value={
+                                                        dataSendApi.reasonRefuseOther ||
+                                                        ""
+                                                    }
+                                                    error={
+                                                        errorDataSendApi.errorReasonRefuseOther
+                                                    }
+                                                    helperText={
+                                                        errorDataSendApi.errorReasonRefuseOther &&
+                                                        errorDataSendApi.helperTextReasonRefuseOther
+                                                    }
+                                                />
+                                            </Collapse>
                                         </Box>
 
                                         {/* INFO DRIVER */}
@@ -832,21 +1037,30 @@ function DialogShowScheduleAdmin({
                                             </TextContent>
 
                                             {/* SELECTBOX UPDATE DRIVER*/}
-                                            {((dataSendApi.status &&
-                                                dataSendApi.status
-                                                    .idScheduleStatus ==
-                                                    Constants.ScheduleStatusCode
-                                                        .APPROVED) ||
-                                                item.scheduleStatus ==
-                                                    Constants.ScheduleStatus
-                                                        .APPROVED) &&
-                                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
-                                                    item.startDate
-                                                ) && (
+                                            {
+                                                <Collapse
+                                                    in={
+                                                        ((dataSendApi.status &&
+                                                            dataSendApi.status
+                                                                .idScheduleStatus ==
+                                                                Constants
+                                                                    .ScheduleStatusCode
+                                                                    .APPROVED) ||
+                                                            item.scheduleStatus ==
+                                                                Constants
+                                                                    .ScheduleStatus
+                                                                    .APPROVED) &&
+                                                        helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
+                                                            item.startDate
+                                                        )
+                                                    }
+                                                >
                                                     <AutocompleteStyle
                                                         disablePortal={false}
                                                         size="small"
-                                                        sx={{ marginBottom: 1 }}
+                                                        sx={{
+                                                            marginBottom: 1,
+                                                        }}
                                                         noOptionsText={
                                                             Strings.Common
                                                                 .NO_DATA
@@ -899,7 +1113,8 @@ function DialogShowScheduleAdmin({
                                                             value.idDriver
                                                         }
                                                     />
-                                                )}
+                                                </Collapse>
+                                            }
 
                                             {/* LIST INFO DRIVER */}
                                             {item.fullNameDriver && (

@@ -158,6 +158,10 @@ const Strings = {
         UPDATED_AT: "Ngày Cập Nhật: ",
         PLEASE_CHOOSE_STATUS: "Vui Lòng Chọn Trạng Thái",
         PLEASE_CHOOSE_DRIVER: "Vui Lòng Chọn Tài Xế",
+        ENTER_REASON_REFUSE: "Nhập Lý Do Từ Chối",
+        PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
+        PLEASE_CHOOSE_REASON: "Vui Lòng Chọn Lý Do",
+        PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
     },
 
     CarRegistrationManagement: {

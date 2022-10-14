@@ -4,6 +4,7 @@ import {
     Button,
     Dialog,
     List,
+    RadioGroup,
     styled,
     TextField,
     Typography,
@@ -474,6 +475,109 @@ const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
     },
 }));
 
+const MultipleTextInput = styled(TextField)(({ theme }) => ({
+    marginTop: 8,
+    marginLeft: 10,
+    ".MuiInputBase-root": {
+        paddingTop: 5,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        width: 220,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 250,
+        ".MuiInputBase-input": {
+            fontSize: 14,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 14,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+}));
+
+
+const RadioGroupStyle = styled(RadioGroup)(({ theme }) => ({
+    marginLeft: 10,
+    "& .MuiSvgIcon-root": {
+        fontSize: 15,
+    },
+    "& .MuiFormControlLabel-label": {
+        fontSize: 15,
+    },
+}));
+
 export {
     Title,
     DialogContainer,
@@ -485,5 +589,7 @@ export {
     TextContent,
     TextInput,
     ListStyle,
-    AutocompleteStyle
+    AutocompleteStyle,
+    MultipleTextInput,
+    RadioGroupStyle
 };
