@@ -210,7 +210,9 @@ function DialogShowScheduleAdmin({
                     Constants.ScheduleStatusCode.APPROVED &&
                     setDialogChangeCar({
                         ...dialogChangeCar,
+                        open: false,
                         idCar: res.data.data[0].idCar,
+                        idSchedule: res.data.data[0].idSchedule,
                     });
 
                 getDriverListForSchedule(
@@ -698,6 +700,26 @@ function DialogShowScheduleAdmin({
                                                                     secondary={helper.formatDateTimeStringFromTimeStamp(
                                                                         item.updatedAt
                                                                     )}
+                                                                />
+                                                            </Tooltip>
+                                                        </ListItem>
+                                                    )}
+
+                                                    {/* USER UPDATE */}
+                                                    {item.fullNameUserUpdate && item.codeUserUpdate && (
+                                                        <ListItem>
+                                                            <PersonIcon />
+                                                            <Tooltip
+                                                                title={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
+                                                                arrow
+                                                            >
+                                                                <ListItemText
+                                                                    primary={
+                                                                        Strings
+                                                                            .DialogShowScheduleAdmin
+                                                                            .USER_UPDATE
+                                                                    }
+                                                                    secondary={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
                                                                 />
                                                             </Tooltip>
                                                         </ListItem>
@@ -1479,6 +1501,10 @@ function DialogShowScheduleAdmin({
                         open: false,
                     })
                 }
+                idCar={dialogChangeCar.idCar}
+                idSchedule={dialogChangeCar.idSchedule}
+                getScheduleOfParent={getSchedule}
+                openModalSuccessOfParent={() => setModalSuccess(true)}
             />
 
             <ModalError

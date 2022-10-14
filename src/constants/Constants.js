@@ -76,6 +76,10 @@ const Constants = {
             CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE:
                 "/driver/confirmReceivedOrCompleteOfSchedule",
         },
+        DialogChangeCar: {
+            GET_CAR_LIST_TO_CHANGE_CAR: "/admin/getCarListToChangeCar",
+            CHANGE_CAR_SCHEDULE: "/admin/changeCarSchedule",
+        },
     },
 
     Styled: {

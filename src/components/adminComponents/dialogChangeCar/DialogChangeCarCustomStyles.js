@@ -3,6 +3,8 @@ import {
     Button,
     Dialog,
     Typography,
+    TextField,
+    FormGroup,
 } from "@mui/material";
 
 const DialogContainer = styled(Dialog)(({ theme }) => ({
@@ -128,9 +130,110 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
     },
 }));
 
+const TextInput = styled(TextField)(({ theme }) => ({
+    marginBottom: 5,
+    ".MuiInputBase-root": {
+        paddingRight: 5,
+    },
+    [theme.breakpoints.up("mobileS")]: {
+        width: 260,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 320,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 360,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 12,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 300,
+        ".MuiInputBase-input": {
+            fontSize: 13,
+        },
+        ".MuiFormLabel-root": {
+            fontSize: 13,
+        },
+        ".MuiSvgIcon-root": {
+            fontSize: 20,
+        },
+    },
+}));
+
+const FormGroupStyle = styled(FormGroup)(({ theme }) => ({
+    "& .MuiSvgIcon-root": {
+        fontSize: 15,
+    },
+    "& .MuiFormControlLabel-label": {
+        fontSize: 15,
+    },
+}));
 
 export {
     ButtonFeatures,
     DialogContainer,
     Title,
+    TextInput,
+    FormGroupStyle
 };

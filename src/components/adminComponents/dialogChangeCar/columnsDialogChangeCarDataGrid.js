@@ -45,7 +45,7 @@ const col = (handleModalShowSchedule) => {
             field: "idCar",
             headerName: Strings.Common.CAR_CODE,
             description: Strings.Common.CAR_CODE,
-            width: 140,
+            width: 65,
             sortable: false,
             renderCell: (params) => {
                 return (

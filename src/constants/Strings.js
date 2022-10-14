@@ -58,10 +58,12 @@ const Strings = {
         SCHEDULE_UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật Lịch Trình",
         UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật",
         MOVING_CONFIRMATION: "Xác Nhận Di Chuyển",
+        CHANGE_CAR_CONFIRMATION: "Xác Nhận Đổi Xe",
         RECEIVE_CAR_CONFIRMATION: "Xác Nhận Nhận Xe",
         RETURN_CAR_CONFIRMATION: "Xác Nhận Trả Xe",
         DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
         DO_YOU_WANT_TO_CONFIRM_MOVING: "Bạn Có Muốn Xác Nhận Di Chuyển?",
+        DO_YOU_WANT_TO_CHANGE_CAR: "Bạn Có Muốn Đổi Xe?",
         DO_YOU_WANT_TO_RECEIVE_CAR: "Bạn Có Muốn Nhận Xe?",
         DO_YOU_WANT_TO_RETURN_CAR: "Bạn Có Muốn Trả Xe?",
         DO_YOU_WANT_TO_ADD_CAR: "Bạn Có Muốn Thêm Xe?",
@@ -156,6 +158,7 @@ const Strings = {
         INFO_ADMIN: "Thông Tin Admin: ",
         CREATED_AT: "Ngày Đăng Ký: ",
         UPDATED_AT: "Ngày Cập Nhật: ",
+        USER_UPDATE: "Người Cập Nhật: ",
         PLEASE_CHOOSE_STATUS: "Vui Lòng Chọn Trạng Thái",
         PLEASE_CHOOSE_DRIVER: "Vui Lòng Chọn Tài Xế",
         ENTER_REASON_REFUSE: "Nhập Lý Do Từ Chối",
@@ -416,6 +419,15 @@ const Strings = {
         PLEASE_CHOOSE_REASON: "Vui Lòng Chọn Lý Do",
         PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
         ENTER_REASON: "Nhập Lý Do",
+    },
+
+    DialogChangeCar: {
+        TITLE: "Danh Sách Xe",
+        SEARCH: "Tìm Kiếm",
+        CAR_CODE: "Mã Xe",
+        LICENSE_PLATES: "Biển Số",
+        SEAT_NUMBER: "Số Ghế",
+        CHANGE_CAR: "Đổi Xe",
     },
 };
 
