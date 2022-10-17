@@ -567,6 +567,32 @@ const MultipleTextInput = styled(TextField)(({ theme }) => ({
     },
 }));
 
+const BoxComment = styled(Box)(({ theme }) => ({
+    display: "block",
+    marginLeft: 1,
+    marginBottom: 5,
+    [theme.breakpoints.up("mobileS")]: {
+        width: 250,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 290,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 330,
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 310,
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 380,
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 450,
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 520,
+    },
+}));
 
 const RadioGroupStyle = styled(RadioGroup)(({ theme }) => ({
     marginLeft: 10,
@@ -591,5 +617,6 @@ export {
     ListStyle,
     AutocompleteStyle,
     MultipleTextInput,
-    RadioGroupStyle
+    RadioGroupStyle,
+    BoxComment,
 };

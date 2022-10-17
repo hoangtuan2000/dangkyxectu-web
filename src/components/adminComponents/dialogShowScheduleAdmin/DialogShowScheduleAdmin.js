@@ -10,12 +10,14 @@ import {
     ListItem,
     ListItemText,
     Radio,
+    Rating,
     TextField,
     Tooltip,
     useTheme,
 } from "@mui/material";
 import {
     AutocompleteStyle,
+    BoxComment,
     BoxLeft,
     BoxRight,
     ButtonFeatures,
@@ -706,24 +708,25 @@ function DialogShowScheduleAdmin({
                                                     )}
 
                                                     {/* USER UPDATE */}
-                                                    {item.fullNameUserUpdate && item.codeUserUpdate && (
-                                                        <ListItem>
-                                                            <PersonIcon />
-                                                            <Tooltip
-                                                                title={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
-                                                                arrow
-                                                            >
-                                                                <ListItemText
-                                                                    primary={
-                                                                        Strings
-                                                                            .DialogShowScheduleAdmin
-                                                                            .USER_UPDATE
-                                                                    }
-                                                                    secondary={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
-                                                                />
-                                                            </Tooltip>
-                                                        </ListItem>
-                                                    )}
+                                                    {item.fullNameUserUpdate &&
+                                                        item.codeUserUpdate && (
+                                                            <ListItem>
+                                                                <PersonIcon />
+                                                                <Tooltip
+                                                                    title={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
+                                                                    arrow
+                                                                >
+                                                                    <ListItemText
+                                                                        primary={
+                                                                            Strings
+                                                                                .DialogShowScheduleAdmin
+                                                                                .RECENT_UPDATE_USER
+                                                                        }
+                                                                        secondary={`${item.fullNameUserUpdate} - ${item.codeUserUpdate}`}
+                                                                    />
+                                                                </Tooltip>
+                                                            </ListItem>
+                                                        )}
                                                 </ListStyle>
                                             </Box>
 
@@ -1027,6 +1030,51 @@ function DialogShowScheduleAdmin({
                                                 />
                                             </Collapse>
                                         </Box>
+
+                                        {/* REVIEWS */}
+                                        {item.idReview && (
+                                            <>
+                                                <TextContent
+                                                    variant="p"
+                                                    component="div"
+                                                >
+                                                    {
+                                                        Strings
+                                                            .DialogShowScheduleAdmin
+                                                            .REVIEW
+                                                    }
+                                                </TextContent>
+
+                                                <Rating
+                                                    name="read-only"
+                                                    defaultValue={
+                                                        item.starNumber
+                                                    }
+                                                    precision={0.1}
+                                                    readOnly
+                                                    size="small"
+                                                    sx={{ marginLeft: 2 }}
+                                                />
+
+                                                <BoxComment>
+                                                    <MultipleTextInput
+                                                        disabled
+                                                        label={
+                                                            Strings
+                                                                .DialogShowScheduleAdmin
+                                                                .COMMENT
+                                                        }
+                                                        value={
+                                                            item.commentReview
+                                                        }
+                                                        multiline
+                                                        sx={{
+                                                            width: "100% !important",
+                                                        }}
+                                                    />
+                                                </BoxComment>
+                                            </>
+                                        )}
 
                                         {/* INFO DRIVER */}
                                         <Box>

@@ -145,6 +145,7 @@ const Strings = {
         SCHEDULE: "Lịch Trình: ",
         INFO_SUBSCRIBERS: "Thông Tin Người Đăng Ký: ",
         DRIVER: "Tài Xế: ",
+        REVIEW: "Đánh Giá: ",
         SCHEDULE_STATUS: "Trạng Thái Lịch Trình: ",
         TIME: "Thời Gian: ",
         NAME_CODE: "Họ Tên - Mã Cán Bộ:",
@@ -158,13 +159,14 @@ const Strings = {
         INFO_ADMIN: "Thông Tin Admin: ",
         CREATED_AT: "Ngày Đăng Ký: ",
         UPDATED_AT: "Ngày Cập Nhật: ",
-        USER_UPDATE: "Người Cập Nhật: ",
+        RECENT_UPDATE_USER: "Người Cập Nhật Gần Đây: ",
         PLEASE_CHOOSE_STATUS: "Vui Lòng Chọn Trạng Thái",
         PLEASE_CHOOSE_DRIVER: "Vui Lòng Chọn Tài Xế",
         ENTER_REASON_REFUSE: "Nhập Lý Do Từ Chối",
         PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
         PLEASE_CHOOSE_REASON: "Vui Lòng Chọn Lý Do",
         PLEASE_ENTER_REASON: "Vui Lòng Nhập Lý Do",
+        COMMENT: "Bình Luận",
     },
 
     CarRegistrationManagement: {
