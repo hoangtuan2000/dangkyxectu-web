@@ -8,6 +8,7 @@ const RoutesPath = {
     CAR_REGISTRATION_MANAGEMENT: "car-registration-management",
     CAR_MANAGER: "car-manager",
     TRIP_MANAGER: "trip-manager",
+    CAR_STATUS_OF_TRIP: "car-status-of-trip",
     DRIVER_MANAGEMENT: "driver-management",
     STATISTICAL: "statistical",
     DRIVER_TRIP_MANAGER: "driver-trip-manager",

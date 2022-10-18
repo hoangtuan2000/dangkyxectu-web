@@ -22,6 +22,7 @@ import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
 import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/UpdateSchedulePending";
 import Constants from "./constants/Constants";
+import CarStatusOfTrip from "./screens/adminScreens/carStatusOfTrip/CarStatusOfTrip";
 
 // init AOS library
 AOS.init({
@@ -118,6 +119,10 @@ function App() {
                                         <Route
                                             path={RoutesPath.TRIP_MANAGER}
                                             element={<TripManager />}
+                                        />
+                                        <Route
+                                            path={RoutesPath.CAR_STATUS_OF_TRIP}
+                                            element={<CarStatusOfTrip />}
                                         />
                                         <Route
                                             path={RoutesPath.DRIVER_MANAGEMENT}

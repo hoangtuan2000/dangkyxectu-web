@@ -80,6 +80,10 @@ const Constants = {
             GET_CAR_LIST_TO_CHANGE_CAR: "/admin/getCarListToChangeCar",
             CHANGE_CAR_SCHEDULE: "/admin/changeCarSchedule",
         },
+        CarStatusOfTrip: {
+            GET_CAR_STATUS_LIST_OF_TRIP: "/admin/getCarStatusListOfTrips",
+            GET_DRIVER_LIST: "/admin/getDriverList",
+        },
     },
 
     Styled: {

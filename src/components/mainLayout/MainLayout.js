@@ -34,6 +34,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
+import CarCrashIcon from '@mui/icons-material/CarCrash';
 import {
     Main,
     AppBar,
@@ -75,8 +76,14 @@ const DataListItems = [
         role: Constants.Role.ADMIN,
     },
     {
-        path: RoutesPath.TRIP_MANAGER,
+        path: RoutesPath.CAR_STATUS_OF_TRIP,
         icon: <CommuteIcon />,
+        name: "Tình Trạng Xe",
+        role: Constants.Role.ADMIN,
+    },
+    {
+        path: RoutesPath.TRIP_MANAGER,
+        icon: <PeopleAltIcon />,
         name: "Quản Lý Chuyến Đi",
         role: Constants.Role.ADMIN,
     },

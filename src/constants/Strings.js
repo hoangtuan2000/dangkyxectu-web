@@ -76,6 +76,9 @@ const Strings = {
         // CREATE: "Tạo",
         ADD: "Thêm",
         DESCRIPTION: "Mô Tả",
+        CAR_STATUS_BEFORE_TRIP: "Tình Trạng Xe Trước Khi Đi",
+        INFO_CAR: "Thông Tin Xe",
+        CAR_STATUS: "Tình Trạng Xe",
     },
 
     Login: {
@@ -430,6 +433,29 @@ const Strings = {
         LICENSE_PLATES: "Biển Số",
         SEAT_NUMBER: "Số Ghế",
         CHANGE_CAR: "Đổi Xe",
+    },
+
+    CarStatusOfTrip: {
+        TITLE: "Tình Trạng Xe Của Chuyến Đi",
+    },
+
+    DialogCarStatusOfTripFilter: {
+        TITLE: "Bộ Lọc",
+        CAR_STATUS_BEFORE_GOING: "Xe Trước Khi Đi: ",
+        CAR_STATUS_AFTER_GOING: "Xe Sau Khi Đi: ",
+        HAS_DAMAGE: "Có Hư Hỏng",
+        NO_DAMAGE: "Không Hư Hỏng",
+        DRIVER: "Tài Xế: ",
+        CHOOSE_DRIVER: "-- Chọn Tài Xế --",
+        TIME: "Thời Gian: ",
+        CAR_CODE: "Mã Số Xe: ",
+        ENTER_CAR_CODE: "-- Nhập Mã Số Xe --",
+        LICENSE_PLATES: "Biển Số Xe:",
+        ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
+        BRAND: "Thương Hiệu: ",
+        CHOOSE_BRAND: "-- Chọn Thương Hiệu --",
+        CAR_TYPE: "Loại Xe:",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
     },
 };
 

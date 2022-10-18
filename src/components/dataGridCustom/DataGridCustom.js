@@ -145,6 +145,7 @@ function DataGridCustom({
                         outline: "none",
                     },
             }}
+            getRowHeight={() => "auto"} // row height auto fit content
             components={{
                 Pagination: CustomPagination,
                 NoRowsOverlay: CustomNoRowsOverlay,
