@@ -19,7 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import helper from "../../../common/helper";
 
-const col = (handleOpenDialogUpdateCar) => {
+const col = (handleOpenDialogCarBroken) => {
     let columns = [];
     return (columns = [
         {
@@ -36,10 +36,7 @@ const col = (handleOpenDialogUpdateCar) => {
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip
-                        title={`${params.row.carBrand}`}
-                        arrow
-                    >
+                    <Tooltip title={`${params.row.carBrand}`} arrow>
                         <img
                             src={params.row.imageCar}
                             alt={params.row.imageCar}
@@ -54,14 +51,14 @@ const col = (handleOpenDialogUpdateCar) => {
             },
         },
         {
-            field: "idSchedule",
+            field: "scheduleCode",
             headerName: Strings.Common.SCHEDULE_CODE,
             description: Strings.Common.SCHEDULE_CODE,
             width: 110,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.idSchedule} arrow>
+                    <Tooltip title={params.row.scheduleCode} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -69,7 +66,7 @@ const col = (handleOpenDialogUpdateCar) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.idSchedule}
+                            {params.row.scheduleCode}
                         </span>
                     </Tooltip>
                 );
@@ -395,9 +392,11 @@ const col = (handleOpenDialogUpdateCar) => {
                     <Tooltip title="Cập Nhật" arrow>
                         <IconButton
                             color="primary"
-                            // onClick={() =>
-                            //     // handleOpenDialogUpdateCar(params.row.carCode)
-                            // }
+                            onClick={() =>
+                                handleOpenDialogCarBroken(
+                                    params.row.scheduleCode
+                                )
+                            }
                         >
                             <VisibilityIcon />
                         </IconButton>

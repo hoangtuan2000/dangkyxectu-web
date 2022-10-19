@@ -457,6 +457,10 @@ const Strings = {
         CAR_TYPE: "Loại Xe:",
         CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
     },
+
+    DialogShowCarBroken: {
+        TITLE: "Thông Tin Tình Trạng Xe",
+    },
 };
 
 export default Strings;

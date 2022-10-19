@@ -16,6 +16,7 @@ import helper from "../../../common/helper";
 import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar/DialogCreateCar";
 import DialogUpdateCar from "../../../components/adminComponents/dialogUpdateCar/DialogUpdateCar";
 import { CarStatusOfTripServices } from "../../../services/adminServices/CarStatusOfTripServices";
+import DialogShowCarBroken from "../../../components/adminComponents/dialogShowCarBroken/DialogShowCarBroken";
 
 function CarStatusOfTrip() {
     const theme = useTheme();
@@ -34,6 +35,10 @@ function CarStatusOfTrip() {
     });
     const [dialogCarStatusOfTripFilter, setDialogCarStatusOfTripFilter] =
         useState(false);
+    const [dialogShowCarBroken, setDialogShowCarBroken] = useState({
+        open: false,
+        idSchedule: null,
+    });
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dataFilter, setDataFilter] = useState({
@@ -74,7 +79,7 @@ function CarStatusOfTrip() {
             isBrokenCarPartsBeforeTrip: isBrokenCarPartsBeforeTrip,
             isBrokenCarPartsAfterTrip: isBrokenCarPartsAfterTrip,
             startDate: startDate,
-            endDat: endDate,    
+            endDat: endDate,
         };
 
         const res = await CarStatusOfTripServices.getCarStatusListOfTrips({
@@ -98,7 +103,7 @@ function CarStatusOfTrip() {
                                 index +
                                 1,
                             imageCar: item.image,
-                            idSchedule: item.idSchedule,
+                            scheduleCode: item.idSchedule,
                             carCode: item.idCar,
                             carBrand: item.nameCarBrand,
                             type: `${item.nameCarType} ${item.seatNumber} Chổ`,
@@ -280,6 +285,14 @@ function CarStatusOfTrip() {
         });
     };
 
+    const handleOpenDialogCarBroken = (e) => {
+        setDialogShowCarBroken({
+            ...dialogShowCarBroken,
+            open: true,
+            idSchedule: e
+        });
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getCarStatusListOfTrips();
@@ -321,7 +334,7 @@ function CarStatusOfTrip() {
             </Box>
 
             <DataGridCustom
-                columns={col()}
+                columns={col((e) => handleOpenDialogCarBroken(e))}
                 rows={carStatusOfTrips}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -350,6 +363,17 @@ function CarStatusOfTrip() {
                     dataFilter.isBrokenCarPartsBeforeTrip
                 }
                 handleRefreshDataFilter={handleRefreshDataFilter}
+            />
+
+            <DialogShowCarBroken
+                open={dialogShowCarBroken.open}
+                handleClose={() =>
+                    setDialogShowCarBroken({
+                        ...dialogShowCarBroken,
+                        open: false,
+                    })
+                }
+                idSchedule={dialogShowCarBroken.idSchedule}
             />
 
             <ModalError

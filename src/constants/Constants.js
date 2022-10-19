@@ -84,6 +84,9 @@ const Constants = {
             GET_CAR_STATUS_LIST_OF_TRIP: "/admin/getCarStatusListOfTrips",
             GET_DRIVER_LIST: "/admin/getDriverList",
         },
+        DialogShowCarBroken: {
+            GET_SCHEDULE_BROKEN_CAR_PARTS: "/admin/getScheduleBrokenCarParts",
+        },
     },
 
     Styled: {
