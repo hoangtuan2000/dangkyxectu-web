@@ -152,8 +152,8 @@ function DialogCarStatusOfTripFilter({
         );
     });
 
-    const getDriverList = async () => {
-        const res = await CarStatusOfTripServices.getDriverList();
+    const getDriverListForFilter = async () => {
+        const res = await CarStatusOfTripServices.getDriverListForFilter();
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -325,7 +325,7 @@ function DialogCarStatusOfTripFilter({
 
     const run = async () => {
         await setBackDrop(true);
-        await getDriverList();
+        await getDriverListForFilter();
         await getCommon();
         await setTimeout(() => {
             setBackDrop(false);

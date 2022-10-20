@@ -17,7 +17,6 @@ import DriverManagement from "./screens/adminScreens/driverManagement/DriverMana
 import Statistical from "./screens/adminScreens/statistical/Statistical";
 import RoutesPath from "./constants/RoutesPath";
 import DriverTripManager from "./screens/driverScreens/driverTripManager/DriverTripManager";
-import TripManager from "./screens/adminScreens/tripManager/TripManager";
 import NoPage from "./screens/noPage/NoPage";
 import RentalCar from "./screens/rentalCar/RentalCar";
 import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/UpdateSchedulePending";
@@ -115,10 +114,6 @@ function App() {
                                         <Route
                                             path={RoutesPath.CAR_MANAGER}
                                             element={<CarManager />}
-                                        />
-                                        <Route
-                                            path={RoutesPath.TRIP_MANAGER}
-                                            element={<TripManager />}
                                         />
                                         <Route
                                             path={RoutesPath.CAR_STATUS_OF_TRIP}

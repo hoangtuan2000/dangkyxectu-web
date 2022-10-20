@@ -113,6 +113,7 @@ function DialogShowCarBroken({ open, handleClose, idSchedule }) {
                         </Tabs>
 
                         <Box>
+                            {/* CAR PART BROKEN BEFORE RUNS */}
                             {tab == 0 &&
                                 carPartBroken.hasOwnProperty("beforeCarRuns") &&
                                 (carPartBroken.beforeCarRuns.isCarBroken ? (
@@ -173,6 +174,7 @@ function DialogShowCarBroken({ open, handleClose, idSchedule }) {
                                     </Box>
                                 ))}
 
+                            {/* CAR PART BROKEN AFTER RUNS */}
                             {tab == 1 &&
                                 carPartBroken.hasOwnProperty("afterCarRuns") &&
                                 (carPartBroken.afterCarRuns.isCarBroken ? (

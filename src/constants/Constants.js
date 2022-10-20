@@ -82,10 +82,13 @@ const Constants = {
         },
         CarStatusOfTrip: {
             GET_CAR_STATUS_LIST_OF_TRIP: "/admin/getCarStatusListOfTrips",
-            GET_DRIVER_LIST: "/admin/getDriverList",
+            GET_DRIVER_LIST_FOR_FILTER: "/admin/getDriverListForFilter",
         },
         DialogShowCarBroken: {
             GET_SCHEDULE_BROKEN_CAR_PARTS: "/admin/getScheduleBrokenCarParts",
+        },
+        DriverManagement: {
+            GET_DRIVER_LIST: "/admin/getDriverList",
         },
     },
 
@@ -172,6 +175,31 @@ const Constants = {
         PERIODIC_INSPECTION_CERTIFICATE: "periodicInspectionCertificate",
         INSURANCE: "insurance",
     },
+
+    UserStatus: {
+        WORK: "Hoạt Động",
+        STOP_WORK: "Nghỉ Việc",
+    },
+
+    ColorOfUserStatus: {
+        Text: {
+            WORK: "green",
+            STOP_WORK: "gray",
+        },
+        TextHaveBackground: {
+            WORK: "white",
+            STOP_WORK: "white",
+        },
+        Background: {
+            WORK: "green",
+            STOP_WORK: "gray",
+        },
+    },
+
+    // UserStatusCode: {
+    //     WORK: 1,
+    //     STOP_WORK: 2,
+    // },
 
     // CarParts: {
     //     FRONT_OF_CAR: "Đầu Xe",

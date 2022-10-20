@@ -1,8 +1,8 @@
 import {
+    Autocomplete,
     Box,
     Button,
     Dialog,
-    FormGroup,
     RadioGroup,
     styled,
     TextField,
@@ -13,8 +13,8 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("mobileS")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "300px !important",
+                width: "fit-content",
+                maxWidth: "310px !important",
                 margin: 0,
             },
         },
@@ -22,8 +22,8 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("mobileM")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "350px !important",
+                width: "fit-content",
+                maxWidth: "368px !important",
                 margin: 0,
             },
         },
@@ -31,8 +31,8 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("mobileL")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "390px !important",
+                width: "fit-content",
+                maxWidth: "410px !important",
                 margin: 0,
             },
         },
@@ -40,7 +40,7 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("sm")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
+                width: "fit-content",
                 maxWidth: "600px !important",
                 margin: 0,
             },
@@ -49,8 +49,8 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("md")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "900px !important",
+                width: "fit-content",
+                maxWidth: "700px !important",
                 margin: 0,
             },
         },
@@ -58,8 +58,8 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("lg")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "1200px !important",
+                width: "fit-content",
+                maxWidth: "800px !important",
                 margin: 0,
             },
         },
@@ -67,43 +67,69 @@ const DialogContainer = styled(Dialog)(({ theme }) => ({
     [theme.breakpoints.up("xl")]: {
         "& .MuiDialog-container": {
             "& .MuiPaper-root": {
-                // width: "fit-content",
-                maxWidth: "1200px !important",
+                width: "fit-content",
+                maxWidth: "900px !important",
                 margin: 0,
             },
         },
     },
 }));
 
-const BoxFloatLeft = styled(Box)(({ theme }) => ({
-    float: "left",
-    [theme.breakpoints.up("mobileS")]: {
-        width: "100%",
-    },
-    [theme.breakpoints.up("mobileM")]: {
-        width: "100%",
-    },
-    [theme.breakpoints.up("mobileL")]: {
-        width: "100%",
-    },
+const BoxContent = styled(Box)(({ theme }) => ({
+    marginTop: 5,
+    [theme.breakpoints.up("mobileS")]: {},
+    [theme.breakpoints.up("mobileM")]: {},
+    [theme.breakpoints.up("mobileL")]: {},
     [theme.breakpoints.up("sm")]: {
-        width: 270,
+        display: "flex",
+        alignItems: "center",
     },
     [theme.breakpoints.up("md")]: {
-        width: 270,
+        display: "flex",
+        alignItems: "center",
     },
     [theme.breakpoints.up("lg")]: {
-        width: 280,
+        display: "flex",
+        alignItems: "center",
     },
     [theme.breakpoints.up("xl")]: {
-        width: 280,
+        display: "flex",
+        alignItems: "center",
+    },
+}));
+
+const TextStyle = styled(Typography)(({ theme }) => ({
+    width: 100,
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 12,
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        fontSize: 13,
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 14,
+        textAlign: "right",
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: 14,
+        textAlign: "right",
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 14,
+        textAlign: "right",
+    },
+    [theme.breakpoints.up("xl")]: {
+        fontSize: 14,
+        textAlign: "right",
     },
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
-    textAlign: "center",
     justifyContent: "center",
     fontWeight: "bold",
     marginBottom: 10,
@@ -139,78 +165,32 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
         fontSize: 9,
     },
     [theme.breakpoints.up("mobileM")]: {
-        fontSize: 12,
+        fontSize: 10,
     },
     [theme.breakpoints.up("mobileL")]: {
+        fontSize: 10,
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("md")]: {
+        fontSize: 11,
+    },
+    [theme.breakpoints.up("lg")]: {
         fontSize: 12,
     },
-    [theme.breakpoints.up("sm")]: {
-        fontSize: 13,
-    },
-    [theme.breakpoints.up("md")]: {
-        fontSize: 13,
-    },
-    [theme.breakpoints.up("lg")]: {
-        fontSize: 13,
-    },
     [theme.breakpoints.up("xl")]: {
-        fontSize: 13,
+        fontSize: 12,
     },
-}));
-
-const BoxImg = styled(Box)(({ theme }) => ({
-    borderRadius: 11,
-    padding: 1,
-    paddingTop: 2,
-    border: "1px solid #c2c0c0",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    [theme.breakpoints.up("mobileS")]: {
-        width: 250,
-        height: 160,
-    },
-    [theme.breakpoints.up("mobileM")]: {
-        width: 300,
-        height: 180,
-    },
-    [theme.breakpoints.up("mobileL")]: {
-        width: 340,
-        height: 190,
-    },
-    [theme.breakpoints.up("sm")]: {
-        width: 260,
-        height: 160,
-    },
-    [theme.breakpoints.up("md")]: {
-        width: 250,
-        height: 160,
-    },
-    [theme.breakpoints.up("lg")]: {
-        width: 260,
-        height: 160,
-    },
-    [theme.breakpoints.up("xl")]: {
-        width: 260,
-        height: 160,
-    },
-}));
-
-const Img = styled("img")(({ theme }) => ({
-    borderRadius: 10,
-    objectFit: "cover",
-    width: "100%",
-    height: "100%",
 }));
 
 const TextInput = styled(TextField)(({ theme }) => ({
-    marginBottom: 5,
+    marginLeft: 10,
     ".MuiInputBase-root": {
-        padding: 10,
+        paddingRight: 5,
     },
     [theme.breakpoints.up("mobileS")]: {
-        width: 250,
+        width: 230,
         ".MuiInputBase-input": {
             fontSize: 12,
         },
@@ -222,7 +202,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("mobileM")]: {
-        width: 300,
+        width: 280,
         ".MuiInputBase-input": {
             fontSize: 12,
         },
@@ -234,7 +214,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("mobileL")]: {
-        width: 340,
+        width: 290,
         ".MuiInputBase-input": {
             fontSize: 12,
         },
@@ -246,7 +226,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("sm")]: {
-        width: 250,
+        width: 400,
         ".MuiInputBase-input": {
             fontSize: 13,
         },
@@ -258,7 +238,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("md")]: {
-        width: 250,
+        width: 420,
         ".MuiInputBase-input": {
             fontSize: 13,
         },
@@ -270,7 +250,7 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("lg")]: {
-        width: 260,
+        width: 390,
         ".MuiInputBase-input": {
             fontSize: 13,
         },
@@ -282,25 +262,87 @@ const TextInput = styled(TextField)(({ theme }) => ({
         },
     },
     [theme.breakpoints.up("xl")]: {
-        width: 260,
+        width: 420,
         ".MuiInputBase-input": {
-            fontSize: 14,
+            fontSize: 13,
         },
         ".MuiFormLabel-root": {
-            fontSize: 14,
+            fontSize: 13,
         },
         ".MuiSvgIcon-root": {
             fontSize: 20,
         },
+    },
+}));
+
+const AutocompleteStyle = styled(Autocomplete)(({ theme }) => ({
+    display: "flex",
+    justifyContent: "space-between",
+    marginLeft: 10,
+    textTransform: "capitalize",
+    color: theme.palette.text.disabled,
+    borderColor: theme.palette.action.disabled,
+    [theme.breakpoints.up("mobileS")]: {
+        width: 230,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        width: 280,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        width: 290,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        width: 400,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        width: 390,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+    [theme.breakpoints.up("xl")]: {
+        width: 420,
+        ".MuiInputBase-input": {
+            fontSize: 12,
+        },
+    },
+}));
+
+const RadioGroupStyle = styled(RadioGroup)(({ theme }) => ({
+    marginLeft: 10,
+    "& .MuiSvgIcon-root": {
+        fontSize: 13,
+    },
+    "& .MuiFormControlLabel-label": {
+        fontSize: 13,
     },
 }));
 
 export {
+    AutocompleteStyle,
+    BoxContent,
     ButtonFeatures,
-    BoxFloatLeft,
     DialogContainer,
-    Title,
-    BoxImg,
-    Img,
     TextInput,
+    TextStyle,
+    Title,
+    RadioGroupStyle,
 };

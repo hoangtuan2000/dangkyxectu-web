@@ -35,7 +35,7 @@ const Strings = {
         NUMBER_OF_TRIPS: "Số Chuyến Đi",
         NUMBER_OF_MAINTENANCE: "Số Lần Bảo Trì",
         LICENSE: "Giấy Phép",
-        NUMBER_PHONE: "Số Điện Thoại",
+        PHONE_NUMBER: "Số Điện Thoại",
         AN_ERROR_OCCURRED: "Đã Xảy Ra Lỗi",
         NO_SCHEDULE: "Không Có Lịch Trình",
         CHOOSE_WARD: "-- Chọn xã phường --",
@@ -183,8 +183,10 @@ const Strings = {
     },
 
     DriverManagement: {
+        TITLE: "Danh Sách Tài Xế",
         ADD_DRIVER: "Thêm Tài Xế",
         DRIVER_CODE: "Mã Tài Xế",
+        EMAIL: "Email",
     },
 
     Statistical: {
@@ -460,6 +462,28 @@ const Strings = {
 
     DialogShowCarBroken: {
         TITLE: "Thông Tin Tình Trạng Xe",
+    },
+
+    DialogDriverManagementFilter: {
+        TITLE: "Bộ Lọc Tài Xế",
+        EXPIRE_LICENSE: "Hạn Giấy Phép: ",
+        DRIVER_CODE: "Mã Tài Xế: ",
+        ENTER_DRIVER_CODE: "-- Nhập Mã Tài Xế --",
+        FULL_NAME: "Họ Tên: ",
+        ENTER_FULL_NAME: "-- Nhập Họ Tên --",
+        EMAIL: "Email: ",
+        ENTER_EMAIL: "-- Nhập Email --",
+        PHONE: "Điện Thoại",
+        ENTER_PHONE: "-- Nhập Số Điện Thoại --",
+        DRIVER_LICENSE: "Giấy Phép: ",
+        NUMBER_OF_TRIPS: "Số Chuyến Đi: ",
+        ENTER_NUMBER_OF_TRIPS: "-- Nhập Số Chuyến Đi --",
+        CHOOSE_DRIVER_LICENSE: "-- Chọn Giấy Phép --",
+        STATUS: "Trạng Thái: ",
+        CHOOSE_STATUS: "-- Chọn Trạng Thái --",
+        REVIEW: "Đánh Giá: ",
+        EXPIRES: "Hết Hạn",
+        NOT_EXPIRES: "Còn Hạn",
     },
 };
 

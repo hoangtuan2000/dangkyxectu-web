@@ -23,12 +23,12 @@ const CarStatusOfTripServices = {
                 return err;
             });
     },
-    getDriverList: async (data) => {
+    getDriverListForFilter: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
             .post(
-                Constants.ApiPath.CarStatusOfTrip.GET_DRIVER_LIST,
+                Constants.ApiPath.CarStatusOfTrip.GET_DRIVER_LIST_FOR_FILTER,
                 data,
                 {
                     headers: {
