@@ -129,8 +129,9 @@ function DriverManagement() {
             codeDriver: codeDriver,
             fullNameDriver: fullNameDriver,
             emailDriver: emailDriver,
-            phoneDrive: phoneDriver,
+            phoneDriver: phoneDriver,
         };
+
         const res = await DriverManagementServices.getDriverList({
             ...data,
         });

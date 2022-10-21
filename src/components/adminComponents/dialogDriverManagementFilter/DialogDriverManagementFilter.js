@@ -119,7 +119,7 @@ function DialogDriverManagementFilter({
         if (helper.isValidStarNumber(val) || val == null) {
             setDataSendApi({
                 ...dataSendApi,
-                starNumber: val == null ? 0 : val,
+                starNumber: val == null ? "0" : val,
             });
         }
     };
@@ -261,26 +261,31 @@ function DialogDriverManagementFilter({
                     <Rating
                         sx={{ marginLeft: 1 }}
                         value={dataSendApi.starNumber}
-                        precision={0.5}
+                        precision={1}
                         // size="small"
                         onChange={(e, val) => {
                             handleChangeRating(val);
                         }}
                     />
-                    {dataSendApi.starNumber && (
-                        <Tooltip arrow title={Strings.Common.DETELE}>
-                            <IconButton
-                                color="error"
-                                onClick={handleDeleteRating}
-                            >
-                                <ClearIcon
-                                    sx={{
-                                        fontSize: "17px !important",
-                                        fontWeight: "bold",
-                                    }}
-                                />
-                            </IconButton>
-                        </Tooltip>
+                    {dataSendApi.starNumber && dataSendApi.starNumber >= 0 && (
+                        <>
+                            <span style={{ marginLeft: 5 }}>
+                                {dataSendApi.starNumber}
+                            </span>
+                            <Tooltip arrow title={Strings.Common.DETELE}>
+                                <IconButton
+                                    color="error"
+                                    onClick={handleDeleteRating}
+                                >
+                                    <ClearIcon
+                                        sx={{
+                                            fontSize: "17px !important",
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                        </>
                     )}
                 </BoxContent>
 
