@@ -23,6 +23,7 @@ import { DriverManagementServices } from "../../../services/adminServices/Driver
 import DialogCarRegistrationManagementFilter from "../../../components/adminComponents/dialogCarRegistrationManagementFilter/DialogCarRegistrationManagementFilter";
 import DialogDriverManagementFilter from "../../../components/adminComponents/dialogDriverManagementFilter/DialogDriverManagementFilter";
 import helper from "../../../common/helper";
+import DialogCreateDriver from "../../../components/adminComponents/dialogCreateDriver/DialogCreateDriver";
 
 const rowsTest = [
     {
@@ -82,6 +83,9 @@ function DriverManagement() {
         title: null,
         content: null,
     });
+
+    const [dialogCreateDriver, setDialogCreateDriver] = useState(false);
+
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
         pageSize: Constants.Common.LIMIT_ENTRY,
@@ -317,6 +321,23 @@ function DriverManagement() {
         });
     };
 
+    const handleGetCarListForAdminWithFilter = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        await getDriverList(
+            dataInfo.page,
+            dataInfo.pageSize,
+            data.driverLicense,
+            data.driverStatus,
+            data.starNumber,
+            data.licenseExpires,
+            data.numberOfTrip,
+            data.codeDriver,
+            data.fullNameDriver,
+            data.emailDriver,
+            data.phoneDriver
+        );
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverList();
@@ -361,7 +382,7 @@ function DriverManagement() {
                     variant="contained"
                     size="small"
                     startIcon={<PersonAddIcon />}
-                    // onClick={() => setDialogCreateCar(true)}
+                    onClick={() => setDialogCreateDriver(true)}
                 >
                     {Strings.DriverManagement.ADD_DRIVER}
                 </ButtonStyle>
@@ -379,20 +400,28 @@ function DriverManagement() {
                 }}
             />
 
+            <DialogCreateDriver
+                open={dialogCreateDriver}
+                handleClose={() => setDialogCreateDriver(false)}
+                handleGetCarListForAdminWithFilter={
+                    handleGetCarListForAdminWithFilter
+                }
+            />
+
             <DialogDriverManagementFilter
                 open={dialogDriverManagementFilter}
                 handleClose={() => setDialogDriverManagementFilter(false)}
                 handleRefreshDataFilter={handleRefreshDataFilter}
                 onSubmit={(e) => handleFilter(e)}
-
-                // defaultCarStatus={dataFilter.carStatus}
-                // defaultCarType={dataFilter.carType}
-                // defaultCarBrand={dataFilter.carBrand}
-                // defaultLicensePlates={dataFilter.licensePlates}
-                // defaultCarCode={dataFilter.carCode}
-                // defaultLicenseExpires={dataFilter.licenseExpires}
-                // defaultHaveTrip={dataFilter.haveTrip}
-                // defaultHaveMaintenance={dataFilter.haveMaintenance}
+                defaultDriverLicense={dataFilter.driverLicense}
+                defaultDriverStatus={dataFilter.driverStatus}
+                defaultStarNumber={dataFilter.starNumber}
+                defaultLicenseExpires={dataFilter.licenseExpires}
+                defaultNumberOfTrip={dataFilter.numberOfTrip}
+                defaultCodeDriver={dataFilter.codeDriver}
+                defaultFullNameDriver={dataFilter.fullNameDriver}
+                defaultEmailDriver={dataFilter.emailDriver}
+                defaultPhoneDriver={dataFilter.phoneDriver}
             />
 
             <ModalError

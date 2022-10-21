@@ -485,6 +485,33 @@ const Strings = {
         EXPIRES: "Hết Hạn",
         NOT_EXPIRES: "Còn Hạn",
     },
+
+    DialogCreateDriver: {
+        TITLE: "Thêm Tài Xế",
+        FULL_NAME: "Họ Tên: ",
+        ENTER_FULL_NAME: "-- Nhập Họ Tên --",
+        CODE_DRIVER: "Mã Tài Xế: ",
+        ENTER_CODE_DRIVER: "-- Nhập Mã Tài Xế --",
+        EMAIL: "Email: ",
+        ENTER_EMAIL: "-- Nhập Email --",
+        PASSWORD: "Mật Khẩu: ",
+        ENTER_PASSWORD: "-- Nhập Mật Khẩu --",
+        PHONE: "Điện Thoại: ",
+        ENTER_PHONE: "-- Nhập Điện Thoại --",
+        LICENSE_TERM: "Hạn Giấy Phép: ",
+        DRIVER_LICENSE: "Bằng Lái Xe: ",
+        CHOOSE_DRIVER_LICENSE: "-- Chọn Bằng Lái Xe --",
+        ADDRESS: "Địa Chỉ: ",
+        ENTER_FULL_NAME_PLEASE: "Vui Lòng Nhập Họ Tên",
+        SUPPORT_FULL_NAME: "Tên Không Quá 250 Ký Tự",
+        ENTER_CODE_PLEASE: "Vui Lòng Nhập Mã Tài Xế",
+        SUPPORT_CODE: "Tối Đa 8 Ký Tự",
+        CHOOSE_TIME_PLEASE: "Vui Lòng Chọn Thời Gian",
+        CHOOSE_DRIVER_LICENSE_PLEASE: "Vui Lòng Chọn Bằng Lái Xe",
+        ENTER_ADDRESS: "-- Nhập Địa Chỉ --",
+        CHOOSE_ADDRESS: "-- Chọn Địa Chỉ --",
+        TITLE_MODAL_ADDRESS: "Chọn Địa Chỉ",
+    },
 };
 
 export default Strings;
