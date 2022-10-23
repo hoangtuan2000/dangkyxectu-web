@@ -11,29 +11,26 @@ import {
 } from "@mui/material";
 import {
     AutocompleteStyle,
-    BoxImg,
     BoxLeft,
     BoxRight,
     ButtonFeatures,
     ButtonStyled,
     DialogContainer,
-    Img,
     TextError,
     TextInput,
     TextStyle,
     Title,
     TitleInput,
 } from "./DialogCreateDriverCustomStyles";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import KeyIcon from "@mui/icons-material/Key";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -46,17 +43,19 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import helper from "../../../common/helper";
-import { DialogCreateCarServices } from "../../../services/adminServices/DialogCreateCarServices";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import ModalShowAddress from "../../modalShowAddress/ModalShowAddress";
+import { DialogCreateDriverServices } from "../../../services/adminServices/DialogCreateDriverServices";
 registerLocale("vi", vi);
 
 function DialogCreateDriver({
     open,
     handleClose,
-    handleGetCarListForAdminWithFilter,
+    handleGetDriverListForAdminWithFilter,
 }) {
     const theme = useTheme();
+
+    const ModalShowAddressRef = useRef(); // use call reset address function
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -68,22 +67,19 @@ function DialogCreateDriver({
     const [modalShowAddress, setModalShowAddress] = useState(false);
     const [dialogConfirmation, setDialogConfirmation] = useState({
         open: false,
-        title: Strings.Common.DO_YOU_WANT_TO_ADD_CAR,
-        content: Strings.Common.ADD_CAR_CONFIRMATION,
+        title: Strings.Common.DO_YOU_WANT_TO_ADD_DRIVER,
+        content: Strings.Common.ADD_DRIVER_CONFIRMATION,
         handleSubmit: () => {},
     });
 
-    const [selectDates, setSelectDates] = useState({
-        startDate: null,
-        endDate: null,
-    });
+    const [selectDates, setSelectDates] = useState();
     const [errorData, setErrorData] = useState({
         fullName: false,
         code: false,
         email: false,
         password: false,
         phone: false,
-        date: false,
+        driverLicenseExpirationDate: false,
         driverLicense: false,
         address: false,
         idWardAddress: false,
@@ -101,8 +97,7 @@ function DialogCreateDriver({
         email: null,
         password: null,
         phone: null,
-        startDate: null,
-        endDate: null,
+        driverLicenseExpirationDate: null,
         address: null,
         ward: null,
         district: null,
@@ -140,6 +135,51 @@ function DialogCreateDriver({
                 content: res.name || null,
             });
         }
+    };
+    const createDriver = async () => {
+        await setBackDrop(true);
+        const res = await DialogCreateDriverServices.createDriver({
+            idDriverLicense: dataSendApi.driverLicense.idDriverLicense,
+            fullName: dataSendApi.fullName,
+            code: dataSendApi.code,
+            email: dataSendApi.email,
+            password: dataSendApi.password,
+            phone: dataSendApi.phone,
+            driverLicenseExpirationDate:
+                dataSendApi.driverLicenseExpirationDate,
+            address: dataSendApi.address,
+            idWard: dataSendApi.ward.idWard,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                handleGetDriverListForAdminWithFilter();
+                handleRefreshInput();
+                setModalSuccess(true);
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
     };
 
     const ButtonDate = forwardRef(
@@ -235,6 +275,11 @@ function DialogCreateDriver({
             district: e.district,
             province: e.province,
         });
+        setErrorData({
+            ...errorData,
+            address: helper.isNullOrEmpty(address) ? true : false,
+            idWardAddress: helper.isNullOrEmpty(address) ? true : false,
+        });
     };
 
     const handleSelectDriverLicense = (e) => {
@@ -254,6 +299,17 @@ function DialogCreateDriver({
             ...dataSendApi,
             phone: e.target.value,
         });
+        !helper.isValidPhoneNumber(e.target.value)
+            ? setErrorData({
+                  ...errorData,
+                  phone: true,
+                  helperTextPhone: Strings.DialogCreateDriver.SUPPORT_PHONE,
+              })
+            : setErrorData({
+                  ...errorData,
+                  phone: false,
+                  helperTextPhone: null,
+              });
     };
 
     const handleChangePassword = (e) => {
@@ -261,6 +317,22 @@ function DialogCreateDriver({
             ...dataSendApi,
             password: e.target.value,
         });
+        !helper.isValidStringBetweenMinMaxLength(
+            e.target.value,
+            Constants.Common.MIN_LENGTH_PASSWORD,
+            Constants.Common.MAX_LENGTH_PASSWORD
+        )
+            ? setErrorData({
+                  ...errorData,
+                  password: true,
+                  helperTextPassword:
+                      Strings.DialogCreateDriver.SUPPORT_PASSWORD,
+              })
+            : setErrorData({
+                  ...errorData,
+                  password: false,
+                  helperTextPassword: null,
+              });
     };
 
     const handleChangeEmail = (e) => {
@@ -268,6 +340,17 @@ function DialogCreateDriver({
             ...dataSendApi,
             email: e.target.value,
         });
+        !helper.isValidEmail(e.target.value)
+            ? setErrorData({
+                  ...errorData,
+                  email: true,
+                  helperTextEmail: Strings.DialogCreateDriver.SUPPORT_EMAIL,
+              })
+            : setErrorData({
+                  ...errorData,
+                  email: false,
+                  helperTextEmail: null,
+              });
     };
 
     const handleChangeFullName = (e) => {
@@ -275,6 +358,22 @@ function DialogCreateDriver({
             ...dataSendApi,
             fullName: e.target.value,
         });
+        !helper.isValidStringBetweenMinMaxLength(
+            e.target.value,
+            Constants.Common.MIN_LENGTH_FULL_NAME,
+            Constants.Common.MAX_LENGTH_FULL_NAME
+        )
+            ? setErrorData({
+                  ...errorData,
+                  fullName: true,
+                  helperTextFullName:
+                      Strings.DialogCreateDriver.SUPPORT_FULL_NAME,
+              })
+            : setErrorData({
+                  ...errorData,
+                  fullName: false,
+                  helperTextFullName: null,
+              });
     };
 
     const handleChangeCode = (e) => {
@@ -282,92 +381,199 @@ function DialogCreateDriver({
             ...dataSendApi,
             code: e.target.value,
         });
+        !helper.isValidStringBetweenMinMaxLength(
+            e.target.value,
+            Constants.Common.MIN_LENGTH_CODE,
+            Constants.Common.MAX_LENGTH_CODE
+        )
+            ? setErrorData({
+                  ...errorData,
+                  code: true,
+                  helperTextCode: Strings.DialogCreateDriver.SUPPORT_CODE,
+              })
+            : setErrorData({
+                  ...errorData,
+                  code: false,
+                  helperTextCode: null,
+              });
     };
 
     const handleChangeDate = (dates) => {
-        const [start, end] = dates;
-        setSelectDates({
-            startDate: start,
-            endDate: end,
-        });
+        setSelectDates(dates);
         setDataSendApi({
             ...dataSendApi,
-            startDate: Math.floor(new Date(start).getTime()),
-            endDate: Math.floor(new Date(end).getTime()),
+            driverLicenseExpirationDate: Math.floor(new Date(dates).getTime()),
         });
         setErrorData({
             ...errorData,
-            date: !start || !end ? true : false,
+            driverLicenseExpirationDate: !dates ? true : false,
         });
     };
 
     const handleValidateData = () => {
-        // if (
-        //     !dataSendApi.image ||
-        //     !dataSendApi.licensePlates ||
-        //     !dataSendApi.carBrand ||
-        //     !dataSendApi.carColor ||
-        //     !dataSendApi.carType ||
-        //     helper.isArrayEmpty(dataSendApi.dateCarRegistrationCertificate) ||
-        //     helper.isArrayEmpty(
-        //         dataSendApi.datePeriodicInspectionCertificate
-        //     ) ||
-        //     helper.isArrayEmpty(dataSendApi.dateCarInsurance) ||
-        //     !helper.isValidStringBetweenMinMaxLength(
-        //         dataSendApi.licensePlates,
-        //         Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES,
-        //         Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES
-        //     )
-        // ) {
-        //     setErrorData({
-        //         ...errorData,
-        //         errorImage: helper.isNullOrEmpty(dataSendApi.image),
-        //         errorLicensePlates: helper.isNullOrEmpty(
-        //             dataSendApi.licensePlates
-        //         ),
-        //         errorLicensePlatesLength:
-        //             !helper.isValidStringBetweenMinMaxLength(
-        //                 dataSendApi.licensePlates,
-        //                 Constants.Common.CHARACTERS_MIN_LENGTH_LICENSE_PLATES,
-        //                 Constants.Common.CHARACTERS_MAX_LENGTH_LICENSE_PLATES
-        //             ),
-        //         errorCarType: helper.isNullOrEmpty(dataSendApi.carType),
-        //         errorCarBrand: helper.isNullOrEmpty(dataSendApi.carBrand),
-        //         errorCarColor: helper.isNullOrEmpty(dataSendApi.carColor),
-        //         errorDateCarRegistrationCertificate: helper.isArrayEmpty(
-        //             dataSendApi.dateCarRegistrationCertificate
-        //         ),
-        //         errorDatePeriodicInspectionCertificate: helper.isArrayEmpty(
-        //             dataSendApi.datePeriodicInspectionCertificate
-        //         ),
-        //         errorDateCarInsurance: helper.isArrayEmpty(
-        //             dataSendApi.dateCarInsurance
-        //         ),
-        //     });
-        //     return false;
-        // } else {
-        //     return true;
-        // }
+        if (
+            !dataSendApi.fullName ||
+            !dataSendApi.code ||
+            !dataSendApi.email ||
+            !dataSendApi.password ||
+            !dataSendApi.phone ||
+            !dataSendApi.driverLicenseExpirationDate ||
+            !dataSendApi.driverLicense ||
+            !dataSendApi.address ||
+            !dataSendApi.ward ||
+            !dataSendApi.district ||
+            !dataSendApi.province
+        ) {
+            setErrorData({
+                ...errorData,
+                fullName: !dataSendApi.fullName ? true : false,
+                code: !dataSendApi.code ? true : false,
+                email: !dataSendApi.email ? true : false,
+                password: !dataSendApi.password ? true : false,
+                phone: !dataSendApi.phone ? true : false,
+                driverLicenseExpirationDate:
+                    !dataSendApi.driverLicenseExpirationDate ? true : false,
+                driverLicense: !dataSendApi.driverLicense ? true : false,
+                address: !dataSendApi.address ? true : false,
+                idWardAddress: !dataSendApi.idWardAddress ? true : false,
+                helperTextCode: !dataSendApi.code
+                    ? Strings.DialogCreateDriver.ENTER_CODE_PLEASE
+                    : null,
+                helperTextFullName: !dataSendApi.fullName
+                    ? Strings.DialogCreateDriver.ENTER_FULL_NAME_PLEASE
+                    : null,
+                helperTextEmail: !dataSendApi.email
+                    ? Strings.DialogCreateDriver.ENTER_EMAIL_PLEASE
+                    : null,
+                helperTextPassword: !dataSendApi.password
+                    ? Strings.DialogCreateDriver.ENTER_PASSWORD_PLEASE
+                    : null,
+                helperTextPhone: !dataSendApi.phone
+                    ? Strings.DialogCreateDriver.ENTER_PHONE_PLEASE
+                    : null,
+            });
+            return false;
+        } else if (
+            !helper.isValidStringBetweenMinMaxLength(
+                dataSendApi.fullName,
+                Constants.Common.MIN_LENGTH_FULL_NAME,
+                Constants.Common.MAX_LENGTH_FULL_NAME
+            ) ||
+            !helper.isValidStringBetweenMinMaxLength(
+                dataSendApi.code,
+                Constants.Common.MIN_LENGTH_CODE,
+                Constants.Common.MAX_LENGTH_CODE
+            ) ||
+            !helper.isValidEmail(dataSendApi.email) ||
+            !helper.isValidStringBetweenMinMaxLength(
+                dataSendApi.password,
+                Constants.Common.MIN_LENGTH_PASSWORD,
+                Constants.Common.MAX_LENGTH_PASSWORD
+            ) ||
+            !helper.isValidPhoneNumber(dataSendApi.phone)
+        ) {
+            setErrorData({
+                ...errorData,
+                fullName: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.fullName,
+                    Constants.Common.MIN_LENGTH_FULL_NAME,
+                    Constants.Common.MAX_LENGTH_FULL_NAME
+                )
+                    ? true
+                    : false,
+                code: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.code,
+                    Constants.Common.MIN_LENGTH_CODE,
+                    Constants.Common.MAX_LENGTH_CODE
+                )
+                    ? true
+                    : false,
+                email: !helper.isValidEmail(dataSendApi.email) ? true : false,
+                password: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.password,
+                    Constants.Common.MIN_LENGTH_PASSWORD,
+                    Constants.Common.MAX_LENGTH_PASSWORD
+                )
+                    ? true
+                    : false,
+                phone: !helper.isValidPhoneNumber(dataSendApi.phone)
+                    ? true
+                    : false,
+
+                helperTextCode: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.code,
+                    Constants.Common.MIN_LENGTH_CODE,
+                    Constants.Common.MAX_LENGTH_CODE
+                )
+                    ? Strings.DialogCreateDriver.SUPPORT_CODE
+                    : null,
+                helperTextFullName: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.fullName,
+                    Constants.Common.MIN_LENGTH_FULL_NAME,
+                    Constants.Common.MAX_LENGTH_FULL_NAME
+                )
+                    ? Strings.DialogCreateDriver.SUPPORT_FULL_NAME
+                    : null,
+                helperTextEmail: !helper.isValidEmail(dataSendApi.email)
+                    ? Strings.DialogCreateDriver.SUPPORT_EMAIL
+                    : null,
+                helperTextPassword: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.password,
+                    Constants.Common.MIN_LENGTH_PASSWORD,
+                    Constants.Common.MAX_LENGTH_PASSWORD
+                )
+                    ? Strings.DialogCreateDriver.SUPPORT_PASSWORD
+                    : null,
+                helperTextPhone: !helper.isValidPhoneNumber(dataSendApi.phone)
+                    ? Strings.DialogCreateDriver.SUPPORT_PHONE
+                    : null,
+            });
+            return false;
+        } else {
+            return true;
+        }
     };
 
-    const handleRefreshInput = () => {};
+    const handleRefreshInput = () => {
+        setDataSendApi({
+            driverLicense: null,
+            fullName: null,
+            code: null,
+            email: null,
+            password: null,
+            phone: null,
+            driverLicenseExpirationDate: null,
+            address: null,
+            ward: null,
+            district: null,
+            province: null,
+        });
+
+        setSelectDates();
+
+        setShowAddress();
+
+        //call function of child component: modalShowEndAdderss
+        //=> reset value in modal choosse end address
+        ModalShowAddressRef.current.handleResetAddress();
+    };
 
     const onSubmit = async () => {
-        // const resultValidate = await handleValidateData();
-        // if (resultValidate) {
-        //     setDialogConfirmation({
-        //         ...dialogConfirmation,
-        //         open: true,
-        //         handleSubmit: () => {
-        //             createCar();
-        //         },
-        //     });
-        // }
+        const resultValidate = await handleValidateData();
+        if (resultValidate) {
+            setDialogConfirmation({
+                ...dialogConfirmation,
+                open: true,
+                handleSubmit: () => {
+                    createDriver();
+                },
+            });
+        }
     };
 
     const run = async () => {
         await setBackDrop(true);
-        (await open) && getCommon();
+        await getCommon();
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -572,7 +778,7 @@ function DialogCreateDriver({
                             />
                         </Box>
 
-                        {/* LICENSE_TERM */}
+                        {/* CHOOSE DATE LICENSE_TERM */}
                         <Box sx={{ marginBottom: 1 }}>
                             <TextStyle>
                                 {Strings.DialogCreateDriver.LICENSE_TERM}
@@ -580,24 +786,24 @@ function DialogCreateDriver({
                             <DatePicker
                                 locale="vi"
                                 dateFormat={Constants.Styled.DATE_FORMAT}
-                                selectsRange={true}
-                                startDate={selectDates.startDate}
-                                endDate={selectDates.endDate}
                                 withPortal
                                 customInput={
                                     <ButtonDate
                                         handleRemoveDate={() =>
-                                            handleChangeDate([null, null])
+                                            handleChangeDate(null)
                                         }
-                                        error={errorData.date}
+                                        error={
+                                            errorData.driverLicenseExpirationDate
+                                        }
                                         helperText={
                                             Strings.DialogCreateDriver
                                                 .CHOOSE_TIME_PLEASE
                                         }
                                     />
                                 }
-                                selected={selectDates.startDate}
+                                selected={selectDates}
                                 onChange={handleChangeDate}
+                                showYearDropdown
                             />
                         </Box>
 
@@ -642,19 +848,6 @@ function DialogCreateDriver({
                         <Box>
                             <TitleInput variant="p" component="div">
                                 {Strings.DialogCreateDriver.ADDRESS}
-                                <span
-                                    style={{
-                                        display: errorData.address
-                                            ? "contents"
-                                            : "none",
-                                        color: theme.palette.error.main,
-                                        fontStyle: "normal",
-                                        fontWeight: "bold",
-                                        marginLeft: 10,
-                                    }}
-                                >
-                                    ( 1 - 250 Ký Tự )
-                                </span>
                             </TitleInput>
                             <ButtonStyled
                                 onClick={() => setModalShowAddress(true)}
@@ -703,6 +896,22 @@ function DialogCreateDriver({
                                     </Box>
                                 </Tooltip>
                             </ButtonStyled>
+                            <span
+                                style={{
+                                    display: errorData.address
+                                        ? "contents"
+                                        : "none",
+                                    color: theme.palette.error.light,
+                                    fontStyle: "normal",
+                                    fontSize: 12,
+                                    marginLeft: 10,
+                                }}
+                            >
+                                {
+                                    Strings.DialogCreateDriver
+                                        .ENTER_ADDRESS_PLEASE
+                                }
+                            </span>
                         </Box>
                     </BoxRight>
                 </Box>
@@ -726,6 +935,18 @@ function DialogCreateDriver({
                         onClick={handleClose}
                     >
                         {Strings.Common.EXIT}
+                    </ButtonFeatures>
+
+                    {/* REFRESH BUTTON */}
+                    <ButtonFeatures
+                        size="small"
+                        variant="contained"
+                        endIcon={<RefreshIcon />}
+                        color="warning"
+                        sx={{ marginRight: 1 }}
+                        onClick={handleRefreshInput}
+                    >
+                        {Strings.Common.REFRESH}
                     </ButtonFeatures>
 
                     {/* SUBMIT BUTTON */}
@@ -761,6 +982,7 @@ function DialogCreateDriver({
                 labelInput={Strings.DialogCreateDriver.CHOOSE_ADDRESS}
                 titleModal={Strings.DialogCreateDriver.TITLE_MODAL_ADDRESS}
                 onConfirm={(e) => handleShowAddress(e)}
+                ref={ModalShowAddressRef}
                 // ref={ModalShowEndAddressRef}
                 // defaultAddress={defaultAddress}
                 // defaultProvince={defaultProvince}

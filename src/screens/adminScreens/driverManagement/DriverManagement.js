@@ -321,7 +321,7 @@ function DriverManagement() {
         });
     };
 
-    const handleGetCarListForAdminWithFilter = async () => {
+    const handleGetDriverListForAdminWithFilter = async () => {
         const data = await handleFormatDataFilterSendApi(dataFilter);
         await getDriverList(
             dataInfo.page,
@@ -403,8 +403,8 @@ function DriverManagement() {
             <DialogCreateDriver
                 open={dialogCreateDriver}
                 handleClose={() => setDialogCreateDriver(false)}
-                handleGetCarListForAdminWithFilter={
-                    handleGetCarListForAdminWithFilter
+                handleGetDriverListForAdminWithFilter={
+                    handleGetDriverListForAdminWithFilter
                 }
             />
 
