@@ -97,6 +97,10 @@ const Constants = {
             GET_DRIVER_TO_UPDATE: "/admin/getDriverToUpdate",
             UPDATE_DRIVER: "/admin/updateDriver",
         },
+        Statistical: {
+            GET_ANALYSIS_TOTAL_COMMON: "/admin/getAnalysisTotalCommon",
+            GET_TOTAL_NUMBER_OF_TRIPS_OVER_TIME: "/admin/getTotalNumberOfTripsOverTime",
+        },
     },
 
     Styled: {

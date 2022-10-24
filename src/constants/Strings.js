@@ -199,7 +199,7 @@ const Strings = {
         TOTAL_DRIVER: "Tống Số Tài Xế",
         TOTAL_TRIPS: "Tống Số Chuyến Đi",
         FORM_IS_PENDING_CONFIRMATION: "Đơn Chờ Xác Nhận",
-        LICENSE_EXPIRES: "Giấy Phép Hết Hạn",
+        LICENSE_CAR_EXPIRES: "Giấy Phép Xe Hết Hạn",
     },
 
     DriverTripManager: {
