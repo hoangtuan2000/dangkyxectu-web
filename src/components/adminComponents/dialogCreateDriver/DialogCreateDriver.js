@@ -77,7 +77,7 @@ function DialogCreateDriver({
         fullName: false,
         code: false,
         email: false,
-        password: false,
+        pass: false,
         phone: false,
         driverLicenseExpirationDate: false,
         driverLicense: false,
@@ -86,7 +86,7 @@ function DialogCreateDriver({
         helperTextCode: null,
         helperTextFullName: null,
         helperTextEmail: null,
-        helperTextPassword: null,
+        helperTextPass: null,
         helperTextPhone: null,
     });
     const [showAddress, setShowAddress] = useState();
@@ -95,7 +95,7 @@ function DialogCreateDriver({
         fullName: null,
         code: null,
         email: null,
-        password: null,
+        pass: null,
         phone: null,
         driverLicenseExpirationDate: null,
         address: null,
@@ -143,7 +143,7 @@ function DialogCreateDriver({
             fullName: dataSendApi.fullName,
             code: dataSendApi.code,
             email: dataSendApi.email,
-            password: dataSendApi.password,
+            pass: dataSendApi.pass,
             phone: dataSendApi.phone,
             driverLicenseExpirationDate:
                 dataSendApi.driverLicenseExpirationDate,
@@ -315,7 +315,7 @@ function DialogCreateDriver({
     const handleChangePassword = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            password: e.target.value,
+            pass: e.target.value,
         });
         !helper.isValidStringBetweenMinMaxLength(
             e.target.value,
@@ -324,14 +324,14 @@ function DialogCreateDriver({
         )
             ? setErrorData({
                   ...errorData,
-                  password: true,
-                  helperTextPassword:
+                  pass: true,
+                  helperTextPass:
                       Strings.DialogCreateDriver.SUPPORT_PASSWORD,
               })
             : setErrorData({
                   ...errorData,
-                  password: false,
-                  helperTextPassword: null,
+                  pass: false,
+                  helperTextPass: null,
               });
     };
 
@@ -415,7 +415,7 @@ function DialogCreateDriver({
             !dataSendApi.fullName ||
             !dataSendApi.code ||
             !dataSendApi.email ||
-            !dataSendApi.password ||
+            !dataSendApi.pass ||
             !dataSendApi.phone ||
             !dataSendApi.driverLicenseExpirationDate ||
             !dataSendApi.driverLicense ||
@@ -429,7 +429,7 @@ function DialogCreateDriver({
                 fullName: !dataSendApi.fullName ? true : false,
                 code: !dataSendApi.code ? true : false,
                 email: !dataSendApi.email ? true : false,
-                password: !dataSendApi.password ? true : false,
+                pass: !dataSendApi.pass ? true : false,
                 phone: !dataSendApi.phone ? true : false,
                 driverLicenseExpirationDate:
                     !dataSendApi.driverLicenseExpirationDate ? true : false,
@@ -445,7 +445,7 @@ function DialogCreateDriver({
                 helperTextEmail: !dataSendApi.email
                     ? Strings.DialogCreateDriver.ENTER_EMAIL_PLEASE
                     : null,
-                helperTextPassword: !dataSendApi.password
+                helperTextPass: !dataSendApi.pass
                     ? Strings.DialogCreateDriver.ENTER_PASSWORD_PLEASE
                     : null,
                 helperTextPhone: !dataSendApi.phone
@@ -466,7 +466,7 @@ function DialogCreateDriver({
             ) ||
             !helper.isValidEmail(dataSendApi.email) ||
             !helper.isValidStringBetweenMinMaxLength(
-                dataSendApi.password,
+                dataSendApi.pass,
                 Constants.Common.MIN_LENGTH_PASSWORD,
                 Constants.Common.MAX_LENGTH_PASSWORD
             ) ||
@@ -489,8 +489,8 @@ function DialogCreateDriver({
                     ? true
                     : false,
                 email: !helper.isValidEmail(dataSendApi.email) ? true : false,
-                password: !helper.isValidStringBetweenMinMaxLength(
-                    dataSendApi.password,
+                pass: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.pass,
                     Constants.Common.MIN_LENGTH_PASSWORD,
                     Constants.Common.MAX_LENGTH_PASSWORD
                 )
@@ -517,8 +517,8 @@ function DialogCreateDriver({
                 helperTextEmail: !helper.isValidEmail(dataSendApi.email)
                     ? Strings.DialogCreateDriver.SUPPORT_EMAIL
                     : null,
-                helperTextPassword: !helper.isValidStringBetweenMinMaxLength(
-                    dataSendApi.password,
+                helperTextPass: !helper.isValidStringBetweenMinMaxLength(
+                    dataSendApi.pass,
                     Constants.Common.MIN_LENGTH_PASSWORD,
                     Constants.Common.MAX_LENGTH_PASSWORD
                 )
@@ -540,7 +540,7 @@ function DialogCreateDriver({
             fullName: null,
             code: null,
             email: null,
-            password: null,
+            pass: null,
             phone: null,
             driverLicenseExpirationDate: null,
             address: null,
@@ -716,14 +716,14 @@ function DialogCreateDriver({
                                 variant="outlined"
                                 type={"password"}
                                 size="small"
-                                value={dataSendApi.password || ""}
+                                value={dataSendApi.pass || ""}
                                 onChange={(e) => handleChangePassword(e)}
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="start">
                                             <KeyIcon
                                                 sx={{
-                                                    color: errorData.password
+                                                    color: errorData.pass
                                                         ? theme.palette.error
                                                               .main
                                                         : theme.palette.primary
@@ -733,10 +733,10 @@ function DialogCreateDriver({
                                         </InputAdornment>
                                     ),
                                 }}
-                                error={errorData.password}
+                                error={errorData.pass}
                                 helperText={
-                                    errorData.password &&
-                                    errorData.helperTextPassword
+                                    errorData.pass &&
+                                    errorData.helperTextPass
                                 }
                             />
                         </Box>
