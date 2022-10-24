@@ -24,6 +24,7 @@ import DialogCarRegistrationManagementFilter from "../../../components/adminComp
 import DialogDriverManagementFilter from "../../../components/adminComponents/dialogDriverManagementFilter/DialogDriverManagementFilter";
 import helper from "../../../common/helper";
 import DialogCreateDriver from "../../../components/adminComponents/dialogCreateDriver/DialogCreateDriver";
+import DialogUpdateDriver from "../../../components/adminComponents/dialogUpdateDriver/DialogUpdateDriver";
 
 const rowsTest = [
     {
@@ -85,6 +86,10 @@ function DriverManagement() {
     });
 
     const [dialogCreateDriver, setDialogCreateDriver] = useState(false);
+    const [dialogUpdateDriver, setDialogUpdateDriver] = useState({
+        open: false,
+        idDriver: null,
+    });
 
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -163,6 +168,7 @@ function DriverManagement() {
                             numberOfTrips: item.numberOfTrips,
                             reviews: item.averageStar,
                             status: item.nameUserStatus,
+                            update: item.idDriver,
                         };
                     })
                 );
@@ -338,6 +344,14 @@ function DriverManagement() {
         );
     };
 
+    const handleOpenDialogUpdateDriver = (e) => {
+        setDialogUpdateDriver({
+            ...dialogUpdateDriver,
+            open: true,
+            idDriver: e,
+        });
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverList();
@@ -389,7 +403,7 @@ function DriverManagement() {
             </Box>
 
             <DataGridCustom
-                columns={col()}
+                columns={col((e) => handleOpenDialogUpdateDriver(e))}
                 rows={driverList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -406,6 +420,20 @@ function DriverManagement() {
                 handleGetDriverListForAdminWithFilter={
                     handleGetDriverListForAdminWithFilter
                 }
+            />
+
+            <DialogUpdateDriver
+                open={dialogUpdateDriver.open}
+                handleClose={() =>
+                    setDialogUpdateDriver({
+                        ...dialogUpdateDriver,
+                        open: false,
+                    })
+                }
+                handleGetDriverListForAdminWithFilter={
+                    handleGetDriverListForAdminWithFilter
+                }
+                idDriver={dialogUpdateDriver.idDriver}
             />
 
             <DialogDriverManagementFilter

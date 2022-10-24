@@ -6,7 +6,7 @@ import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import Constants from "../../../constants/Constants";
 
-const col = (handleOpenDialogCarBroken) => {
+const col = (handleOpenDialogUpdateDriver) => {
     let columns = [];
     return (columns = [
         {
@@ -219,8 +219,8 @@ const col = (handleOpenDialogCarBroken) => {
                         <IconButton
                             color="primary"
                             onClick={() =>
-                                handleOpenDialogCarBroken(
-                                    params.row.scheduleCode
+                                handleOpenDialogUpdateDriver(
+                                    params.row.update
                                 )
                             }
                         >
