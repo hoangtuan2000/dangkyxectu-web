@@ -198,15 +198,12 @@ const Strings = {
         TOTAL_CAR: "Tổng Số Xe",
         TOTAL_DRIVER: "Tống Số Tài Xế",
         TOTAL_TRIPS: "Tống Số Chuyến Đi",
+        TOTAL_TRIPS_FROM: "Tống Số Chuyến Đi Từ: ",
         FORM_IS_PENDING_CONFIRMATION: "Đơn Chờ Xác Nhận",
         LICENSE_CAR_EXPIRES: "Giấy Phép Xe Hết Hạn",
     },
 
     DriverTripManager: {
-        TRIP_LIST: "Danh Sách Chuyến Đi",
-    },
-
-    TripManager: {
         TRIP_LIST: "Danh Sách Chuyến Đi",
     },
 

@@ -24,23 +24,24 @@ const ButtonStyle = styled(Button)(({ theme }) => ({
 }));
 
 const BoxContainerCount = styled(Box)(({ theme }) => ({
-    width: "280px",
-    height: "130px",
+    width: "calc(90% / 5)",
+    // width: "220px",
+    height: "100px",
     backgroundColor: theme.palette.action.selected,
     boxShadow: `${theme.palette.text.disabled} 0px 5px 15px`,
     borderRadius: "10px",
     borderLeft: `5px solid ${theme.palette.primary.main}`,
     padding: theme.spacing(2),
     margin: theme.spacing(1),
-    float: "left",
 }));
 
 const BoxTextCount = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "40px",
-    color: theme.palette.text.primary
+    fontSize: "25px",
+    fontWeight: "bold",
+    color: theme.palette.text.primary,
 }));
 
 const TypographyHeaderCount = styled(Typography)(({ theme }) => ({
@@ -48,6 +49,64 @@ const TypographyHeaderCount = styled(Typography)(({ theme }) => ({
     alignItems: "center",
     color: theme.palette.primary.main,
     fontWeight: "bold",
+    fontSize: 15,
 }));
 
-export { BoxContainerCount, ButtonStyle, TypographyHeaderCount, BoxTextCount };
+const BoxContainerChart = styled(Box)(({ theme }) => ({
+    width: "calc(96% / 2)",
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    boxShadow: `${theme.palette.text.disabled} 0px 5px 15px`,
+}));
+
+const TitleChart = styled(Typography)(({ theme }) => ({
+    fontSize: 16,
+    fontWeight: "bold",
+    color: theme.palette.primary.main,
+    // textAlign: 'center'
+}));
+
+const BoxTitleChart = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    position: "relative",
+}));
+
+const FabStyle = styled(Fab)(({ theme }) => ({
+    marginBottom: 5,
+    color: "white",
+    [theme.breakpoints.up("mobileS")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("sm")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("md")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("lg")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("xl")]: {
+        transform: "scale(0.6)",
+    },
+}));
+
+export {
+    BoxContainerCount,
+    ButtonStyle,
+    TypographyHeaderCount,
+    BoxTextCount,
+    BoxContainerChart,
+    TitleChart,
+    FabStyle,
+    BoxTitleChart
+};
