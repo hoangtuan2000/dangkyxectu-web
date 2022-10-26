@@ -51,7 +51,7 @@ import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
-import AnalysisTotalTrips from "./AnalysisTotalTrips";
+import AnalysisTotalTrips from "../../../components/adminComponents/analysisTotalTrips/AnalysisTotalTrips";
 registerLocale("vi", vi);
 
 const BoxCount = ({

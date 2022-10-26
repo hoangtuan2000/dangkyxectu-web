@@ -19,6 +19,22 @@ const GlobalService = {
                 return err;
             });
     },
+    getSchedule: async (data) => {
+        const token = store.getState().currentUser.user.token;
+        const accessToken = store.getState().currentUser.user.accessToken;
+        return await axiosInstance
+            .post(Constants.ApiPath.Common.GET_SCHEDULE, data, {
+                headers: {
+                    Authorization: `${accessToken} ${token}`,
+                },
+            })
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
 };
 
 export { GlobalService };

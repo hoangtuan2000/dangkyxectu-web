@@ -13,6 +13,7 @@ const Constants = {
     ApiPath: {
         Common: {
             GET_COMMON: "/global/getCommon",
+            GET_SCHEDULE: "/global/getSchedule",
         },
         Login: {
             LOGIN: "/global/login",
@@ -99,7 +100,12 @@ const Constants = {
         },
         Statistical: {
             GET_ANALYSIS_TOTAL_COMMON: "/admin/getAnalysisTotalCommon",
-            GET_TOTAL_NUMBER_OF_TRIPS_OVER_TIME: "/admin/getTotalNumberOfTripsOverTime",
+        },
+        AnalysisTotalTrips: {
+            GET_TOTAL_NUMBER_OF_TRIPS_OVER_TIME:
+                "/admin/getTotalNumberOfTripsOverTime",
+            GET_DATA_TOTAL_NUMBER_OF_TRIPS_OVER_TIME:
+                "/admin/getDataTotalNumberOfTripsOverTime",
         },
     },
 

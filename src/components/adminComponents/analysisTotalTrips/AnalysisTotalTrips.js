@@ -1,63 +1,45 @@
 import {
     Badge,
     Box,
-    Typography,
     useTheme,
     Tooltip,
     IconButton,
     SpeedDial,
     SpeedDialAction,
-    SpeedDialIcon,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import {
-    BarChart,
-    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip as TooltipChart,
     Legend,
-    Label,
     ResponsiveContainer,
-    LabelList,
     AreaChart,
-    ReferenceLine,
     Area,
-    LineChart,
-    Line,
 } from "recharts";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import EventIcon from "@mui/icons-material/Event";
 import TodayIcon from "@mui/icons-material/Today";
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import InfoIcon from "@mui/icons-material/Info";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import CountUp from "react-countup";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
 import {
     BoxContainerChart,
-    BoxContainerCount,
-    BoxTextCount,
     BoxTitleChart,
-    FabStyle,
+    ButtonFeatures,
     TitleChart,
-    TypographyHeaderCount,
-} from "./StatisticalCustomStyles";
+} from "./AnalysisTotalTripsCustomStyles";
 import ModalError from "../../../components/modalError/ModalError";
 import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
 import BackDrop from "../../../components/backDrop/BackDrop";
-import { StatisticalServices } from "../../../services/adminServices/StatisticalServices";
+import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
 import Constants from "../../../constants/Constants";
 import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
+import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisTotalTrips";
 registerLocale("vi", vi);
 
 function AnalysisTotalTrips() {
@@ -75,6 +57,13 @@ function AnalysisTotalTrips() {
         content: null,
     });
 
+    const [dialogShowAnalysisTotalTrips, setDialogShowAnalysisTotalTrips] =
+        useState({
+            open: false,
+            startDate: null,
+            endDate: null,
+        });
+
     const [selectedDates, setSelectedDates] = useState({
         startDate: null,
         endDate: null,
@@ -88,10 +77,11 @@ function AnalysisTotalTrips() {
 
     const getTotalNumberOfTripsOverTime = async (startDate, endDate) => {
         await setBackDrop(true);
-        const res = await StatisticalServices.getTotalNumberOfTripsOverTime({
-            startDate: startDate,
-            endDate: endDate,
-        });
+        const res =
+            await AnalysisTotalTripsServices.getTotalNumberOfTripsOverTime({
+                startDate: startDate,
+                endDate: endDate,
+            });
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -145,7 +135,7 @@ function AnalysisTotalTrips() {
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(lastQuarter).getTime())
             );
-        } else {
+        } else if (!start && lastQuarter) {
             getTotalNumberOfTripsOverTime();
         }
     };
@@ -165,7 +155,7 @@ function AnalysisTotalTrips() {
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(lastDayOfEndMonth).getTime())
             );
-        } else {
+        } else if (!start && !lastDayOfEndMonth) {
             getTotalNumberOfTripsOverTime();
         }
     };
@@ -183,9 +173,18 @@ function AnalysisTotalTrips() {
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(end).getTime())
             );
-        } else {
+        } else if (!start && !end) {
             getTotalNumberOfTripsOverTime();
         }
+    };
+
+    const handleOpenDialogShowAnalysisTotalTrips = () => {
+        setDialogShowAnalysisTotalTrips({
+            ...dialogShowAnalysisTotalTrips,
+            open: true,
+            startDate: Math.floor(new Date(selectedDates.startDate).getTime()),
+            endDate: Math.floor(new Date(selectedDates.endDate).getTime()),
+        });
     };
 
     const run = async () => {
@@ -337,7 +336,7 @@ function AnalysisTotalTrips() {
                     </Box>
                 </BoxTitleChart>
 
-                <ResponsiveContainer width={"100%"} height={250}>
+                <ResponsiveContainer width={"100%"} height={300}>
                     <AreaChart
                         data={totalScheduleListOverTime}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
@@ -387,50 +386,77 @@ function AnalysisTotalTrips() {
                         />
                     </AreaChart>
                 </ResponsiveContainer>
+
+                {/* DETAIL BUTTON */}
+                <Box>
+                    <ButtonFeatures
+                        size="small"
+                        variant="contained"
+                        endIcon={<VisibilityIcon />}
+                        color="success"
+                        onClick={handleOpenDialogShowAnalysisTotalTrips}
+                    >
+                        {Strings.Common.DETAIL}
+                    </ButtonFeatures>
+                </Box>
             </Box>
 
-            {/* DATE */}
-            <DatePicker
-                locale="vi"
-                dateFormat={Constants.Styled.DATE_FORMAT}
-                selectsRange={true}
-                startDate={selectedDates.startDate}
-                endDate={selectedDates.endDate}
-                withPortal
-                customInput={<></>}
-                selected={selectedDates.startDate}
-                onChange={handleChangeDate}
-                ref={refDate}
-            />
+            <Box sx={{ position: "fixed", bottom: -500, left: -500 }}>
+                {/* DATE */}
+                <DatePicker
+                    locale="vi"
+                    dateFormat={Constants.Styled.DATE_FORMAT}
+                    selectsRange={true}
+                    startDate={selectedDates.startDate}
+                    endDate={selectedDates.endDate}
+                    withPortal
+                    customInput={<></>}
+                    selected={selectedDates.startDate}
+                    onChange={handleChangeDate}
+                    ref={refDate}
+                />
 
-            {/* MONTH */}
-            <DatePicker
-                locale="vi"
-                dateFormat={Constants.Styled.DATE_FORMAT}
-                selectsRange={true}
-                startDate={selectedDates.startDate}
-                endDate={selectedDates.endDate}
-                withPortal
-                customInput={<></>}
-                selected={selectedDates.startDate}
-                onChange={handleChangeDateMonth}
-                showMonthYearPicker
-                ref={refDateMonth}
-            />
+                {/* MONTH */}
+                <DatePicker
+                    locale="vi"
+                    dateFormat={Constants.Styled.DATE_FORMAT}
+                    selectsRange={true}
+                    startDate={selectedDates.startDate}
+                    endDate={selectedDates.endDate}
+                    withPortal
+                    customInput={<></>}
+                    selected={selectedDates.startDate}
+                    onChange={handleChangeDateMonth}
+                    showMonthYearPicker
+                    ref={refDateMonth}
+                />
 
-            {/* QUARTER */}
-            <DatePicker
-                locale="vi"
-                dateFormat={Constants.Styled.DATE_FORMAT}
-                selectsRange={true}
-                startDate={selectedDates.startDate}
-                endDate={selectedDates.endDate}
-                withPortal
-                customInput={<></>}
-                selected={selectedDates.startDate}
-                onChange={handleChangeDateQuarter}
-                showQuarterYearPicker
-                ref={refDateQuarter}
+                {/* QUARTER */}
+                <DatePicker
+                    locale="vi"
+                    dateFormat={Constants.Styled.DATE_FORMAT}
+                    selectsRange={true}
+                    startDate={selectedDates.startDate}
+                    endDate={selectedDates.endDate}
+                    withPortal
+                    customInput={<></>}
+                    selected={selectedDates.startDate}
+                    onChange={handleChangeDateQuarter}
+                    showQuarterYearPicker
+                    ref={refDateQuarter}
+                />
+            </Box>
+
+            <DialogShowAnalysisTotalTrips
+                open={dialogShowAnalysisTotalTrips.open}
+                handleClose={() =>
+                    setDialogShowAnalysisTotalTrips({
+                        ...dialogShowAnalysisTotalTrips,
+                        open: false,
+                    })
+                }
+                startDate={dialogShowAnalysisTotalTrips.startDate}
+                endDate={dialogShowAnalysisTotalTrips.endDate}
             />
 
             <ModalError
