@@ -107,6 +107,9 @@ const Constants = {
             GET_DATA_TOTAL_NUMBER_OF_TRIPS_OVER_TIME:
                 "/admin/getDataTotalNumberOfTripsOverTime",
         },
+        AnalysisDriverLicense: {
+            GET_ANALYSIS_DRIVER_LICENSE: "/admin/getAnalysisDriverLicense",
+        },
     },
 
     Styled: {
@@ -262,6 +265,16 @@ const Constants = {
         DRIVER: "driver",
         ADMIN_USER: "admin user",
     },
+
+    Colors: [
+        "#021bd6",
+        "#029dd6",
+        "#02d65e",
+        "#d6af02",
+        "#d63b02",
+        "#d602c8",
+        "#7302d6",
+    ],
 };
 
 export default Constants;

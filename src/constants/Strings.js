@@ -615,6 +615,10 @@ const Strings = {
         YES: "Có",
         NO: "Không",
     },
+
+    AnalysisDriverLicense: {
+        TITLE: "Tổng Số Tài Xế Theo Bằng Lái",
+    },
 };
 
 export default Strings;

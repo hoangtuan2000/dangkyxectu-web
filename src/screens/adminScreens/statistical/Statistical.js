@@ -52,6 +52,7 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import AnalysisTotalTrips from "../../../components/adminComponents/analysisTotalTrips/AnalysisTotalTrips";
+import AnalysisDriverLicense from "../../../components/adminComponents/analysisDriverLicense/AnalysisDriverLicense";
 registerLocale("vi", vi);
 
 const BoxCount = ({
@@ -217,6 +218,7 @@ function Statistical() {
                 }}
             >
                 <AnalysisTotalTrips />
+                <AnalysisDriverLicense />
             </Box>
 
             <ModalError
