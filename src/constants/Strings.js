@@ -84,6 +84,8 @@ const Strings = {
         INFO_CAR: "Thông Tin Xe",
         CAR_STATUS: "Tình Trạng Xe",
         DATA_IS_UNCHANGED: "Dữ Liệu Không Thay Đổi",
+        YES: "Có",
+        NO: "Không",
     },
 
     Login: {
@@ -618,6 +620,32 @@ const Strings = {
 
     AnalysisDriverLicense: {
         TITLE: "Tổng Số Tài Xế Theo Bằng Lái",
+    },
+    DialogShowAnalysisDriverLicense: {
+        TITLE: "Danh Sách Tài Xế",
+        DRIVER_LICENSE: "Bằng Lái Xe",
+        CODE_DRIVER: "Mã Tài Xế",
+        FULL_NAME: "Họ Tên",
+        EMAIL: "Email",
+        PHONE: "Điện Thoại",
+    },
+    DialogShowAnalysisDriverLicenseFilter: {
+        TITLE: "Bộ Lọc Bằng Lái Xe",
+        HAVE_DRIVER: "Có Tài Xế: ",
+        DRIVER_CODE: "Mã Tài Xế: ",
+        ENTER_DRIVER_CODE: "-- Nhập Mã Tài Xế --",
+        FULL_NAME: "Họ Tên: ",
+        ENTER_FULL_NAME: "-- Nhập Họ Tên --",
+        EMAIL: "Email: ",
+        ENTER_EMAIL: "-- Nhập Email --",
+        PHONE: "Điện Thoại: ",
+        ENTER_PHONE: "-- Nhập Điện Thoại --",
+        ADDRESS: "Địa Chỉ: ",
+        ENTER_ADDRESS: "--Nhập Địa Chỉ --",
+        DRIVER_LICENSE: "Bằng Lái: ",
+        CHOOSE_DRIVER_LICENSE: "-- Chọn Bằng Lái --",
+        STATUS: 'Trạng Thái: ',
+        CHOOSE_STATUS: '-- Chọn Trạng Thái --',
     },
 };
 

@@ -1,7 +1,6 @@
-import { useState, useEffect, forwardRef, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
     Box,
-    Button,
     DialogActions,
     DialogContent,
     FormControlLabel,
@@ -22,50 +21,41 @@ import {
     TextInput,
     TextStyle,
     Title,
-} from "./DialogShowAnalysisTotalTripsFilterCustomStyles";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+} from "./DialogShowAnalysisDriverLicenseFilterCustomStyles";
+import QrCodeIcon from "@mui/icons-material/QrCode";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import EmailIcon from "@mui/icons-material/Email";
 import ClearIcon from "@mui/icons-material/Clear";
 import CancelIcon from "@mui/icons-material/Cancel";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PersonIcon from "@mui/icons-material/Person";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
-import DatePicker from "react-datepicker";
-import { registerLocale } from "react-datepicker";
-import vi from "date-fns/locale/vi";
 import ModalShowAddress from "../../modalShowAddress/ModalShowAddress";
 import { GlobalService } from "../../../services/GlobalServices";
 import helper from "../../../common/helper";
-registerLocale("vi", vi);
 
-function DialogShowAnalysisTotalTripsFilter({
+function DialogShowAnalysisDriverLicenseFilter({
     open,
     handleClose,
     onSubmit = () => {},
     handleRefreshDataFilter,
-    defaultStatus,
-    defaultCarType,
-    defaultScheduleCode,
-    defaultInfoUser,
-    defaultInfoDriver,
-    defaultLicensePlates,
-    defaultFaculty,
+    defaultHaveDriver,
+    defaultDriverLicense,
+    defaultCodeDriver,
+    defaultFullNameDriver,
+    defaultEmailDriver,
+    defaultPhoneDriver,
+    defaultUserStatus,
     defaultAddress,
     defaultWard,
     defaultDistrict,
     defaultProvince,
-    defaultStartDateSchedule,
-    defaultEndDateSchedule,
-    defaultHaveSchedule,
 }) {
     const theme = useTheme();
 
@@ -80,109 +70,40 @@ function DialogShowAnalysisTotalTripsFilter({
     });
 
     const [modalShowStartAdderss, setModalShowStartAdderss] = useState(false);
-    const [selectedDates, setSelectedDates] = useState({
-        startDate: null,
-        endDate: null,
-    });
 
-    const [facultyList, setFacultyList] = useState([]);
-    const [scheduleStatusList, setScheduleStatusList] = useState([]);
-    const [carTypeList, setCarTypeList] = useState([]);
+    const [driverLicenseList, setDriverLicenseList] = useState([]);
+    const [userStatusList, setUserStatusList] = useState([]);
 
     const [showAddress, setShowAddress] = useState();
     const [dataSendApi, setDataSendApi] = useState({
-        status: defaultStatus ? [...defaultStatus] : [],
-        carType: defaultCarType ? [...defaultCarType] : [],
-        faculty: defaultFaculty ? [...defaultFaculty] : [],
-        haveSchedule: defaultHaveSchedule || null,
-        scheduleCode: defaultScheduleCode || null,
-        infoUser: defaultInfoUser || null,
-        infoDriver: defaultInfoDriver || null,
-        licensePlates: defaultLicensePlates || null,
+        driverLicense: defaultDriverLicense ? [...defaultDriverLicense] : [],
+        userStatus: defaultUserStatus ? [...defaultUserStatus] : [],
+        haveDriver: defaultHaveDriver || null,
+        codeDriver: defaultCodeDriver || null,
+        fullNameDriver: defaultFullNameDriver || null,
+        emailDriver: defaultEmailDriver || null,
+        phoneDriver: defaultPhoneDriver || null,
         address: defaultAddress || null,
         ward: defaultWard || null,
         district: defaultDistrict || null,
         province: defaultProvince || null,
-        startDateSchedule: defaultStartDateSchedule || null,
-        endDateSchedule: defaultEndDateSchedule || null,
-    });
-
-    const ButtonDate = forwardRef(({ value, onClick }, ref) => {
-        return (
-            <Tooltip
-                title={
-                    value
-                        ? value
-                        : Strings.DialogShowAnalysisTotalTripsFilter.CHOOSE_TIME
-                }
-            >
-                <Box
-                    sx={{
-                        position: "relative",
-                        width: "fit-content",
-                    }}
-                >
-                    <ButtonStyled
-                        onClick={onClick}
-                        ref={ref}
-                        variant="outlined"
-                        endIcon={
-                            <CalendarMonthIcon
-                                sx={{
-                                    color: theme.palette.primary.main,
-                                    display:
-                                        selectedDates.startDate &&
-                                        selectedDates.startDate &&
-                                        "none",
-                                }}
-                            />
-                        }
-                    >
-                        {value
-                            ? value
-                            : Strings.DialogShowAnalysisTotalTripsFilter
-                                  .CHOOSE_TIME}
-                    </ButtonStyled>
-                    {selectedDates.startDate && selectedDates.startDate && (
-                        <Button
-                            size="small"
-                            onClick={() => {
-                                handleChangeDate([null, null]);
-                            }}
-                            sx={{
-                                zIndex: 99999,
-                                position: "absolute",
-                                top: 5,
-                                right: 10,
-                                p: 0,
-                                color: theme.palette.error.dark,
-                                width: "22px !important",
-                                minWidth: 22,
-                            }}
-                        >
-                            <HighlightOffIcon />
-                        </Button>
-                    )}
-                </Box>
-            </Tooltip>
-        );
     });
 
     const getCommon = async () => {
         const res = await GlobalService.getCommon({
-            group: "schedule_status, car_type, faculty",
+            group: "driver_license, user_status",
         });
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setCarTypeList(res.data.data.car_type);
-                setScheduleStatusList(res.data.data.schedule_status);
-                setFacultyList(res.data.data.faculty);
+                setDriverLicenseList(res.data.data.driver_license);
+                setUserStatusList(res.data.data.user_status);
             } else {
                 setModalError({
                     ...modalError,
                     open: true,
                     title: res.data.message,
+                    content: null,
                 });
             }
         }
@@ -200,58 +121,59 @@ function DialogShowAnalysisTotalTripsFilter({
         }
     };
 
-    const handleChangeHaveSchedule = (e) => {
+    const handleChangeHaveDriver = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            haveSchedule: e.target.value === "true", // e.target.value === 'true' => convert boolean
+            haveDriver: e.target.value === "true", // e.target.value === 'true' => convert boolean
         });
     };
 
-    const handleDeleteHaveSchedule = () => {
+    const handleDeleteHaveDriver = () => {
         setDataSendApi({
             ...dataSendApi,
-            haveSchedule: null,
+            haveDriver: null,
         });
     };
 
-    const handleChangeDate = (dates) => {
-        const [start, end] = dates;
-        setSelectedDates({
-            startDate: start,
-            endDate: end,
-        });
+    const handleSelectDriverLicense = (valueArray) => {
         setDataSendApi({
             ...dataSendApi,
-            startDateSchedule: Math.floor(new Date(start).getTime()),
-            endDateSchedule: Math.floor(new Date(end).getTime()),
+            driverLicense: [...valueArray],
         });
     };
 
-    const handleChangeInfoUser = (e) => {
+    const handleChangeCodeDriver = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            infoUser: e.target.value ? e.target.value : null,
+            codeDriver: e.target.value ? e.target.value : null,
         });
     };
 
-    const handleChangeInfoDriver = (e) => {
+    const handleChangeFullNameDriver = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            infoDriver: e.target.value ? e.target.value : null,
+            fullNameDriver: e.target.value ? e.target.value : null,
         });
     };
 
-    const handleChangeLicensePlates = (e) => {
+    const handleChangeEmailDriver = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            licensePlates: e.target.value ? e.target.value : null,
+            emailDriver: e.target.value ? e.target.value : null,
         });
     };
 
-    const handleChangeScheduleCode = (e) => {
+    const handleChangePhoneDriver = (e) => {
         setDataSendApi({
             ...dataSendApi,
-            scheduleCode: e.target.value ? e.target.value : null,
+            phoneDriver: e.target.value ? e.target.value : null,
+        });
+    };
+
+    const handleSelectUserStatus = (valueArray) => {
+        setDataSendApi({
+            ...dataSendApi,
+            userStatus: [...valueArray],
         });
     };
 
@@ -267,72 +189,28 @@ function DialogShowAnalysisTotalTripsFilter({
         });
     };
 
-    const handleSelectFaculty = (valueArray) => {
-        setDataSendApi({
-            ...dataSendApi,
-            faculty: [...valueArray],
-        });
-    };
-
-    const handleSelectStatus = (valueArray) => {
-        setDataSendApi({
-            ...dataSendApi,
-            status: [...valueArray],
-        });
-    };
-
-    const handleSelectCarType = (valueArray) => {
-        setDataSendApi({
-            ...dataSendApi,
-            carType: [...valueArray],
-        });
-    };
-
     const handleRefreshFilter = () => {
-        //call function => return submit
-        onSubmit({
-            status: [],
-            carType: [],
-            faculty: [],
-            haveSchedule: null,
-            scheduleCode: null,
-            infoUser: null,
-            infoDriver: null,
-            licensePlates: null,
+        let dataRefresh = {
+            driverLicense: [],
+            userStatus: [],
+            haveDriver: null,
+            codeDriver: null,
+            fullNameDriver: null,
+            emailDriver: null,
+            phoneDriver: null,
             address: null,
             ward: null,
             district: null,
             province: null,
-            startDateSchedule: null,
-            endDateSchedule: null,
-        });
+        };
+        //call function => return submit
+        onSubmit(dataRefresh);
 
-        //refresh dates
-        setSelectedDates({
-            startDate: null,
-            endDate: null,
-        });
+        //refresh data
+        setDataSendApi(dataRefresh);
 
         //refresh address
         setShowAddress();
-
-        //refresh data
-        setDataSendApi({
-            status: [],
-            carType: [],
-            faculty: [],
-            haveSchedule: null,
-            scheduleCode: null,
-            infoUser: null,
-            infoDriver: null,
-            licensePlates: null,
-            address: null,
-            ward: null,
-            district: null,
-            province: null,
-            startDateSchedule: null,
-            endDateSchedule: null,
-        });
 
         //call function
         handleRefreshDataFilter();
@@ -370,40 +248,37 @@ function DialogShowAnalysisTotalTripsFilter({
             <DialogContent>
                 {/* TITLE */}
                 <Title>
-                    {Strings.DialogShowAnalysisTotalTripsFilter.TITLE}
+                    {Strings.DialogShowAnalysisDriverLicenseFilter.TITLE}
                 </Title>
 
+                {/* HAVE DRIVER */}
                 <BoxContent>
                     <TextStyle>
                         {
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .HAVE_SCHEDULE
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .HAVE_DRIVER
                         }
                     </TextStyle>
                     <RadioGroupStyle
                         row
-                        onChange={handleChangeHaveSchedule}
-                        value={dataSendApi.haveSchedule}
+                        onChange={handleChangeHaveDriver}
+                        value={dataSendApi.haveDriver}
                     >
                         <FormControlLabel
                             value={true}
                             control={<Radio />}
-                            label={
-                                Strings.DialogShowAnalysisTotalTripsFilter.YES
-                            }
+                            label={Strings.Common.YES}
                         />
                         <FormControlLabel
                             value={false}
                             control={<Radio />}
-                            label={
-                                Strings.DialogShowAnalysisTotalTripsFilter.NO
-                            }
+                            label={Strings.Common.NO}
                         />
-                        {!helper.isNullOrEmpty(dataSendApi.haveSchedule) && (
+                        {!helper.isNullOrEmpty(dataSendApi.haveDriver) && (
                             <Tooltip arrow title={Strings.Common.DETELE}>
                                 <IconButton
                                     color="error"
-                                    onClick={handleDeleteHaveSchedule}
+                                    onClick={handleDeleteHaveDriver}
                                 >
                                     <ClearIcon
                                         sx={{
@@ -417,27 +292,63 @@ function DialogShowAnalysisTotalTripsFilter({
                     </RadioGroupStyle>
                 </BoxContent>
 
-                {/* SCHEDULE CODE */}
+                {/* SELECT DRIVER LICENSE */}
                 <BoxContent>
                     <TextStyle>
                         {
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .SCHEDULE_CODE
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .DRIVER_LICENSE
+                        }
+                    </TextStyle>
+                    <AutocompleteStyle
+                        disablePortal={false}
+                        multiple
+                        disableCloseOnSelect
+                        size="small"
+                        noOptionsText={Strings.Common.NO_DATA}
+                        options={driverLicenseList}
+                        getOptionLabel={(option) => `${option.name}`}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                placeholder={
+                                    Strings
+                                        .DialogShowAnalysisDriverLicenseFilter
+                                        .CHOOSE_DRIVER_LICENSE
+                                }
+                            />
+                        )}
+                        onChange={(event, newValue) => {
+                            handleSelectDriverLicense(newValue);
+                        }}
+                        value={dataSendApi.driverLicense || null}
+                        isOptionEqualToValue={(option, value) =>
+                            option.idDriverLicense === value.idDriverLicense
+                        }
+                    />
+                </BoxContent>
+
+                {/* DRIVER CODE */}
+                <BoxContent>
+                    <TextStyle>
+                        {
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .DRIVER_CODE
                         }
                     </TextStyle>
                     <TextInput
                         placeholder={
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .ENTER_SCHEDULE_CODE
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .ENTER_DRIVER_CODE
                         }
                         variant="outlined"
                         size="small"
-                        value={dataSendApi.scheduleCode || ""}
-                        onChange={(e) => handleChangeScheduleCode(e)}
+                        value={dataSendApi.codeDriver || ""}
+                        onChange={(e) => handleChangeCodeDriver(e)}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="start">
-                                    <AssignmentIcon
+                                    <QrCodeIcon
                                         sx={{
                                             color: theme.palette.primary.main,
                                         }}
@@ -448,20 +359,23 @@ function DialogShowAnalysisTotalTripsFilter({
                     />
                 </BoxContent>
 
-                {/* USER */}
+                {/* FULL NAME DRIVER */}
                 <BoxContent>
                     <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.SUBSCRIBERS}
+                        {
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .FULL_NAME
+                        }
                     </TextStyle>
                     <TextInput
                         placeholder={
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .ENTER_NAME_CODE_USER
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .ENTER_FULL_NAME
                         }
                         variant="outlined"
                         size="small"
-                        value={dataSendApi.infoUser || ""}
-                        onChange={(e) => handleChangeInfoUser(e)}
+                        value={dataSendApi.fullNameDriver || ""}
+                        onChange={(e) => handleChangeFullNameDriver(e)}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="start">
@@ -476,24 +390,24 @@ function DialogShowAnalysisTotalTripsFilter({
                     />
                 </BoxContent>
 
-                {/* DRIVER */}
+                {/* EMAIL */}
                 <BoxContent>
                     <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.DRIVER}
+                        {Strings.DialogShowAnalysisDriverLicenseFilter.EMAIL}
                     </TextStyle>
                     <TextInput
                         placeholder={
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .ENTER_NAME_CODE_DRIVER
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .ENTER_EMAIL
                         }
                         variant="outlined"
                         size="small"
-                        value={dataSendApi.infoDriver || ""}
-                        onChange={(e) => handleChangeInfoDriver(e)}
+                        value={dataSendApi.emailDriver || ""}
+                        onChange={(e) => handleChangeEmailDriver(e)}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="start">
-                                    <AirlineSeatReclineExtraIcon
+                                    <EmailIcon
                                         sx={{
                                             color: theme.palette.primary.main,
                                         }}
@@ -504,27 +418,24 @@ function DialogShowAnalysisTotalTripsFilter({
                     />
                 </BoxContent>
 
-                {/* LICENSEPLATES */}
+                {/* PHONE */}
                 <BoxContent>
                     <TextStyle>
-                        {
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .LICENSE_PLATES
-                        }
+                        {Strings.DialogShowAnalysisDriverLicenseFilter.PHONE}
                     </TextStyle>
                     <TextInput
                         placeholder={
-                            Strings.DialogShowAnalysisTotalTripsFilter
-                                .ENTER_LICENSE_PLATES
+                            Strings.DialogShowAnalysisDriverLicenseFilter
+                                .ENTER_PHONE
                         }
                         variant="outlined"
                         size="small"
-                        value={dataSendApi.licensePlates || ""}
-                        onChange={(e) => handleChangeLicensePlates(e)}
+                        value={dataSendApi.phoneDriver || ""}
+                        onChange={(e) => handleChangePhoneDriver(e)}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="start">
-                                    <AirportShuttleIcon
+                                    <PhoneEnabledIcon
                                         sx={{
                                             color: theme.palette.primary.main,
                                         }}
@@ -535,132 +446,43 @@ function DialogShowAnalysisTotalTripsFilter({
                     />
                 </BoxContent>
 
-                {/* SELECT FACULTY */}
+                {/* SELECT USER STATUS */}
                 <BoxContent>
                     <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.FACULTY}
+                        {Strings.DialogShowAnalysisDriverLicenseFilter.STATUS}
                     </TextStyle>
                     <AutocompleteStyle
                         disablePortal={false}
                         multiple
                         disableCloseOnSelect
                         size="small"
-                        sx={{ marginBottom: 1 }}
                         noOptionsText={Strings.Common.NO_DATA}
-                        options={facultyList}
+                        options={userStatusList}
                         getOptionLabel={(option) => `${option.name}`}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
                                 placeholder={
                                     Strings
-                                        .DialogCarRegistrationManagementFilter
-                                        .CHOOSE_FACULTY
-                                }
-                            />
-                        )}
-                        onChange={(event, newValue) => {
-                            handleSelectFaculty(newValue);
-                        }}
-                        value={dataSendApi.faculty || null}
-                        isOptionEqualToValue={(option, value) =>
-                            option.idFaculty === value.idFaculty
-                        }
-                    />
-                </BoxContent>
-
-                {/* SELECT STATUS */}
-                <BoxContent>
-                    <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.STATUS}
-                    </TextStyle>
-                    <AutocompleteStyle
-                        disablePortal={false}
-                        multiple
-                        disableCloseOnSelect
-                        size="small"
-                        sx={{ marginBottom: 1 }}
-                        noOptionsText={Strings.Common.NO_DATA}
-                        options={scheduleStatusList}
-                        getOptionLabel={(option) => `${option.name}`}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                placeholder={
-                                    Strings
-                                        .DialogCarRegistrationManagementFilter
+                                        .DialogShowAnalysisDriverLicenseFilter
                                         .CHOOSE_STATUS
                                 }
                             />
                         )}
                         onChange={(event, newValue) => {
-                            handleSelectStatus(newValue);
+                            handleSelectUserStatus(newValue);
                         }}
-                        value={dataSendApi.status || null}
+                        value={dataSendApi.userStatus || null}
                         isOptionEqualToValue={(option, value) =>
-                            option.idScheduleStatus === value.idScheduleStatus
+                            option.idUserStatus === value.idUserStatus
                         }
-                    />
-                </BoxContent>
-
-                {/* SELECT CAR TYPE */}
-                <BoxContent>
-                    <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.CAR_TYPE}
-                    </TextStyle>
-                    <AutocompleteStyle
-                        disablePortal={false}
-                        multiple
-                        disableCloseOnSelect
-                        size="small"
-                        sx={{ marginBottom: 1 }}
-                        noOptionsText={Strings.Common.NO_DATA}
-                        options={carTypeList}
-                        getOptionLabel={(option) =>
-                            `${option.name} ${option.seatNumber} Chổ`
-                        }
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                placeholder={
-                                    Strings
-                                        .DialogCarRegistrationManagementFilter
-                                        .CHOOSE_CAR_TYPE
-                                }
-                            />
-                        )}
-                        onChange={(event, newValue) => {
-                            handleSelectCarType(newValue);
-                        }}
-                        value={dataSendApi.carType || null}
-                        isOptionEqualToValue={(option, value) =>
-                            option.idCarType === value.idCarType
-                        }
-                    />
-                </BoxContent>
-
-                {/* SELECT DATES */}
-                <BoxContent>
-                    <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.TIME}{" "}
-                    </TextStyle>
-                    <DatePicker
-                        locale="vi"
-                        dateFormat={Constants.Styled.DATE_FORMAT}
-                        selectsRange={true}
-                        startDate={selectedDates.startDate}
-                        endDate={selectedDates.endDate}
-                        withPortal
-                        customInput={<ButtonDate />}
-                        selected={selectedDates.startDate}
-                        onChange={handleChangeDate}
                     />
                 </BoxContent>
 
                 {/* SELECT ADDRESS */}
                 <BoxContent>
                     <TextStyle>
-                        {Strings.DialogShowAnalysisTotalTripsFilter.ADDRESS}{" "}
+                        {Strings.DialogShowAnalysisDriverLicenseFilter.ADDRESS}{" "}
                     </TextStyle>
                     <ButtonStyled
                         onClick={() => setModalShowStartAdderss(true)}
@@ -678,8 +500,8 @@ function DialogShowAnalysisTotalTripsFilter({
                                 showAddress
                                     ? showAddress
                                     : Strings
-                                          .DialogCarRegistrationManagementFilter
-                                          .ENTER_LOCATION
+                                          .DialogShowAnalysisDriverLicenseFilter
+                                          .ENTER_ADDRESS
                             }
                         >
                             <Box
@@ -695,8 +517,8 @@ function DialogShowAnalysisTotalTripsFilter({
                                 {showAddress
                                     ? showAddress
                                     : Strings
-                                          .DialogCarRegistrationManagementFilter
-                                          .ENTER_LOCATION}
+                                          .DialogShowAnalysisDriverLicenseFilter
+                                          .ENTER_ADDRESS}
                             </Box>
                         </Tooltip>
                     </ButtonStyled>
@@ -783,4 +605,4 @@ function DialogShowAnalysisTotalTripsFilter({
     );
 }
 
-export default DialogShowAnalysisTotalTripsFilter;
+export default DialogShowAnalysisDriverLicenseFilter;

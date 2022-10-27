@@ -109,6 +109,7 @@ const Constants = {
         },
         AnalysisDriverLicense: {
             GET_ANALYSIS_DRIVER_LICENSE: "/admin/getAnalysisDriverLicense",
+            GET_DATA_ANALYSIS_DRIVER_LICENSE: "/admin/getDataAnalysisDriverLicense",
         },
     },
 
@@ -216,10 +217,10 @@ const Constants = {
         },
     },
 
-    // UserStatusCode: {
-    //     WORK: 1,
-    //     STOP_WORK: 2,
-    // },
+    UserStatusCode: {
+        WORK: 1,
+        STOP_WORK: 2,
+    },
 
     // CarParts: {
     //     FRONT_OF_CAR: "Đầu Xe",

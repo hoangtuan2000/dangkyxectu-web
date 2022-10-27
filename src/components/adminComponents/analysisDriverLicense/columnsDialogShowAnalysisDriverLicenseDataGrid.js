@@ -6,7 +6,7 @@ import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
 import helper from "../../../common/helper";
 
-const col = (handleGetScheduleCode) => {
+const col = (handleGetDriverCode) => {
     let columns = [];
     return (columns = [
         {
@@ -16,17 +16,14 @@ const col = (handleGetScheduleCode) => {
             sortable: false,
         },
         {
-            field: "date",
-            headerName: Strings.DialogShowAnalysisTotalTrips.DATE,
-            description: Strings.DialogShowAnalysisTotalTrips.DATE,
-            width: 150,
+            field: "driverLicense",
+            headerName: Strings.DialogShowAnalysisDriverLicense.DRIVER_LICENSE,
+            description: Strings.DialogShowAnalysisDriverLicense.DRIVER_LICENSE,
+            width: 100,
             sortable: false,
             renderCell: (params) => {
-                const date = helper.formatDateStringFromTimeStamp(
-                    params.row.date
-                );
                 return (
-                    <Tooltip title={`${date}`} arrow>
+                    <Tooltip title={params.row.driverLicense} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -34,22 +31,26 @@ const col = (handleGetScheduleCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {`${date}`}
+                            {params.row.driverLicense}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
-            field: "idSchedule",
-            headerName: Strings.DialogShowAnalysisTotalTrips.SCHEDULE_CODE,
-            description: Strings.DialogShowAnalysisTotalTrips.SCHEDULE_CODE,
-            width: 120,
+            field: "idDriver",
+            hide: true,
+        },
+        {
+            field: "code",
+            headerName: Strings.DialogShowAnalysisDriverLicense.CODE_DRIVER,
+            description: Strings.DialogShowAnalysisDriverLicense.CODE_DRIVER,
+            width: 90,
             sortable: false,
             renderCell: (params) => {
-                if (params.row.idSchedule) {
+                if (params.row.code) {
                     return (
-                        <Tooltip title={params.row.idSchedule} arrow>
+                        <Tooltip title={params.row.code} arrow>
                             <span
                                 style={{
                                     whiteSpace: "nowrap",
@@ -57,7 +58,7 @@ const col = (handleGetScheduleCode) => {
                                     textOverflow: "ellipsis",
                                 }}
                             >
-                                {params.row.idSchedule}
+                                {params.row.code}
                             </span>
                         </Tooltip>
                     );
@@ -73,34 +74,15 @@ const col = (handleGetScheduleCode) => {
             },
         },
         {
-            field: "startDate",
-            hide: true,
-        },
-        {
-            field: "endDate",
-            hide: true,
-        },
-        {
-            field: "dateRange",
-            headerName: Strings.DialogShowAnalysisTotalTrips.TIME,
-            description: Strings.DialogShowAnalysisTotalTrips.TIME,
-            width: 190,
+            flex: 1,
+            field: "fullName",
+            headerName: Strings.DialogShowAnalysisDriverLicense.FULL_NAME,
+            description: Strings.DialogShowAnalysisDriverLicense.FULL_NAME,
+            minWidth: 120,
             sortable: false,
             renderCell: (params) => {
-                let startDate = null;
-                let endDate = null;
-                if (params.row.startDate && params.row.endDate) {
-                    startDate = helper.formatDateStringFromTimeStamp(
-                        params.row.startDate
-                    );
-                    endDate = helper.formatDateStringFromTimeStamp(
-                        params.row.endDate
-                    );
-                }
-                const dateRange =
-                    startDate && endDate ? `${startDate} - ${endDate}` : "";
                 return (
-                    <Tooltip title={dateRange} arrow>
+                    <Tooltip title={params.row.fullName || ""} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -108,7 +90,7 @@ const col = (handleGetScheduleCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {dateRange}
+                            {params.row.fullName}
                         </span>
                     </Tooltip>
                 );
@@ -116,14 +98,14 @@ const col = (handleGetScheduleCode) => {
         },
         {
             flex: 1,
-            field: "infoUser",
-            headerName: Strings.DialogShowAnalysisTotalTrips.SUBSCRIBERS,
-            description: Strings.DialogShowAnalysisTotalTrips.SUBSCRIBERS,
+            field: "email",
+            headerName: Strings.DialogShowAnalysisDriverLicense.EMAIL,
+            description: Strings.DialogShowAnalysisDriverLicense.EMAIL,
             minWidth: 120,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.infoUser || ""} arrow>
+                    <Tooltip title={params.row.email || ""} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -131,22 +113,21 @@ const col = (handleGetScheduleCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.infoUser}
+                            {params.row.email}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
-            flex: 1,
-            field: "infoDriver",
-            headerName: Strings.DialogShowAnalysisTotalTrips.DRIVER,
-            description: Strings.DialogShowAnalysisTotalTrips.DRIVER,
-            minWidth: 120,
+            field: "phoneNumber",
+            headerName: Strings.DialogShowAnalysisDriverLicense.PHONE,
+            description: Strings.DialogShowAnalysisDriverLicense.PHONE,
+            width: 110,
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <Tooltip title={params.row.infoDriver || ""} arrow>
+                    <Tooltip title={params.row.phoneNumber || ""} arrow>
                         <span
                             style={{
                                 whiteSpace: "nowrap",
@@ -154,18 +135,18 @@ const col = (handleGetScheduleCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.infoDriver}
+                            {params.row.phoneNumber}
                         </span>
                     </Tooltip>
                 );
             },
         },
         {
-            field: "scheduleStatusCode",
+            field: "userStatusCode",
             hide: true,
         },
         {
-            field: "scheduleStatus",
+            field: "userStatus",
             headerName: Strings.Common.STATUS,
             description: Strings.Common.STATUS,
             width: 120,
@@ -173,23 +154,23 @@ const col = (handleGetScheduleCode) => {
             renderCell: (params) => {
                 let bgColor = "#969696";
                 let textColor = "white";
-                const objScheduleStatusCode = Constants.ScheduleStatusCode;
-                for (const property in objScheduleStatusCode) {
+                const objUserStatusCode = Constants.UserStatusCode;
+                for (const property in objUserStatusCode) {
                     if (
-                        params.row.scheduleStatusCode ==
-                        `${objScheduleStatusCode[property]}`
+                        params.row.userStatusCode ==
+                        `${objUserStatusCode[property]}`
                     ) {
                         bgColor =
-                            Constants.ColorOfScheduleStatus.Background[
+                            Constants.ColorOfUserStatus.Background[property];
+                        textColor =
+                            Constants.ColorOfUserStatus.TextHaveBackground[
                                 property
                             ];
-                        textColor =
-                            Constants.ColorOfScheduleStatus.Text[property];
                         break;
                     }
                 }
 
-                if (params.row.idSchedule) {
+                if (params.row.userStatusCode) {
                     return (
                         <>
                             <Box
@@ -221,13 +202,13 @@ const col = (handleGetScheduleCode) => {
             width: 70,
             sortable: false,
             renderCell: (params) => {
-                if (params.row.idSchedule) {
+                if (params.row.idDriver) {
                     return (
                         <Tooltip title={Strings.Common.DETAIL} arrow>
                             <IconButton
                                 color="primary"
                                 onClick={() =>
-                                    handleGetScheduleCode(params.row.idSchedule)
+                                    handleGetDriverCode(params.row.driverCode)
                                 }
                             >
                                 <VisibilityIcon />

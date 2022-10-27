@@ -42,8 +42,9 @@ import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
-import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisTotalTrips";
+import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisDriverLicense";
 import { AnalysisDriverLicenseServices } from "../../../services/adminServices/AnalysisDriverLicenseServices";
+import DialogShowAnalysisDriverLicense from "./DialogShowAnalysisDriverLicense";
 registerLocale("vi", vi);
 
 const RADIAN = Math.PI / 180;
@@ -229,129 +230,6 @@ function AnalysisDriverLicense() {
                     <TitleChart variant="h6" component="div">
                         {Strings.AnalysisDriverLicense.TITLE}
                     </TitleChart>
-
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        <SpeedDial
-                            ariaLabel="SpeedDial controlled open example"
-                            sx={{
-                                position: "absolute",
-                                top: -5,
-                                right: 20,
-                                height: 0,
-                                "& .MuiFab-primary": { width: 40, height: 60 },
-                                "& .MuiButtonBase-root": {
-                                    scale: "0.7",
-                                },
-                                "& .MuiSpeedDial-actions": {
-                                    paddingTop: "20px !important",
-                                },
-                            }}
-                            icon={
-                                <Box>
-                                    <Tooltip
-                                        title={
-                                            selectedDates.startDate &&
-                                            selectedDates.endDate
-                                                ? `${new Date(
-                                                      selectedDates.startDate
-                                                  ).toLocaleDateString(
-                                                      "en-GB"
-                                                  )} - ${new Date(
-                                                      selectedDates.endDate
-                                                  ).toLocaleDateString(
-                                                      "en-GB"
-                                                  )}`
-                                                : Strings.Common.TIME
-                                        }
-                                        placement="left"
-                                    >
-                                        <Badge
-                                            color="error"
-                                            invisible={
-                                                selectedDates.startDate &&
-                                                selectedDates.endDate
-                                                    ? false
-                                                    : true
-                                            }
-                                            badgeContent={"!"}
-                                        >
-                                            <CalendarMonthIcon />
-                                        </Badge>
-                                    </Tooltip>
-                                </Box>
-                            }
-                            onClose={() => setSpeedDial(false)}
-                            onOpen={() => setSpeedDial(true)}
-                            open={speedDial}
-                            direction={"down"}
-                        >
-                            <SpeedDialAction
-                                key={"Ngày"}
-                                icon={<TodayIcon />}
-                                tooltipTitle={"Ngày"}
-                                tooltipOpen
-                                sx={{
-                                    "& .MuiSpeedDialAction-fab": {
-                                        margin: 0,
-                                        marginTop: 2,
-                                    },
-                                }}
-                                onClick={() => {
-                                    refDate.current.setOpen(true);
-                                }}
-                            />
-                            <SpeedDialAction
-                                key={"Tháng"}
-                                icon={<CalendarMonthIcon />}
-                                tooltipTitle={"Tháng"}
-                                tooltipOpen
-                                sx={{
-                                    "& .MuiSpeedDialAction-fab": {
-                                        margin: 0,
-                                    },
-                                }}
-                                onClick={() => {
-                                    refDateMonth.current.setOpen(true);
-                                }}
-                            />
-                            <SpeedDialAction
-                                key={"Quí"}
-                                icon={<EventNoteIcon />}
-                                tooltipTitle={"Quí"}
-                                tooltipOpen
-                                sx={{
-                                    "& .MuiSpeedDialAction-fab": {
-                                        margin: 0,
-                                    },
-                                }}
-                                onClick={() => {
-                                    refDateQuarter.current.setOpen(true);
-                                }}
-                            />
-                        </SpeedDial>
-
-                        {/* REFRESH BUTTON */}
-                        {selectedDates.startDate && selectedDates.endDate && (
-                            <Tooltip title={Strings.Common.REFRESH}>
-                                <IconButton
-                                    sx={{ padding: 0 }}
-                                    onClick={() =>
-                                        handleChangeDate([null, null])
-                                    }
-                                >
-                                    <CloseIcon
-                                        color={"error"}
-                                        sx={{ fontSize: 18 }}
-                                    />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                    </Box>
                 </BoxTitleChart>
 
                 <ResponsiveContainer width={"100%"} height={300}>
@@ -438,7 +316,7 @@ function AnalysisDriverLicense() {
                 />
             </Box>
 
-            <DialogShowAnalysisTotalTrips
+            <DialogShowAnalysisDriverLicense
                 open={dialogShowAnalysisTotalTrips.open}
                 handleClose={() =>
                     setDialogShowAnalysisTotalTrips({
@@ -446,8 +324,6 @@ function AnalysisDriverLicense() {
                         open: false,
                     })
                 }
-                startDate={dialogShowAnalysisTotalTrips.startDate}
-                endDate={dialogShowAnalysisTotalTrips.endDate}
             />
 
             <ModalError

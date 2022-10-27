@@ -17,7 +17,7 @@ import {
     FormGroupStyle,
     TextInput,
     Title,
-} from "./DialogShowAnalysisTotalTripsCustomStyles";
+} from "./DialogShowAnalysisDriverLicenseCustomStyles";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
@@ -27,22 +27,19 @@ import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
 import DataGridCustom from "../../dataGridCustom/DataGridCustom";
 import Constants from "../../../constants/Constants";
-import col from "./columnsDialogShowAnalysisTotalTripsDataGrid";
+import col from "./columnsDialogShowAnalysisDriverLicenseDataGrid";
 import { DialogChangeCarServices } from "../../../services/adminServices/DialogChangeCarServices";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
 import helper from "../../../common/helper";
 import DialogShowScheduleGlobal from "../../dialogShowScheduleGlobal/DialogShowScheduleGlobal";
-import { FabStyle } from "./DialogShowAnalysisTotalTripsCustomStyles";
-import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisTotalTripsFilter";
+import { FabStyle } from "./DialogShowAnalysisDriverLicenseCustomStyles";
+import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisDriverLicenseFilter";
+import { AnalysisDriverLicenseServices } from "../../../services/adminServices/AnalysisDriverLicenseServices";
+import DialogShowAnalysisDriverLicenseFilter from "./DialogShowAnalysisDriverLicenseFilter";
 
-function DialogShowAnalysisTotalTrips({
-    open,
-    handleClose,
-    startDate,
-    endDate,
-}) {
+function DialogShowAnalysisDriverLicense({ open, handleClose }) {
     const theme = useTheme();
 
     const [backDrop, setBackDrop] = useState(false);
@@ -59,7 +56,6 @@ function DialogShowAnalysisTotalTrips({
     });
 
     const [totalDataFilter, setTotalDataFilter] = useState(null);
-    const [title, setTitle] = useState();
 
     const [
         dialogShowAnalysisTotalTripsFilter,
@@ -72,60 +68,49 @@ function DialogShowAnalysisTotalTrips({
     });
 
     const [dataFilter, setDataFilter] = useState({
-        status: [],
-        carType: [],
-        faculty: [],
-        haveSchedule: null,
-        infoUser: null,
-        infoDriver: null,
-        licensePlates: null,
-        scheduleCode: null,
+        driverLicense: [],
+        userStatus: [],
+        haveDriver: null,
+        codeDriver: null,
+        fullNameDriver: null,
+        emailDriver: null,
+        phoneDriver: null,
         address: null,
         ward: null,
         district: null,
         province: null,
-        startDateSchedule: null,
-        endDateSchedule: null,
     });
 
-    const [scheduleList, setScheduleList] = useState([]);
+    const [driverLicenseList, setDriverLicenseList] = useState([]);
 
-    const getDataTotalNumberOfTripsOverTime = async (
+    const getDataAnalysisDriverLicense = async (
         page = dataInfo.page,
         pageSize = dataInfo.pageSize,
-        haveSchedule,
-        status,
-        carType,
-        faculty,
-        infoUser,
-        infoDriver,
-        licensePlates,
-        scheduleCode,
+        driverLicense,
+        userStatus,
+        haveDriver,
+        codeDriver,
+        fullNameDriver,
+        emailDriver,
+        phoneDriver,
         address,
-        idWard,
-        startDateSchedule,
-        endDateSchedule
+        idWard
     ) => {
         const data = {
             page: page,
             limitEntry: pageSize,
-            startDate: startDate,
-            endDate: endDate,
-            haveSchedule,
-            status,
-            carType,
-            faculty,
-            infoUser,
-            infoDriver,
-            licensePlates,
-            scheduleCode,
+            driverLicense,
+            userStatus,
+            haveDriver,
+            codeDriver,
+            fullNameDriver,
+            emailDriver,
+            phoneDriver,
             address,
             idWard,
-            startDateSchedule,
-            endDateSchedule,
         };
         const res =
-            await AnalysisTotalTripsServices.getDataTotalNumberOfTripsOverTime({
+            await AnalysisDriverLicenseServices.getDataAnalysisDriverLicense({
                 ...data,
             });
         // axios success
@@ -136,7 +121,7 @@ function DialogShowAnalysisTotalTrips({
                     pageSize: res.data.limitEntry,
                     totalRows: res.data.sizeQuerySnapshot,
                 });
-                setScheduleList(
+                setDriverLicenseList(
                     res.data.data.map((item, index) => {
                         return {
                             id:
@@ -144,20 +129,15 @@ function DialogShowAnalysisTotalTrips({
                                 res.data.limitEntry +
                                 index +
                                 1,
-                            date: item.date,
-                            idSchedule: item.idSchedule,
-                            startDate: item.startDate,
-                            endDate: item.endDate,
-                            infoUser:
-                                item.fullNameUser &&
-                                item.codeUser &&
-                                `${item.fullNameUser} - ${item.codeUser}`,
-                            infoDriver:
-                                item.fullNameDriver &&
-                                item.codeDriver &&
-                                `${item.fullNameDriver} - ${item.codeDriver}`,
-                            scheduleStatusCode: item.idScheduleStatus,
-                            scheduleStatus: item.nameScheduleStatus,
+                            driverLicense: item.nameDriverLicense,
+                            idDriver: item.idDriver,
+                            code: item.codeDriver,
+                            fullName: item.idDriver,
+                            fullName: item.fullNameDriver,
+                            email: item.emailDriver,
+                            phoneNumber: item.phoneDriver,
+                            userStatusCode: item.idUserStatus,
+                            userStatus: item.nameUserStatus,
                         };
                     })
                 );
@@ -187,186 +167,140 @@ function DialogShowAnalysisTotalTrips({
     const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getDataTotalNumberOfTripsOverTime(
+        await getDataAnalysisDriverLicense(
             e,
             dataInfo.pageSize,
-            data.haveSchedule,
-            data.status,
-            data.carType,
-            data.faculty,
-            data.infoUser,
-            data.infoDriver,
-            data.licensePlates,
-            data.scheduleCode,
+            data.driverLicense,
+            data.userStatus,
+            data.haveDriver,
+            data.codeDriver,
+            data.fullNameDriver,
+            data.emailDriver,
+            data.phoneDriver,
             data.address,
-            data.idWard,
-            data.startDateSchedule,
-            data.endDateSchedule
+            data.idWard
         );
     };
 
     const handleChangeRowsPerPage = async (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getDataTotalNumberOfTripsOverTime(
+        await getDataAnalysisDriverLicense(
             dataInfo.page,
             e,
-            data.haveSchedule,
-            data.status,
-            data.carType,
-            data.faculty,
-            data.infoUser,
-            data.infoDriver,
-            data.licensePlates,
-            data.scheduleCode,
+            data.driverLicense,
+            data.userStatus,
+            data.haveDriver,
+            data.codeDriver,
+            data.fullNameDriver,
+            data.emailDriver,
+            data.phoneDriver,
             data.address,
-            data.idWard,
-            data.startDateSchedule,
-            data.endDateSchedule
+            data.idWard
         );
     };
 
     const handleFormatDataFilterSendApi = (data) => {
         //format data to send API
-        let status = [];
-        let carType = [];
-        let faculty = [];
-        if (helper.isArray(data.status) && data.status.length > 0) {
-            status = data.status.map((item) => {
-                return item.idScheduleStatus;
+        let driverLicense = [];
+        let userStatus = [];
+        if (
+            helper.isArray(data.driverLicense) &&
+            data.driverLicense.length > 0
+        ) {
+            driverLicense = data.driverLicense.map((item) => {
+                return item.idDriverLicense;
             });
         }
-        if (helper.isArray(data.carType) && data.carType.length > 0) {
-            carType = data.carType.map((item) => {
-                return item.idCarType;
+        if (helper.isArray(data.userStatus) && data.userStatus.length > 0) {
+            userStatus = data.userStatus.map((item) => {
+                return item.idUserStatus;
             });
         }
-        if (helper.isArray(data.faculty) && data.faculty.length > 0) {
-            faculty = data.faculty.map((item) => {
-                return item.idFaculty;
-            });
-        }
-
         return {
-            status,
-            carType,
-            faculty,
-            haveSchedule: data.haveSchedule,
-            infoUser: data.infoUser,
-            infoDriver: data.infoDriver,
-            licensePlates: data.licensePlates,
-            scheduleCode: data.scheduleCode,
+            driverLicense,
+            userStatus,
+            driverLicense: data.driverLicense,
+            userStatus: data.userStatus,
+            haveDriver: data.haveDriver,
+            codeDriver: data.codeDriver,
+            fullNameDriver: data.fullNameDriver,
+            emailDriver: data.emailDriver,
+            phoneDriver: data.phoneDriver,
             address: data.address,
             idWard: data.ward && data.ward.idWard,
-            startDateSchedule: data.startDateSchedule,
-            endDateSchedule: data.endDateSchedule,
         };
     };
 
-    // const handleGetDataTotalNumberOfTripsOverTimeWithFilter = async () => {
-    //     const data = await handleFormatDataFilterSendApi(dataFilter);
-    //     await getDataTotalNumberOfTripsOverTime(
-    //         dataInfo.page,
-    //         dataInfo.pageSize,
-    //         data.status,
-    //         data.carType,
-    //         data.faculty,
-    //         data.infoUser,
-    //         data.infoDriver,
-    //         data.licensePlates,
-    //         data.scheduleCode,
-    //         data.address,
-    //         data.idWard,
-    //         data.startDateSchedule,
-    //         data.endDateSchedule
-    //     );
-    // };
-
     const handleFilter = (e) => {
         //format data to send API
-        let status = [];
-        let carType = [];
-        let faculty = [];
-        if (helper.isArray(e.status) && e.status.length > 0) {
-            status = e.status.map((item) => {
-                return item.idScheduleStatus;
+        let driverLicense = [];
+        let userStatus = [];
+        if (helper.isArray(e.driverLicense) && e.driverLicense.length > 0) {
+            driverLicense = e.driverLicense.map((item) => {
+                return item.idDriverLicense;
             });
         }
-        if (helper.isArray(e.carType) && e.carType.length > 0) {
-            carType = e.carType.map((item) => {
-                return item.idCarType;
-            });
-        }
-        if (helper.isArray(e.faculty) && e.faculty.length > 0) {
-            faculty = e.faculty.map((item) => {
-                return item.idFaculty;
+        if (helper.isArray(e.userStatus) && e.userStatus.length > 0) {
+            userStatus = e.userStatus.map((item) => {
+                return item.idUserStatus;
             });
         }
 
-        //reset page and pageSize => call getUserRegisteredScheduleList function
-        getDataTotalNumberOfTripsOverTime(
+        //reset page and pageSize => call getDataAnalysisDriverLicense function
+        getDataAnalysisDriverLicense(
             Constants.Common.PAGE,
             dataInfo.pageSize,
-            e.haveSchedule,
-            status,
-            carType,
-            faculty,
-            e.infoUser,
-            e.infoDriver,
-            e.licensePlates,
-            e.scheduleCode,
+            driverLicense,
+            userStatus,
+            e.haveDriver,
+            e.codeDriver,
+            e.fullNameDriver,
+            e.emailDriver,
+            e.phoneDriver,
             e.address,
-            e.ward && e.ward.idWard,
-            e.startDateSchedule,
-            e.endDateSchedule
+            e.ward && e.ward.idWard
         );
 
-        // save data filter in dialogCarRegistrationManagementFilter => default value in dialogCarRegistrationManagementFilter
+        // save data filter in DialogShowAnalysisDriverLicenseFilter => default value in DialogShowAnalysisDriverLicenseFilter
         setDataFilter({
-            status: [...e.status],
-            carType: [...e.carType],
-            faculty: [...e.faculty],
-            haveSchedule: e.haveSchedule,
-            infoUser: e.infoUser,
-            infoDriver: e.infoDriver,
-            licensePlates: e.licensePlates,
-            scheduleCode: e.scheduleCode,
+            driverLicense: [...e.driverLicense],
+            userStatus: [...e.userStatus],
+            haveDriver: e.haveDriver,
+            codeDriver: e.codeDriver,
+            fullNameDriver: e.fullNameDriver,
+            emailDriver: e.emailDriver,
+            phoneDriver: e.phoneDriver,
             address: e.address,
             ward: e.ward,
             district: e.district,
             province: e.province,
-            startDateSchedule: e.startDateSchedule,
-            endDateSchedule: e.endDateSchedule,
         });
 
         // show total data to filter in UI => button filter
-        let total = status.length + carType.length + faculty.length;
-        if (e.scheduleCode) total += 1;
-        if (e.haveSchedule) total += 1;
+        let total = driverLicense.length + userStatus.length;
+        if (e.haveDriver) total += 1;
+        if (e.codeDriver) total += 1;
+        if (e.fullNameDriver) total += 1;
+        if (e.emailDriver) total += 1;
+        if (e.phoneDriver) total += 1;
         if (e.ward) total += 1;
-        if (e.infoUser) total += 1;
-        if (e.infoDriver) total += 1;
-        if (e.licensePlates) total += 1;
-        if (e.startDateSchedule && e.endDateSchedule) total += 1;
         setTotalDataFilter(total > 0 ? total : null);
     };
 
     const handleRefreshDataFilter = () => {
         setDataFilter({
-            status: [],
-            carType: [],
-            faculty: [],
-            haveSchedule: null,
-            infoUser: null,
-            infoDriver: null,
-            licensePlates: null,
-            scheduleCode: null,
+            driverLicense: [],
+            userStatus: [],
+            haveDriver: null,
+            codeDriver: null,
+            fullNameDriver: null,
+            emailDriver: null,
+            phoneDriver: null,
             address: null,
             ward: null,
             district: null,
             province: null,
-            startDateSchedule: null,
-            endDateSchedule: null,
         });
     };
 
@@ -380,31 +314,19 @@ function DialogShowAnalysisTotalTrips({
 
     const run = async () => {
         await setBackDrop(true);
-        (await open) && getDataTotalNumberOfTripsOverTime(Constants.Common.PAGE, Constants.Common.LIMIT_ENTRY);
-        if (startDate && endDate) {
-            const startTime = helper.formatDateStringFromTimeStamp(
-                startDate / 1000
+        (await open) &&
+            getDataAnalysisDriverLicense(
+                Constants.Common.PAGE,
+                Constants.Common.LIMIT_ENTRY
             );
-            const endTime = helper.formatDateStringFromTimeStamp(
-                endDate / 1000
-            );
-            setTitle(` Từ ${startTime} - ${endTime}`);
-        } else {
-            const currentDate = new Date();
-            const startTime = new Date(
-                currentDate.setDate(currentDate.getDate() - 7)
-            ).toLocaleDateString("en-GB");
-            const endTime = new Date().toLocaleDateString("en-GB");
-            setTitle(` Từ ${startTime} - ${endTime}`);
-        }
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
-    };    
+    };
 
     useEffect(() => {
         run();
-    }, [open, startDate, endDate]);
+    }, [open]);
 
     return (
         <DialogContainer
@@ -417,8 +339,7 @@ function DialogShowAnalysisTotalTrips({
                 <Box>
                     {/* TITLE */}
                     <Title>
-                        {Strings.DialogShowAnalysisTotalTrips.TITLE}
-                        {title}
+                        {Strings.DialogShowAnalysisDriverLicense.TITLE}
                     </Title>
 
                     {/* FILTER BUTTON */}
@@ -440,7 +361,7 @@ function DialogShowAnalysisTotalTrips({
                     <Box>
                         <DataGridCustom
                             columns={col((e) => handleShowSchedule(e))}
-                            rows={scheduleList}
+                            rows={driverLicenseList}
                             {...dataInfo}
                             onChangePage={(e) => {
                                 handleChangePage(e);
@@ -487,7 +408,7 @@ function DialogShowAnalysisTotalTrips({
                 idSchedule={dialogShowScheduleGlobal.idSchedule}
             />
 
-            <DialogShowAnalysisTotalTripsFilter
+            <DialogShowAnalysisDriverLicenseFilter
                 open={dialogShowAnalysisTotalTripsFilter}
                 handleClose={() => setDialogShowAnalysisTotalTripsFilter(false)}
                 onSubmit={(e) => handleFilter(e)}
@@ -525,4 +446,4 @@ function DialogShowAnalysisTotalTrips({
     );
 }
 
-export default DialogShowAnalysisTotalTrips;
+export default DialogShowAnalysisDriverLicense;
