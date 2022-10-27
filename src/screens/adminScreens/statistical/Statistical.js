@@ -5,6 +5,7 @@ import {
     useTheme,
     Tooltip,
     IconButton,
+    Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
@@ -38,6 +39,8 @@ import {
     BoxContainerCount,
     BoxTextCount,
     BoxTitleChart,
+    ButtonCount,
+    ButtonNavigate,
     FabStyle,
     TitleChart,
     TypographyHeaderCount,
@@ -49,10 +52,14 @@ import { StatisticalServices } from "../../../services/adminServices/Statistical
 import Constants from "../../../constants/Constants";
 import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
+import SendIcon from "@mui/icons-material/Send";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import AnalysisTotalTrips from "../../../components/adminComponents/analysisTotalTrips/AnalysisTotalTrips";
 import AnalysisDriverLicense from "../../../components/adminComponents/analysisDriverLicense/AnalysisDriverLicense";
+import { useNavigate } from "react-router-dom";
+import RoutesPath from "../../../constants/RoutesPath";
 registerLocale("vi", vi);
 
 const BoxCount = ({
@@ -62,7 +69,9 @@ const BoxCount = ({
     colorBorderLeft,
     colorHeader,
     colorContent,
+    pathNavigate,
 }) => {
+    const navigate = useNavigate();
     return (
         <BoxContainerCount sx={{ borderLeft: `5px solid ${colorBorderLeft}` }}>
             <TypographyHeaderCount
@@ -78,6 +87,22 @@ const BoxCount = ({
                     <CountUp end={content} duration={2.75} delay={0.5} />
                 </Typography>
             </BoxTextCount>
+            <Box sx={{ textAlign: "right" }}>
+                <Tooltip
+                    arrow
+                    title={Strings.Common.DETAIL}
+                    sx={{ padding: 0 }}
+                >
+                    <IconButton
+                        aria-label="delete"
+                        onClick={() => navigate("/" + pathNavigate)}
+                    >
+                        <KeyboardDoubleArrowRightIcon
+                            sx={{ color: colorBorderLeft }}
+                        />
+                    </IconButton>
+                </Tooltip>
+            </Box>
         </BoxContainerCount>
     );
 };
@@ -166,6 +191,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.error.main}
                     colorHeader={theme.palette.error.main}
                     colorContent={theme.palette.error.main}
+                    pathNavigate={RoutesPath.CAR_MANAGER}
                 />
 
                 {/* TOTAL_DRIVER */}
@@ -176,6 +202,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.primary.main}
                     colorHeader={theme.palette.primary.main}
                     colorContent={theme.palette.primary.main}
+                    pathNavigate={RoutesPath.DRIVER_MANAGEMENT}
                 />
 
                 {/* TOTAL_TRIPS */}
@@ -186,6 +213,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.success.main}
                     colorHeader={theme.palette.success.main}
                     colorContent={theme.palette.success.main}
+                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
                 />
 
                 {/* FORM_IS_PENDING_CONFIRMATION */}
@@ -196,6 +224,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.secondary.main}
                     colorHeader={theme.palette.secondary.main}
                     colorContent={theme.palette.secondary.main}
+                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
                 />
 
                 {/* LICENSE_CAR_EXPIRES */}
@@ -206,6 +235,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.warning.main}
                     colorHeader={theme.palette.warning.main}
                     colorContent={theme.palette.warning.main}
+                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
                 />
             </Box>
 

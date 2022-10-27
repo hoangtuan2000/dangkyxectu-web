@@ -34,7 +34,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
-import CarCrashIcon from '@mui/icons-material/CarCrash';
+import CarCrashIcon from "@mui/icons-material/CarCrash";
 import {
     Main,
     AppBar,
@@ -219,103 +219,6 @@ export default function MainLayout() {
                     </Box>
 
                     {/* TOOLTIP ACCOUNT BUTTON */}
-                    {/* <Tooltip title="Tài Khoản">
-                        <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 1 }}
-                        >
-                            <Avatar
-                                alt="avatar"
-                                src="/static/images/avatar/1.jpg"
-                                sx={{
-                                    width: {
-                                        xs: 30,
-                                        sm: 40,
-                                        md: 50,
-                                    },
-                                    height: {
-                                        xs: 30,
-                                        sm: 40,
-                                        md: 50,
-                                    },
-                                }}
-                            />
-                        </IconButton>
-                    </Tooltip> */}
-
-                    {/* ACCOUNT BUTTON / LOGOUT BUTTON */}
-                    {/* <Menu
-                        anchorEl={anchorElAvatar}
-                        open={openAccount}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: "visible",
-                                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                                mt: 1.5,
-                                "& .MuiAvatar-root": {
-                                    width: 32,
-                                    height: 32,
-                                    ml: -0.5,
-                                    mr: 1,
-                                },
-                                "& .MuiList-root": {
-                                    padding: "2px",
-                                },
-                                "& .MuiButtonBase-root": {
-                                    padding: "4px 8px",
-                                },
-                                "&:before": {
-                                    content: '""',
-                                    display: "block",
-                                    position: "absolute",
-                                    top: 0,
-                                    right: 14,
-                                    width: 10,
-                                    height: 10,
-                                    bgcolor: "background.paper",
-                                    transform: "translateY(-50%) rotate(45deg)",
-                                    zIndex: 0,
-                                },
-                            },
-                        }}
-                        transformOrigin={{
-                            horizontal: "right",
-                            vertical: "top",
-                        }}
-                        anchorOrigin={{
-                            horizontal: "right",
-                            vertical: "bottom",
-                        }}
-                    >
-                    <MenuItem
-                            sx={{
-                                fontSize: {
-                                    xs: "12px",
-                                    sm: "14px",
-                                    md: "16px",
-                                },
-                            }}
-                            onClick={handleLogout}
-                        >
-                            <LogoutIcon
-                                sx={{
-                                    marginRight: "5px",
-                                    fontSize: {
-                                        xs: "14px",
-                                        sm: "16px",
-                                        md: "18px",
-                                    },
-                                }}
-                            />
-                            {Strings.Common.LOGOUT}
-                        </MenuItem>
-                    </Menu> */}
-
-                    {/* TOOLTIP ACCOUNT BUTTON */}
                     <Tooltip title={Strings.Common.LOGOUT}>
                         <IconButton onClick={handleLogout} sx={{ ml: 1 }}>
                             <LogoutIcon
@@ -352,10 +255,15 @@ export default function MainLayout() {
                     {/* TEXT HEADER DRAWER */}
                     <Typography
                         variant="h6"
-                        component="div"
+                        component="h6"
                         sx={{
                             width: "100%",
                             textAlign: "center",
+                            fontSize: {
+                                'mobileS': 16,
+                                'sm': 14,
+                                'lg': 18,
+                            }
                         }}
                     >
                         {Strings.MainLayout.TEXT_HEADER}
@@ -416,7 +324,14 @@ export default function MainLayout() {
                 <Divider />
 
                 {/* CHANGE DARK MODE BUTTON */}
-                <List>
+                <List
+                    sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                    }}
+                >
                     <ListItem key={"Dark mode"} disablePadding>
                         <ListItemButton
                             onClick={() => {

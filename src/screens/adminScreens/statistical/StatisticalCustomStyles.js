@@ -55,8 +55,8 @@ const ButtonFeatures = styled(Button)(({ theme }) => ({
 
 const BoxContainerCount = styled(Box)(({ theme }) => ({
     width: "calc(90% / 5)",
-    // width: "220px",
-    height: "100px",
+    minWidth: "220px",
+    height: "110px",
     backgroundColor: theme.palette.action.selected,
     boxShadow: `${theme.palette.text.disabled} 0px 5px 15px`,
     borderRadius: "10px",
@@ -64,6 +64,40 @@ const BoxContainerCount = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2),
     margin: theme.spacing(1),
 }));
+
+// const ButtonNavigate = styled(Button)(({ theme }) => ({
+//     padding: 1,
+//     paddingLeft: 5,
+//     paddingRight: 5,
+//     backgroundColor: "#0090e3",
+//     [theme.breakpoints.up("xs")]: {
+//         fontSize: 9,
+//     },
+//     [theme.breakpoints.up("mobileS")]: {
+//         fontSize: 9,
+//     },
+//     [theme.breakpoints.up("mobileM")]: {
+//         fontSize: 10,
+//     },
+//     [theme.breakpoints.up("mobileL")]: {
+//         fontSize: 10,
+//     },
+//     [theme.breakpoints.up("sm")]: {
+//         fontSize: 11,
+//     },
+//     [theme.breakpoints.up("md")]: {
+//         fontSize: 11,
+//     },
+//     [theme.breakpoints.up("lg")]: {
+//         fontSize: 11,
+//     },
+//     [theme.breakpoints.up("xl")]: {
+//         fontSize: 10,
+//         "& .MuiSvgIcon-root": {
+//             fontSize: 12,
+//         },
+//     },
+// }));
 
 const BoxTextCount = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -84,6 +118,7 @@ const TypographyHeaderCount = styled(Typography)(({ theme }) => ({
 
 const BoxContainerChart = styled(Box)(({ theme }) => ({
     width: "calc(96% / 2)",
+    minWidth: "870px",
     margin: 10,
     padding: 10,
     borderRadius: 10,
@@ -98,9 +133,9 @@ const TitleChart = styled(Typography)(({ theme }) => ({
 }));
 
 const BoxTitleChart = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
     position: "relative",
 }));
 
@@ -139,5 +174,6 @@ export {
     TitleChart,
     FabStyle,
     BoxTitleChart,
-    ButtonFeatures
+    ButtonFeatures,
+    // ButtonNavigate,
 };
