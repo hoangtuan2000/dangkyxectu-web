@@ -109,7 +109,12 @@ const Constants = {
         },
         AnalysisDriverLicense: {
             GET_ANALYSIS_DRIVER_LICENSE: "/admin/getAnalysisDriverLicense",
-            GET_DATA_ANALYSIS_DRIVER_LICENSE: "/admin/getDataAnalysisDriverLicense",
+            GET_DATA_ANALYSIS_DRIVER_LICENSE:
+                "/admin/getDataAnalysisDriverLicense",
+        },
+        DialogShowInfoDriver: {
+            GET_INFO_DRIVER: "/admin/getInfoDriver",
+            GET_SCHEDULE_LIST_OF_DRIVER: "/admin/getScheduleListOfDriver",
         },
     },
 

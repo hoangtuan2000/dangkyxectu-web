@@ -25,8 +25,6 @@ import {
 } from "./DialogUpdateDriverCustomStyles";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import KeyIcon from "@mui/icons-material/Key";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -48,7 +46,6 @@ import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import ModalShowAddress from "../../modalShowAddress/ModalShowAddress";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { DialogCreateDriverServices } from "../../../services/adminServices/DialogCreateDriverServices";
 import { DialogUpdateDriverServices } from "../../../services/adminServices/DialogUpdateDriverServices";
 registerLocale("vi", vi);
 

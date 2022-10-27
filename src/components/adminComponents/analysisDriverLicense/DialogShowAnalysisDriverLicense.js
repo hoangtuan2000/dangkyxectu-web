@@ -38,6 +38,7 @@ import { FabStyle } from "./DialogShowAnalysisDriverLicenseCustomStyles";
 import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisDriverLicenseFilter";
 import { AnalysisDriverLicenseServices } from "../../../services/adminServices/AnalysisDriverLicenseServices";
 import DialogShowAnalysisDriverLicenseFilter from "./DialogShowAnalysisDriverLicenseFilter";
+import DialogShowInfoDriver from "../dialogShowInfoDriver/DialogShowInfoDriver";
 
 function DialogShowAnalysisDriverLicense({ open, handleClose }) {
     const theme = useTheme();
@@ -62,9 +63,9 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
         setDialogShowAnalysisTotalTripsFilter,
     ] = useState(false);
 
-    const [dialogShowScheduleGlobal, setDialogShowScheduleGlobal] = useState({
+    const [dialogShowInfoDriver, setDialogShowInfoDriver] = useState({
         open: false,
-        idSchedule: null,
+        idDriver: null,
     });
 
     const [dataFilter, setDataFilter] = useState({
@@ -304,11 +305,11 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
         });
     };
 
-    const handleShowSchedule = (e) => {
-        setDialogShowScheduleGlobal({
-            ...dialogShowScheduleGlobal,
+    const handleShowInfoDriver = (e) => {
+        setDialogShowInfoDriver({
+            ...dialogShowInfoDriver,
             open: true,
-            idSchedule: e,
+            idDriver: e,
         });
     };
 
@@ -360,7 +361,7 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
                     {/* CONTENT */}
                     <Box>
                         <DataGridCustom
-                            columns={col((e) => handleShowSchedule(e))}
+                            columns={col((e) => handleShowInfoDriver(e))}
                             rows={driverLicenseList}
                             {...dataInfo}
                             onChangePage={(e) => {
@@ -397,15 +398,15 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
                 </Box>
             </DialogActions>
 
-            <DialogShowScheduleGlobal
-                open={dialogShowScheduleGlobal.open}
+            <DialogShowInfoDriver
+                open={dialogShowInfoDriver.open}
                 handleClose={() =>
-                    setDialogShowScheduleGlobal({
-                        ...dialogShowScheduleGlobal,
+                    setDialogShowInfoDriver({
+                        ...dialogShowInfoDriver,
                         open: false,
                     })
                 }
-                idSchedule={dialogShowScheduleGlobal.idSchedule}
+                idDriver={dialogShowInfoDriver.idDriver}
             />
 
             <DialogShowAnalysisDriverLicenseFilter

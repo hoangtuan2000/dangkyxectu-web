@@ -8,6 +8,7 @@ import {
     TextField,
     Tooltip,
     useTheme,
+    IconButton,
 } from "@mui/material";
 import {
     AutocompleteStyle,
@@ -24,8 +25,9 @@ import {
 } from "./DialogCreateDriverCustomStyles";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import KeyIcon from "@mui/icons-material/Key";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -71,6 +73,7 @@ function DialogCreateDriver({
         content: Strings.Common.ADD_DRIVER_CONFIRMATION,
         handleSubmit: () => {},
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const [selectDates, setSelectDates] = useState();
     const [errorData, setErrorData] = useState({
@@ -714,22 +717,46 @@ function DialogCreateDriver({
                                     Strings.DialogCreateDriver.ENTER_PASSWORD
                                 }
                                 variant="outlined"
-                                type={"password"}
+                                type={showPassword ? "text" : "password"}
                                 size="small"
                                 value={dataSendApi.pass || ""}
                                 onChange={(e) => handleChangePassword(e)}
                                 InputProps={{
-                                    endAdornment: (
+                                    endAdornment: showPassword ? (
                                         <InputAdornment position="start">
-                                            <KeyIcon
-                                                sx={{
-                                                    color: errorData.pass
-                                                        ? theme.palette.error
-                                                              .main
-                                                        : theme.palette.primary
-                                                              .main,
-                                                }}
-                                            />
+                                            <IconButton
+                                                onClick={() =>
+                                                    setShowPassword(false)
+                                                }
+                                            >
+                                                <VisibilityIcon
+                                                    sx={{
+                                                        color: errorData.pass
+                                                            ? theme.palette
+                                                                  .error.main
+                                                            : theme.palette
+                                                                  .primary.main,
+                                                    }}
+                                                />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ) : (
+                                        <InputAdornment position="start">
+                                            <IconButton
+                                                onClick={() =>
+                                                    setShowPassword(true)
+                                                }
+                                            >
+                                                <VisibilityOffIcon
+                                                    sx={{
+                                                        color: errorData.pass
+                                                            ? theme.palette
+                                                                  .error.main
+                                                            : theme.palette
+                                                                  .primary.main,
+                                                    }}
+                                                />
+                                            </IconButton>
                                         </InputAdornment>
                                     ),
                                 }}

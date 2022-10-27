@@ -90,7 +90,7 @@ const col = (handleGetDriverCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.fullName}
+                            {params.row.fullName || ""}
                         </span>
                     </Tooltip>
                 );
@@ -113,7 +113,7 @@ const col = (handleGetDriverCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.email}
+                            {params.row.email || ""}
                         </span>
                     </Tooltip>
                 );
@@ -135,7 +135,7 @@ const col = (handleGetDriverCode) => {
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {params.row.phoneNumber}
+                            {params.row.phoneNumber || ""}
                         </span>
                     </Tooltip>
                 );
@@ -208,7 +208,7 @@ const col = (handleGetDriverCode) => {
                             <IconButton
                                 color="primary"
                                 onClick={() =>
-                                    handleGetDriverCode(params.row.driverCode)
+                                    handleGetDriverCode(params.row.idDriver)
                                 }
                             >
                                 <VisibilityIcon />
