@@ -1,4 +1,4 @@
-import { Fab, styled } from "@mui/material";
+import { Button, Fab, styled } from "@mui/material";
 
 const FabStyle = styled(Fab)(({ theme }) => ({
     marginBottom: 5,
@@ -26,4 +26,27 @@ const FabStyle = styled(Fab)(({ theme }) => ({
     },
 }));
 
-export { FabStyle };
+const ButtonStyle = styled(Button)(({ theme }) => ({
+    marginBottom: 5,
+    backgroundColor: theme.palette.success.main,
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 10,
+        ".MuiSvgIcon-root": {
+            fontSize: 14,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 11,
+        ".MuiSvgIcon-root": {
+            fontSize: 16,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 12,
+        ".MuiSvgIcon-root": {
+            fontSize: 18,
+        },
+    },
+}));
+
+export { FabStyle, ButtonStyle };

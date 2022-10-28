@@ -9,10 +9,12 @@ import BackDrop from "../../../components/backDrop/BackDrop";
 import Constants from "../../../constants/Constants";
 import { CarRegistrationManagementService } from "../../../services/adminServices/CarRegistrationManagementServices";
 import helper from "../../../common/helper";
-import { FabStyle } from "./CarRegistrationManagementCustomStyles";
+import { ButtonStyle, FabStyle } from "./CarRegistrationManagementCustomStyles";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DialogShowScheduleAdmin from "../../../components/adminComponents/dialogShowScheduleAdmin/DialogShowScheduleAdmin";
 import DialogCarRegistrationManagementFilter from "../../../components/adminComponents/dialogCarRegistrationManagementFilter/DialogCarRegistrationManagementFilter";
+import * as XLSX from "xlsx";
 
 function CarRegistrationManagement() {
     const theme = useTheme();
@@ -148,6 +150,56 @@ function CarRegistrationManagement() {
                     Strings.Common.ERROR,
                 content: res.name || null,
             });
+        }
+    };
+
+    const getAdminScheduleListToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            status: data.status,
+            carType: data.carType,
+            faculty: data.faculty,
+            infoUser: data.infoUser,
+            infoDriver: data.infoDriver,
+            licensePlates: data.licensePlates,
+            scheduleCode: data.scheduleCode,
+            address: data.address,
+            idWard: data.idWard,
+            startDate: data.startDate,
+            endDate: data.endDate,
+        };
+        const res = await CarRegistrationManagementService.getAdminScheduleList(
+            {
+                ...objData,
+            }
+        );
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
         }
     };
 
@@ -337,6 +389,64 @@ function CarRegistrationManagement() {
         });
     };
 
+    const exportExcel = async () => {
+        let getData = await getAdminScheduleListToExport();
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        idSchedule: item.idSchedule,
+                        fullNameUser: item.fullNameUser,
+                        codeUser: item.codeUser,
+                        startLocation: `${item.startLocation} - ${item.wardStart} - ${item.districtStart} - ${item.provinceStart}`,
+                        endLocation: `${item.endLocation} - ${item.wardEnd} - ${item.districtEnd} - ${item.provinceEnd}`,
+                        reason: item.reason,
+                        startDate: helper.formatDateStringFromTimeStamp(
+                            item.startDate
+                        ),
+                        endDate: helper.formatDateStringFromTimeStamp(
+                            item.endDate
+                        ),
+                        fullNameDriver: item.fullNameDriver,
+                        codeDriver: item.codeDriver,
+                        carType: `${item.carType} ${item.seatNumber} Chổ`,
+                        licensePlates: item.licensePlates,
+                        scheduleStatus: item.scheduleStatus,
+                        starNumber: item.starNumber,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Mã Lịch Trình",
+                        "Người Đăng Ký",
+                        "Mã Người Đăng Ký",
+                        "Điểm Đi",
+                        "Điểm Đến",
+                        "Lý Do Đăng Ký",
+                        "Thời Gian Đi",
+                        "Thời Gian Về",
+                        "Tài Xế",
+                        "Mã Tài Xế",
+                        "Loại Xe",
+                        "Biển Số Xe",
+                        "Trạng Thái Lịch Trình",
+                        "Đánh Giá",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(wb, "Danh_Sach_Lich_Trinh.xlsx");
+        }
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getAdminScheduleList();
@@ -356,20 +466,39 @@ function CarRegistrationManagement() {
                 {Strings.CarRegistrationManagement.LIST_OF_VEHICLE_REGISTRATION}
             </Typography>
 
-            {/* FILTER BUTTON */}
-            <Tooltip title={Strings.Common.FILTER}>
-                <FabStyle
-                    color="primary"
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                {/* FILTER BUTTON */}
+                <Tooltip title={Strings.Common.FILTER}>
+                    <FabStyle
+                        color="primary"
+                        size="small"
+                        onClick={() =>
+                            setDialogCarRegistrationManagementFilter(true)
+                        }
+                    >
+                        <Badge badgeContent={totalDataFilter} color="error">
+                            <FilterAltIcon />
+                        </Badge>
+                    </FabStyle>
+                </Tooltip>
+
+                {/* EXPORT BUTTON */}
+                <ButtonStyle
+                    variant="contained"
                     size="small"
-                    onClick={() =>
-                        setDialogCarRegistrationManagementFilter(true)
-                    }
+                    sx={{ backgroundColor: "#02b6d6" }}
+                    endIcon={<FileDownloadIcon />}
+                    onClick={() => exportExcel()}
                 >
-                    <Badge badgeContent={totalDataFilter} color="error">
-                        <FilterAltIcon />
-                    </Badge>
-                </FabStyle>
-            </Tooltip>
+                    {Strings.Common.EXPORT}
+                </ButtonStyle>
+            </Box>
 
             <DataGridCustom
                 columns={col((e) => {

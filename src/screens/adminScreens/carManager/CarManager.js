@@ -1,15 +1,10 @@
-import {
-    Badge,
-    Box,
-    Tooltip,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Badge, Box, Tooltip, Typography, useTheme } from "@mui/material";
 import { useState, useEffect } from "react";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import Strings from "../../../constants/Strings";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Constants from "../../../constants/Constants";
 import col from "./columnsCarManagerDataGrid";
 import ModalError from "../../../components/modalError/ModalError";
@@ -21,6 +16,7 @@ import DialogCarManagerFilter from "../../../components/adminComponents/dialogCa
 import helper from "../../../common/helper";
 import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar/DialogCreateCar";
 import DialogUpdateCar from "../../../components/adminComponents/dialogUpdateCar/DialogUpdateCar";
+import * as XLSX from "xlsx";
 
 function CarManager() {
     const theme = useTheme();
@@ -38,7 +34,7 @@ function CarManager() {
     const [dialogCreateCar, setDialogCreateCar] = useState(false);
     const [dialogUpdateCar, setDialogUpdateCar] = useState({
         open: false,
-        idCar: null
+        idCar: null,
     });
     const [dataFilter, setDataFilter] = useState({
         carStatus: [],
@@ -136,6 +132,51 @@ function CarManager() {
         }
     };
 
+    const getCarListForAdminToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            carStatus: data.carStatus,
+            carType: data.carType,
+            carBrand: data.carBrand,
+            carCode: data.carCode,
+            licensePlates: data.licensePlates,
+            licenseExpires: data.licenseExpires,
+            haveTrip: data.haveTrip,
+            haveMaintenance: data.haveMaintenance,
+        };
+        const res = await CarManagerServices.getCarListForAdmin({
+            ...objData,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
+        }
+    };
+
     const handleFormatDataFilterSendApi = (data) => {
         //format data to send API
         let carStatus = [];
@@ -181,7 +222,7 @@ function CarManager() {
             data.licensePlates,
             data.licenseExpires,
             data.haveTrip,
-            data.haveMaintenance,
+            data.haveMaintenance
         );
     };
 
@@ -198,7 +239,7 @@ function CarManager() {
             data.licensePlates,
             data.licenseExpires,
             data.haveTrip,
-            data.haveMaintenance,
+            data.haveMaintenance
         );
     };
 
@@ -280,8 +321,50 @@ function CarManager() {
             data.carCode,
             data.licensePlates,
             data.haveTrip,
-            data.haveMaintenance,
+            data.haveMaintenance
         );
+    };
+
+    const exportExcel = async () => {
+        let getData = await getCarListForAdminToExport();
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        idCar: item.idCar,
+                        licensePlates: item.licensePlates,
+                        nameCarBrand: item.nameCarBrand,
+                        carType: `${item.nameCarType} ${item.seatNumber} Chổ`,
+                        numberOfTrips: item.numberOfTrips,
+                        numberOfMaintenance: item.numberOfMaintenance,
+                        licenseNumberExpired: item.licenseNumberExpired,
+                        nameCarStatus: item.nameCarStatus,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Mã Xe",
+                        "Biển Số",
+                        "Thương Hiệu",
+                        "Loại Xe",
+                        "Số Chuyến Đi",
+                        "Số Lần Bảo Trì",
+                        "Giấy Phép Hết Hạn",
+                        "Trạng Thái",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(wb, "Danh_Sach_Xe.xlsx");
+        }
     };
 
     const run = async () => {
@@ -323,23 +406,38 @@ function CarManager() {
                     </FabStyle>
                 </Tooltip>
 
-                {/* BUTTON ADD CAR */}
-                <ButtonStyle
-                    variant="contained"
-                    size="small"
-                    startIcon={<DirectionsCarIcon />}
-                    onClick={() => setDialogCreateCar(true)}
-                >
-                    {Strings.CarManager.ADD_CAR}
-                </ButtonStyle>
+                <Box>
+                    {/* EXPORT BUTTON */}
+                    <ButtonStyle
+                        variant="contained"
+                        size="small"
+                        sx={{ backgroundColor: "#02b6d6" }}
+                        endIcon={<FileDownloadIcon />}
+                        onClick={() => exportExcel()}
+                    >
+                        {Strings.Common.EXPORT}
+                    </ButtonStyle>
+
+                    {/* BUTTON ADD CAR */}
+                    <ButtonStyle
+                        variant="contained"
+                        size="small"
+                        startIcon={<DirectionsCarIcon />}
+                        onClick={() => setDialogCreateCar(true)}
+                    >
+                        {Strings.CarManager.ADD_CAR}
+                    </ButtonStyle>
+                </Box>
             </Box>
 
             <DataGridCustom
-                columns={col((e) => setDialogUpdateCar({
-                    ...dialogUpdateCar,
-                    open: true,
-                    idCar: e
-                }))}
+                columns={col((e) =>
+                    setDialogUpdateCar({
+                        ...dialogUpdateCar,
+                        open: true,
+                        idCar: e,
+                    })
+                )}
                 rows={carList}
                 {...dataInfo}
                 onChangePage={(e) => {
@@ -360,10 +458,12 @@ function CarManager() {
 
             <DialogUpdateCar
                 open={dialogUpdateCar.open}
-                handleClose={() => setDialogUpdateCar({
-                    ...dialogUpdateCar,
-                    open: false
-                })}
+                handleClose={() =>
+                    setDialogUpdateCar({
+                        ...dialogUpdateCar,
+                        open: false,
+                    })
+                }
                 handleGetCarListForAdminWithFilter={
                     handleGetCarListForAdminWithFilter
                 }

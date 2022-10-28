@@ -28,6 +28,7 @@ const FabStyle = styled(Fab)(({ theme }) => ({
 
 const ButtonStyle = styled(Button)(({ theme }) => ({
     marginBottom: 5,
+    marginLeft: 5,
     backgroundColor: theme.palette.success.main,
     [theme.breakpoints.up("mobileS")]: {
         fontSize: 10,
