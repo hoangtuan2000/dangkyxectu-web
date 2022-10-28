@@ -4,6 +4,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import Strings from "../../../constants/Strings";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Constants from "../../../constants/Constants";
 import col from "./columnsCarStatusOfTripDataGrid";
 import ModalError from "../../../components/modalError/ModalError";
@@ -17,6 +18,7 @@ import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar
 import DialogUpdateCar from "../../../components/adminComponents/dialogUpdateCar/DialogUpdateCar";
 import { CarStatusOfTripServices } from "../../../services/adminServices/CarStatusOfTripServices";
 import DialogShowCarBroken from "../../../components/adminComponents/dialogShowCarBroken/DialogShowCarBroken";
+import * as XLSX from "xlsx";
 
 function CarStatusOfTrip() {
     const theme = useTheme();
@@ -139,6 +141,54 @@ function CarStatusOfTrip() {
                     Strings.Common.ERROR,
                 content: res.name || null,
             });
+        }
+    };
+
+    const getCarStatusListOfTripsToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            carType: data.carType,
+            carBrand: data.carBrand,
+            driver: data.driver,
+            licensePlates: data.licensePlates,
+            carCode: data.carCode,
+            isBrokenCarPartsBeforeTrip: data.isBrokenCarPartsBeforeTrip,
+            isBrokenCarPartsAfterTrip: data.isBrokenCarPartsAfterTrip,
+            startDate: data.startDate,
+            endDate: data.endDate,
+        };
+
+        const res = await CarStatusOfTripServices.getCarStatusListOfTrips({
+            ...objData,
+        });
+
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
         }
     };
 
@@ -289,8 +339,68 @@ function CarStatusOfTrip() {
         setDialogShowCarBroken({
             ...dialogShowCarBroken,
             open: true,
-            idSchedule: e
+            idSchedule: e,
         });
+    };
+
+    const exportExcel = async () => {
+        let getData = await getCarStatusListOfTripsToExport();
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        idSchedule: item.idSchedule,
+                        idCar: item.idCar,
+                        totalBrokenPartsBeforeTrip:
+                            item.totalBrokenPartsBeforeTrip,
+                        totalBrokenPartsAfterTrip:
+                            item.totalBrokenPartsAfterTrip,
+                        carType: `${item.nameCarType} ${item.seatNumber} Chổ`,
+                        licensePlates: item.licensePlates,
+                        nameCarBrand: item.nameCarBrand,
+                        startDate: helper.formatDateStringFromTimeStamp(
+                            item.startDate
+                        ),
+                        endDate: helper.formatDateStringFromTimeStamp(
+                            item.endDate
+                        ),
+                        scheduleStatus: item.nameScheduleStatus,
+                        fullNameDriver: item.fullNameDriver,
+                        codeDriver: item.codeDriver,
+                        fullNameUser: item.fullNameUser,
+                        codeUser: item.codeUser,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Mã Lịch Trình",
+                        "Mã Xe",
+                        "Số Bộ Phận Xe Bị Hỏng Trước Khi Đi",
+                        "Số Bộ Phận Xe Bị Hỏng Xe Sau Khi Đi",
+                        "Loại Xe",
+                        "Biển Số Xe",
+                        "Thương Hiệu",
+                        "Thời Gian Đi",
+                        "Thời Gian Về",
+                        "Trạng Thái Lịch Trình",
+                        "Tài Xế",
+                        "Mã Tài Xế",
+                        "Người Đăng Ký",
+                        "Mã Người Đăng Ký",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(wb, "Danh_Sach_Tinh_Trang_Xe_Cua_Chuyen_Di.xlsx");
+        }
     };
 
     const run = async () => {
@@ -331,6 +441,17 @@ function CarStatusOfTrip() {
                         </Badge>
                     </FabStyle>
                 </Tooltip>
+
+                {/* EXPORT BUTTON */}
+                <ButtonStyle
+                    variant="contained"
+                    size="small"
+                    sx={{ backgroundColor: "#02b6d6" }}
+                    endIcon={<FileDownloadIcon />}
+                    onClick={() => exportExcel()}
+                >
+                    {Strings.Common.EXPORT}
+                </ButtonStyle>
             </Box>
 
             <DataGridCustom

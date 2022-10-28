@@ -257,11 +257,35 @@ const FabStyle = styled(Fab)(({ theme }) => ({
     },
 }));
 
+const ButtonStyle = styled(Button)(({ theme }) => ({
+    marginBottom: 5,
+    backgroundColor: theme.palette.success.main,
+    [theme.breakpoints.up("mobileS")]: {
+        fontSize: 10,
+        ".MuiSvgIcon-root": {
+            fontSize: 14,
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        fontSize: 10,
+        ".MuiSvgIcon-root": {
+            fontSize: 15,
+        },
+    },
+    [theme.breakpoints.up("lg")]: {
+        fontSize: 11,
+        ".MuiSvgIcon-root": {
+            fontSize: 16,
+        },
+    },
+}));
+
 export {
     ButtonFeatures,
     DialogContainer,
     Title,
     TextInput,
     FormGroupStyle,
-    FabStyle
+    FabStyle,
+    ButtonStyle
 };

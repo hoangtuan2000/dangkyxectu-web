@@ -86,8 +86,8 @@ const Strings = {
         DATA_IS_UNCHANGED: "Dữ Liệu Không Thay Đổi",
         YES: "Có",
         NO: "Không",
-        EXPORT: "Export",
-        IMPORT: "Import",
+        EXPORT: "Xuất File",
+        IMPORT: "Nhập File",
     },
 
     Login: {

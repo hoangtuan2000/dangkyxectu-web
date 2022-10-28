@@ -2,25 +2,19 @@ import { useState, useEffect } from "react";
 import {
     Badge,
     Box,
-    Checkbox,
     DialogActions,
     DialogContent,
-    FormControlLabel,
-    IconButton,
-    InputAdornment,
     Tooltip,
     useTheme,
 } from "@mui/material";
 import {
     ButtonFeatures,
+    ButtonStyle,
     DialogContainer,
-    FormGroupStyle,
-    TextInput,
     Title,
 } from "./DialogShowAnalysisTotalTripsCustomStyles";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import SearchIcon from "@mui/icons-material/Search";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
@@ -28,14 +22,13 @@ import BackDrop from "../../backDrop/BackDrop";
 import DataGridCustom from "../../dataGridCustom/DataGridCustom";
 import Constants from "../../../constants/Constants";
 import col from "./columnsDialogShowAnalysisTotalTripsDataGrid";
-import { DialogChangeCarServices } from "../../../services/adminServices/DialogChangeCarServices";
-import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
 import helper from "../../../common/helper";
 import DialogShowScheduleGlobal from "../../dialogShowScheduleGlobal/DialogShowScheduleGlobal";
 import { FabStyle } from "./AnalysisTotalTripsCustomStyles";
 import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisTotalTripsFilter";
+import * as XLSX from "xlsx";
 
 function DialogShowAnalysisTotalTrips({
     open,
@@ -184,6 +177,56 @@ function DialogShowAnalysisTotalTrips({
         }
     };
 
+    const getDataTotalNumberOfTripsOverTimeToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            haveSchedule: data.haveSchedule,
+            status: data.status,
+            carType: data.carType,
+            faculty: data.faculty,
+            infoUser: data.infoUser,
+            infoDriver: data.infoDriver,
+            licensePlates: data.licensePlates,
+            scheduleCode: data.scheduleCode,
+            address: data.address,
+            idWard: data.idWard,
+            startDateSchedule: data.startDateSchedule,
+            endDateSchedule: data.endDateSchedule
+        };
+        const res =
+            await AnalysisTotalTripsServices.getDataTotalNumberOfTripsOverTime({
+                ...objData,
+            });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
+        }
+    };
+
     const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
@@ -262,25 +305,6 @@ function DialogShowAnalysisTotalTrips({
             endDateSchedule: data.endDateSchedule,
         };
     };
-
-    // const handleGetDataTotalNumberOfTripsOverTimeWithFilter = async () => {
-    //     const data = await handleFormatDataFilterSendApi(dataFilter);
-    //     await getDataTotalNumberOfTripsOverTime(
-    //         dataInfo.page,
-    //         dataInfo.pageSize,
-    //         data.status,
-    //         data.carType,
-    //         data.faculty,
-    //         data.infoUser,
-    //         data.infoDriver,
-    //         data.licensePlates,
-    //         data.scheduleCode,
-    //         data.address,
-    //         data.idWard,
-    //         data.startDateSchedule,
-    //         data.endDateSchedule
-    //     );
-    // };
 
     const handleFilter = (e) => {
         //format data to send API
@@ -380,7 +404,11 @@ function DialogShowAnalysisTotalTrips({
 
     const run = async () => {
         await setBackDrop(true);
-        (await open) && getDataTotalNumberOfTripsOverTime(Constants.Common.PAGE, Constants.Common.LIMIT_ENTRY);
+        (await open) &&
+            getDataTotalNumberOfTripsOverTime(
+                Constants.Common.PAGE,
+                Constants.Common.LIMIT_ENTRY
+            );
         if (startDate && endDate) {
             const startTime = helper.formatDateStringFromTimeStamp(
                 startDate / 1000
@@ -400,7 +428,76 @@ function DialogShowAnalysisTotalTrips({
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
-    };    
+    };
+
+    const exportExcel = async () => {
+        let getData = await getDataTotalNumberOfTripsOverTimeToExport();
+        // FORMAT NAME FILE EXPORT
+        let startTime = "";
+        let endTime = "";
+        if (startDate && endDate) {
+            startTime = helper.formatDateStringFromTimeStamp(startDate / 1000);
+            endTime = helper.formatDateStringFromTimeStamp(endDate / 1000);
+        } else {
+            const currentDate = new Date();
+            startTime = new Date(
+                currentDate.setDate(currentDate.getDate() - 7)
+            ).toLocaleDateString("en-GB");
+            endTime = new Date().toLocaleDateString("en-GB");
+        }
+
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        date: item.date
+                            ? helper.formatDateStringFromTimeStamp(item.date)
+                            : "",
+                        idSchedule: item.idSchedule,
+                        startDate: item.startDate
+                            ? helper.formatDateStringFromTimeStamp(
+                                  item.startDate
+                              )
+                            : "",
+                        endDate: item.endDate
+                            ? helper.formatDateStringFromTimeStamp(item.endDate)
+                            : "",
+                        fullNameUser: item.fullNameUser,
+                        codeUser: item.codeUser,
+                        fullNameDriver: item.fullNameDriver,
+                        codeDriver: item.codeDriver,
+                        nameScheduleStatus: item.nameScheduleStatus,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Ngày",
+                        "Mã Lịch Trình",
+                        "Ngày Đi",
+                        "Ngày Về",
+                        "Người Đăng Ký",
+                        "Mã Người Đăng Ký",
+                        "Tài Xế",
+                        "Mã Tài Xế",
+                        "Trạng Thái Lịch Trình",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(
+                wb,
+                `Danh_Sach_Lich_Trinh_Tu_${startTime}_Den_${endTime}.xlsx`
+            );
+        }
+    };
 
     useEffect(() => {
         run();
@@ -421,20 +518,42 @@ function DialogShowAnalysisTotalTrips({
                         {title}
                     </Title>
 
-                    {/* FILTER BUTTON */}
-                    <Tooltip title={Strings.Common.FILTER}>
-                        <FabStyle
-                            color="primary"
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        {/* FILTER BUTTON */}
+                        <Tooltip title={Strings.Common.FILTER}>
+                            <FabStyle
+                                color="primary"
+                                size="small"
+                                onClick={() =>
+                                    setDialogShowAnalysisTotalTripsFilter(true)
+                                }
+                            >
+                                <Badge
+                                    badgeContent={totalDataFilter}
+                                    color="error"
+                                >
+                                    <FilterAltIcon />
+                                </Badge>
+                            </FabStyle>
+                        </Tooltip>
+
+                        {/* EXPORT BUTTON */}
+                        <ButtonStyle
+                            variant="contained"
                             size="small"
-                            onClick={() =>
-                                setDialogShowAnalysisTotalTripsFilter(true)
-                            }
+                            sx={{ backgroundColor: "#02b6d6" }}
+                            endIcon={<FileDownloadIcon />}
+                            onClick={() => exportExcel()}
                         >
-                            <Badge badgeContent={totalDataFilter} color="error">
-                                <FilterAltIcon />
-                            </Badge>
-                        </FabStyle>
-                    </Tooltip>
+                            {Strings.Common.EXPORT}
+                        </ButtonStyle>
+                    </Box>
 
                     {/* CONTENT */}
                     <Box>

@@ -14,6 +14,7 @@ import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../../constants/Strings";
 import col from "./columnsDriverManagement";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import BackDrop from "../../../components/backDrop/BackDrop";
 import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
 import ModalError from "../../../components/modalError/ModalError";
@@ -25,54 +26,7 @@ import DialogDriverManagementFilter from "../../../components/adminComponents/di
 import helper from "../../../common/helper";
 import DialogCreateDriver from "../../../components/adminComponents/dialogCreateDriver/DialogCreateDriver";
 import DialogUpdateDriver from "../../../components/adminComponents/dialogUpdateDriver/DialogUpdateDriver";
-
-const rowsTest = [
-    {
-        id: 1,
-        fullName: "Nguyễn Văn A",
-        code: "TX123",
-        phone: "0123456789",
-        license: "Hạng C",
-        numberOfTrips: "20",
-        status: "Hoạt Động",
-    },
-    {
-        id: 2,
-        fullName: "Nguyễn Văn A",
-        code: "TX123",
-        phone: "0123456789",
-        license: "Hạng C",
-        numberOfTrips: "20",
-        status: "Hoạt Động",
-    },
-    {
-        id: 3,
-        fullName: "Nguyễn Văn A",
-        code: "TX123",
-        phone: "0123456789",
-        license: "Hạng C",
-        numberOfTrips: "20",
-        status: "Hoạt Động",
-    },
-    {
-        id: 4,
-        fullName: "Nguyễn Văn A",
-        code: "TX123",
-        phone: "0123456789",
-        license: "Hạng C",
-        numberOfTrips: "20",
-        status: "Ngừng Hoạt Động",
-    },
-    {
-        id: 5,
-        fullName: "Nguyễn Văn A",
-        code: "TX123",
-        phone: "0123456789",
-        license: "Hạng C",
-        numberOfTrips: "20",
-        status: "Hoạt Động",
-    },
-];
+import * as XLSX from "xlsx";
 
 function DriverManagement() {
     const theme = useTheme();
@@ -192,6 +146,53 @@ function DriverManagement() {
                     Strings.Common.ERROR,
                 content: res.name || null,
             });
+        }
+    };
+
+    const getDriverListToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            driverLicense: data.driverLicense,
+            driverStatus: data.driverStatus,
+            starNumber: data.starNumber,
+            licenseExpires: data.licenseExpires,
+            numberOfTrip: data.numberOfTrip,
+            codeDriver: data.codeDriver,
+            fullNameDriver: data.fullNameDriver,
+            emailDriver: data.emailDriver,
+            phoneDriver: data.phoneDriver,
+        };
+
+        const res = await DriverManagementServices.getDriverList({
+            ...objData,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
         }
     };
 
@@ -352,6 +353,46 @@ function DriverManagement() {
         });
     };
 
+    const exportExcel = async () => {
+        let getData = await getDriverListToExport();
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        codeDriver: item.codeDriver,
+                        fullNameDriver: item.fullNameDriver,
+                        phoneDriver: item.phoneDriver,
+                        emailDriver: item.emailDriver,
+                        nameDriverLicense: item.nameDriverLicense,
+                        numberOfTrips: item.numberOfTrips,
+                        averageStar: item.averageStar,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Mã Tài Xế",
+                        "Họ Tên",
+                        "Điện Thoại",
+                        "Email",
+                        "Bằng Lái",
+                        "Số Chuyến Đi",
+                        "Đánh Giá",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(wb, "Danh_Sach_Tai_Xe.xlsx");
+        }
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverList();
@@ -391,15 +432,28 @@ function DriverManagement() {
                     </FabStyle>
                 </Tooltip>
 
-                {/* BUTTON ADD CAR */}
-                <ButtonStyle
-                    variant="contained"
-                    size="small"
-                    startIcon={<PersonAddIcon />}
-                    onClick={() => setDialogCreateDriver(true)}
-                >
-                    {Strings.DriverManagement.ADD_DRIVER}
-                </ButtonStyle>
+                <Box>
+                    {/* EXPORT BUTTON */}
+                    <ButtonStyle
+                        variant="contained"
+                        size="small"
+                        sx={{ backgroundColor: "#02b6d6" }}
+                        endIcon={<FileDownloadIcon />}
+                        onClick={() => exportExcel()}
+                    >
+                        {Strings.Common.EXPORT}
+                    </ButtonStyle>
+
+                    {/* BUTTON ADD CAR */}
+                    <ButtonStyle
+                        variant="contained"
+                        size="small"
+                        startIcon={<PersonAddIcon />}
+                        onClick={() => setDialogCreateDriver(true)}
+                    >
+                        {Strings.DriverManagement.ADD_DRIVER}
+                    </ButtonStyle>
+                </Box>
             </Box>
 
             <DataGridCustom

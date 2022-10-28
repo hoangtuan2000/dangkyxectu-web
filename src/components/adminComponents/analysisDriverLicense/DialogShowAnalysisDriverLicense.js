@@ -2,25 +2,18 @@ import { useState, useEffect } from "react";
 import {
     Badge,
     Box,
-    Checkbox,
     DialogActions,
     DialogContent,
-    FormControlLabel,
-    IconButton,
-    InputAdornment,
     Tooltip,
     useTheme,
 } from "@mui/material";
 import {
     ButtonFeatures,
+    ButtonStyle,
     DialogContainer,
-    FormGroupStyle,
-    TextInput,
     Title,
 } from "./DialogShowAnalysisDriverLicenseCustomStyles";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import SearchIcon from "@mui/icons-material/Search";
 import Strings from "../../../constants/Strings";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
@@ -28,17 +21,14 @@ import BackDrop from "../../backDrop/BackDrop";
 import DataGridCustom from "../../dataGridCustom/DataGridCustom";
 import Constants from "../../../constants/Constants";
 import col from "./columnsDialogShowAnalysisDriverLicenseDataGrid";
-import { DialogChangeCarServices } from "../../../services/adminServices/DialogChangeCarServices";
-import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import helper from "../../../common/helper";
-import DialogShowScheduleGlobal from "../../dialogShowScheduleGlobal/DialogShowScheduleGlobal";
 import { FabStyle } from "./DialogShowAnalysisDriverLicenseCustomStyles";
-import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisDriverLicenseFilter";
 import { AnalysisDriverLicenseServices } from "../../../services/adminServices/AnalysisDriverLicenseServices";
 import DialogShowAnalysisDriverLicenseFilter from "./DialogShowAnalysisDriverLicenseFilter";
 import DialogShowInfoDriver from "../dialogShowInfoDriver/DialogShowInfoDriver";
+import * as XLSX from "xlsx";
 
 function DialogShowAnalysisDriverLicense({ open, handleClose }) {
     const theme = useTheme();
@@ -162,6 +152,53 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
                     Strings.Common.ERROR,
                 content: res.name || null,
             });
+        }
+    };
+
+    const getDataAnalysisDriverLicenseToExport = async () => {
+        const data = await handleFormatDataFilterSendApi(dataFilter);
+        const objData = {
+            getAllData: true,
+            driverLicense: data.driverLicense,
+            userStatus: data.userStatus,
+            haveDriver: data.haveDriver,
+            codeDriver: data.codeDriver,
+            fullNameDriver: data.fullNameDriver,
+            emailDriver: data.emailDriver,
+            phoneDriver: data.phoneDriver,
+            address: data.address,
+            idWard: data.idWard,
+        };
+        const res =
+            await AnalysisDriverLicenseServices.getDataAnalysisDriverLicense({
+                ...objData,
+            });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                return res.data.data;
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+                return false;
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+            return false;
         }
     };
 
@@ -313,6 +350,44 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
         });
     };
 
+    const exportExcel = async () => {
+        let getData = await getDataAnalysisDriverLicenseToExport();
+        if (getData) {
+            let dataExport = [
+                ...getData.map((item) => {
+                    return {
+                        nameDriverLicense: item.nameDriverLicense,
+                        codeDriver: item.codeDriver,
+                        fullNameDriver: item.fullNameDriver,
+                        phoneDriver: item.phoneDriver,
+                        emailDriver: item.emailDriver,
+                        nameUserStatus: item.nameUserStatus,
+                    };
+                }),
+            ];
+            let wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.json_to_sheet(dataExport);
+            XLSX.utils.book_append_sheet(wb, ws, "MySheet");
+            XLSX.utils.sheet_add_aoa(
+                ws,
+                [
+                    [
+                        "Bằng Lái",
+                        "Mã Tài Xế",
+                        "Họ Tên",
+                        "Điện Thoại",
+                        "Email",
+                        "Trạng Thái",
+                    ],
+                ],
+                {
+                    origin: "A1",
+                }
+            );
+            XLSX.writeFile(wb, "Danh_Sach_Bang_Lai_Tuong_Ung_Voi_Tai_Xe.xlsx");
+        }
+    };
+
     const run = async () => {
         await setBackDrop(true);
         (await open) &&
@@ -343,20 +418,42 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
                         {Strings.DialogShowAnalysisDriverLicense.TITLE}
                     </Title>
 
-                    {/* FILTER BUTTON */}
-                    <Tooltip title={Strings.Common.FILTER}>
-                        <FabStyle
-                            color="primary"
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        {/* FILTER BUTTON */}
+                        <Tooltip title={Strings.Common.FILTER}>
+                            <FabStyle
+                                color="primary"
+                                size="small"
+                                onClick={() =>
+                                    setDialogShowAnalysisTotalTripsFilter(true)
+                                }
+                            >
+                                <Badge
+                                    badgeContent={totalDataFilter}
+                                    color="error"
+                                >
+                                    <FilterAltIcon />
+                                </Badge>
+                            </FabStyle>
+                        </Tooltip>
+
+                        {/* EXPORT BUTTON */}
+                        <ButtonStyle
+                            variant="contained"
                             size="small"
-                            onClick={() =>
-                                setDialogShowAnalysisTotalTripsFilter(true)
-                            }
+                            sx={{ backgroundColor: "#02b6d6" }}
+                            endIcon={<FileDownloadIcon />}
+                            onClick={() => exportExcel()}
                         >
-                            <Badge badgeContent={totalDataFilter} color="error">
-                                <FilterAltIcon />
-                            </Badge>
-                        </FabStyle>
-                    </Tooltip>
+                            {Strings.Common.EXPORT}
+                        </ButtonStyle>
+                    </Box>
 
                     {/* CONTENT */}
                     <Box>
