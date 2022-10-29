@@ -59,11 +59,13 @@ const Strings = {
         UPDATE_CONFIRMATION: "Xác Nhận Cập Nhật",
         MOVING_CONFIRMATION: "Xác Nhận Di Chuyển",
         CHANGE_CAR_CONFIRMATION: "Xác Nhận Đổi Xe",
+        UPLOAD_FILE_CONFIRMATION: "Xác Nhận Tải Tệp",
         RECEIVE_CAR_CONFIRMATION: "Xác Nhận Nhận Xe",
         RETURN_CAR_CONFIRMATION: "Xác Nhận Trả Xe",
         DO_YOU_WANT_TO_UPDATE: "Bạn Có Muốn Cập Nhật?",
         DO_YOU_WANT_TO_CONFIRM_MOVING: "Bạn Có Muốn Xác Nhận Di Chuyển?",
         DO_YOU_WANT_TO_CHANGE_CAR: "Bạn Có Muốn Đổi Xe?",
+        DO_YOU_WANT_TO_UPLOAD_FILE: "Bạn Có Muốn Tải Tệp Lên Hệ Thống?",
         DO_YOU_WANT_TO_RECEIVE_CAR: "Bạn Có Muốn Nhận Xe?",
         DO_YOU_WANT_TO_RETURN_CAR: "Bạn Có Muốn Trả Xe?",
         DO_YOU_WANT_TO_ADD_CAR: "Bạn Có Muốn Thêm Xe?",
@@ -88,6 +90,8 @@ const Strings = {
         NO: "Không",
         EXPORT: "Xuất File",
         IMPORT: "Nhập File",
+        FILE_CONTENT: "Nội Dung Tập Tin",
+        UPLOAD_FILE: "Tải Tệp",
     },
 
     Login: {
@@ -221,6 +225,8 @@ const Strings = {
         ADD_DRIVER: "Thêm Tài Xế",
         DRIVER_CODE: "Mã Tài Xế",
         EMAIL: "Email",
+        INVALID_DATA_FROM_FILE: "Dữ Liệu Từ Tập Tin Không Hợp Lệ",
+        SUPPORT_INVALID_DATA_FROM_FILE: "Thiếu Hoặc Sai Tên Cột Dữ Liệu",
     },
 
     Statistical: {

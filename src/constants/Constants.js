@@ -90,6 +90,7 @@ const Constants = {
         },
         DriverManagement: {
             GET_DRIVER_LIST: "/admin/getDriverList",
+            CREATE_MULTIPLE_DRIVER: "/admin/createMultipleDriver",
         },
         DialogCreateDriver: {
             CREATE_DRIVER: "/admin/createDriver",

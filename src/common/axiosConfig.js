@@ -9,12 +9,12 @@ import Strings from "../constants/Strings";
 
 const axiosInstanceNotAuth = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    timeout: 10000,
+    timeout: 100000,
 });
 
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    timeout: 10000,
+    timeout: 100000,
 });
 
 const Authentication = async () => {

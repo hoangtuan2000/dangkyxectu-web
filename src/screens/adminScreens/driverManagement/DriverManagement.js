@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Badge,
     Box,
@@ -13,6 +13,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import DataGridCustom from "../../../components/dataGridCustom/DataGridCustom";
 import Strings from "../../../constants/Strings";
 import col from "./columnsDriverManagement";
+import BackupIcon from "@mui/icons-material/Backup";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import BackDrop from "../../../components/backDrop/BackDrop";
@@ -27,9 +28,12 @@ import helper from "../../../common/helper";
 import DialogCreateDriver from "../../../components/adminComponents/dialogCreateDriver/DialogCreateDriver";
 import DialogUpdateDriver from "../../../components/adminComponents/dialogUpdateDriver/DialogUpdateDriver";
 import * as XLSX from "xlsx";
+import DialogShowDataFileImport from "../../../components/adminComponents/dialogShowDataFileImport/DialogShowDataFileImport";
 
 function DriverManagement() {
     const theme = useTheme();
+
+    const inputImport = useRef();
 
     const [backDrop, setBackDrop] = useState(false);
     const [modalSuccess, setModalSuccess] = useState(false);
@@ -44,12 +48,21 @@ function DriverManagement() {
         open: false,
         idDriver: null,
     });
+    const [dialogShowDataFileImport, setDialogShowDataFileImport] = useState({
+        open: false,
+        data: null,
+        nameFile: null,
+    });
 
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
         pageSize: Constants.Common.LIMIT_ENTRY,
         totalRows: 0,
     });
+
+    const [fileDataCreateMultiDriver, setFileDataCreateMultiDriver] = useState(
+        []
+    );
 
     const [dialogDriverManagementFilter, setDialogDriverManagementFilter] =
         useState(false);
@@ -147,6 +160,42 @@ function DriverManagement() {
                 content: res.name || null,
             });
         }
+    };
+
+    const createMultipleDriver = async () => {
+        await setBackDrop(true);
+        const res = await DriverManagementServices.createMultipleDriver({
+            fileData: fileDataCreateMultiDriver,
+        });
+        // axios success
+        if (res.data) {
+            if (res.data.status == Constants.ApiCode.OK) {
+                await setModalSuccess(true);
+                await getDriverList();
+            } else {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: res.data.message,
+                    content: null,
+                });
+            }
+        }
+        // axios fail
+        else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
+                content: res.name || null,
+            });
+        }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
     };
 
     const getDriverListToExport = async () => {
@@ -393,6 +442,107 @@ function DriverManagement() {
         }
     };
 
+    const handleOpenChooseFileImport = () => {
+        inputImport.current.click();
+    };
+
+    const handleCloseDialogShowDataFileImport = () => {
+        setDialogShowDataFileImport({
+            ...dialogShowDataFileImport,
+            open: false,
+            data: null,
+            nameFile: null,
+        });
+        handleRefreshChooseFile();
+    };
+
+    const handleRefreshChooseFile = () => {
+        // refresh file in input choose file
+        inputImport.current.value = null;
+        inputImport.current.files = null;
+    };
+
+    const importExcel = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const bstr = event.target.result;
+            const workBook = XLSX.read(bstr, { type: "binary" });
+            const workSheetName = workBook.SheetNames[0];
+            const workSheet = workBook.Sheets[workSheetName];
+            const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 });
+            const headers = fileData[0];
+
+            let errorData = false;
+            headers[0] != "Mã Tài Xế" && (errorData = true);
+            headers[1] != "Họ Tên" && (errorData = true);
+            headers[2] != "Email" && (errorData = true);
+            headers[3] != "Điện Thoại" && (errorData = true);
+            headers[4] != "Mã Bằng Lái" && (errorData = true);
+            headers[5] != "Thời Hạn Bằng Lái" && (errorData = true);
+            headers[6] != "Địa Chỉ" && (errorData = true);
+            headers[7] != "Mã Xã Phường" && (errorData = true);
+            headers[8] != "Mật Khẩu" && (errorData = true);
+
+            if (errorData || fileData.length < 1) {
+                setModalError({
+                    ...modalError,
+                    open: true,
+                    title: Strings.DriverManagement.INVALID_DATA_FROM_FILE,
+                    content:
+                        Strings.DriverManagement.SUPPORT_INVALID_DATA_FROM_FILE,
+                });
+            } else {
+                let fileDataValid = [];
+                // DELETE fileData CHILDREN IF ARRAY EMPTY
+                for (let i = 0; i < fileData.length; i++) {
+                    if (!helper.isArrayEmpty(fileData[i])) {
+                        fileDataValid.push(fileData[i]);
+                    }
+                }
+                let fileNotHeader = [...fileDataValid].slice(1);
+                setFileDataCreateMultiDriver([
+                    ...fileNotHeader.map((item) => {
+                        return {
+                            code: item[0] || null,
+                            fullName: item[1] || null,
+                            email: item[2] || null,
+                            phone: item[3] || null,
+                            idDriverLicense: item[4] || null,
+                            driverLicenseExpirationDate: item[5] || null,
+                            address: item[6] || null,
+                            idWard: item[7] || null,
+                            pass: item[8] || null,
+                        };
+                    }),
+                ]);
+                setDialogShowDataFileImport({
+                    ...dialogShowDataFileImport,
+                    open: true,
+                    data: fileDataValid,
+                    nameFile: file.name,
+                });
+            }
+        };
+        reader.readAsBinaryString(file);
+        // REFRESH INPUT CHOOSE FILE
+        handleRefreshChooseFile();
+    };
+
+    const handleCreateMultiDriverFromFile = () => {
+        if (fileDataCreateMultiDriver.length > 1) {
+            createMultipleDriver();
+        } else {
+            setModalError({
+                ...modalError,
+                open: true,
+                title: Strings.DriverManagement.INVALID_DATA_FROM_FILE,
+                content:
+                    Strings.DriverManagement.SUPPORT_INVALID_DATA_FROM_FILE,
+            });
+        }
+    };
+
     const run = async () => {
         await setBackDrop(true);
         await getDriverList();
@@ -433,6 +583,24 @@ function DriverManagement() {
                 </Tooltip>
 
                 <Box>
+                    {/* IMPORT BUTTON */}
+                    <ButtonStyle
+                        variant="contained"
+                        size="small"
+                        sx={{ backgroundColor: theme.palette.primary.main }}
+                        endIcon={<BackupIcon />}
+                        onClick={handleOpenChooseFileImport}
+                    >
+                        {Strings.Common.IMPORT}
+                    </ButtonStyle>
+                    <input
+                        ref={inputImport}
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={importExcel}
+                        accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    />
+
                     {/* EXPORT BUTTON */}
                     <ButtonStyle
                         variant="contained"
@@ -504,6 +672,14 @@ function DriverManagement() {
                 defaultFullNameDriver={dataFilter.fullNameDriver}
                 defaultEmailDriver={dataFilter.emailDriver}
                 defaultPhoneDriver={dataFilter.phoneDriver}
+            />
+
+            <DialogShowDataFileImport
+                open={dialogShowDataFileImport.open}
+                handleClose={handleCloseDialogShowDataFileImport}
+                data={dialogShowDataFileImport.data}
+                nameFile={dialogShowDataFileImport.nameFile}
+                onSubmit={handleCreateMultiDriverFromFile}
             />
 
             <ModalError
