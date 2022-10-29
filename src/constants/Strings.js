@@ -692,6 +692,9 @@ const Strings = {
         TIME: "Thời Gian: ",
         ADDRESS: "Địa Chỉ: ",
     },
+    AnalysisTotalTripsOfFaculties: {
+        TITLE: "Tổng Số Chuyến Đi Của Các Khoa",
+    },
 };
 
 export default Strings;

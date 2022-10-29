@@ -30,9 +30,9 @@ import {
     ButtonFeatures,
     TitleChart,
 } from "./AnalysisTotalTripsCustomStyles";
-import ModalError from "../../../components/modalError/ModalError";
-import ModalSuccess from "../../../components/modalSuccess/ModalSuccess";
-import BackDrop from "../../../components/backDrop/BackDrop";
+import ModalError from "../../modalError/ModalError";
+import ModalSuccess from "../../modalSuccess/ModalSuccess";
+import BackDrop from "../../backDrop/BackDrop";
 import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
 import Constants from "../../../constants/Constants";
 import helper from "../../../common/helper";
@@ -401,7 +401,7 @@ function AnalysisTotalTrips() {
                 </Box>
             </Box>
 
-            <Box sx={{ position: "fixed", bottom: -500, left: -500, zIndex: 99999 }}>
+            <Box sx={{ position: "fixed", bottom: -500, left: -500 }}>
                 {/* DATE */}
                 <DatePicker
                     locale="vi"

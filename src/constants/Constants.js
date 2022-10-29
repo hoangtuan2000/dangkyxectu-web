@@ -108,6 +108,10 @@ const Constants = {
             GET_DATA_TOTAL_NUMBER_OF_TRIPS_OVER_TIME:
                 "/admin/getDataTotalNumberOfTripsOverTime",
         },
+        AnalysisTotalTripsOfFaculties: {
+            GET_ANALYSIS_TOTAL_TRIPS_OF_FACULTIES:
+                "/admin/getAnalysisTotalTripsOfFaculties",
+        },
         AnalysisDriverLicense: {
             GET_ANALYSIS_DRIVER_LICENSE: "/admin/getAnalysisDriverLicense",
             GET_DATA_ANALYSIS_DRIVER_LICENSE:

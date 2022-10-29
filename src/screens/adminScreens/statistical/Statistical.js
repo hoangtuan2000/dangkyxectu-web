@@ -60,6 +60,7 @@ import AnalysisTotalTrips from "../../../components/adminComponents/analysisTota
 import AnalysisDriverLicense from "../../../components/adminComponents/analysisDriverLicense/AnalysisDriverLicense";
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../../constants/RoutesPath";
+import AnalysisTotalTripsOfFaculties from "../../../components/adminComponents/analysisTotalTripsOfFaculties/AnalysisTotalTripsOfFaculties";
 registerLocale("vi", vi);
 
 const BoxCount = ({
@@ -249,6 +250,16 @@ function Statistical() {
             >
                 <AnalysisTotalTrips />
                 <AnalysisDriverLicense />
+            </Box>
+            <Box
+                sx={{
+                    width: "100%",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <AnalysisTotalTripsOfFaculties />
             </Box>
 
             <ModalError
