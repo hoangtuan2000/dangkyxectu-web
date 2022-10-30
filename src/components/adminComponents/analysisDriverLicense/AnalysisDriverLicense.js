@@ -232,7 +232,7 @@ function AnalysisDriverLicense() {
                     </TitleChart>
                 </BoxTitleChart>
 
-                <ResponsiveContainer width={"100%"} height={300}>
+                <ResponsiveContainer width={"100%"} height={340}>
                     <PieChart>
                         <Pie
                             data={driverLicense}

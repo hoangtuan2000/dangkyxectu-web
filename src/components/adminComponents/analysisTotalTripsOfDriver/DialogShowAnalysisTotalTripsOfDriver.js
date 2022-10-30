@@ -12,7 +12,8 @@ import {
     ButtonStyle,
     DialogContainer,
     Title,
-} from "./DialogShowAnalysisTotalTripsCustomStyles";
+    FabStyle,
+} from "./DialogShowAnalysisTotalTripsOfDriverCustomStyles";
 import CancelIcon from "@mui/icons-material/Cancel";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Strings from "../../../constants/Strings";
@@ -21,16 +22,15 @@ import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
 import DataGridCustom from "../../dataGridCustom/DataGridCustom";
 import Constants from "../../../constants/Constants";
-import col from "./columnsDialogShowAnalysisTotalTripsDataGrid";
+import col from "./columnsDialogShowAnalysisTotalTripsOfDriverDataGrid";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { AnalysisTotalTripsServices } from "../../../services/adminServices/AnalysisTotalTripsServices";
 import helper from "../../../common/helper";
 import DialogShowScheduleGlobal from "../../dialogShowScheduleGlobal/DialogShowScheduleGlobal";
-import { FabStyle } from "./AnalysisTotalTripsCustomStyles";
-import DialogShowAnalysisTotalTripsFilter from "./DialogShowAnalysisTotalTripsFilter";
+import DialogShowAnalysisTotalTripsOfFacultiesFilter from "./DialogShowAnalysisTotalTripsOfDriverFilter";
 import * as XLSX from "xlsx";
+import { AnalysisTotalTripsOfDriverServices } from "../../../services/adminServices/AnalysisTotalTripsOfDriverServices";
 
-function DialogShowAnalysisTotalTrips({
+function DialogShowAnalysisTotalTripsOfDriver({
     open,
     handleClose,
     startDate,
@@ -54,10 +54,7 @@ function DialogShowAnalysisTotalTrips({
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [title, setTitle] = useState();
 
-    const [
-        dialogShowAnalysisTotalTripsFilter,
-        setDialogShowAnalysisTotalTripsFilter,
-    ] = useState(false);
+    const [dialogFilter, setDialogFilter] = useState(false);
 
     const [dialogShowScheduleGlobal, setDialogShowScheduleGlobal] = useState({
         open: false,
@@ -69,6 +66,7 @@ function DialogShowAnalysisTotalTrips({
         carType: [],
         faculty: [],
         haveSchedule: null,
+        starRating: null,
         infoUser: null,
         infoDriver: null,
         licensePlates: null,
@@ -81,9 +79,9 @@ function DialogShowAnalysisTotalTrips({
         endDateSchedule: null,
     });
 
-    const [scheduleList, setScheduleList] = useState([]);
+    const [dataList, setDataList] = useState([]);
 
-    const getDataTotalNumberOfTripsOverTime = async (
+    const getDataAnalysisTotalTripsOfDriver = async (
         page = dataInfo.page,
         pageSize = dataInfo.pageSize,
         haveSchedule,
@@ -95,9 +93,10 @@ function DialogShowAnalysisTotalTrips({
         licensePlates,
         scheduleCode,
         address,
-        idWard,
+        ward,
         startDateSchedule,
-        endDateSchedule
+        endDateSchedule,
+        starRating
     ) => {
         const data = {
             page: page,
@@ -113,14 +112,17 @@ function DialogShowAnalysisTotalTrips({
             licensePlates,
             scheduleCode,
             address,
-            idWard,
+            ward,
             startDateSchedule,
             endDateSchedule,
+            starRating,
         };
         const res =
-            await AnalysisTotalTripsServices.getDataTotalNumberOfTripsOverTime({
-                ...data,
-            });
+            await AnalysisTotalTripsOfDriverServices.getDataAnalysisTotalTripsOfDriver(
+                {
+                    ...data,
+                }
+            );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -129,15 +131,16 @@ function DialogShowAnalysisTotalTrips({
                     pageSize: res.data.limitEntry,
                     totalRows: res.data.sizeQuerySnapshot,
                 });
-                setScheduleList(
-                    res.data.data.map((item, index) => {
+                let result = res.data.data;
+                setDataList(
+                    result.data.map((item, index) => {
                         return {
                             id:
                                 res.data.limitEntry * res.data.page -
                                 res.data.limitEntry +
                                 index +
                                 1,
-                            date: item.date,
+                            driver: `${item.fullNameDriver} - ${item.codeDriver}`,
                             idSchedule: item.idSchedule,
                             startDate: item.startDate,
                             endDate: item.endDate,
@@ -145,15 +148,21 @@ function DialogShowAnalysisTotalTrips({
                                 item.fullNameUser &&
                                 item.codeUser &&
                                 `${item.fullNameUser} - ${item.codeUser}`,
-                            infoDriver:
-                                item.fullNameDriver &&
-                                item.codeDriver &&
-                                `${item.fullNameDriver} - ${item.codeDriver}`,
-                            scheduleStatusCode: item.idScheduleStatus,
-                            scheduleStatus: item.nameScheduleStatus,
+                            review: item.starNumber,
                         };
                     })
                 );
+                if (result.date.startDate && result.date.endDate) {
+                    const startDate = helper.formatDateStringFromTimeStamp(
+                        result.date.startDate
+                    );
+                    const endDate = helper.formatDateStringFromTimeStamp(
+                        result.date.endDate
+                    );
+                    setTitle(` Từ: ${startDate} - ${endDate}`);
+                } else {
+                    setTitle();
+                }
             } else {
                 setModalError({
                     ...modalError,
@@ -177,7 +186,7 @@ function DialogShowAnalysisTotalTrips({
         }
     };
 
-    const getDataTotalNumberOfTripsOverTimeToExport = async () => {
+    const getDataAnalysisTotalTripsOfDriverToExport = async () => {
         const data = await handleFormatDataFilterSendApi(dataFilter);
         const objData = {
             getAllData: true,
@@ -195,11 +204,14 @@ function DialogShowAnalysisTotalTrips({
             idWard: data.idWard,
             startDateSchedule: data.startDateSchedule,
             endDateSchedule: data.endDateSchedule,
+            starRating: data.starRating,
         };
         const res =
-            await AnalysisTotalTripsServices.getDataTotalNumberOfTripsOverTime({
-                ...objData,
-            });
+            await AnalysisTotalTripsOfDriverServices.getDataAnalysisTotalTripsOfDriver(
+                {
+                    ...objData,
+                }
+            );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -232,7 +244,7 @@ function DialogShowAnalysisTotalTrips({
     const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getDataTotalNumberOfTripsOverTime(
+        await getDataAnalysisTotalTripsOfDriver(
             e,
             dataInfo.pageSize,
             data.haveSchedule,
@@ -246,14 +258,15 @@ function DialogShowAnalysisTotalTrips({
             data.address,
             data.idWard,
             data.startDateSchedule,
-            data.endDateSchedule
+            data.endDateSchedule,
+            data.starRating
         );
     };
 
     const handleChangeRowsPerPage = async (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getDataTotalNumberOfTripsOverTime(
+        await getDataAnalysisTotalTripsOfDriver(
             dataInfo.page,
             e,
             data.haveSchedule,
@@ -267,7 +280,8 @@ function DialogShowAnalysisTotalTrips({
             data.address,
             data.idWard,
             data.startDateSchedule,
-            data.endDateSchedule
+            data.endDateSchedule,
+            data.starRating
         );
     };
 
@@ -305,6 +319,7 @@ function DialogShowAnalysisTotalTrips({
             idWard: data.ward && data.ward.idWard,
             startDateSchedule: data.startDateSchedule,
             endDateSchedule: data.endDateSchedule,
+            starRating: data.starRating,
         };
     };
 
@@ -330,7 +345,7 @@ function DialogShowAnalysisTotalTrips({
         }
 
         //reset page and pageSize => call getUserRegisteredScheduleList function
-        getDataTotalNumberOfTripsOverTime(
+        getDataAnalysisTotalTripsOfDriver(
             Constants.Common.PAGE,
             dataInfo.pageSize,
             e.haveSchedule,
@@ -344,7 +359,8 @@ function DialogShowAnalysisTotalTrips({
             e.address,
             e.ward && e.ward.idWard,
             e.startDateSchedule,
-            e.endDateSchedule
+            e.endDateSchedule,
+            e.starRating
         );
 
         // save data filter in dialogCarRegistrationManagementFilter => default value in dialogCarRegistrationManagementFilter
@@ -363,10 +379,12 @@ function DialogShowAnalysisTotalTrips({
             province: e.province,
             startDateSchedule: e.startDateSchedule,
             endDateSchedule: e.endDateSchedule,
+            starRating: e.starRating,
         });
 
         // show total data to filter in UI => button filter
         let total = status.length + carType.length + faculty.length;
+        if (e.starRating) total += 1;
         if (e.scheduleCode) total += 1;
         if (e.haveSchedule) total += 1;
         if (e.ward) total += 1;
@@ -393,6 +411,7 @@ function DialogShowAnalysisTotalTrips({
             province: null,
             startDateSchedule: null,
             endDateSchedule: null,
+            starRating: null,
         });
     };
 
@@ -407,55 +426,36 @@ function DialogShowAnalysisTotalTrips({
     const run = async () => {
         await setBackDrop(true);
         (await open) &&
-            getDataTotalNumberOfTripsOverTime(
+            getDataAnalysisTotalTripsOfDriver(
                 Constants.Common.PAGE,
                 Constants.Common.LIMIT_ENTRY
             );
         (await open) && setTotalDataFilter(null);
-        if (startDate && endDate) {
-            const startTime = helper.formatDateStringFromTimeStamp(
-                startDate / 1000
-            );
-            const endTime = helper.formatDateStringFromTimeStamp(
-                endDate / 1000
-            );
-            setTitle(` Từ ${startTime} - ${endTime}`);
-        } else {
-            const currentDate = new Date();
-            const startTime = new Date(
-                currentDate.setDate(currentDate.getDate() - 7)
-            ).toLocaleDateString("en-GB");
-            const endTime = new Date().toLocaleDateString("en-GB");
-            setTitle(` Từ ${startTime} - ${endTime}`);
-        }
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
     };
 
     const exportExcel = async () => {
-        let getData = await getDataTotalNumberOfTripsOverTimeToExport();
-        // FORMAT NAME FILE EXPORT
-        let startTime = "";
-        let endTime = "";
-        if (startDate && endDate) {
-            startTime = helper.formatDateStringFromTimeStamp(startDate / 1000);
-            endTime = helper.formatDateStringFromTimeStamp(endDate / 1000);
-        } else {
-            const currentDate = new Date();
-            startTime = new Date(
-                currentDate.setDate(currentDate.getDate() - 7)
-            ).toLocaleDateString("en-GB");
-            endTime = new Date().toLocaleDateString("en-GB");
-        }
+        let getData = await getDataAnalysisTotalTripsOfDriverToExport();
 
         if (getData) {
+            // FORMAT NAME FILE EXPORT
+            let nameFile = "Danh_Sach_Lich_Trinh_Cua_Tai_Xe.xlsx";
+            if (getData.date.startDate && getData.date.endDate) {
+                const startDate = helper.formatDateStringFromTimeStamp(
+                    getData.date.startDate
+                );
+                const endDate = helper.formatDateStringFromTimeStamp(
+                    getData.date.endDate
+                );
+                nameFile = `Danh_Sach_Lich_Trinh_Cua_Tai_Xe_Tu_${startDate}_Den_${endDate}.xlsx`;
+            }
             let dataExport = [
-                ...getData.map((item) => {
+                ...getData.data.map((item) => {
                     return {
-                        date: item.date
-                            ? helper.formatDateStringFromTimeStamp(item.date)
-                            : "",
+                        codeDriver: item.codeDriver,
+                        fullNameDriver: item.fullNameDriver,
                         idSchedule: item.idSchedule,
                         startDate: item.startDate
                             ? helper.formatDateStringFromTimeStamp(
@@ -465,11 +465,9 @@ function DialogShowAnalysisTotalTrips({
                         endDate: item.endDate
                             ? helper.formatDateStringFromTimeStamp(item.endDate)
                             : "",
+                        starNumber: item.starNumber,
                         fullNameUser: item.fullNameUser,
                         codeUser: item.codeUser,
-                        fullNameDriver: item.fullNameDriver,
-                        codeDriver: item.codeDriver,
-                        nameScheduleStatus: item.nameScheduleStatus,
                     };
                 }),
             ];
@@ -480,25 +478,21 @@ function DialogShowAnalysisTotalTrips({
                 ws,
                 [
                     [
-                        "Ngày",
+                        "Mã Tài Xế",
+                        "Tên Tài Xế",
                         "Mã Lịch Trình",
                         "Ngày Đi",
                         "Ngày Về",
+                        "Đánh Giá",
                         "Người Đăng Ký",
                         "Mã Người Đăng Ký",
-                        "Tài Xế",
-                        "Mã Tài Xế",
-                        "Trạng Thái Lịch Trình",
                     ],
                 ],
                 {
                     origin: "A1",
                 }
             );
-            XLSX.writeFile(
-                wb,
-                `Danh_Sach_Lich_Trinh_Tu_${startTime}_Den_${endTime}.xlsx`
-            );
+            XLSX.writeFile(wb, nameFile);
         }
     };
 
@@ -517,7 +511,7 @@ function DialogShowAnalysisTotalTrips({
                 <Box>
                     {/* TITLE */}
                     <Title>
-                        {Strings.DialogShowAnalysisTotalTrips.TITLE}
+                        {Strings.DialogShowAnalysisTotalTripsOfDriver.TITLE}
                         {title}
                     </Title>
 
@@ -533,9 +527,7 @@ function DialogShowAnalysisTotalTrips({
                             <FabStyle
                                 color="primary"
                                 size="small"
-                                onClick={() =>
-                                    setDialogShowAnalysisTotalTripsFilter(true)
-                                }
+                                onClick={() => setDialogFilter(true)}
                             >
                                 <Badge
                                     badgeContent={totalDataFilter}
@@ -562,7 +554,7 @@ function DialogShowAnalysisTotalTrips({
                     <Box>
                         <DataGridCustom
                             columns={col((e) => handleShowSchedule(e))}
-                            rows={scheduleList}
+                            rows={dataList}
                             {...dataInfo}
                             onChangePage={(e) => {
                                 handleChangePage(e);
@@ -609,9 +601,9 @@ function DialogShowAnalysisTotalTrips({
                 idSchedule={dialogShowScheduleGlobal.idSchedule}
             />
 
-            <DialogShowAnalysisTotalTripsFilter
-                open={dialogShowAnalysisTotalTripsFilter}
-                handleClose={() => setDialogShowAnalysisTotalTripsFilter(false)}
+            <DialogShowAnalysisTotalTripsOfFacultiesFilter
+                open={dialogFilter}
+                handleClose={() => setDialogFilter(false)}
                 onSubmit={(e) => handleFilter(e)}
                 defaultStatus={dataFilter.status}
                 defaultCarType={dataFilter.carType}
@@ -626,6 +618,7 @@ function DialogShowAnalysisTotalTrips({
                 defaultProvince={dataFilter.province}
                 defaultStartDateSchedule={dataFilter.startDateSchedule}
                 defaultEndDateSchedule={dataFilter.endDateSchedule}
+                defaultStarRating={dataFilter.starRating}
                 handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
@@ -647,4 +640,4 @@ function DialogShowAnalysisTotalTrips({
     );
 }
 
-export default DialogShowAnalysisTotalTrips;
+export default DialogShowAnalysisTotalTripsOfDriver;

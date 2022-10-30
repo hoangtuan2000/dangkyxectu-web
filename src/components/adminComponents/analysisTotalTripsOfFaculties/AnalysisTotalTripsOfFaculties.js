@@ -340,7 +340,7 @@ function AnalysisTotalTripsOfFaculties() {
                     </Box>
                 </BoxTitleChart>
 
-                <ResponsiveContainer width={"100%"} height={300}>
+                <ResponsiveContainer width={"100%"} height={340}>
                     <AreaChart
                         data={totalTripsOfFaculties}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}

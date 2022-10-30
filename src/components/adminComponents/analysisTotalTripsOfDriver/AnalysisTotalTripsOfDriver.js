@@ -29,7 +29,7 @@ import {
     BoxTitleChart,
     ButtonFeatures,
     TitleChart,
-} from "./AnalysisTotalTripsCustomStyles";
+} from "./AnalysisTotalTripsOfDriverCustomStyles";
 import ModalError from "../../modalError/ModalError";
 import ModalSuccess from "../../modalSuccess/ModalSuccess";
 import BackDrop from "../../backDrop/BackDrop";
@@ -39,10 +39,12 @@ import helper from "../../../common/helper";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
-import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisTotalTrips";
+import { AnalysisTotalTripsOfDriverServices } from "../../../services/adminServices/AnalysisTotalTripsOfDriverServices";
+import DialogShowAnalysisTotalTripsOfDriver from "./DialogShowAnalysisTotalTripsOfDriver";
+// import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisTotalTrips";
 registerLocale("vi", vi);
 
-function AnalysisTotalTrips() {
+function AnalysisTotalTripsOfDriver() {
     const theme = useTheme();
 
     const refDate = useRef();
@@ -57,44 +59,56 @@ function AnalysisTotalTrips() {
         content: null,
     });
 
-    const [dialogShowAnalysisTotalTrips, setDialogShowAnalysisTotalTrips] =
-        useState({
-            open: false,
-            startDate: null,
-            endDate: null,
-        });
+    const [dialogShowDataAnalysis, setDialogShowDataAnalysis] = useState({
+        open: false,
+        startDate: null,
+        endDate: null,
+    });
 
     const [selectedDates, setSelectedDates] = useState({
         startDate: null,
         endDate: null,
     });
 
-    const [totalScheduleListOverTime, setTotalScheduleListOverTime] = useState(
-        []
+    const [title, setTitle] = useState(
+        Strings.AnalysisTotalTripsOfDriver.TITLE
     );
+    const [analysisList, setAnalysisList] = useState([]);
 
     const [speedDial, setSpeedDial] = useState(false);
 
-    const getTotalNumberOfTripsOverTime = async (startDate, endDate) => {
+    const getAnalysisTotalTripsOfDriver = async (startDate, endDate) => {
         await setBackDrop(true);
         const res =
-            await AnalysisTotalTripsServices.getTotalNumberOfTripsOverTime({
-                startDate: startDate,
-                endDate: endDate,
-            });
+            await AnalysisTotalTripsOfDriverServices.getAnalysisTotalTripsOfDriver(
+                {
+                    startDate,
+                    endDate,
+                }
+            );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setTotalScheduleListOverTime([
-                    ...res.data.data.map((item) => {
-                        return {
-                            totalSchedule: item.totalSchedule,
-                            date: helper.formatDateStringFromTimeStamp(
-                                item.date
-                            ),
-                        };
-                    }),
-                ]);
+                let result = res.data.data;
+                setAnalysisList([...result.data.map(item => {
+                    return {
+                        totalSchedule: item.totalSchedule,
+                        infoDriver: `${item.fullName}-${item.code}`
+                    }
+                })]);
+                if (result.date.startDate && result.date.endDate) {
+                    const startDate = helper.formatDateStringFromTimeStamp(
+                        result.date.startDate
+                    );
+                    const endDate = helper.formatDateStringFromTimeStamp(
+                        result.date.endDate
+                    );
+                    setTitle(
+                        `${Strings.AnalysisTotalTripsOfDriver.TITLE} Từ: ${startDate} - ${endDate}`
+                    );
+                } else {
+                    setTitle(Strings.AnalysisTotalTripsOfDriver.TITLE);
+                }
             } else {
                 setModalError({
                     ...modalError,
@@ -131,12 +145,12 @@ function AnalysisTotalTrips() {
 
         // SEND API
         if (start && lastQuarter) {
-            getTotalNumberOfTripsOverTime(
+            getAnalysisTotalTripsOfDriver(
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(lastQuarter).getTime())
             );
         } else if (!start && lastQuarter) {
-            getTotalNumberOfTripsOverTime();
+            getAnalysisTotalTripsOfDriver();
         }
     };
 
@@ -151,12 +165,12 @@ function AnalysisTotalTrips() {
 
         // SEND API
         if (start && lastDayOfEndMonth) {
-            getTotalNumberOfTripsOverTime(
+            getAnalysisTotalTripsOfDriver(
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(lastDayOfEndMonth).getTime())
             );
         } else if (!start && !lastDayOfEndMonth) {
-            getTotalNumberOfTripsOverTime();
+            getAnalysisTotalTripsOfDriver();
         }
     };
 
@@ -169,18 +183,18 @@ function AnalysisTotalTrips() {
 
         // SEND API
         if (start && end) {
-            getTotalNumberOfTripsOverTime(
+            getAnalysisTotalTripsOfDriver(
                 Math.floor(new Date(start).getTime()),
                 Math.floor(new Date(end).getTime())
             );
         } else if (!start && !end) {
-            getTotalNumberOfTripsOverTime();
+            getAnalysisTotalTripsOfDriver();
         }
     };
 
-    const handleOpenDialogShowAnalysisTotalTrips = () => {
-        setDialogShowAnalysisTotalTrips({
-            ...dialogShowAnalysisTotalTrips,
+    const handleOpenDialogShowDataAnalysis = () => {
+        setDialogShowDataAnalysis({
+            ...dialogShowDataAnalysis,
             open: true,
             startDate: Math.floor(new Date(selectedDates.startDate).getTime()),
             endDate: Math.floor(new Date(selectedDates.endDate).getTime()),
@@ -189,7 +203,7 @@ function AnalysisTotalTrips() {
 
     const run = async () => {
         await setBackDrop(true);
-        await getTotalNumberOfTripsOverTime();
+        await getAnalysisTotalTripsOfDriver();
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -203,13 +217,7 @@ function AnalysisTotalTrips() {
             <Box>
                 <BoxTitleChart>
                     <TitleChart variant="h6" component="div">
-                        {Strings.Statistical.TOTAL_TRIPS_FROM}
-                        {totalScheduleListOverTime.length > 0 &&
-                            totalScheduleListOverTime[0].date +
-                                " - " +
-                                totalScheduleListOverTime[
-                                    totalScheduleListOverTime.length - 1
-                                ].date}
+                        {title}
                     </TitleChart>
 
                     <Box
@@ -336,14 +344,14 @@ function AnalysisTotalTrips() {
                     </Box>
                 </BoxTitleChart>
 
-                <ResponsiveContainer width={"100%"} height={300}>
+                <ResponsiveContainer width={"100%"} height={340}>
                     <AreaChart
-                        data={totalScheduleListOverTime}
+                        data={analysisList}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                     >
                         <defs>
                             <linearGradient
-                                id="colorPv"
+                                id="00a2cf"
                                 x1="0"
                                 y1="0"
                                 x2="0"
@@ -351,17 +359,17 @@ function AnalysisTotalTrips() {
                             >
                                 <stop
                                     offset="5%"
-                                    stopColor="#82ca9d"
+                                    stopColor="#00a2cf"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="#82ca9d"
+                                    stopColor="#00a2cf"
                                     stopOpacity={0}
                                 />
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="date" />
+                        <XAxis dataKey="infoDriver" />
                         <YAxis />
                         <Legend
                             verticalAlign="bottom"
@@ -380,9 +388,10 @@ function AnalysisTotalTrips() {
                         <Area
                             type="monotone"
                             dataKey="totalSchedule"
-                            stroke="#82ca9d"
+                            stroke="#00a2cf"
                             fillOpacity={1}
-                            fill="url(#colorPv)"
+                            fill="url(#00a2cf)"
+                            // fill="#a1bfed"
                         />
                     </AreaChart>
                 </ResponsiveContainer>
@@ -394,14 +403,21 @@ function AnalysisTotalTrips() {
                         variant="contained"
                         endIcon={<VisibilityIcon />}
                         color="success"
-                        onClick={handleOpenDialogShowAnalysisTotalTrips}
+                        onClick={handleOpenDialogShowDataAnalysis}
                     >
                         {Strings.Common.DETAIL}
                     </ButtonFeatures>
                 </Box>
             </Box>
 
-            <Box sx={{ position: "fixed", bottom: -500, left: -500 }}>
+            <Box
+                sx={{
+                    position: "fixed",
+                    bottom: -500,
+                    left: -500,
+                    zIndex: 99999,
+                }}
+            >
                 {/* DATE */}
                 <DatePicker
                     locale="vi"
@@ -447,16 +463,16 @@ function AnalysisTotalTrips() {
                 />
             </Box>
 
-            <DialogShowAnalysisTotalTrips
-                open={dialogShowAnalysisTotalTrips.open}
+            <DialogShowAnalysisTotalTripsOfDriver
+                open={dialogShowDataAnalysis.open}
                 handleClose={() =>
-                    setDialogShowAnalysisTotalTrips({
-                        ...dialogShowAnalysisTotalTrips,
+                    setDialogShowDataAnalysis({
+                        ...dialogShowDataAnalysis,
                         open: false,
                     })
                 }
-                startDate={dialogShowAnalysisTotalTrips.startDate}
-                endDate={dialogShowAnalysisTotalTrips.endDate}
+                startDate={dialogShowDataAnalysis.startDate}
+                endDate={dialogShowDataAnalysis.endDate}
             />
 
             <ModalError
@@ -477,4 +493,4 @@ function AnalysisTotalTrips() {
     );
 }
 
-export default AnalysisTotalTrips;
+export default AnalysisTotalTripsOfDriver;

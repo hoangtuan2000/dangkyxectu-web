@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
     Badge,
     Box,
@@ -6,8 +7,9 @@ import {
     Tooltip,
     IconButton,
     Button,
+    Tabs,
+    Tab,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 import {
     BarChart,
     Bar,
@@ -61,6 +63,7 @@ import AnalysisDriverLicense from "../../../components/adminComponents/analysisD
 import { useNavigate } from "react-router-dom";
 import RoutesPath from "../../../constants/RoutesPath";
 import AnalysisTotalTripsOfFaculties from "../../../components/adminComponents/analysisTotalTripsOfFaculties/AnalysisTotalTripsOfFaculties";
+import AnalysisTotalTripsOfDriver from "../../../components/adminComponents/analysisTotalTripsOfDriver/AnalysisTotalTripsOfDriver";
 registerLocale("vi", vi);
 
 const BoxCount = ({
@@ -126,6 +129,12 @@ function Statistical() {
         totalSchedulePending: null,
         totalLicenseCarExpires: null,
     });
+
+    const [tab, setTab] = useState(0);
+
+    const handleChangeTab = (event, newValue) => {
+        setTab(newValue);
+    };
 
     const getAnalysisTotalCommon = async () => {
         const res = await StatisticalServices.getAnalysisTotalCommon();
@@ -240,7 +249,34 @@ function Statistical() {
                 />
             </Box>
 
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Tabs
+                    value={tab}
+                    onChange={handleChangeTab}
+                    sx={{ marginBottom: "10px" }}
+                >
+                    <Tab value={0} label="Lịch Trình" />
+                    <Tab value={1} label="Khoa" />
+                    <Tab value={2} label="Tài Xế" />
+                    <Tab value={3} label="Bằng Lái" />
+                </Tabs>
+            </Box>
+
             <Box
+                sx={{
+                    width: "100%",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                {tab == 0 && <AnalysisTotalTrips />}
+                {tab == 1 && <AnalysisTotalTripsOfFaculties />}
+                {tab == 2 && <AnalysisTotalTripsOfDriver />}
+                {tab == 3 && <AnalysisDriverLicense />}
+            </Box>
+
+            {/* <Box
                 sx={{
                     width: "100%",
                     display: "inline-flex",
@@ -260,7 +296,8 @@ function Statistical() {
                 }}
             >
                 <AnalysisTotalTripsOfFaculties />
-            </Box>
+                <AnalysisTotalTripsOfDriver />
+            </Box> */}
 
             <ModalError
                 open={modalError.open}

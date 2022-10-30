@@ -2,14 +2,14 @@ import axiosInstance from "../../common/axiosConfig";
 import Constants from "../../constants/Constants";
 import { store } from "../../redux/store";
 
-const AnalysisTotalTripsServices = {
-    getTotalNumberOfTripsOverTime: async (data) => {
+const AnalysisTotalTripsOfDriverServices = {
+    getAnalysisTotalTripsOfDriver: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
             .post(
-                Constants.ApiPath.AnalysisTotalTrips
-                    .GET_TOTAL_NUMBER_OF_TRIPS_OVER_TIME,
+                Constants.ApiPath.AnalysisTotalTripsOfDriver
+                    .GET_ANALYSIS_TOTAL_TRIPS_OF_DRIVER,
                 data,
                 {
                     headers: {
@@ -24,13 +24,13 @@ const AnalysisTotalTripsServices = {
                 return err;
             });
     },
-    getDataTotalNumberOfTripsOverTime: async (data) => {
+    getDataAnalysisTotalTripsOfDriver: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
             .post(
-                Constants.ApiPath.AnalysisTotalTrips
-                    .GET_DATA_TOTAL_NUMBER_OF_TRIPS_OVER_TIME,
+                Constants.ApiPath.AnalysisTotalTripsOfDriver
+                    .GET_DATA_ANALYSIS_TOTAL_TRIPS_OF_DRIVER,
                 data,
                 {
                     headers: {
@@ -47,4 +47,4 @@ const AnalysisTotalTripsServices = {
     },
 };
 
-export { AnalysisTotalTripsServices };
+export { AnalysisTotalTripsOfDriverServices };

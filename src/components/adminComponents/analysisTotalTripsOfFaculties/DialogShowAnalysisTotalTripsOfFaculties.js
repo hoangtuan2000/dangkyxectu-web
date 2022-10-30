@@ -31,7 +31,7 @@ import DialogShowAnalysisTotalTripsOfFacultiesFilter from "./DialogShowAnalysisT
 import * as XLSX from "xlsx";
 import { AnalysisTotalTripsOfFacultiesServices } from "../../../services/adminServices/AnalysisTotalTripsOfFacultiesServices";
 
-function DialogShowAnalysisTotalTrips({
+function DialogShowAnalysisTotalTripsOfFaculties({
     open,
     handleClose,
     startDate,
@@ -188,6 +188,8 @@ function DialogShowAnalysisTotalTrips({
         const data = await handleFormatDataFilterSendApi(dataFilter);
         const objData = {
             getAllData: true,
+            startDate: startDate,
+            endDate: endDate,
             haveSchedule: data.haveSchedule,
             status: data.status,
             carType: data.carType,
@@ -418,6 +420,7 @@ function DialogShowAnalysisTotalTrips({
                 Constants.Common.PAGE,
                 Constants.Common.LIMIT_ENTRY
             );
+        (await open) && setTotalDataFilter(null);
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -477,10 +480,7 @@ function DialogShowAnalysisTotalTrips({
                     origin: "A1",
                 }
             );
-            XLSX.writeFile(
-                wb,
-                nameFile
-            );
+            XLSX.writeFile(wb, nameFile);
         }
     };
 
@@ -627,4 +627,4 @@ function DialogShowAnalysisTotalTrips({
     );
 }
 
-export default DialogShowAnalysisTotalTrips;
+export default DialogShowAnalysisTotalTripsOfFaculties;

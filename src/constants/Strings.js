@@ -695,6 +695,9 @@ const Strings = {
     AnalysisTotalTripsOfFaculties: {
         TITLE: "Tổng Số Chuyến Đi Của Các Khoa",
     },
+    AnalysisTotalTripsOfDriver: {
+        TITLE: "Tổng Số Chuyến Đi Của Tài Xế",
+    },
     DialogShowAnalysisTotalTripsOfFaculties: {
         TITLE: "Danh Sách Lịch Trình Của Các Khoa",
         FACULTY: "Khoa",
@@ -702,6 +705,14 @@ const Strings = {
         TIME: "Thời Gian",
         SUBSCRIBERS: "Người Đăng Ký",
         REASON: "Lý Do Đăng Ký",
+    },
+    DialogShowAnalysisTotalTripsOfDriver: {
+        TITLE: "Danh Sách Lịch Trình Của Tài Xế",
+        DRIVER: "Tài Xế",
+        SCHEDULE_CODE: "Mã Lịch Trình",
+        TIME: "Thời Gian",
+        SUBSCRIBERS: "Người Đăng Ký",
+        REVIEW: "Đánh Giá",
     },
     DialogShowAnalysisTotalTripsOfFacultiesFilter: {
         TITLE: "Bộ Lọc",

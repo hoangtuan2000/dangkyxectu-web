@@ -83,7 +83,8 @@ const TypographyHeaderCount = styled(Typography)(({ theme }) => ({
 }));
 
 const BoxContainerChart = styled(Box)(({ theme }) => ({
-    width: "calc(96% / 2)",
+    // width: "calc(96% / 2)",
+    width: "100%",
     margin: 10,
     padding: 10,
     borderRadius: 10,

@@ -395,6 +395,7 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
                 Constants.Common.PAGE,
                 Constants.Common.LIMIT_ENTRY
             );
+        (await open) && setTotalDataFilter(null);
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
