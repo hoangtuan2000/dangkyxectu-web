@@ -695,6 +695,38 @@ const Strings = {
     AnalysisTotalTripsOfFaculties: {
         TITLE: "Tổng Số Chuyến Đi Của Các Khoa",
     },
+    DialogShowAnalysisTotalTripsOfFaculties: {
+        TITLE: "Danh Sách Lịch Trình Của Các Khoa",
+        FACULTY: "Khoa",
+        SCHEDULE_CODE: "Mã Lịch Trình",
+        TIME: "Thời Gian",
+        SUBSCRIBERS: "Người Đăng Ký",
+        REASON: "Lý Do Đăng Ký",
+    },
+    DialogShowAnalysisTotalTripsOfFacultiesFilter: {
+        TITLE: "Bộ Lọc",
+        CHOOSE_TIME: "-- Chọn Thời Gian --",
+        ENTER_LOCATION: "-- Địa Điểm --",
+        STATUS: "Trạng Thái:",
+        FACULTY: "Khoa:",
+        CAR_TYPE: "Loại Xe:",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
+        CHOOSE_STATUS: "-- Chọn Trạng Thái --",
+        CHOOSE_FACULTY: "-- Chọn Khoa --",
+        SCHEDULE_CODE: "Mã Lịch Trình:",
+        SUBSCRIBERS: "Người Đăng Ký:",
+        DRIVER: "Tài Xế:",
+        LICENSE_PLATES: "Biển Số Xe:",
+        ENTER_SCHEDULE_CODE: "-- Nhập Mã Lịch Trình --",
+        ENTER_NAME_CODE_USER: "-- Nhập Tên Hoặc Mã CB Người Đăng Ký --",
+        ENTER_NAME_CODE_DRIVER: "-- Nhập Tên Hoặc Mã CB Tài Xế --",
+        ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
+        TIME: "Thời Gian: ",
+        ADDRESS: "Địa Chỉ: ",
+        HAVE_SCHEDULE: "Có Lịch Trình: ",
+        YES: "Có",
+        NO: "Không",
+    },
 };
 
 export default Strings;

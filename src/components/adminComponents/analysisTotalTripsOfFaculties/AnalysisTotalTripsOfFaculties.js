@@ -40,6 +40,7 @@ import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import vi from "date-fns/locale/vi";
 import { AnalysisTotalTripsOfFacultiesServices } from "../../../services/adminServices/AnalysisTotalTripsOfFacultiesServices";
+import DialogShowAnalysisTotalTripsOfFaculties from "./DialogShowAnalysisTotalTripsOfFaculties";
 // import DialogShowAnalysisTotalTrips from "./DialogShowAnalysisTotalTrips";
 registerLocale("vi", vi);
 
@@ -58,7 +59,7 @@ function AnalysisTotalTripsOfFaculties() {
         content: null,
     });
 
-    const [dialogShowAnalysisTotalTrips, setDialogShowAnalysisTotalTrips] =
+    const [dialogShowDataAnalysis, setDialogShowDataAnalysis] =
         useState({
             open: false,
             startDate: null,
@@ -70,6 +71,9 @@ function AnalysisTotalTripsOfFaculties() {
         endDate: null,
     });
 
+    const [title, setTitle] = useState(
+        Strings.AnalysisTotalTripsOfFaculties.TITLE
+    );
     const [totalTripsOfFaculties, setTotalTripsOfFaculties] = useState([]);
 
     const [speedDial, setSpeedDial] = useState(false);
@@ -77,11 +81,30 @@ function AnalysisTotalTripsOfFaculties() {
     const getAnalysisTotalTripsOfFaculties = async (startDate, endDate) => {
         await setBackDrop(true);
         const res =
-            await AnalysisTotalTripsOfFacultiesServices.getAnalysisTotalTripsOfFaculties();
+            await AnalysisTotalTripsOfFacultiesServices.getAnalysisTotalTripsOfFaculties(
+                {
+                    startDate,
+                    endDate,
+                }
+            );
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
-                setTotalTripsOfFaculties(res.data.data);
+                let result = res.data.data;
+                setTotalTripsOfFaculties(result.data);
+                if (result.date.startDate && result.date.endDate) {
+                    const startDate = helper.formatDateStringFromTimeStamp(
+                        result.date.startDate
+                    );
+                    const endDate = helper.formatDateStringFromTimeStamp(
+                        result.date.endDate
+                    );
+                    setTitle(
+                        `${Strings.AnalysisTotalTripsOfFaculties.TITLE} Từ: ${startDate} - ${endDate}`
+                    );
+                } else {
+                    setTitle(Strings.AnalysisTotalTripsOfFaculties.TITLE);
+                }
             } else {
                 setModalError({
                     ...modalError,
@@ -108,71 +131,71 @@ function AnalysisTotalTripsOfFaculties() {
         }, 1000);
     };
 
-    // const handleChangeDateQuarter = (dates) => {
-    //     const [start, end] = dates;
-    //     let lastQuarter = end && new Date(end.setMonth(end.getMonth() + 4));
-    //     setSelectedDates({
-    //         startDate: start,
-    //         endDate: lastQuarter,
-    //     });
+    const handleChangeDateQuarter = (dates) => {
+        const [start, end] = dates;
+        let lastQuarter = end && new Date(end.setMonth(end.getMonth() + 4));
+        setSelectedDates({
+            startDate: start,
+            endDate: lastQuarter,
+        });
 
-    //     // SEND API
-    //     if (start && lastQuarter) {
-    //         getTotalNumberOfTripsOverTime(
-    //             Math.floor(new Date(start).getTime()),
-    //             Math.floor(new Date(lastQuarter).getTime())
-    //         );
-    //     } else if (!start && lastQuarter) {
-    //         getTotalNumberOfTripsOverTime();
-    //     }
-    // };
+        // SEND API
+        if (start && lastQuarter) {
+            getAnalysisTotalTripsOfFaculties(
+                Math.floor(new Date(start).getTime()),
+                Math.floor(new Date(lastQuarter).getTime())
+            );
+        } else if (!start && lastQuarter) {
+            getAnalysisTotalTripsOfFaculties();
+        }
+    };
 
-    // const handleChangeDateMonth = (dates) => {
-    //     const [start, end] = dates;
-    //     let lastDayOfEndMonth =
-    //         end && new Date(end.getFullYear(), end.getMonth() + 1, 0);
-    //     setSelectedDates({
-    //         startDate: start,
-    //         endDate: lastDayOfEndMonth,
-    //     });
+    const handleChangeDateMonth = (dates) => {
+        const [start, end] = dates;
+        let lastDayOfEndMonth =
+            end && new Date(end.getFullYear(), end.getMonth() + 1, 0);
+        setSelectedDates({
+            startDate: start,
+            endDate: lastDayOfEndMonth,
+        });
 
-    //     // SEND API
-    //     if (start && lastDayOfEndMonth) {
-    //         getTotalNumberOfTripsOverTime(
-    //             Math.floor(new Date(start).getTime()),
-    //             Math.floor(new Date(lastDayOfEndMonth).getTime())
-    //         );
-    //     } else if (!start && !lastDayOfEndMonth) {
-    //         getTotalNumberOfTripsOverTime();
-    //     }
-    // };
+        // SEND API
+        if (start && lastDayOfEndMonth) {
+            getAnalysisTotalTripsOfFaculties(
+                Math.floor(new Date(start).getTime()),
+                Math.floor(new Date(lastDayOfEndMonth).getTime())
+            );
+        } else if (!start && !lastDayOfEndMonth) {
+            getAnalysisTotalTripsOfFaculties();
+        }
+    };
 
-    // const handleChangeDate = (dates) => {
-    //     const [start, end] = dates;
-    //     setSelectedDates({
-    //         startDate: start,
-    //         endDate: end,
-    //     });
+    const handleChangeDate = (dates) => {
+        const [start, end] = dates;
+        setSelectedDates({
+            startDate: start,
+            endDate: end,
+        });
 
-    //     // SEND API
-    //     if (start && end) {
-    //         getTotalNumberOfTripsOverTime(
-    //             Math.floor(new Date(start).getTime()),
-    //             Math.floor(new Date(end).getTime())
-    //         );
-    //     } else if (!start && !end) {
-    //         getTotalNumberOfTripsOverTime();
-    //     }
-    // };
+        // SEND API
+        if (start && end) {
+            getAnalysisTotalTripsOfFaculties(
+                Math.floor(new Date(start).getTime()),
+                Math.floor(new Date(end).getTime())
+            );
+        } else if (!start && !end) {
+            getAnalysisTotalTripsOfFaculties();
+        }
+    };
 
-    // const handleOpenDialogShowAnalysisTotalTrips = () => {
-    //     setDialogShowAnalysisTotalTrips({
-    //         ...dialogShowAnalysisTotalTrips,
-    //         open: true,
-    //         startDate: Math.floor(new Date(selectedDates.startDate).getTime()),
-    //         endDate: Math.floor(new Date(selectedDates.endDate).getTime()),
-    //     });
-    // };
+    const handleOpenDialogShowDataAnalysis = () => {
+        setDialogShowDataAnalysis({
+            ...dialogShowDataAnalysis,
+            open: true,
+            startDate: Math.floor(new Date(selectedDates.startDate).getTime()),
+            endDate: Math.floor(new Date(selectedDates.endDate).getTime()),
+        });
+    };
 
     const run = async () => {
         await setBackDrop(true);
@@ -190,7 +213,7 @@ function AnalysisTotalTripsOfFaculties() {
             <Box>
                 <BoxTitleChart>
                     <TitleChart variant="h6" component="div">
-                        {Strings.AnalysisTotalTripsOfFaculties.TITLE}
+                        {title}
                     </TitleChart>
 
                     <Box
@@ -303,9 +326,9 @@ function AnalysisTotalTripsOfFaculties() {
                             <Tooltip title={Strings.Common.REFRESH}>
                                 <IconButton
                                     sx={{ padding: 0 }}
-                                    // onClick={() =>
-                                    //     handleChangeDate([null, null])
-                                    // }
+                                    onClick={() =>
+                                        handleChangeDate([null, null])
+                                    }
                                 >
                                     <CloseIcon
                                         color={"error"}
@@ -324,7 +347,7 @@ function AnalysisTotalTripsOfFaculties() {
                     >
                         <defs>
                             <linearGradient
-                                id="colorPv"
+                                id="a1bfed"
                                 x1="0"
                                 y1="0"
                                 x2="0"
@@ -332,12 +355,12 @@ function AnalysisTotalTripsOfFaculties() {
                             >
                                 <stop
                                     offset="5%"
-                                    stopColor="#82ca9d"
+                                    stopColor="#a1bfed"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="#82ca9d"
+                                    stopColor="#a1bfed"
                                     stopOpacity={0}
                                 />
                             </linearGradient>
@@ -361,9 +384,10 @@ function AnalysisTotalTripsOfFaculties() {
                         <Area
                             type="monotone"
                             dataKey="totalTripsOfFaculty"
-                            stroke="#82ca9d"
+                            stroke="#a1bfed"
                             fillOpacity={1}
-                            fill="url(#colorPv)"
+                            fill="url(#a1bfed)"
+                            // fill="#a1bfed"
                         />
                     </AreaChart>
                 </ResponsiveContainer>
@@ -375,7 +399,7 @@ function AnalysisTotalTripsOfFaculties() {
                         variant="contained"
                         endIcon={<VisibilityIcon />}
                         color="success"
-                        // onClick={handleOpenDialogShowAnalysisTotalTrips}
+                        onClick={handleOpenDialogShowDataAnalysis}
                     >
                         {Strings.Common.DETAIL}
                     </ButtonFeatures>
@@ -400,7 +424,7 @@ function AnalysisTotalTripsOfFaculties() {
                     withPortal
                     customInput={<></>}
                     selected={selectedDates.startDate}
-                    // onChange={handleChangeDate}
+                    onChange={handleChangeDate}
                     ref={refDate}
                 />
 
@@ -414,7 +438,7 @@ function AnalysisTotalTripsOfFaculties() {
                     withPortal
                     customInput={<></>}
                     selected={selectedDates.startDate}
-                    // onChange={handleChangeDateMonth}
+                    onChange={handleChangeDateMonth}
                     showMonthYearPicker
                     ref={refDateMonth}
                 />
@@ -429,23 +453,23 @@ function AnalysisTotalTripsOfFaculties() {
                     withPortal
                     customInput={<></>}
                     selected={selectedDates.startDate}
-                    // onChange={handleChangeDateQuarter}
+                    onChange={handleChangeDateQuarter}
                     showQuarterYearPicker
                     ref={refDateQuarter}
                 />
             </Box>
 
-            {/* <DialogShowAnalysisTotalTrips
-                open={dialogShowAnalysisTotalTrips.open}
+            <DialogShowAnalysisTotalTripsOfFaculties
+                open={dialogShowDataAnalysis.open}
                 handleClose={() =>
-                    setDialogShowAnalysisTotalTrips({
-                        ...dialogShowAnalysisTotalTrips,
+                    setDialogShowDataAnalysis({
+                        ...dialogShowDataAnalysis,
                         open: false,
                     })
                 }
-                startDate={dialogShowAnalysisTotalTrips.startDate}
-                endDate={dialogShowAnalysisTotalTrips.endDate}
-            /> */}
+                startDate={dialogShowDataAnalysis.startDate}
+                endDate={dialogShowDataAnalysis.endDate}
+            />
 
             <ModalError
                 open={modalError.open}
