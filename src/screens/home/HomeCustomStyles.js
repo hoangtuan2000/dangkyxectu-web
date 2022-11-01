@@ -1,12 +1,13 @@
 import {
     Card,
+    Fab,
     styled,
 } from "@mui/material";
 
 const CardContainer = styled(Card)(({ theme }) => ({
     float: "left",
     margin: "5px",
-    height: 350,
+    height: 330,
     [theme.breakpoints.up("xs")]: {
         maxWidth: 240,
     },
@@ -30,10 +31,38 @@ const CardContainer = styled(Card)(({ theme }) => ({
         maxWidth: 267,
     },
     [theme.breakpoints.up("xl")]: {
-        maxWidth: 200,
+        maxWidth: 235,
     },
 }));
 
+const FabStyle = styled(Fab)(({ theme }) => ({
+    marginBottom: 5,
+    color: "white",
+    [theme.breakpoints.up("mobileS")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("mobileM")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("mobileL")]: {
+        transform: "scale(0.6)",
+    },
+    [theme.breakpoints.up("sm")]: {
+        transform: "scale(0.65)",
+    },
+    [theme.breakpoints.up("md")]: {
+        transform: "scale(0.7)",
+    },
+    [theme.breakpoints.up("lg")]: {
+        transform: "scale(0.7)",
+    },
+    [theme.breakpoints.up("xl")]: {
+        transform: "scale(0.7)",
+    },
+}));
+
+
 export {
-    CardContainer
+    CardContainer,
+    FabStyle
 }

@@ -37,11 +37,11 @@ const HomeService = {
             });
     },
     
-    getCarList: async () => {
+    getCarList: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.Home.GET_CAR_LIST, null,{
+            .post(Constants.ApiPath.Home.GET_CAR_LIST, data,{
                 headers: {
                     Authorization: `${accessToken} ${token}`,
                 },

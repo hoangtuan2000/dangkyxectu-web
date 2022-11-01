@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+    Badge,
     Box,
     CardActionArea,
     CardContent,
@@ -7,10 +8,11 @@ import {
     List,
     ListItem,
     ListItemText,
+    Tooltip,
     Typography,
     useTheme,
 } from "@mui/material";
-import { CardContainer } from "./HomeCustomStyles";
+import { CardContainer, FabStyle } from "./HomeCustomStyles";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import DialogCarInfo from "../../components/dialogCarInfo/DialogCarInfo";
 import Strings from "../../constants/Strings";
@@ -20,6 +22,8 @@ import ModalError from "../../components/modalError/ModalError";
 import BackDrop from "../../components/backDrop/BackDrop";
 import { GlobalService } from "../../services/GlobalServices";
 import helper from "../../common/helper";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import DialogRentalCarFilter from "../../components/dialogRentalCarFilter/DialogRentalCarFilter";
 
 export default function Home() {
     const theme = useTheme();
@@ -32,6 +36,20 @@ export default function Home() {
     });
 
     const [openDialogCarInfo, setOpenDialogCarInfo] = useState(false);
+
+    const [dataInfo, setDataInfo] = useState({
+        page: Constants.Common.PAGE,
+        pageSize: Constants.Common.LIMIT_ENTRY,
+        totalRows: 0,
+    });
+    const [totalDataFilter, setTotalDataFilter] = useState(null);
+    const [dialogRentalCarFilter, setDialogRentalCarFilter] = useState(false);
+    const [dataFilter, setDataFilter] = useState({
+        carType: [],
+        carBrand: [],
+        licensePlates: null,
+        haveTrip: null,
+    });
 
     const [carScheduleList, setCarScheduleList] = useState([]);
     const [car, setCar] = useState([]);
@@ -72,7 +90,10 @@ export default function Home() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -97,14 +118,33 @@ export default function Home() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
     };
 
-    const getCarList = async () => {
-        const res = await HomeService.getCarList();
+    const getCarList = async (
+        page = dataInfo.page,
+        pageSize = dataInfo.pageSize,
+        carType,
+        carBrand,
+        licensePlates,
+        haveTrip
+    ) => {
+        const data = {
+            getAllData: true,
+            page: page,
+            limitEntry: pageSize,
+            carType,
+            carBrand,
+            licensePlates,
+            haveTrip,
+        };
+        const res = await HomeService.getCarList({ ...data });
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -122,7 +162,10 @@ export default function Home() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
@@ -152,10 +195,59 @@ export default function Home() {
             setModalError({
                 ...modalError,
                 open: true,
-                title: (res.request && `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) || Strings.Common.ERROR,
+                title:
+                    (res.request &&
+                        `${Strings.Common.AN_ERROR_OCCURRED} (${res.request.status})`) ||
+                    Strings.Common.ERROR,
                 content: res.name || null,
             });
         }
+    };
+
+    const handleFilter = (e) => {
+        //format data to send API
+        let carType = [];
+        let carBrand = [];
+        if (helper.isArray(e.carType) && e.carType.length > 0) {
+            carType = e.carType.map((item) => {
+                return item.idCarType;
+            });
+        }
+        if (helper.isArray(e.carBrand) && e.carBrand.length > 0) {
+            carBrand = e.carBrand.map((item) => {
+                return item.idCarBrand;
+            });
+        }
+        //reset page and pageSize => call getCarListForAdmin function
+        getCarList(
+            Constants.Common.PAGE,
+            dataInfo.pageSize,
+            carType,
+            carBrand,
+            e.licensePlates,
+            e.haveTrip
+        );
+        // save data filter in dialogRentalCarFilter => default value in dialogRentalCarFilter
+        setDataFilter({
+            carType: [...e.carType],
+            carBrand: [...e.carBrand],
+            licensePlates: e.licensePlates,
+            haveTrip: e.haveTrip,
+        });
+        // show total data to filter in UI => button filter
+        let total = carType.length + carBrand.length;
+        if (e.licensePlates) total += 1;
+        if (e.haveTrip) total += 1;
+        setTotalDataFilter(total > 0 ? total : null);
+    };
+
+    const handleRefreshDataFilter = () => {
+        setDataFilter({
+            carType: [],
+            carBrand: [],
+            licensePlates: null,
+            haveTrip: null,
+        });
     };
 
     const run = async () => {
@@ -163,8 +255,8 @@ export default function Home() {
         await getCommon();
         await getCarList();
         await setTimeout(() => {
-            setBackDrop(false)
-        }, 1000)
+            setBackDrop(false);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -173,25 +265,33 @@ export default function Home() {
 
     return (
         <Box>
-            <Typography variant="h6" component="div">
-                {Strings.Home.CAR_LIST}
-            </Typography>
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <Typography variant="h6" component="div">
+                    {Strings.Home.CAR_LIST}
+                </Typography>
+
+                {/* FILTER BUTTON */}
+                <Tooltip title={Strings.Common.FILTER}>
+                    <FabStyle
+                        color="primary"
+                        size="small"
+                        onClick={() => setDialogRentalCarFilter(true)}
+                    >
+                        <Badge badgeContent={totalDataFilter} color="error">
+                            <FilterAltIcon />
+                        </Badge>
+                    </FabStyle>
+                </Tooltip>
+            </Box>
+
             {carList.length > 0 ? (
                 carList.map((val) => {
-                    const type = carTypeList
-                        ? carTypeList.filter((item) => {
-                              if (item.idCarType == val.idCarType) {
-                                  return item;
-                              }
-                          })
-                        : [];
-                    const status = carStatusList
-                        ? carStatusList.filter((item) => {
-                              if (item.idCarStatus == val.idCarStatus) {
-                                  return item;
-                              }
-                          })
-                        : [];
                     const startDate = val.startDate
                         ? helper.formatDateStringFromTimeStamp(val.startDate)
                         : undefined;
@@ -202,7 +302,7 @@ export default function Home() {
                         <CardContainer
                             key={val.idCar}
                             onClick={() => handleOpenDialogCarInfo(val.idCar)}
-                            data-aos="zoom-in"
+                            // data-aos="zoom-in"
                         >
                             <CardActionArea>
                                 <CardMedia
@@ -213,11 +313,11 @@ export default function Home() {
                                 />
                                 <CardContent>
                                     <Typography variant="h6" component="div">
-                                        {type.length > 0 &&
-                                            type[0].name +
-                                                " " +
-                                                type[0].seatNumber}{" "}
-                                        Chỗ
+                                        {`${val.nameCarType} ${val.seatNumber} Chổ`}
+                                    </Typography>
+                                    <Typography variant="p" component="div">
+                                        {Strings.Home.CAR_BRAND}{" "}
+                                        {val.nameCarBrand}
                                     </Typography>
                                     <Typography variant="p" component="div">
                                         {Strings.Home.LICENSE_PLATES}{" "}
@@ -225,105 +325,57 @@ export default function Home() {
                                     </Typography>
                                     <Typography variant="p" component="div">
                                         {Strings.Home.VEHICLE_CONDITION}{" "}
-                                        {status.length > 0 ? (
-                                            status[0].idCarStatus == 2 ? (
-                                                <span
-                                                    style={{
-                                                        color: theme.palette
-                                                            .error.main,
-                                                    }}
-                                                >
-                                                    {status[0].name}
-                                                </span>
-                                            ) : status[0].idCarStatus == 3 ? (
-                                                <span
-                                                    style={{
-                                                        color: theme.palette
-                                                            .warning.main,
-                                                    }}
-                                                >
-                                                    {status[0].name}
-                                                </span>
-                                            ) : (
-                                                <span
-                                                    style={{
-                                                        color: theme.palette
-                                                            .success.main,
-                                                    }}
-                                                >
-                                                    {status[0].name}
-                                                </span>
-                                            )
-                                        ) : undefined}
+                                        {val.idCarStatus ==
+                                        Constants.CarStatusCode.STOP_WORKING ? (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.error
+                                                        .main,
+                                                }}
+                                            >
+                                                {val.nameCarStatus}
+                                            </span>
+                                        ) : val.idCarStatus ==
+                                          Constants.CarStatusCode
+                                              .MAINTENANCE ? (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.warning
+                                                        .main,
+                                                }}
+                                            >
+                                                {val.nameCarStatus}
+                                            </span>
+                                        ) : (
+                                            <span
+                                                style={{
+                                                    color: theme.palette.success
+                                                        .main,
+                                                }}
+                                            >
+                                                {val.nameCarStatus}
+                                            </span>
+                                        )}
                                     </Typography>
+
                                     <Typography
                                         variant="p"
                                         color="text.secondary"
                                     >
                                         {Strings.Home.SCHEDULE}
-                                    </Typography>
-
-                                    {val.idSchedule && (
-                                        <List
-                                            sx={{
-                                                width: "100%",
-                                                bgcolor: "background.paper",
-                                                padding: "0px",
-                                            }}
-                                        >
-                                            <ListItem
-                                                sx={{
-                                                    padding: "0px",
-                                                }}
-                                            >
-                                                <NearMeIcon
-                                                    color="primary"
-                                                    fontSize="small"
-                                                    sx={{
-                                                        marginRight: "5px",
-                                                    }}
-                                                />
-                                                <ListItemText
-                                                    primary={val.reason}
-                                                    secondary={`${startDate} - ${endDate}`}
-                                                    primaryTypographyProps={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "bold",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        color: theme.palette
-                                                            .primary.main,
-                                                    }}
-                                                    secondaryTypographyProps={{
-                                                        fontSize: "12px",
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        </List>
-                                    )}
-
-                                    {!val.idSchedule && (
-                                        <Typography
-                                            variant="p"
-                                            component="div"
-                                            color="text.secondary"
-                                            sx={{
-                                                marginLeft: 1,
-                                                marginTop: 1,
-                                                color: theme.palette.success
-                                                    .main,
+                                        <span
+                                            style={{
+                                                color:
+                                                    val.totalSchedule == 0 &&
+                                                    theme.palette.success.main,
                                                 fontWeight: "bold",
                                             }}
                                         >
-                                            {Strings.Common.NO_SCHEDULE}
-                                        </Typography>
-                                    )}
+                                            {val.totalSchedule == 0
+                                                ? "Không Có"
+                                                : val.totalSchedule}
+                                        </span>
+                                    </Typography>
                                 </CardContent>
                             </CardActionArea>
                         </CardContainer>
@@ -338,10 +390,7 @@ export default function Home() {
                         height: "50vh",
                     }}
                 >
-                    <Typography
-                        variant="h6"
-                        component="div"
-                    >
+                    <Typography variant="h6" component="div">
                         {Strings.Common.NO_DATA}
                     </Typography>
                 </Box>
@@ -356,6 +405,17 @@ export default function Home() {
                 carBrandData={carBrandList}
                 carStatusData={carStatusList}
                 carScheduleList={carScheduleList}
+            />
+
+            <DialogRentalCarFilter
+                open={dialogRentalCarFilter}
+                handleClose={() => setDialogRentalCarFilter(false)}
+                onSubmit={(e) => handleFilter(e)}
+                defaultCarType={dataFilter.carType}
+                defaultCarBrand={dataFilter.carBrand}
+                defaultLicensePlates={dataFilter.licensePlates}
+                defaultHaveTrip={dataFilter.haveTrip}
+                handleRefreshDataFilter={handleRefreshDataFilter}
             />
 
             <ModalError
