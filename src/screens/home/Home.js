@@ -148,6 +148,11 @@ export default function Home() {
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
+                setDataInfo({
+                    page: res.data.page,
+                    pageSize: res.data.limitEntry,
+                    totalRows: res.data.sizeQuerySnapshot,
+                });
                 setCarList(res.data.data);
             } else {
                 setModalError({
