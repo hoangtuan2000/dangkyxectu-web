@@ -183,7 +183,7 @@ const Constants = {
         TextNoBackground: {
             PENDING: "#d400ff",
             APPROVED: "green",
-            COMPLETE: "Blue",
+            COMPLETE: "blue",
             CANCELLED: "gray",
             REFUSE: "red",
             RECEIVED: "#03a882",
