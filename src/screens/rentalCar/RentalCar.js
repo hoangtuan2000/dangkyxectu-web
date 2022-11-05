@@ -522,45 +522,20 @@ function RentalCar() {
                 <BoxLeftContent>
                     {car.length > 0 &&
                         car.map((val) => {
-                            const type =
-                                carTypeList.length > 0
-                                    ? carTypeList.filter((item) => {
-                                          if (item.idCarType == val.idCarType) {
-                                              return item;
-                                          }
-                                      })
-                                    : null;
-                            const status =
-                                carStatusList.length > 0
-                                    ? carStatusList.filter((item) => {
-                                          if (
-                                              item.idCarStatus ==
-                                              val.idCarStatus
-                                          ) {
-                                              return item;
-                                          }
-                                      })
-                                    : null;
-                            const color =
-                                carColorList.length > 0
-                                    ? carColorList.filter((item) => {
-                                          if (
-                                              item.idCarColor == val.idCarColor
-                                          ) {
-                                              return item;
-                                          }
-                                      })
-                                    : null;
-                            const brand =
-                                carBrandList.length > 0
-                                    ? carBrandList.filter((item) => {
-                                          if (
-                                              item.idCarBrand == val.idCarBrand
-                                          ) {
-                                              return item;
-                                          }
-                                      })
-                                    : null;
+                            let textColor = theme.palette.text.primary;
+                            const objCarStatus = Constants.CarStatusCode;
+                            for (const property in objCarStatus) {
+                                if (
+                                    val.idCarStatus ==
+                                    `${objCarStatus[property]}`
+                                ) {
+                                    textColor =
+                                        Constants.ColorOfCarStatus.Text[
+                                            property
+                                        ];
+                                    break;
+                                }
+                            }
                             return (
                                 <Box key={val.idCar}>
                                     <Box
@@ -583,8 +558,7 @@ function RentalCar() {
                                             variant="p"
                                             component="div"
                                         >
-                                            {type &&
-                                                `${type[0].name} ${type[0].seatNumber} Chổ`}
+                                            {`${val.nameCarType} ${val.seatNumber} Chổ`}
                                         </CarTypeTitle>
                                         <TextContent
                                             variant="p"
@@ -604,22 +578,10 @@ function RentalCar() {
                                             <span
                                                 style={{
                                                     fontWeight: "bold",
-                                                    color: status
-                                                        ? status[0]
-                                                              .idCarStatus == 2
-                                                            ? theme.palette
-                                                                  .error.main
-                                                            : status[0]
-                                                                  .idCarStatus ==
-                                                              3
-                                                            ? theme.palette
-                                                                  .warning.main
-                                                            : theme.palette
-                                                                  .success.main
-                                                        : theme.palette.primary,
+                                                    color: textColor,
                                                 }}
                                             >
-                                                {status && status[0].name}
+                                                {val.nameCarStatus}
                                             </span>
                                         </TextContent>
                                         <TextContent
@@ -627,14 +589,14 @@ function RentalCar() {
                                             component="div"
                                         >
                                             {Strings.RentalCar.CAR_COLOR}{" "}
-                                            {color && color[0].name}
+                                            {val.nameCarColor}
                                         </TextContent>
                                         <TextContent
                                             variant="p"
                                             component="div"
                                         >
                                             {Strings.RentalCar.CAR_BRAND}{" "}
-                                            {brand && brand[0].name}
+                                            {val.nameCarBrand}
                                         </TextContent>
                                     </Box>
                                 </Box>
