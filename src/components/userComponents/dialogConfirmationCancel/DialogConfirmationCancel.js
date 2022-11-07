@@ -74,6 +74,10 @@ function DialogConfirmationCancel({
                 await handleRefesh();
                 await handleGetUserRegisteredScheduleListWithFilter();
                 await handleOpenModalSuccessOfParent()
+                await setTimeout(() => {
+                    setBackDrop(false);
+                }, 1000);
+                await handleClose();
             } else {
                 setModalError({
                     ...modalError,
@@ -97,7 +101,6 @@ function DialogConfirmationCancel({
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
-        await handleClose();
     };
 
     const handleCancel = () => {

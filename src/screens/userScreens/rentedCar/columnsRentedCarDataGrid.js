@@ -224,47 +224,56 @@ const col = (
             width: 85,
             sortable: false,
             renderCell: (params) => {
+                // if (
+                //     helper.isDateTimeStampGreaterThanCurrentDate(
+                //         params.row.startDate
+                //     )
+                // ) {
                 if (
+                    params.row.status == Constants.ScheduleStatus.PENDING &&
                     helper.isDateTimeStampGreaterThanCurrentDate(
                         params.row.startDate
                     )
                 ) {
-                    if (params.row.status == Constants.ScheduleStatus.PENDING) {
-                        return (
-                            <Tooltip title="Cập Nhật" arrow>
-                                <IconButton
-                                    color="primary"
-                                    onClick={() => {
-                                        handleUpdateSchedulePending(
-                                            params.row.scheduleCode
-                                        );
-                                    }}
-                                >
-                                    <ModeEditIcon />
-                                </IconButton>
-                            </Tooltip>
-                        );
-                    } else if (
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    handleUpdateSchedulePending(
+                                        params.row.scheduleCode
+                                    );
+                                }}
+                            >
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                } else if (
+                    (params.row.status == Constants.ScheduleStatus.APPROVED ||
                         params.row.status ==
-                            Constants.ScheduleStatus.APPROVED ||
-                        params.row.status == Constants.ScheduleStatus.RECEIVED
-                    ) {
-                        return (
-                            <Tooltip title="Cập Nhật" arrow>
-                                <IconButton
-                                    color="primary"
-                                    onClick={() => {
-                                        handleModalShowSchedule(
-                                            params.row.scheduleCode
-                                        );
-                                    }}
-                                >
-                                    <ModeEditIcon />
-                                </IconButton>
-                            </Tooltip>
-                        );
-                    }
-                } else {
+                            Constants.ScheduleStatus.RECEIVED) &&
+                    helper.isDateTimeStampGreaterThanCurrentDate(
+                        params.row.startDate
+                    )
+                ) {
+                    return (
+                        <Tooltip title="Cập Nhật" arrow>
+                            <IconButton
+                                color="primary"
+                                onClick={() => {
+                                    handleModalShowSchedule(
+                                        params.row.scheduleCode
+                                    );
+                                }}
+                            >
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                    );
+                }
+                // }
+                else {
                     return (
                         <Tooltip title="Xem Chi Tiết" arrow>
                             <IconButton

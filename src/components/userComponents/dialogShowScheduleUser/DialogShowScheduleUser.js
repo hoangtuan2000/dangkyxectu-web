@@ -83,7 +83,7 @@ function DialogShowScheduleUser({
                     ...dataSendApi,
                     idReview: res.data.data[0].idReview,
                     idSchedule: res.data.data[0].idSchedule,
-                    comment: res.data.data[0].comment,
+                    comment: res.data.data[0].commentReview,
                     starNumber: res.data.data[0].starNumber,
                     phoneUser: res.data.data[0].phoneUser,
                 });
@@ -135,6 +135,7 @@ function DialogShowScheduleUser({
     };
 
     const handleSubmit = async () => {
+        await setBackDrop(true);
         let res = {};
         if (
             schedule.length > 0 &&
@@ -186,6 +187,9 @@ function DialogShowScheduleUser({
                 content: res.name || null,
             });
         }
+        await setTimeout(() => {
+            setBackDrop(false);
+        }, 1000);
     };
 
     const onSubmit = () => {
