@@ -79,7 +79,7 @@ function DialogShowScheduleDriver({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 getDriverScheduleListOfDriverTripManager();
-                getSchedule()
+                getSchedule();
                 setModalSuccess(true);
             } else {
                 setModalError({
@@ -577,6 +577,7 @@ function DialogShowScheduleDriver({
                                     {Strings.Common.EXIT}
                                 </ButtonFeatures>
 
+                                {/* RECEIVE_SCHEDULE BUTTON */}
                                 {helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                     item.startDate
                                 ) &&
@@ -606,6 +607,7 @@ function DialogShowScheduleDriver({
                                         </ButtonFeatures>
                                     )}
 
+                                {/* MOVING_COMFIRMATION BUTTON */}
                                 {item.idScheduleStatus ==
                                     Constants.ScheduleStatusCode.RECEIVED && (
                                     <ButtonFeatures
@@ -627,6 +629,7 @@ function DialogShowScheduleDriver({
                                     </ButtonFeatures>
                                 )}
 
+                                {/* COMPLETE_COMFIRMATION BUTTON */}
                                 {item.idScheduleStatus ==
                                     Constants.ScheduleStatusCode.MOVING && (
                                     <ButtonFeatures
@@ -639,7 +642,9 @@ function DialogShowScheduleDriver({
                                                 Constants.ColorOfScheduleStatus
                                                     .Background.COMPLETE,
                                         }}
-                                        onClick={handleOpenDialogCarStatusConfirmation}
+                                        onClick={
+                                            handleOpenDialogCarStatusConfirmation
+                                        }
                                     >
                                         {
                                             Strings.DialogShowScheduleDriver

@@ -27,7 +27,8 @@ function DriverTripManager() {
         open: false,
         idSchedule: null,
     });
-    const [dialogDriverTripManagerFilter, setDialogDriverTripManagerFilter] = useState(false);
+    const [dialogDriverTripManagerFilter, setDialogDriverTripManagerFilter] =
+        useState(false);
     const [scheduleList, setScheduleList] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         page: Constants.Common.PAGE,
@@ -111,6 +112,7 @@ function DriverTripManager() {
                     ...modalError,
                     open: true,
                     title: res.data.message,
+                    content: null,
                 });
             }
         }
@@ -343,7 +345,9 @@ function DriverTripManager() {
                 }
                 idSchedule={dialogShowScheduleDriver.idSchedule}
                 titleDialog={Strings.Common.INFO_SCHEDULE}
-                getDriverScheduleListOfDriverTripManager={handleGetDriverScheduleListWithFilter}
+                getDriverScheduleListOfDriverTripManager={
+                    handleGetDriverScheduleListWithFilter
+                }
             />
 
             <ModalError
