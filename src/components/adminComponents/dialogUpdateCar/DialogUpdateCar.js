@@ -104,6 +104,7 @@ function DialogUpdateCar({
         errorDateCarInsurance: false,
     });
     const [dataOld, setDataOld] = useState({
+        idCar: null,
         createdAt: null,
         updatedAt: null,
         fullNameAdmin: null,
@@ -218,6 +219,7 @@ function DialogUpdateCar({
                         });
                         setCarLicenseList(resCarLicense.data.data);
                         setDataOld({
+                            idCar: data.idCar,
                             image: data.image,
                             fullNameAdmin: data.fullNameAdmin,
                             codeAdmin: data.codeAdmin,
@@ -305,9 +307,9 @@ function DialogUpdateCar({
 
     const updateCar = async () => {
         await setBackDrop(true);
-        let data = handleFormatData();
+        let formData = handleFormDataSendApi();
 
-        const res = await DialogUpdateCarServices.updateCar(data);
+        const res = await DialogUpdateCarServices.updateCar(formData);
         // axios success
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
@@ -732,33 +734,118 @@ function DialogUpdateCar({
         }
     };
 
-    const handleFormatData = () => {
-        let data = {};
+    // const handleFormatData = () => {
+    //     let data = {};
 
-        data.idCar = idCar;
-        data.image = dataUpdateSendApi.hasOwnProperty("image")
-            ? dataUpdateSendApi.image
-            : null;
-        dataUpdateSendApi.hasOwnProperty("licensePlates") &&
-            (data.licensePlates = dataUpdateSendApi.licensePlates);
+    //     data.idCar = idCar;
+    //     data.image = dataUpdateSendApi.hasOwnProperty("image")
+    //         ? dataUpdateSendApi.image
+    //         : null;
+    //     dataUpdateSendApi.hasOwnProperty("licensePlates") &&
+    //         (data.licensePlates = dataUpdateSendApi.licensePlates);
+    //     dataUpdateSendApi.hasOwnProperty("carType") &&
+    //         (data.idCarType = dataUpdateSendApi.carType.idCarType);
+    //     dataUpdateSendApi.hasOwnProperty("carBrand") &&
+    //         (data.idCarBrand = dataUpdateSendApi.carBrand.idCarBrand);
+    //     dataUpdateSendApi.hasOwnProperty("carColor") &&
+    //         (data.idCarColor = dataUpdateSendApi.carColor.idCarColor);
+    //     dataUpdateSendApi.hasOwnProperty("carStatus") &&
+    //         (data.idCarStatus = dataUpdateSendApi.carStatus.idCarStatus);
+    //     dataUpdateSendApi.hasOwnProperty("dateCarRegistrationCertificate") &&
+    //         (data.dateCarRegistrationCertificate =
+    //             dataUpdateSendApi.dateCarRegistrationCertificate);
+    //     dataUpdateSendApi.hasOwnProperty("datePeriodicInspectionCertificate") &&
+    //         (data.datePeriodicInspectionCertificate =
+    //             dataUpdateSendApi.datePeriodicInspectionCertificate);
+    //     dataUpdateSendApi.hasOwnProperty("dateCarInsurance") &&
+    //         (data.dateCarInsurance = dataUpdateSendApi.dateCarInsurance);
+
+    //     return data;
+    // };
+
+    const handleFormDataSendApi = () => {
+        const formData = new FormData();
+
+        formData.append("idCar", dataOld.idCar);
+
+        dataUpdateSendApi.hasOwnProperty("image") &&
+            formData.append("imageCar", dataUpdateSendApi.image);
+
         dataUpdateSendApi.hasOwnProperty("carType") &&
-            (data.idCarType = dataUpdateSendApi.carType.idCarType);
-        dataUpdateSendApi.hasOwnProperty("carBrand") &&
-            (data.idCarBrand = dataUpdateSendApi.carBrand.idCarBrand);
-        dataUpdateSendApi.hasOwnProperty("carColor") &&
-            (data.idCarColor = dataUpdateSendApi.carColor.idCarColor);
-        dataUpdateSendApi.hasOwnProperty("carStatus") &&
-            (data.idCarStatus = dataUpdateSendApi.carStatus.idCarStatus);
-        dataUpdateSendApi.hasOwnProperty("dateCarRegistrationCertificate") &&
-            (data.dateCarRegistrationCertificate =
-                dataUpdateSendApi.dateCarRegistrationCertificate);
-        dataUpdateSendApi.hasOwnProperty("datePeriodicInspectionCertificate") &&
-            (data.datePeriodicInspectionCertificate =
-                dataUpdateSendApi.datePeriodicInspectionCertificate);
-        dataUpdateSendApi.hasOwnProperty("dateCarInsurance") &&
-            (data.dateCarInsurance = dataUpdateSendApi.dateCarInsurance);
+            formData.append(
+                "idCarType",
+                dataUpdateSendApi.carType && dataUpdateSendApi.carType.idCarType
+            );
 
-        return data;
+        dataUpdateSendApi.hasOwnProperty("carBrand") &&
+            formData.append(
+                "idCarBrand",
+                dataUpdateSendApi.carBrand &&
+                    dataUpdateSendApi.carBrand.idCarBrand
+            );
+
+        dataUpdateSendApi.hasOwnProperty("carColor") &&
+            formData.append(
+                "idCarColor",
+                dataUpdateSendApi.carColor &&
+                    dataUpdateSendApi.carColor.idCarColor
+            );
+
+        dataUpdateSendApi.hasOwnProperty("licensePlates") &&
+            formData.append("licensePlates", dataUpdateSendApi.licensePlates);
+
+        dataUpdateSendApi.hasOwnProperty("carStatus") &&
+            formData.append(
+                "idCarStatus",
+                dataUpdateSendApi.carStatus.idCarStatus
+            );
+
+        if (
+            dataUpdateSendApi.hasOwnProperty("dateCarRegistrationCertificate")
+        ) {
+            for (
+                var i = 0;
+                i < dataUpdateSendApi.dateCarRegistrationCertificate.length;
+                i++
+            ) {
+                formData.append(
+                    "dateCarRegistrationCertificate",
+                    dataUpdateSendApi.dateCarRegistrationCertificate[i]
+                );
+            }
+        }
+
+        if (
+            dataUpdateSendApi.hasOwnProperty(
+                "datePeriodicInspectionCertificate"
+            )
+        ) {
+            for (
+                var i = 0;
+                i < dataUpdateSendApi.datePeriodicInspectionCertificate.length;
+                i++
+            ) {
+                formData.append(
+                    "datePeriodicInspectionCertificate",
+                    dataUpdateSendApi.datePeriodicInspectionCertificate[i]
+                );
+            }
+        }
+
+        if (dataUpdateSendApi.hasOwnProperty("dateCarInsurance")) {
+            for (
+                var i = 0;
+                i < dataUpdateSendApi.dateCarInsurance.length;
+                i++
+            ) {
+                formData.append(
+                    "dateCarInsurance",
+                    dataUpdateSendApi.dateCarInsurance[i]
+                );
+            }
+        }
+
+        return formData;
     };
 
     const onSubmit = async () => {

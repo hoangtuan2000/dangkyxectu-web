@@ -188,19 +188,25 @@ function DialogShowScheduleAdmin({
         if (res.data) {
             if (res.data.status == Constants.ApiCode.OK) {
                 setSchedule(res.data.data);
-                setDataSendApi({
-                    ...dataSendApi,
-                    idSchedule: res.data.data[0].idSchedule,
-                    status: {
-                        idScheduleStatus: res.data.data[0].idScheduleStatus,
-                        name: res.data.data[0].scheduleStatus,
-                    },
-                    driver: {
-                        idDriver: res.data.data[0].idDriver,
-                        fullNameDriver: res.data.data[0].fullNameDriver,
-                        codeDriver: res.data.data[0].codeDriver,
-                    },
-                });
+
+                if (
+                    res.data.data[0].idScheduleStatus !=
+                    Constants.ScheduleStatusCode.REFUSE
+                ) {
+                    setDataSendApi({
+                        ...dataSendApi,
+                        idSchedule: res.data.data[0].idSchedule,
+                        status: {
+                            idScheduleStatus: res.data.data[0].idScheduleStatus,
+                            name: res.data.data[0].scheduleStatus,
+                        },
+                        driver: {
+                            idDriver: res.data.data[0].idDriver,
+                            fullNameDriver: res.data.data[0].fullNameDriver,
+                            codeDriver: res.data.data[0].codeDriver,
+                        },
+                    });
+                }
 
                 res.data.data[0].idScheduleStatus ==
                     Constants.ScheduleStatusCode.PENDING &&
@@ -350,7 +356,7 @@ function DialogShowScheduleAdmin({
             });
         } else {
             setDialogConfirmation({
-                ...dialogChangeCar,
+                ...dialogConfirmation,
                 open: true,
                 handleSubmit: () => {
                     updateScheduleApproved(data);
@@ -1551,7 +1557,10 @@ function DialogShowScheduleAdmin({
                 }
                 idCar={dialogChangeCar.idCar}
                 idSchedule={dialogChangeCar.idSchedule}
-                getScheduleOfParent={getSchedule}
+                getScheduleOfParent={() => {
+                    getSchedule();
+                    handleGetAdminScheduleListWithFilter();
+                }}
                 openModalSuccessOfParent={() => setModalSuccess(true)}
             />
 

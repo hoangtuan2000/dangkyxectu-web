@@ -154,7 +154,7 @@ const col = (handleOpenDialogUpdateCar) => {
             field: "status",
             headerName: Strings.Common.STATUS,
             description: Strings.Common.STATUS,
-            width: 125,
+            width: 140,
             sortable: false,
             renderCell: (params) => {
                 let bgColor = "white";
@@ -175,7 +175,7 @@ const col = (handleOpenDialogUpdateCar) => {
                 return (
                     <Box
                         style={{
-                            width: "110px",
+                            width: "130px",
                             textAlign: "center",
                             backgroundColor: bgColor,
                             color: textColor,

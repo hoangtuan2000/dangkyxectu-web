@@ -125,6 +125,7 @@ function DialogChangeCar({
             isSearchCarLicensePlates: isSearchCarLicensePlates,
             isSearchCarSeatNumber: isSearchCarSeatNumber,
             idCar: idCar,
+            idSchedule: idSchedule,
         });
         // axios success
         if (res.data) {
@@ -282,8 +283,8 @@ function DialogChangeCar({
         if (open) {
             setDataSendApi({
                 ...dataSendApi,
-                idSchedule: idSchedule
-            })
+                idSchedule: idSchedule,
+            });
             run();
         }
     }, [idCar, idSchedule, open]);

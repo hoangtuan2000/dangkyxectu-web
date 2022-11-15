@@ -39,13 +39,13 @@ export default function Login() {
         (state) => state.globalRedux.errorAuthencationToken
     );
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPass, setShowPassword] = useState(false);
     const [backDrop, setBackDrop] = useState(false);
     const [inputLogin, setInputLogin] = useState({
         code: null,
-        password: null,
+        pass: null,
         helperCode: null,
-        helperPassword: null,
+        helperPass: null,
     });
 
     const [modalError, setModalError] = useState({
@@ -65,8 +65,8 @@ export default function Login() {
     const handleChangePassword = (e) => {
         setInputLogin({
             ...inputLogin,
-            password: e.target.value,
-            helperPassword: null,
+            pass: e.target.value,
+            helperPass: null,
         });
     };
 
@@ -74,7 +74,7 @@ export default function Login() {
         event.preventDefault();
         if (
             helper.isNullOrEmpty(inputLogin.code) ||
-            helper.isNullOrEmpty(inputLogin.password)
+            helper.isNullOrEmpty(inputLogin.pass)
         ) {
             // code login null or empty => set error help text
             helper.isNullOrEmpty(inputLogin.code) &&
@@ -82,15 +82,18 @@ export default function Login() {
                     ...inputLogin,
                     helperCode: Strings.Login.PLEASE_ENTER_CODE,
                 });
-            // password login null or empty => set error help text
-            helper.isNullOrEmpty(inputLogin.password) &&
+            // pass login null or empty => set error help text
+            helper.isNullOrEmpty(inputLogin.pass) &&
                 setInputLogin({
                     ...inputLogin,
-                    helperPassword: Strings.Login.PLEASE_ENTER_PASSWORD,
+                    helperPass: Strings.Login.PLEASE_ENTER_PASSWORD,
                 });
         } else {
             await setBackDrop(true);
-            const res = await LoginService.Login(inputLogin);
+            const res = await LoginService.Login({
+                code: inputLogin.code,
+                pass: inputLogin.pass
+            });
             // axios success
             if (res.data) {
                 // login success
@@ -172,14 +175,14 @@ export default function Login() {
                             />
                             <TextLogin
                                 onChange={(e) => handleChangePassword(e)}
-                                error={inputLogin.helperPassword && true}
-                                helperText={inputLogin.helperPassword}
+                                error={inputLogin.helperPass && true}
+                                helperText={inputLogin.helperPass}
                                 margin="normal"
                                 fullWidth
                                 size="small"
                                 label={Strings.Login.PASSWORD}
                                 placeholder={Strings.Login.PASSWORD}
-                                type={showPassword ? "text" : "password"}
+                                type={showPass ? "text" : "password"}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
@@ -191,11 +194,11 @@ export default function Login() {
                                             <IconButton
                                                 onClick={(e) =>
                                                     setShowPassword(
-                                                        !showPassword
+                                                        !showPass
                                                     )
                                                 }
                                             >
-                                                {showPassword ? (
+                                                {showPass ? (
                                                     <VisibilityOff />
                                                 ) : (
                                                     <Visibility />
@@ -205,7 +208,7 @@ export default function Login() {
                                     ),
                                 }}
                             />
-                            <FormCheckBox
+                            {/* <FormCheckBox
                                 control={
                                     <Checkbox
                                         value="remember"
@@ -213,7 +216,7 @@ export default function Login() {
                                     />
                                 }
                                 label={Strings.Login.REMEMBER_ACCOUNT}
-                            />
+                            /> */}
                             <ButtonLogin
                                 type="submit"
                                 fullWidth
