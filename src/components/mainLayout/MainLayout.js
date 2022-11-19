@@ -21,6 +21,7 @@ import {
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CarCrashIcon from '@mui/icons-material/CarCrash';
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import LogoCTU from "../../assets/logoCTU.png";
 import Strings from "../../constants/Strings";
@@ -34,7 +35,6 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
 import {
     Main,
     AppBar,
@@ -79,6 +79,12 @@ const DataListItems = [
         path: RoutesPath.CAR_STATUS_OF_TRIP,
         icon: <CommuteIcon />,
         name: "Tình Trạng Xe",
+        role: Constants.Role.ADMIN,
+    },
+    {
+        path: RoutesPath.MAINTENANCE_MANAGER,
+        icon: <CarCrashIcon />,
+        name: "Quản Lý Bảo Trì",
         role: Constants.Role.ADMIN,
     },
     {

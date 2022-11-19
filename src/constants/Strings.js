@@ -771,6 +771,25 @@ const Strings = {
         SUPPORT_EMPTY_DESCRIPTION: "Vui lòng nhập mô tả",
         SUPPORT_LENGTH_DESCRIPTION: `Vui lòng nhập dưới ${Constants.Common.MAX_LENGTH_MAINTENANCE_DESCRIPTION} ký tự`,
     },
+
+    MaintenanceManager: {
+        TITLE: 'Danh Sách Xe Bảo Trì',
+        MAINTENANCE_DESCRIPTION: "Mô Tả Bảo Trì",
+        REPAIR_COST: "Chi Phí Bảo Trì",
+    },
+    DialogMaintenanceManagerFilter: {
+        TITLE: "Bộ Lọc Xe",
+        LICENSE_PLATES: "Biển Số Xe:",
+        ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
+        CAR_CODE: "Mã Số Xe: ",
+        ENTER_CAR_CODE: "-- Nhập Mã Số Xe --",
+        BRAND: "Thương Hiệu: ",
+        CHOOSE_BRAND: "-- Chọn Thương Hiệu --",
+        CAR_STATUS: "Trạng Thái Xe:",
+        CAR_TYPE: "Loại Xe:",
+        CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
+        CHOOSE_CAR_STATUS: "-- Chọn Trạng Thái Xe --",
+    },
 };
 
 export default Strings;

@@ -131,7 +131,10 @@ const Constants = {
         },
         DialogCreateMaintenance: {
             CREATE_CAR_MAINTENANCE: "/admin/createCarMaintenance",
-        }
+        },
+        MaintenanceManager: {
+            GET_CAR_MAINTENANCE: "/admin/getCarMaintenance",
+        },
     },
 
     Styled: {
