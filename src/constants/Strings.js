@@ -69,9 +69,11 @@ const Strings = {
         DO_YOU_WANT_TO_RECEIVE_CAR: "Bạn Có Muốn Nhận Xe?",
         DO_YOU_WANT_TO_RETURN_CAR: "Bạn Có Muốn Trả Xe?",
         DO_YOU_WANT_TO_ADD_CAR: "Bạn Có Muốn Thêm Xe?",
+        DO_YOU_WANT_TO_CREATE_MAINTENANCE: "Bạn Có Muốn Tạo Bảo Trì?",
         DO_YOU_WANT_TO_ADD_DRIVER: "Bạn Có Muốn Thêm Tài Xế?",
         DO_YOU_WANT_TO_UPDATE_DRIVER: "Bạn Có Muốn Cập Nhật Tài Xế?",
         ADD_CAR_CONFIRMATION: "Xác Nhận Thêm Xe",
+        CREATE_MAINTENANCE_CONFIRMATION: "Xác Nhận Tạo Bảo Trì",
         ADD_DRIVER_CONFIRMATION: "Xác Nhận Thêm Tài Xế",
         UPDATE_DRIVER_CONFIRMATION: "Xác Nhận Cập Nhật Tài Xế",
         SCHEDULE_CANCEL_CONFIRMATION: "Xác Nhận Hủy Lịch Trình",
@@ -217,6 +219,7 @@ const Strings = {
         TITLE: "Danh Sách Xe",
         ADD_CAR: "Thêm Xe",
         CAR_CODE: "Mã Xe",
+        MAINTENANCE: "Bảo Trì",
     },
 
     DriverManagement: {
@@ -756,6 +759,17 @@ const Strings = {
         HAVE_SCHEDULE: "Có Lịch Trình: ",
         YES: "Có",
         NO: "Không",
+    },
+
+    DialogCreateMaintenance: {
+        TITLE: "Bảo Trì Xe",
+        CHOOSE_IMAGE_PLEASE: "Vui Lòng Chọn Hình Ảnh",
+        MAINTENANCE_DESCRIPTION: "Mô Tả Bảo Trì",
+        ENTER_MAINTENANCE_DESCRIPTION: "-- Nhập Lý Do Bảo Trì --",
+        REPAIR_COST: "Chi Phí Bảo Trì",
+        ENTER_REPAIR_COST: "-- Nhập Chi Phí Bảo Trì --",
+        SUPPORT_EMPTY_DESCRIPTION: "Vui lòng nhập mô tả",
+        SUPPORT_LENGTH_DESCRIPTION: `Vui lòng nhập dưới ${Constants.Common.MAX_LENGTH_MAINTENANCE_DESCRIPTION} ký tự`,
     },
 };
 

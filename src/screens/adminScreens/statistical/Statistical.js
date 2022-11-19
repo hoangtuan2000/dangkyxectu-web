@@ -223,7 +223,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.success.main}
                     colorHeader={theme.palette.success.main}
                     colorContent={theme.palette.success.main}
-                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
+                    pathNavigate={RoutesPath.HOME}
                 />
 
                 {/* FORM_IS_PENDING_CONFIRMATION */}
@@ -234,7 +234,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.secondary.main}
                     colorHeader={theme.palette.secondary.main}
                     colorContent={theme.palette.secondary.main}
-                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
+                    pathNavigate={RoutesPath.HOME}
                 />
 
                 {/* LICENSE_CAR_EXPIRES */}
@@ -245,7 +245,7 @@ function Statistical() {
                     colorBorderLeft={theme.palette.warning.main}
                     colorHeader={theme.palette.warning.main}
                     colorContent={theme.palette.warning.main}
-                    pathNavigate={RoutesPath.CAR_REGISTRATION_MANAGEMENT}
+                    pathNavigate={RoutesPath.CAR_MANAGER}
                 />
             </Box>
 
@@ -275,29 +275,6 @@ function Statistical() {
                 {tab == 2 && <AnalysisTotalTripsOfDriver />}
                 {tab == 3 && <AnalysisDriverLicense />}
             </Box>
-
-            {/* <Box
-                sx={{
-                    width: "100%",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
-                <AnalysisTotalTrips />
-                <AnalysisDriverLicense />
-            </Box>
-            <Box
-                sx={{
-                    width: "100%",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
-                <AnalysisTotalTripsOfFaculties />
-                <AnalysisTotalTripsOfDriver />
-            </Box> */}
 
             <ModalError
                 open={modalError.open}

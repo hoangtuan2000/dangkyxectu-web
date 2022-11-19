@@ -17,6 +17,7 @@ import helper from "../../../common/helper";
 import DialogCreateCar from "../../../components/adminComponents/dialogCreateCar/DialogCreateCar";
 import DialogUpdateCar from "../../../components/adminComponents/dialogUpdateCar/DialogUpdateCar";
 import * as XLSX from "xlsx";
+import DialogCreateMaintenance from "../../../components/adminComponents/dialogCreateMaintenance/DialogCreateMaintenance";
 
 function CarManager() {
     const theme = useTheme();
@@ -32,6 +33,10 @@ function CarManager() {
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogCarManagerFilter, setDialogCarManagerFilter] = useState(false);
     const [dialogCreateCar, setDialogCreateCar] = useState(false);
+    const [dialogCreateMaintenance, setDialogCreateMaintenance] = useState({
+        open: false,
+        idCar: null,
+    });
     const [dialogUpdateCar, setDialogUpdateCar] = useState({
         open: false,
         idCar: null,
@@ -431,12 +436,19 @@ function CarManager() {
             </Box>
 
             <DataGridCustom
-                columns={col((e) =>
-                    setDialogUpdateCar({
-                        ...dialogUpdateCar,
-                        open: true,
-                        idCar: e,
-                    })
+                columns={col(
+                    (e) =>
+                        setDialogUpdateCar({
+                            ...dialogUpdateCar,
+                            open: true,
+                            idCar: e,
+                        }),
+                    (e) =>
+                        setDialogCreateMaintenance({
+                            ...dialogCreateMaintenance,
+                            open: true,
+                            idCar: e,
+                        })
                 )}
                 rows={carList}
                 {...dataInfo}
@@ -454,6 +466,21 @@ function CarManager() {
                 handleGetCarListForAdminWithFilter={
                     handleGetCarListForAdminWithFilter
                 }
+            />
+
+            <DialogCreateMaintenance
+                open={dialogCreateMaintenance.open}
+                handleClose={() =>
+                    setDialogCreateMaintenance({
+                        ...dialogCreateMaintenance,
+                        open: false,
+                    })
+                }
+                idCar={dialogCreateMaintenance.idCar}
+                callFunctionParent={() => {
+                    handleGetCarListForAdminWithFilter();
+                    setModalSuccess(true);
+                }}
             />
 
             <DialogUpdateCar

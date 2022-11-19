@@ -55,7 +55,7 @@ const DataListItems = [
         path: RoutesPath.HOME,
         icon: <ListAltIcon />,
         name: "Tất Cả Xe",
-        role: Constants.Role.ADMIN_USER,
+        role: Constants.Role.USER,
     },
     {
         path: RoutesPath.RENDTED_CAR,
@@ -64,7 +64,7 @@ const DataListItems = [
         role: Constants.Role.USER,
     },
     {
-        path: RoutesPath.CAR_REGISTRATION_MANAGEMENT,
+        path: RoutesPath.HOME,
         icon: <FeedIcon />,
         name: "Quản Lý Đăng Ký",
         role: Constants.Role.ADMIN,

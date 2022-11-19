@@ -129,6 +129,9 @@ const Constants = {
             GET_INFO_DRIVER: "/admin/getInfoDriver",
             GET_SCHEDULE_LIST_OF_DRIVER: "/admin/getScheduleListOfDriver",
         },
+        DialogCreateMaintenance: {
+            CREATE_CAR_MAINTENANCE: "/admin/createCarMaintenance",
+        }
     },
 
     Styled: {
@@ -275,6 +278,7 @@ const Constants = {
         MAX_LENGTH_CODE: 8,
         MIN_LENGTH_PASSWORD: 5,
         MAX_LENGTH_PASSWORD: 15,
+        MAX_LENGTH_MAINTENANCE_DESCRIPTION: 500,
     },
 
     Role: {

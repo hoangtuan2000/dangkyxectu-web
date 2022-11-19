@@ -92,6 +92,17 @@ const helper = {
             new Date(new Date().toDateString())
         );
     },
+
+    formatMoney: (number) => {
+        let money = undefined;
+        let isNumber = parseInt(number);
+        if (isNumber) {
+            money = isNumber
+                .toString()
+                .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        }
+        return money;
+    },
 };
 
 export default helper;

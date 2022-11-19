@@ -67,7 +67,7 @@ function App() {
                                 element={<MainLayout />}
                             >
                                 {/* ROUTE ADMIN AND USER */}
-                                {currentUser.role != Constants.Role.DRIVER && (
+                                {currentUser.role != Constants.Role.DRIVER && currentUser.role != Constants.Role.ADMIN && (
                                     <>
                                         <Route
                                             path={RoutesPath.HOME}
@@ -105,7 +105,7 @@ function App() {
                                     <>
                                         <Route
                                             path={
-                                                RoutesPath.CAR_REGISTRATION_MANAGEMENT
+                                                RoutesPath.HOME
                                             }
                                             element={
                                                 <CarRegistrationManagement />

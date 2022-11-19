@@ -42,6 +42,7 @@ const DialogUpdateCarServices = {
             .post(Constants.ApiPath.DialogUpdateCar.UPDATE_CAR, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
+                    "Content-Type": `multipart/form-data`,
                 },
             })
             .then((res) => {

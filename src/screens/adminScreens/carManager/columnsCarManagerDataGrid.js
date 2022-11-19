@@ -5,8 +5,9 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
 import Constants from "../../../constants/Constants";
+import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 
-const col = (handleOpenDialogUpdateCar) => {
+const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
     let columns = [];
     return (columns = [
         {
@@ -276,6 +277,27 @@ const col = (handleOpenDialogUpdateCar) => {
                         >
                             {params.row.carCode}
                         </span>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            field: "maintenance",
+            headerName: Strings.CarManager.MAINTENANCE,
+            description: Strings.CarManager.MAINTENANCE,
+            width: 70,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={Strings.CarManager.MAINTENANCE} arrow>
+                        <IconButton
+                            color="warning"
+                            onClick={() =>
+                                handleOpenDialogCreateMaintenance(params.row.carCode)
+                            }
+                        >
+                            <GppMaybeIcon />
+                        </IconButton>
                     </Tooltip>
                 );
             },

@@ -10,6 +10,7 @@ const DialogCarStatusConfirmationServices = {
             .post(Constants.ApiPath.DialogCarStatusConfirmation.CONFIRM_RECEIVED_OR_COMPLETE_OF_SCHEDULE, data, {
                 headers: {
                     Authorization: `${accessToken} ${token}`,
+                    "Content-Type": `multipart/form-data`,
                 },
             })
             .then((res) => {
