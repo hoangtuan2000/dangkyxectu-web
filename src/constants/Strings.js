@@ -773,9 +773,10 @@ const Strings = {
     },
 
     MaintenanceManager: {
-        TITLE: 'Danh Sách Xe Bảo Trì',
+        TITLE: "Danh Sách Xe Bảo Trì",
         MAINTENANCE_DESCRIPTION: "Mô Tả Bảo Trì",
         REPAIR_COST: "Chi Phí Bảo Trì",
+        MAINTENANCE_CODE: "Mã Bảo Trì",
     },
     DialogMaintenanceManagerFilter: {
         TITLE: "Bộ Lọc Xe",
@@ -789,6 +790,20 @@ const Strings = {
         CAR_TYPE: "Loại Xe:",
         CHOOSE_CAR_TYPE: "-- Chọn Loại Xe --",
         CHOOSE_CAR_STATUS: "-- Chọn Trạng Thái Xe --",
+    },
+
+    DialogUpdateMaintenance: {
+        TITLE: "Cập Nhật Bảo Trì",
+        CHOOSE_IMAGE_PLEASE: "Vui Lòng Chọn Hình Ảnh",
+        MAINTENANCE_DESCRIPTION: "Mô Tả Bảo Trì",
+        ENTER_MAINTENANCE_DESCRIPTION: "-- Nhập Lý Do Bảo Trì --",
+        REPAIR_COST: "Chi Phí Bảo Trì",
+        ENTER_REPAIR_COST: "-- Nhập Chi Phí Bảo Trì --",
+        SUPPORT_EMPTY_DESCRIPTION: "Vui lòng nhập mô tả",
+        SUPPORT_LENGTH_DESCRIPTION: `Vui lòng nhập dưới ${Constants.Common.MAX_LENGTH_MAINTENANCE_DESCRIPTION} ký tự`,
+        CREATED_AT: "Ngày Tạo: ",
+        UPDATED_AT: "Ngày Cập Nhật: ",
+        RECENT_UPDATE_USER: "Người Cập Nhật Gần Đây: ",
     },
 };
 

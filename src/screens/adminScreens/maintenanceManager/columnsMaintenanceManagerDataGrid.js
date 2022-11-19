@@ -1,13 +1,9 @@
 import React from "react";
-import { Box, IconButton, Rating, Tooltip } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { IconButton, Tooltip } from "@mui/material";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import Strings from "../../../constants/Strings";
-import Constants from "../../../constants/Constants";
-import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 
-const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
+const col = (handleOpenDialogUpdateMaintenance) => {
     let columns = [];
     return (columns = [
         {
@@ -57,7 +53,7 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                     </Tooltip>
                 );
             },
-        }, 
+        },
         {
             field: "carBrand",
             headerName: Strings.Common.BRAND,
@@ -123,9 +119,9 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                     </Tooltip>
                 );
             },
-        },        
+        },
         {
-            flex:1,
+            flex: 1,
             field: "repairCost",
             headerName: Strings.MaintenanceManager.REPAIR_COST,
             description: Strings.MaintenanceManager.REPAIR_COST,
@@ -146,9 +142,9 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                     </Tooltip>
                 );
             },
-        },        
+        },
         {
-            flex:1,
+            flex: 1,
             field: "description",
             headerName: Strings.MaintenanceManager.MAINTENANCE_DESCRIPTION,
             description: Strings.MaintenanceManager.MAINTENANCE_DESCRIPTION,
@@ -169,7 +165,7 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                     </Tooltip>
                 );
             },
-        },        
+        },
         {
             field: "update",
             headerName: Strings.Common.UPDATE,
@@ -182,7 +178,9 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                         <IconButton
                             color="primary"
                             onClick={() =>
-                                handleOpenDialogUpdateCar(params.row.carCode)
+                                handleOpenDialogUpdateMaintenance(
+                                    params.row.maintenanceCode
+                                )
                             }
                         >
                             <ModeEditIcon />
@@ -191,7 +189,28 @@ const col = (handleOpenDialogUpdateCar, handleOpenDialogCreateMaintenance) => {
                 );
             },
         },
-        
+        {
+            field: "maintenanceCode",
+            headerName: Strings.MaintenanceManager.MAINTENANCE_CODE,
+            description: Strings.MaintenanceManager.MAINTENANCE_CODE,
+            width: 90,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <Tooltip title={params.row.maintenanceCode} arrow>
+                        <span
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {params.row.maintenanceCode}
+                        </span>
+                    </Tooltip>
+                );
+            },
+        },
     ]);
 };
 

@@ -17,6 +17,7 @@ import * as XLSX from "xlsx";
 import DialogCreateMaintenance from "../../../components/adminComponents/dialogCreateMaintenance/DialogCreateMaintenance";
 import { MaintenanceManagerServices } from "../../../services/adminServices/MaintenanceManagerServices";
 import DialogMaintenanceManagerFilter from "../../../components/adminComponents/dialogMaintenanceManagerFilter/DialogMaintenanceManagerFilter";
+import DialogUpdateMaintenance from "../../../components/adminComponents/dialogUpdateMaintenance/DialogUpdateMaintenance";
 
 function MaintenanceManager() {
     const theme = useTheme();
@@ -32,9 +33,9 @@ function MaintenanceManager() {
     const [totalDataFilter, setTotalDataFilter] = useState(null);
     const [dialogCarManagerFilter, setDialogCarManagerFilter] = useState(false);
     const [dialogCreateCar, setDialogCreateCar] = useState(false);
-    const [dialogCreateMaintenance, setDialogCreateMaintenance] = useState({
+    const [dialogUpdateMaintenance, setDialogUpdateMaintenance] = useState({
         open: false,
-        idCar: null,
+        idCarMaintenance: null,
     });
     const [dialogUpdateCar, setDialogUpdateCar] = useState({
         open: false,
@@ -55,7 +56,7 @@ function MaintenanceManager() {
         totalRows: 0,
     });
 
-    const getCarMaintenance = async (
+    const getCarMaintenanceList = async (
         page = dataInfo.page,
         pageSize = dataInfo.pageSize,
         carStatus,
@@ -73,7 +74,7 @@ function MaintenanceManager() {
             licensePlates,
             carCode,
         };
-        const res = await MaintenanceManagerServices.getCarMaintenance({
+        const res = await MaintenanceManagerServices.getCarMaintenanceList({
             ...data,
         });
         // axios success
@@ -101,6 +102,7 @@ function MaintenanceManager() {
                             carCode: item.idCar,
                             repairCost: helper.formatMoney(item.repairCost),
                             description: item.description,
+                            maintenanceCode: item.idCarMaintenance
                         };
                     })
                 );
@@ -127,7 +129,7 @@ function MaintenanceManager() {
         }
     };
 
-    const getCarMaintenanceToExport = async () => {
+    const getCarMaintenanceListToExport = async () => {
         const data = await handleFormatDataFilterSendApi(dataFilter);
         const objData = {
             getAllData: true,
@@ -137,7 +139,7 @@ function MaintenanceManager() {
             carCode: data.carCode,
             licensePlates: data.licensePlates,
         };
-        const res = await MaintenanceManagerServices.getCarMaintenance({
+        const res = await MaintenanceManagerServices.getCarMaintenanceList({
             ...objData,
         });
         // axios success
@@ -201,7 +203,7 @@ function MaintenanceManager() {
     const handleChangePage = async (e) => {
         setDataInfo({ ...dataInfo, page: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getCarMaintenance(
+        await getCarMaintenanceList(
             e,
             dataInfo.pageSize,
             data.carStatus,
@@ -215,7 +217,7 @@ function MaintenanceManager() {
     const handleChangeRowsPerPage = async (e) => {
         setDataInfo({ ...dataInfo, pageSize: e });
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getCarMaintenance(
+        await getCarMaintenanceList(
             dataInfo.page,
             e,
             data.carStatus,
@@ -246,8 +248,8 @@ function MaintenanceManager() {
                 return item.idCarBrand;
             });
         }
-        //reset page and pageSize => call getCarMaintenance function
-        getCarMaintenance(
+        //reset page and pageSize => call getCarMaintenanceList function
+        getCarMaintenanceList(
             Constants.Common.PAGE,
             dataInfo.pageSize,
             carStatus,
@@ -283,7 +285,7 @@ function MaintenanceManager() {
 
     const handleGetCarListForAdminWithFilter = async () => {
         const data = await handleFormatDataFilterSendApi(dataFilter);
-        await getCarMaintenance(
+        await getCarMaintenanceList(
             dataInfo.page,
             dataInfo.pageSize,
             data.carStatus,
@@ -294,7 +296,7 @@ function MaintenanceManager() {
     };
 
     const exportExcel = async () => {
-        let getData = await getCarMaintenanceToExport();
+        let getData = await getCarMaintenanceListToExport();
         if (getData) {
             let dataExport = [
                 ...getData.map((item) => {
@@ -333,7 +335,7 @@ function MaintenanceManager() {
 
     const run = async () => {
         await setBackDrop(true);
-        await getCarMaintenance();
+        await getCarMaintenanceList();
         await setTimeout(() => {
             setBackDrop(false);
         }, 1000);
@@ -385,19 +387,12 @@ function MaintenanceManager() {
             </Box>
 
             <DataGridCustom
-                columns={col(
-                    (e) =>
-                        setDialogUpdateCar({
-                            ...dialogUpdateCar,
-                            open: true,
-                            idCar: e,
-                        }),
-                    (e) =>
-                        setDialogCreateMaintenance({
-                            ...dialogCreateMaintenance,
-                            open: true,
-                            idCar: e,
-                        })
+                columns={col((e) =>
+                    setDialogUpdateMaintenance({
+                        ...dialogUpdateMaintenance,
+                        open: true,
+                        idCarMaintenance: e,
+                    })
                 )}
                 rows={carList}
                 {...dataInfo}
@@ -409,41 +404,19 @@ function MaintenanceManager() {
                 }}
             />
 
-            <DialogCreateCar
-                open={dialogCreateCar}
-                handleClose={() => setDialogCreateCar(false)}
-                handleGetCarListForAdminWithFilter={
-                    handleGetCarListForAdminWithFilter
-                }
-            />
-
-            <DialogCreateMaintenance
-                open={dialogCreateMaintenance.open}
+            <DialogUpdateMaintenance
+                open={dialogUpdateMaintenance.open}
                 handleClose={() =>
-                    setDialogCreateMaintenance({
-                        ...dialogCreateMaintenance,
+                    setDialogUpdateMaintenance({
+                        ...dialogUpdateMaintenance,
                         open: false,
                     })
                 }
-                idCar={dialogCreateMaintenance.idCar}
+                idCarMaintenance={dialogUpdateMaintenance.idCarMaintenance}
                 callFunctionParent={() => {
                     handleGetCarListForAdminWithFilter();
                     setModalSuccess(true);
                 }}
-            />
-
-            <DialogUpdateCar
-                open={dialogUpdateCar.open}
-                handleClose={() =>
-                    setDialogUpdateCar({
-                        ...dialogUpdateCar,
-                        open: false,
-                    })
-                }
-                handleGetCarListForAdminWithFilter={
-                    handleGetCarListForAdminWithFilter
-                }
-                idCar={dialogUpdateCar.idCar}
             />
 
             <DialogMaintenanceManagerFilter
