@@ -1,5 +1,6 @@
 import "aos/dist/aos.css";
 import "react-datepicker/dist/react-datepicker.css";
+import 'react-18-image-lightbox/style.css';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AOS from "aos";

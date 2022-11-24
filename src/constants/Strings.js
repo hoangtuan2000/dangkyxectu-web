@@ -804,6 +804,7 @@ const Strings = {
         CREATED_AT: "Ngày Tạo: ",
         UPDATED_AT: "Ngày Cập Nhật: ",
         RECENT_UPDATE_USER: "Người Cập Nhật Gần Đây: ",
+        OPEN_IMAGE: "Xem Ảnh",
     },
 };
 

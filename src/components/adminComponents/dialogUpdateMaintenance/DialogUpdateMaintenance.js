@@ -35,9 +35,11 @@ import Constants from "../../../constants/Constants";
 import helper from "../../../common/helper";
 import InfoIcon from "@mui/icons-material/Info";
 import PaidIcon from "@mui/icons-material/Paid";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import DialogConfirmation from "../../dialogConfirmation/DialogConfirmation";
 import { DialogCreateMaintenanceServices } from "../../../services/adminServices/DialogCreateMaintenanceServices";
 import { DialogUploadMaintenanceServices } from "../../../services/adminServices/DialogUpdateMaintenanceServices";
+import Lightbox from "react-18-image-lightbox";
 
 function DialogUpdateMaintenance({
     open,
@@ -74,6 +76,10 @@ function DialogUpdateMaintenance({
         repairCost: null,
     });
 
+    const [showImageModal, setShowImageModal] = useState({
+        open: false,
+        image: null,
+    });
     const [carMaintenance, setCarMaintenance] = useState([]);
 
     const getCarMaintenance = async () => {
@@ -86,6 +92,10 @@ function DialogUpdateMaintenance({
             if (res.data.status == Constants.ApiCode.OK) {
                 await setCarMaintenance(res.data.data);
                 await setImagePreview(res.data.data[0].image);
+                await setShowImageModal({
+                    ...showImageModal,
+                    image: res.data.data[0].image,
+                });
                 await setDataSendApi({
                     ...dataSendApi,
                     idCarMaintenance: res.data.data[0].idCarMaintenance,
@@ -280,6 +290,9 @@ function DialogUpdateMaintenance({
             onClose={handleClose}
             scroll="body"
             fullWidth={true}
+            style={{
+                zIndex: 99,
+            }}
         >
             {/* FORM */}
             <DialogContent>
@@ -292,7 +305,7 @@ function DialogUpdateMaintenance({
                         {/* CHOOSE IMAGE */}
                         <Box
                             sx={{
-                                marginBottom: "30px",
+                                marginBottom: "10px",
                             }}
                         >
                             <input
@@ -334,11 +347,56 @@ function DialogUpdateMaintenance({
                                     </TextError>
                                 </Box>
                             )}
+
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    marginTop: 1,
+                                }}
+                            >
+                                <ButtonFeatures
+                                    size="small"
+                                    variant="contained"
+                                    endIcon={<VisibilityIcon />}
+                                    color="info"
+                                    sx={{ padding: "0px 4px" }}
+                                    onClick={() =>
+                                        setShowImageModal({
+                                            ...showImageModal,
+                                            open: true,
+                                        })
+                                    }
+                                >
+                                    {Strings.DialogUpdateMaintenance.OPEN_IMAGE}
+                                </ButtonFeatures>
+
+                                {showImageModal.open && (
+                                    <Lightbox
+                                        mainSrc={showImageModal.image}
+                                        reactModalStyle={{
+                                            zIndex: 100,
+                                        }}
+                                        onImageLoad={() => {
+                                            window.dispatchEvent(
+                                                new Event("resize")
+                                            );
+                                        }}
+                                        onCloseRequest={() =>
+                                            setShowImageModal({
+                                                ...showImageModal,
+                                                open: false,
+                                            })
+                                        }
+                                    />
+                                )}
+                            </Box>
                         </Box>
 
-                        {carMaintenance.map((item) => {
+                        {carMaintenance.map((item, index) => {
                             return (
-                                <ListStyle>
+                                <ListStyle key={index}>
                                     {/* CREATED AT */}
                                     <ListItem>
                                         <AccessTimeIcon />

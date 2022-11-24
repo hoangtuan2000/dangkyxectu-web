@@ -3,6 +3,7 @@ import { Button, Fab, styled } from "@mui/material";
 const FabStyle = styled(Fab)(({ theme }) => ({
     marginBottom: 5,
     color: "white",
+    zIndex: 1,
     [theme.breakpoints.up("mobileS")]: {
         transform: "scale(0.6)",
     },
