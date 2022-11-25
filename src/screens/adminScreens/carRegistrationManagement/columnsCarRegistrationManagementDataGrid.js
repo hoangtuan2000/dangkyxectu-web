@@ -325,7 +325,7 @@ const col = (handleModalShowSchedule) => {
             renderCell: (params) => {
                 if (
                     params.row.status == Constants.ScheduleStatus.PENDING &&
-                    helper.isDateTimeStampGreaterThanCurrentDate(
+                    helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                         params.row.startDate
                     )
                 ) {

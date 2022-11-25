@@ -812,7 +812,7 @@ function DialogShowScheduleAdmin({
                                                     style={{
                                                         fontWeight: "bold",
                                                         color:
-                                                            !helper.isDateTimeStampGreaterThanCurrentDate(
+                                                            !helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                                                 item.startDate
                                                             ) &&
                                                             item.scheduleStatus ==
@@ -828,7 +828,7 @@ function DialogShowScheduleAdmin({
                                                     }}
                                                 >
                                                     {`${startDate} - ${endDate}`}
-                                                    {!helper.isDateTimeStampGreaterThanCurrentDate(
+                                                    {!helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                                         item.startDate
                                                     ) &&
                                                     item.scheduleStatus ==
@@ -855,7 +855,7 @@ function DialogShowScheduleAdmin({
                                                 {(item.scheduleStatus ==
                                                     Constants.ScheduleStatus
                                                         .PENDING &&
-                                                    !helper.isDateTimeStampGreaterThanCurrentDate(
+                                                    !helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                                         item.startDate
                                                     )) ||
                                                 item.scheduleStatus !=
@@ -886,7 +886,7 @@ function DialogShowScheduleAdmin({
                                             {item.scheduleStatus ==
                                                 Constants.ScheduleStatus
                                                     .PENDING &&
-                                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                                     item.startDate
                                                 ) && (
                                                     <AutocompleteStyle
@@ -1457,7 +1457,7 @@ function DialogShowScheduleAdmin({
                                 {/* UPDATE SCHEDULE PENDING BUTTON */}
                                 {schedule[0].idScheduleStatus ==
                                     Constants.ScheduleStatusCode.PENDING &&
-                                helper.isDateTimeStampGreaterThanCurrentDate(
+                                helper.isDateTimeStampGreaterThanOrEqualCurrentDate(
                                     schedule[0].startDate
                                 ) ? (
                                     <ButtonFeatures
