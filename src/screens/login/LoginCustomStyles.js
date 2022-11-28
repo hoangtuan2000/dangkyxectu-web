@@ -38,7 +38,7 @@ const BoxLogin = styled(Box)(({ theme }) => ({
 }));
 
 const Logo = styled("img")({
-    width: "30%",
+    width: "40%",
     marginBottom: 15,
 });
 

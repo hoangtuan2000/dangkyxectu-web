@@ -1,6 +1,6 @@
 import "aos/dist/aos.css";
 import "react-datepicker/dist/react-datepicker.css";
-import 'react-18-image-lightbox/style.css';
+import "react-18-image-lightbox/style.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AOS from "aos";
@@ -24,6 +24,7 @@ import UpdateSchedulePending from "./screens/userScreens/updateSchedulePending/U
 import Constants from "./constants/Constants";
 import CarStatusOfTrip from "./screens/adminScreens/carStatusOfTrip/CarStatusOfTrip";
 import MaintenanceManager from "./screens/adminScreens/maintenanceManager/MaintenanceManager";
+import UserManagement from "./screens/adminScreens/userManagement/UserManagement";
 
 // init AOS library
 AOS.init({
@@ -68,8 +69,13 @@ function App() {
                                 path={RoutesPath.INDEX}
                                 element={<MainLayout />}
                             >
-                                {/* ROUTE ADMIN AND USER */}
-                                {currentUser.role != Constants.Role.DRIVER && currentUser.role != Constants.Role.ADMIN && (
+                                {/* ROUTE USER */}
+                                {/* {currentUser.role == Constants.Role.USER && (
+                                    <></>
+                                )} */}
+
+                                {/* ROUTE USER */}
+                                {currentUser.role == Constants.Role.USER && (
                                     <>
                                         <Route
                                             path={RoutesPath.HOME}
@@ -82,12 +88,6 @@ function App() {
                                             }
                                             element={<RentalCar />}
                                         />
-                                    </>
-                                )}
-
-                                {/* ROUTE USER */}
-                                {currentUser.role == Constants.Role.USER && (
-                                    <>
                                         <Route
                                             path={RoutesPath.RENDTED_CAR}
                                             element={<RentedCar />}
@@ -103,12 +103,12 @@ function App() {
                                 )}
 
                                 {/* ROUTE ADMIN */}
-                                {currentUser.role == Constants.Role.ADMIN && (
+                                {(currentUser.role == Constants.Role.ADMIN ||
+                                    currentUser.role ==
+                                        Constants.Role.ADMIN_SYSTEM) && (
                                     <>
                                         <Route
-                                            path={
-                                                RoutesPath.HOME
-                                            }
+                                            path={RoutesPath.HOME}
                                             element={
                                                 <CarRegistrationManagement />
                                             }
@@ -122,7 +122,9 @@ function App() {
                                             element={<CarStatusOfTrip />}
                                         />
                                         <Route
-                                            path={RoutesPath.MAINTENANCE_MANAGER}
+                                            path={
+                                                RoutesPath.MAINTENANCE_MANAGER
+                                            }
                                             element={<MaintenanceManager />}
                                         />
                                         <Route
@@ -132,6 +134,19 @@ function App() {
                                         <Route
                                             path={RoutesPath.STATISTICAL}
                                             element={<Statistical />}
+                                        />
+                                    </>
+                                )}
+
+                                {/* ROUTE ADMIN SYSTEM */}
+                                {currentUser.role ==
+                                    Constants.Role.ADMIN_SYSTEM && (
+                                    <>
+                                        <Route
+                                            path={RoutesPath.USER_MANAGEMENT}
+                                            element={
+                                                <UserManagement />
+                                            }
                                         />
                                     </>
                                 )}

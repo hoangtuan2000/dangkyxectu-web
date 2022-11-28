@@ -10,6 +10,7 @@ const RoutesPath = {
     CAR_STATUS_OF_TRIP: "car-status-of-trip",
     MAINTENANCE_MANAGER: 'maintenance-manager',
     DRIVER_MANAGEMENT: "driver-management",
+    USER_MANAGEMENT: "user-management",
     STATISTICAL: "statistical",
     DRIVER_TRIP_MANAGER: "driver-trip-manager",
 };

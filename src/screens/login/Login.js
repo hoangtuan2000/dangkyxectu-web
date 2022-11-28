@@ -141,7 +141,7 @@ export default function Login() {
     return (
         <>
             <GridContainer container p={2}>
-                <Grid item xs={12} sm={8} md={5}>
+                <Grid item xs={12} sm={8} md={4}>
                     <BoxLogin>
                         <Logo src={logoCTU} alt="Logo CTU" />
                         <Title component="h1" variant="h5">

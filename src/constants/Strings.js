@@ -231,6 +231,15 @@ const Strings = {
         SUPPORT_INVALID_DATA_FROM_FILE: "Thiếu Hoặc Sai Tên Cột Dữ Liệu",
     },
 
+    UserManagement: {
+        TITLE: "Danh Sách Người Dùng",
+        ADD_USER: "Thêm Người Dùng",
+        USER_CODE: "Mã Người Dùng",
+        EMAIL: "Email",
+        INVALID_DATA_FROM_FILE: "Dữ Liệu Từ Tập Tin Không Hợp Lệ",
+        SUPPORT_INVALID_DATA_FROM_FILE: "Thiếu Hoặc Sai Tên Cột Dữ Liệu",
+    },
+
     Statistical: {
         TOTAL_CAR: "Tổng Số Xe",
         TOTAL_DRIVER: "Tống Số Tài Xế",
@@ -543,6 +552,22 @@ const Strings = {
         REVIEW: "Đánh Giá: ",
         EXPIRES: "Hết Hạn",
         NOT_EXPIRES: "Còn Hạn",
+    },
+
+    DialogUserManagementFilter: {
+        TITLE: "Bộ Lọc Người Dùng",
+        USER_CODE: "Mã Người Dùng: ",
+        ENTER_USER_CODE: "-- Nhập Mã Người Dùng --",
+        FULL_NAME: "Họ Tên: ",
+        ENTER_FULL_NAME: "-- Nhập Họ Tên --",
+        EMAIL: "Email: ",
+        ENTER_EMAIL: "-- Nhập Email --",
+        PHONE: "Điện Thoại: ",
+        ENTER_PHONE: "-- Nhập Số Điện Thoại --",
+        FACULTY: "Khoa: ",
+        CHOOSE_FACULTY: "-- Chọn Khoa --",
+        STATUS: "Trạng Thái: ",
+        CHOOSE_STATUS: "-- Chọn Trạng Thái --",
     },
 
     DialogCreateDriver: {

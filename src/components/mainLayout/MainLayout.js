@@ -21,7 +21,7 @@ import {
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import CarCrashIcon from '@mui/icons-material/CarCrash';
+import CarCrashIcon from "@mui/icons-material/CarCrash";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import LogoCTU from "../../assets/logoCTU.png";
 import Strings from "../../constants/Strings";
@@ -35,6 +35,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
+import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 import {
     Main,
     AppBar,
@@ -89,9 +90,15 @@ const DataListItems = [
     },
     {
         path: RoutesPath.DRIVER_MANAGEMENT,
-        icon: <PeopleAltIcon />,
+        icon: <AirlineSeatReclineExtraIcon />,
         name: "Quản Lý Tài Xế",
         role: Constants.Role.ADMIN,
+    },
+    {
+        path: RoutesPath.USER_MANAGEMENT,
+        icon: <PeopleAltIcon />,
+        name: "Quản Lý Người Dùng",
+        role: Constants.Role.ADMIN_SYSTEM,
     },
     {
         path: RoutesPath.STATISTICAL,
@@ -266,10 +273,10 @@ export default function MainLayout() {
                             width: "100%",
                             textAlign: "center",
                             fontSize: {
-                                'mobileS': 16,
-                                'sm': 14,
-                                'lg': 18,
-                            }
+                                mobileS: 16,
+                                sm: 14,
+                                lg: 18,
+                            },
                         }}
                     >
                         {Strings.MainLayout.TEXT_HEADER}
@@ -285,8 +292,8 @@ export default function MainLayout() {
                     {DataListItems.map((item, index) => {
                         if (
                             item.role == currentUser.role ||
-                            (item.role == Constants.Role.ADMIN_USER &&
-                                currentUser.role != Constants.Role.DRIVER)
+                            (item.role == Constants.Role.ADMIN &&
+                                currentUser.role == Constants.Role.ADMIN_SYSTEM)
                         ) {
                             return (
                                 <ListItem disablePadding key={index}>

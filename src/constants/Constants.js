@@ -92,6 +92,9 @@ const Constants = {
             GET_DRIVER_LIST: "/admin/getDriverList",
             CREATE_MULTIPLE_DRIVER: "/admin/createMultipleDriver",
         },
+        UserManagement: {
+            GET_USER_LIST: "/admin/getUserList",
+        },
         DialogCreateDriver: {
             CREATE_DRIVER: "/admin/createDriver",
         },
@@ -293,7 +296,7 @@ const Constants = {
         ADMIN: "admin",
         USER: "user",
         DRIVER: "driver",
-        ADMIN_USER: "admin user",
+        ADMIN_SYSTEM: "adminSystem",
     },
 
     Colors: [
