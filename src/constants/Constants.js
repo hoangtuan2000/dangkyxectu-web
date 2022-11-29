@@ -98,6 +98,9 @@ const Constants = {
         DialogCreateDriver: {
             CREATE_DRIVER: "/admin/createDriver",
         },
+        DialogCreateUser: {
+            CREATE_USER: "/admin/createUser",
+        },
         DialogUpdateDriver: {
             GET_DRIVER_TO_UPDATE: "/admin/getDriverToUpdate",
             UPDATE_DRIVER: "/admin/updateDriver",

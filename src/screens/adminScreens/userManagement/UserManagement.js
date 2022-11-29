@@ -24,11 +24,11 @@ import { ButtonStyle, FabStyle } from "./UserManagementCustomStyles";
 import { UserManagementServices } from "../../../services/adminServices/UserManagementServices";
 import DialogCarRegistrationManagementFilter from "../../../components/adminComponents/dialogCarRegistrationManagementFilter/DialogCarRegistrationManagementFilter";
 import helper from "../../../common/helper";
-import DialogCreateDriver from "../../../components/adminComponents/dialogCreateDriver/DialogCreateDriver";
 import DialogUpdateDriver from "../../../components/adminComponents/dialogUpdateDriver/DialogUpdateDriver";
 import * as XLSX from "xlsx";
 import DialogShowDataFileImport from "../../../components/adminComponents/dialogShowDataFileImport/DialogShowDataFileImport";
 import DialogUserManagementFilter from "../../../components/adminComponents/dialogUserManagementFilter/DialogUserManagementFilter";
+import DialogCreateUser from "../../../components/adminComponents/dialogCreateUser/DialogCreateUser";
 
 function UserManagement() {
     const theme = useTheme();
@@ -43,7 +43,7 @@ function UserManagement() {
         content: null,
     });
 
-    const [dialogCreateDriver, setDialogCreateDriver] = useState(false);
+    const [dialogCreateUser, setDialogCreateUser] = useState(false);
     const [dialogUpdateUser, setDialogUpdateUser] = useState({
         open: false,
         idUser: null,
@@ -562,7 +562,7 @@ function UserManagement() {
                         variant="contained"
                         size="small"
                         startIcon={<PersonAddIcon />}
-                        onClick={() => setDialogCreateDriver(true)}
+                        onClick={() => setDialogCreateUser(true)}
                     >
                         {Strings.UserManagement.ADD_USER}
                     </ButtonStyle>
@@ -581,9 +581,9 @@ function UserManagement() {
                 }}
             />
 
-            <DialogCreateDriver
-                open={dialogCreateDriver}
-                handleClose={() => setDialogCreateDriver(false)}
+            <DialogCreateUser
+                open={dialogCreateUser}
+                handleClose={() => setDialogCreateUser(false)}
                 handleGetDriverListForAdminWithFilter={
                     handleGetUserListForAdminWithFilter
                 }
