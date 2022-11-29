@@ -2,16 +2,20 @@ import axiosInstance from "../../common/axiosConfig";
 import Constants from "../../constants/Constants";
 import { store } from "../../redux/store";
 
-const UserManagementServices = {
-    getUserList: async (data) => {
+const DialogUpdateUserServices = {
+    getUserToUpdate: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
-            .post(Constants.ApiPath.UserManagement.GET_USER_LIST, data, {
-                headers: {
-                    Authorization: `${accessToken} ${token}`,
-                },
-            })
+            .post(
+                Constants.ApiPath.DialogUpdateUser.GET_USER_TO_UPDATE,
+                data,
+                {
+                    headers: {
+                        Authorization: `${accessToken} ${token}`,
+                    },
+                }
+            )
             .then((res) => {
                 return res;
             })
@@ -19,12 +23,12 @@ const UserManagementServices = {
                 return err;
             });
     },
-    createMultipleUser: async (data) => {
+    updateUser: async (data) => {
         const token = store.getState().currentUser.user.token;
         const accessToken = store.getState().currentUser.user.accessToken;
         return await axiosInstance
             .post(
-                Constants.ApiPath.UserManagement.CREATE_MULTIPLE_USER,
+                Constants.ApiPath.DialogUpdateUser.UPDATE_USER,
                 data,
                 {
                     headers: {
@@ -41,4 +45,4 @@ const UserManagementServices = {
     },
 };
 
-export { UserManagementServices };
+export { DialogUpdateUserServices };

@@ -29,6 +29,7 @@ import * as XLSX from "xlsx";
 import DialogShowDataFileImport from "../../../components/adminComponents/dialogShowDataFileImport/DialogShowDataFileImport";
 import DialogUserManagementFilter from "../../../components/adminComponents/dialogUserManagementFilter/DialogUserManagementFilter";
 import DialogCreateUser from "../../../components/adminComponents/dialogCreateUser/DialogCreateUser";
+import DialogUpdateUser from "../../../components/adminComponents/dialogUpdateUser/DialogUpdateUser";
 
 function UserManagement() {
     const theme = useTheme();
@@ -151,9 +152,9 @@ function UserManagement() {
         }
     };
 
-    const createMultipleDriver = async () => {
+    const createMultipleUser = async () => {
         await setBackDrop(true);
-        const res = await UserManagementServices.createMultipleDriver({
+        const res = await UserManagementServices.createMultipleUser({
             fileData: fileDataCreateMultiUser,
         });
         // axios success
@@ -477,7 +478,7 @@ function UserManagement() {
 
     const handleCreateMultiUserFromFile = () => {
         if (fileDataCreateMultiUser.length > 1) {
-            // createMultipleDriver();
+            createMultipleUser();
         } else {
             setModalError({
                 ...modalError,
@@ -589,7 +590,7 @@ function UserManagement() {
                 }
             />
 
-            <DialogUpdateDriver
+            <DialogUpdateUser
                 open={dialogUpdateUser.open}
                 handleClose={() =>
                     setDialogUpdateUser({
@@ -600,7 +601,7 @@ function UserManagement() {
                 handleGetDriverListForAdminWithFilter={
                     handleGetUserListForAdminWithFilter
                 }
-                idDriver={dialogUpdateUser.idUser}
+                idUser={dialogUpdateUser.idUser}
             />
 
             <DialogUserManagementFilter

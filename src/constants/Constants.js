@@ -94,6 +94,7 @@ const Constants = {
         },
         UserManagement: {
             GET_USER_LIST: "/admin/getUserList",
+            CREATE_MULTIPLE_USER: "/admin/createMultipleUser",
         },
         DialogCreateDriver: {
             CREATE_DRIVER: "/admin/createDriver",
@@ -104,6 +105,10 @@ const Constants = {
         DialogUpdateDriver: {
             GET_DRIVER_TO_UPDATE: "/admin/getDriverToUpdate",
             UPDATE_DRIVER: "/admin/updateDriver",
+        },
+        DialogUpdateUser: {
+            GET_USER_TO_UPDATE: "/admin/getUserToUpdate",
+            UPDATE_USER: "/admin/updateUser",
         },
         Statistical: {
             GET_ANALYSIS_TOTAL_COMMON: "/admin/getAnalysisTotalCommon",
