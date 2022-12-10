@@ -258,8 +258,6 @@ function DialogShowAnalysisDriverLicense({ open, handleClose }) {
         return {
             driverLicense,
             userStatus,
-            driverLicense: data.driverLicense,
-            userStatus: data.userStatus,
             haveDriver: data.haveDriver,
             codeDriver: data.codeDriver,
             fullNameDriver: data.fullNameDriver,

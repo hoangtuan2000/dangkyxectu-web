@@ -93,8 +93,8 @@ const Strings = {
         DATA_IS_UNCHANGED: "Dữ Liệu Không Thay Đổi",
         YES: "Có",
         NO: "Không",
-        EXPORT: "Xuất File",
-        IMPORT: "Nhập File",
+        EXPORT: "Xuất Tệp",
+        IMPORT: "Nhập Tệp",
         FILE_CONTENT: "Nội Dung Tập Tin",
         UPLOAD_FILE: "Tải Tệp",
     },
@@ -746,10 +746,10 @@ const Strings = {
     },
 
     AnalysisDriverLicense: {
-        TITLE: "Tổng Số Tài Xế Theo Bằng Lái",
+        TITLE: "Tổng Số Tài Xế Theo Giấy Phép Lái Xe",
     },
     DialogShowAnalysisDriverLicense: {
-        TITLE: "Danh Sách Tài Xế",
+        TITLE: "Danh Sách Tài Xế Theo Bằng Lái",
         DRIVER_LICENSE: "Bằng Lái Xe",
         CODE_DRIVER: "Mã Tài Xế",
         FULL_NAME: "Họ Tên",
@@ -876,7 +876,7 @@ const Strings = {
         MAINTENANCE_CODE: "Mã Bảo Trì",
     },
     DialogMaintenanceManagerFilter: {
-        TITLE: "Bộ Lọc Xe",
+        TITLE: "Bộ Lọc Bảo Trì",
         LICENSE_PLATES: "Biển Số Xe:",
         ENTER_LICENSE_PLATES: "-- Nhập Biển Số Xe --",
         CAR_CODE: "Mã Số Xe: ",

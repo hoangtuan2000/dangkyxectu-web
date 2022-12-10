@@ -40,6 +40,7 @@ const BoxLogin = styled(Box)(({ theme }) => ({
 const Logo = styled("img")({
     width: "40%",
     marginBottom: 15,
+    marginTop: 15
 });
 
 const Title = styled(Typography)(({ theme }) => ({

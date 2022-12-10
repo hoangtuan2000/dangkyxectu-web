@@ -35,7 +35,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import InsightsIcon from "@mui/icons-material/Insights";
 import CommuteIcon from "@mui/icons-material/Commute";
-import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import {
     Main,
     AppBar,
